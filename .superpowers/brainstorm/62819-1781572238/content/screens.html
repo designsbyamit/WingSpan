@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wingspan — Screen Layouts</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Inter', sans-serif;
+    background: #e4e4e8;
+    padding: 32px 20px;
+    min-height: 100vh;
+  }
+  h2 {
+    text-align: center; font-size: 11px; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase; color: #888;
+    margin-bottom: 6px;
+  }
+  .sub {
+    text-align: center; font-size: 13px; color: #aaa; margin-bottom: 36px;
+  }
+
+  .screens {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    max-width: 1300px;
+    margin: 0 auto 40px;
+  }
+
+  .screen-wrap { display: flex; flex-direction: column; gap: 10px; }
+  .screen-num {
+    font-size: 10px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #999; text-align: center;
+  }
+  .screen-name {
+    font-size: 12px; font-weight: 600; color: #444; text-align: center;
+    margin-bottom: 4px;
+  }
+
+  /* phone shell */
+  .phone {
+    background: #09090f;
+    border-radius: 20px;
+    border: 1.5px solid rgba(255,255,255,0.08);
+    padding: 16px 14px;
+    min-height: 420px;
+    display: flex; flex-direction: column; gap: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.04) inset;
+    position: relative;
+    overflow: hidden;
+  }
+  .phone::before {
+    content: '';
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 48px; height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 0 0 3px 3px;
+  }
+
+  /* typography tokens */
+  .t-label {
+    font-size: 8px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #2a2a20;
+  }
+  .t-wordmark {
+    font-size: 9px; font-weight: 700; letter-spacing: 2.5px;
+    text-transform: uppercase; color: #a3e635;
+    text-shadow: 0 0 10px rgba(163,230,53,0.4);
+  }
+  .t-headline {
+    font-size: 15px; font-weight: 300; line-height: 1.3;
+    letter-spacing: -0.3px; color: #f0f0fa;
+  }
+  .t-headline strong { font-weight: 700; color: #fff; }
+  .t-body { font-size: 9px; line-height: 1.6; color: #3a3a50; }
+  .t-caption { font-size: 8px; color: #252530; line-height: 1.5; }
+
+  /* ui tokens */
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: #a3e635; color: #09090f;
+    padding: 7px 14px; border-radius: 8px;
+    font-size: 9px; font-weight: 700;
+    box-shadow: 0 0 14px rgba(163,230,53,0.3);
+  }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 4px;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 5px 10px; border-radius: 6px;
+    font-size: 8px; color: #4a4a60; font-weight: 500;
+  }
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px; padding: 10px;
+  }
+  .card-sm {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px; padding: 8px;
+  }
+  .pill {
+    display: inline-block; padding: 3px 8px; border-radius: 6px;
+    font-size: 8px; font-weight: 500;
+    background: rgba(163,230,53,0.08);
+    color: #a3e635; border: 1px solid rgba(163,230,53,0.15);
+  }
+  .pill-muted {
+    display: inline-block; padding: 3px 8px; border-radius: 6px;
+    font-size: 8px; font-weight: 500;
+    background: rgba(255,255,255,0.04);
+    color: #3a3a50; border: 1px solid rgba(255,255,255,0.07);
+  }
+  .progress-row { display: flex; flex-direction: column; gap: 3px; }
+  .prog-track { height: 1.5px; border-radius: 2px; background: rgba(255,255,255,0.06); }
+  .prog-fill { height: 100%; border-radius: 2px; background: #a3e635; box-shadow: 0 0 5px rgba(163,230,53,0.5); }
+  .divider { height: 1px; background: rgba(255,255,255,0.05); margin: 4px 0; }
+  .row { display: flex; justify-content: space-between; align-items: center; }
+  .col { display: flex; flex-direction: column; gap: 4px; }
+  .gap-4 { gap: 4px; }
+  .gap-6 { gap: 6px; }
+  .gap-8 { gap: 8px; }
+  .neon { color: #a3e635; text-shadow: 0 0 6px rgba(163,230,53,0.5); }
+
+  /* ── SCREEN 1 – WELCOME ── */
+  .s1-bg {
+    position: absolute; inset: 0; border-radius: 18px;
+    background: radial-gradient(ellipse at 50% 30%, rgba(163,230,53,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── SCREEN 3 – DISCOVERY ── */
+  .step { display: flex; align-items: center; gap: 8px; }
+  .step-dot {
+    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  }
+  .step-done .step-dot { background: #a3e635; box-shadow: 0 0 5px rgba(163,230,53,0.5); }
+  .step-active .step-dot { background: #a3e635; animation: pulse 1.2s infinite; }
+  .step-pending .step-dot { background: rgba(255,255,255,0.1); }
+  .step-done .step-text { color: #3a4a20; font-size: 8px; }
+  .step-active .step-text { color: #a3e635; font-size: 8px; font-weight: 600; }
+  .step-pending .step-text { color: #1e1e28; font-size: 8px; }
+  @keyframes pulse {
+    0%,100% { opacity:1; box-shadow: 0 0 5px rgba(163,230,53,0.5); }
+    50% { opacity:0.5; box-shadow: 0 0 10px rgba(163,230,53,0.8); }
+  }
+  .observation {
+    background: rgba(163,230,53,0.05);
+    border: 1px solid rgba(163,230,53,0.12);
+    border-radius: 8px; padding: 8px 10px;
+    font-size: 8px; color: #4a5a20; line-height: 1.5; font-style: italic;
+  }
+
+  /* description strip */
+  .desc {
+    background: rgba(255,255,255,0.55); border-radius: 12px;
+    padding: 12px 14px; border: 1px solid rgba(0,0,0,0.06);
+  }
+  .desc h4 { font-size: 11px; font-weight: 700; color: #333; margin-bottom: 6px; }
+  .desc ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .desc li { font-size: 11px; color: #666; display: flex; gap: 6px; align-items: flex-start; }
+  .desc li::before { content: '·'; color: #a3e635; font-weight: 900; margin-top: 1px; }
+
+  @media (max-width: 900px) { .screens { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 600px) { .screens { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+
+<h2>Screen Layouts</h2>
+<p class="sub">5 screens · dark mode · neon green accent · confirm or flag issues</p>
+
+<div class="screens">
+
+  <!-- S1 WELCOME -->
+  <div class="screen-wrap">
+    <div class="screen-num">Screen 1</div>
+    <div class="screen-name">Welcome</div>
+    <div class="phone">
+      <div class="s1-bg"></div>
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;position:relative">
+        <div class="t-wordmark">Wingspan</div>
+        <div class="t-headline">Discover the patterns<br/><strong>hidden in your career.</strong></div>
+        <div class="t-body">Transform your professional footprint into a personalized Future Self Blueprint.</div>
+        <div style="margin-top:4px">
+          <div class="btn-primary">Start Discovery →</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <div class="pill-muted">AI-powered</div>
+        <div class="pill-muted">Single session</div>
+        <div class="pill-muted">No signup</div>
+      </div>
+    </div>
+    <div class="desc">
+      <h4>Welcome</h4>
+      <ul>
+        <li>Full-bleed, centered layout</li>
+        <li>Subtle neon radial glow behind headline</li>
+        <li>Framer Motion entrance animation</li>
+        <li>Floating trust chips at bottom</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- S2 FOOTPRINT -->
+  <div class="screen-wrap">
+    <div class="screen-num">Screen 2</div>
+    <div class="screen-name">Footprint Collection</div>
+    <div class="phone">
+      <div class="t-wordmark" style="margin-bottom:2px">Wingspan</div>
+      <div style="font-size:11px;font-weight:600;color:#e8e8f0;line-height:1.3;margin-bottom:2px">Your professional<br/>footprint</div>
+      <div class="t-body" style="margin-bottom:8px">Upload your resume to begin.</div>
+
+      <!-- upload zone -->
+      <div style="border:1.5px dashed rgba(163,230,53,0.2);border-radius:10px;padding:12px;text-align:center;background:rgba(163,230,53,0.03)">
+        <div style="font-size:16px;margin-bottom:4px">↑</div>
+        <div style="font-size:8px;color:#a3e635;font-weight:600">Upload Resume</div>
+        <div class="t-caption" style="margin-top:2px">PDF supported</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- optional URLs -->
+      <div class="t-label" style="margin-bottom:6px">Optional links</div>
+      <div class="col gap-4">
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:6px 8px;font-size:8px;color:#252530">linkedin.com/in/yourname</div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:6px;padding:6px 8px;font-size:8px;color:#252530">github.com/yourname</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- interests -->
+      <div class="t-label" style="margin-bottom:6px">What excites you next?</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">
+        <div class="pill">AI ✓</div>
+        <div class="pill">Design Leadership ✓</div>
+        <div class="pill-muted">Research</div>
+        <div class="pill-muted">Entrepreneurship</div>
+        <div class="pill-muted">Education</div>
+        <div class="pill-muted">Systems</div>
+      </div>
+
+      <div style="margin-top:auto;padding-top:10px">
+        <div class="btn-primary" style="width:100%;justify-content:center">Begin Analysis →</div>
+      </div>
+    </div>
+    <div class="desc">
+      <h4>Footprint Collection</h4>
+      <ul>
+        <li>Resume upload (required)</li>
+        <li>Optional URLs (LinkedIn, GitHub…)</li>
+        <li>Additional file uploads</li>
+        <li>Template download link</li>
+        <li>Interest chip selector (3–5)</li>
+        <li>CTA unlocks after resume + ≥3 interests</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- S3 DISCOVERY -->
+  <div class="screen-wrap">
+    <div class="screen-num">Screen 3</div>
+    <div class="screen-name">AI Discovery</div>
+    <div class="phone">
+      <div class="t-wordmark" style="margin-bottom:8px">Wingspan</div>
+      <div style="font-size:11px;font-weight:600;color:#f0f0fa;margin-bottom:12px">Building your<br/>Blueprint…</div>
+
+      <div class="col gap-6">
+        <div class="step step-done"><div class="step-dot"></div><span class="step-text">Resume parsed & structured</span></div>
+        <div class="step step-done"><div class="step-dot"></div><span class="step-text">Career timeline reconstructed</span></div>
+        <div class="step step-active"><div class="step-dot"></div><span class="step-text">Detecting strength patterns…</span></div>
+        <div class="step step-pending"><div class="step-dot"></div><span class="step-text">Mapping future opportunities</span></div>
+        <div class="step step-pending"><div class="step-dot"></div><span class="step-text">Analyzing gaps</span></div>
+        <div class="step step-pending"><div class="step-dot"></div><span class="step-text">Generating your Blueprint</span></div>
+      </div>
+
+      <div style="margin-top:10px">
+        <div class="observation">"A recurring theme is emerging — you keep gravitating toward cross-functional complexity."</div>
+      </div>
+
+      <!-- overall progress -->
+      <div style="margin-top:auto;padding-top:10px">
+        <div class="row" style="margin-bottom:4px">
+          <span class="t-caption">Analysis progress</span>
+          <span class="neon" style="font-size:8px;font-weight:700">42%</span>
+        </div>
+        <div class="prog-track"><div class="prog-fill" style="width:42%"></div></div>
+      </div>
+    </div>
+    <div class="desc">
+      <h4>AI Discovery</h4>
+      <ul>
+        <li>Real steps tied to API pipeline stages</li>
+        <li>Observations surface mid-analysis</li>
+        <li>Streaming SSE drives live progress</li>
+        <li>20–45s total, never a spinner</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- S4 VALIDATION -->
+  <div class="screen-wrap">
+    <div class="screen-num">Screen 4</div>
+    <div class="screen-name">Validation</div>
+    <div class="phone">
+      <div class="t-wordmark" style="margin-bottom:4px">Wingspan</div>
+      <div style="font-size:11px;font-weight:600;color:#f0f0fa;margin-bottom:2px">Does this look right?</div>
+      <div class="t-caption" style="margin-bottom:10px">Confirm or correct before we finalize your Blueprint.</div>
+
+      <!-- timeline -->
+      <div class="t-label" style="margin-bottom:6px">Career Timeline</div>
+      <div class="col gap-4" style="margin-bottom:8px">
+        <div class="card-sm row">
+          <div>
+            <div style="font-size:9px;font-weight:600;color:#e0e0f0">Senior Designer · Acme</div>
+            <div class="t-caption">2021 – Present</div>
+          </div>
+          <div style="display:flex;gap:4px">
+            <div style="font-size:9px;color:#a3e635;cursor:pointer">✓</div>
+            <div style="font-size:9px;color:#3a3a50;cursor:pointer">✎</div>
+          </div>
+        </div>
+        <div class="card-sm row">
+          <div>
+            <div style="font-size:9px;font-weight:600;color:#e0e0f0">UX Lead · Startup Co</div>
+            <div class="t-caption">2018 – 2021</div>
+          </div>
+          <div style="display:flex;gap:4px">
+            <div style="font-size:9px;color:#a3e635">✓</div>
+            <div style="font-size:9px;color:#3a3a50">✎</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- confidence -->
+      <div class="t-label" style="margin-bottom:6px">Analysis Confidence</div>
+      <div class="col gap-4" style="margin-bottom:10px">
+        <div class="progress-row">
+          <div class="row"><span class="t-caption">Career Timeline</span><span class="neon" style="font-size:7px;font-weight:700">95%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:95%"></div></div>
+        </div>
+        <div class="progress-row">
+          <div class="row"><span class="t-caption">Strength Analysis</span><span class="neon" style="font-size:7px;font-weight:700">88%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:88%"></div></div>
+        </div>
+        <div class="progress-row">
+          <div class="row"><span class="t-caption">Future Opportunities</span><span class="neon" style="font-size:7px;font-weight:700">79%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:79%"></div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:auto">
+        <div class="btn-primary" style="width:100%;justify-content:center">View My Blueprint →</div>
+      </div>
+    </div>
+    <div class="desc">
+      <h4>Validation</h4>
+      <ul>
+        <li>Timeline cards: confirm / inline edit / remove</li>
+        <li>Confidence scores per analysis dimension</li>
+        <li>Tip suggesting template upload if confidence low</li>
+        <li>CTA → Blueprint screen</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- S5 BLUEPRINT -->
+  <div class="screen-wrap">
+    <div class="screen-num">Screen 5</div>
+    <div class="screen-name">Future Self Blueprint</div>
+    <div class="phone">
+      <div class="t-wordmark" style="margin-bottom:4px">Future Self Blueprint™</div>
+      <div style="font-size:10px;font-weight:300;color:#d0d0e8;margin-bottom:10px;line-height:1.4">You consistently gravitate toward complex systems, capability building, and cross-functional influence.</div>
+
+      <!-- profile map stats -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:8px">
+        <div class="card-sm" style="text-align:center">
+          <div class="neon" style="font-size:14px;font-weight:700">8</div>
+          <div class="t-caption">yrs exp</div>
+        </div>
+        <div class="card-sm" style="text-align:center">
+          <div class="neon" style="font-size:14px;font-weight:700">4</div>
+          <div class="t-caption">industries</div>
+        </div>
+        <div class="card-sm" style="text-align:center">
+          <div class="neon" style="font-size:14px;font-weight:700">23</div>
+          <div class="t-caption">projects</div>
+        </div>
+      </div>
+
+      <!-- section tabs -->
+      <div style="display:flex;gap:4px;margin-bottom:8px">
+        <div style="background:rgba(163,230,53,0.1);border:1px solid rgba(163,230,53,0.2);border-radius:6px;padding:3px 7px;font-size:7px;font-weight:700;color:#a3e635">Profile</div>
+        <div class="pill-muted" style="font-size:7px">Strengths</div>
+        <div class="pill-muted" style="font-size:7px">Paths</div>
+        <div class="pill-muted" style="font-size:7px">Gaps</div>
+        <div class="pill-muted" style="font-size:7px">Actions</div>
+      </div>
+
+      <!-- strength sample -->
+      <div class="card" style="margin-bottom:6px">
+        <div class="row" style="margin-bottom:4px">
+          <span style="font-size:9px;font-weight:600;color:#e0e0f0">Systems Thinking</span>
+          <span class="neon" style="font-size:8px;font-weight:700">88%</span>
+        </div>
+        <div class="t-caption" style="margin-bottom:6px">Detected in 9 projects · High evidence</div>
+        <div class="prog-track"><div class="prog-fill" style="width:88%"></div></div>
+      </div>
+
+      <!-- future path sample -->
+      <div class="card">
+        <div style="font-size:9px;font-weight:600;color:#e0e0f0;margin-bottom:2px">AI Design Strategist</div>
+        <div class="t-caption" style="margin-bottom:4px">High fit · Growing market · 82% confidence</div>
+        <div style="display:flex;gap:4px">
+          <div class="pill" style="font-size:7px">Why it fits</div>
+          <div class="pill-muted" style="font-size:7px">Gap analysis →</div>
+        </div>
+      </div>
+    </div>
+    <div class="desc">
+      <h4>Future Self Blueprint</h4>
+      <ul>
+        <li>Identity statement at top</li>
+        <li>Profile stats (years, industries, projects)</li>
+        <li>Tab navigation: Profile → Strengths → Paths → Gaps → Actions</li>
+        <li>Each section scrollable, progressive disclosure</li>
+        <li>Evidence expandable on every insight</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<p style="text-align:center;font-size:12px;color:#999;margin-top:8px">Does the screen flow feel right? Any layout or content concerns?</p>
+
+</body>
+</html>

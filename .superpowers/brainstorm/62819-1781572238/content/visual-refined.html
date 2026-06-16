@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wingspan — Visual Direction</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Inter', sans-serif;
+    background: #f0f0f0;
+    padding: 32px 24px;
+    min-height: 100vh;
+  }
+  .page-title {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 8px;
+  }
+  .page-sub {
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 32px;
+  }
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ── LIGHT PANEL ── */
+  .panel-light {
+    background: #fafbff;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 12px 40px rgba(99,102,241,0.06);
+    border: 1px solid rgba(99,102,241,0.08);
+  }
+  .panel-dark {
+    background: #0e0e14;
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4), 0 12px 40px rgba(99,102,241,0.08);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .mode-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .panel-light .mode-label { color: #a0a8cc; }
+  .panel-dark .mode-label { color: #4a4a6a; }
+
+  .mode-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+  }
+  .panel-light .mode-dot { background: #818cf8; }
+  .panel-dark .mode-dot { background: #4a4a6a; }
+
+  /* wordmark */
+  .wordmark {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .panel-light .wordmark { color: #818cf8; }
+  .panel-dark .wordmark { color: #5c5c9a; }
+
+  /* headline */
+  .headline {
+    font-size: 26px;
+    font-weight: 300;
+    line-height: 1.35;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+  .panel-light .headline { color: #1a1a2e; }
+  .panel-dark .headline { color: #e8e8f4; }
+
+  .headline strong { font-weight: 600; }
+
+  /* subtext */
+  .subtext {
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .panel-light .subtext { color: #6b7280; }
+  .panel-dark .subtext { color: #5a5a7a; }
+
+  /* CTA button */
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    margin-bottom: 28px;
+    cursor: pointer;
+  }
+  .panel-light .cta {
+    background: #1a1a2e;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(26,26,46,0.2), 0 1px 2px rgba(0,0,0,0.1);
+  }
+  .panel-dark .cta {
+    background: #818cf8;
+    color: #fff;
+    box-shadow: 0 2px 12px rgba(129,140,248,0.3);
+  }
+
+  /* divider */
+  .divider {
+    height: 1px;
+    margin-bottom: 24px;
+  }
+  .panel-light .divider { background: rgba(99,102,241,0.08); }
+  .panel-dark .divider { background: rgba(255,255,255,0.05); }
+
+  /* section label */
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .panel-light .section-label { color: #a0a8cc; }
+  .panel-dark .section-label { color: #3a3a5a; }
+
+  /* insight card */
+  .insight-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .insight-card {
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .panel-light .insight-card {
+    background: #fff;
+    border: 1px solid rgba(99,102,241,0.1);
+    box-shadow: 0 1px 4px rgba(99,102,241,0.06), 0 4px 12px rgba(0,0,0,0.04);
+  }
+  .panel-dark .insight-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .card-name {
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .panel-light .card-name { color: #1a1a2e; }
+  .panel-dark .card-name { color: #d0d0e8; }
+
+  .card-pct {
+    font-size: 11px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .panel-light .card-pct { color: #818cf8; }
+  .panel-dark .card-pct { color: #6060a0; }
+
+  .card-desc {
+    font-size: 11px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .panel-light .card-desc { color: #9ca3af; }
+  .panel-dark .card-desc { color: #3a3a5a; }
+
+  .progress-track {
+    height: 2px;
+    border-radius: 2px;
+  }
+  .panel-light .progress-track { background: rgba(99,102,241,0.1); }
+  .panel-dark .progress-track { background: rgba(255,255,255,0.06); }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #818cf8, #a78bfa);
+  }
+  .panel-dark .progress-fill {
+    background: linear-gradient(90deg, #4040a0, #6060c0);
+  }
+
+  /* path chips */
+  .paths {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .path-chip {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 6px;
+  }
+  .panel-light .path-chip {
+    background: rgba(99,102,241,0.07);
+    color: #4f46e5;
+    border: 1px solid rgba(99,102,241,0.12);
+  }
+  .panel-dark .path-chip {
+    background: rgba(255,255,255,0.04);
+    color: #4a4a7a;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+
+  /* toggle row */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .toggle-track {
+    width: 36px; height: 20px;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+  }
+  .panel-light .toggle-track { background: #1a1a2e; }
+  .panel-dark .toggle-track { background: #818cf8; }
+  .toggle-thumb {
+    position: absolute;
+    top: 3px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    transition: left 0.2s;
+  }
+  .panel-light .toggle-thumb { left: 3px; }
+  .panel-dark .toggle-thumb { left: 19px; }
+  .toggle-icon {
+    font-size: 13px;
+  }
+  .panel-light .toggle-icon { color: #888; }
+  .panel-dark .toggle-icon { color: #4a4a6a; }
+
+  @media (max-width: 700px) {
+    .split { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<p class="page-title">Visual Direction — Refined C</p>
+<p class="page-sub">Light & dark modes · soft shadows · minimal · clear hierarchy</p>
+
+<div class="split">
+
+  <!-- LIGHT -->
+  <div class="panel-light">
+    <div class="mode-label"><span class="mode-dot"></span> Light Mode</div>
+
+    <div class="toggle-row">
+      <span class="toggle-icon">☀</span>
+      <div class="toggle-track"><div class="toggle-thumb"></div></div>
+      <span class="toggle-icon" style="opacity:0.4">☽</span>
+    </div>
+
+    <div class="wordmark">Wingspan</div>
+    <div class="headline">Discover the patterns<br/><strong>hidden in your career.</strong></div>
+    <div class="subtext">Transform your professional footprint into a personalized Future Self Blueprint.</div>
+    <div class="cta">Start Discovery <span style="opacity:0.6">→</span></div>
+
+    <div class="divider"></div>
+    <div class="section-label">Strength Landscape</div>
+    <div class="insight-row">
+      <div class="insight-card">
+        <div class="card-top">
+          <span class="card-name">Systems Thinking</span>
+          <span class="card-pct">88%</span>
+        </div>
+        <div class="card-desc">Consistently synthesizes complexity across 9 projects</div>
+        <div class="progress-track"><div class="progress-fill" style="width:88%"></div></div>
+      </div>
+      <div class="insight-card">
+        <div class="card-top">
+          <span class="card-name">Cross-functional Leadership</span>
+          <span class="card-pct">74%</span>
+        </div>
+        <div class="card-desc">Evidence across 6 stakeholder initiatives</div>
+        <div class="progress-track"><div class="progress-fill" style="width:74%"></div></div>
+      </div>
+    </div>
+
+    <div class="section-label">Future Paths</div>
+    <div class="paths">
+      <div class="path-chip">AI Design Strategist</div>
+      <div class="path-chip">Design Systems Leader</div>
+      <div class="path-chip">Innovation Director</div>
+    </div>
+  </div>
+
+  <!-- DARK -->
+  <div class="panel-dark">
+    <div class="mode-label"><span class="mode-dot"></span> Dark Mode</div>
+
+    <div class="toggle-row">
+      <span class="toggle-icon" style="opacity:0.4">☀</span>
+      <div class="toggle-track"><div class="toggle-thumb"></div></div>
+      <span class="toggle-icon">☽</span>
+    </div>
+
+    <div class="wordmark">Wingspan</div>
+    <div class="headline">Discover the patterns<br/><strong>hidden in your career.</strong></div>
+    <div class="subtext">Transform your professional footprint into a personalized Future Self Blueprint.</div>
+    <div class="cta">Start Discovery <span style="opacity:0.7">→</span></div>
+
+    <div class="divider"></div>
+    <div class="section-label">Strength Landscape</div>
+    <div class="insight-row">
+      <div class="insight-card">
+        <div class="card-top">
+          <span class="card-name">Systems Thinking</span>
+          <span class="card-pct">88%</span>
+        </div>
+        <div class="card-desc">Consistently synthesizes complexity across 9 projects</div>
+        <div class="progress-track"><div class="progress-fill" style="width:88%"></div></div>
+      </div>
+      <div class="insight-card">
+        <div class="card-top">
+          <span class="card-name">Cross-functional Leadership</span>
+          <span class="card-pct">74%</span>
+        </div>
+        <div class="card-desc">Evidence across 6 stakeholder initiatives</div>
+        <div class="progress-track"><div class="progress-fill" style="width:74%"></div></div>
+      </div>
+    </div>
+
+    <div class="section-label">Future Paths</div>
+    <div class="paths">
+      <div class="path-chip">AI Design Strategist</div>
+      <div class="path-chip">Design Systems Leader</div>
+      <div class="path-chip">Innovation Director</div>
+    </div>
+  </div>
+
+</div>
+
+<p style="text-align:center;font-size:12px;color:#999;margin-top:28px">Does this feel right? Reply in the terminal with what works and what to adjust.</p>
+
+<script>
+  // Inject helper if available
+  const s = document.createElement('script');
+  s.src = '/helper.js';
+  document.head.appendChild(s);
+</script>
+</body>
+</html>
