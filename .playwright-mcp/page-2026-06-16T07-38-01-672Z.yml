@@ -1,0 +1,18 @@
+- generic [ref=e1]:
+  - main [ref=e2]:
+    - button "Toggle theme" [ref=e4]:
+      - img [ref=e6]
+    - generic [ref=e10]:
+      - generic [ref=e11]: Wingspan
+      - heading "Discover the patterns hidden in your career." [level=1] [ref=e12]:
+        - text: Discover the patterns
+        - strong [ref=e13]: hidden in your career.
+      - paragraph [ref=e14]: Transform your professional footprint into a personalized Future Self Blueprint™ powered by AI.
+      - button "Start Discovery →" [active] [ref=e16] [cursor=pointer]
+      - generic [ref=e17]:
+        - generic [ref=e18]: AI-powered
+        - generic [ref=e19]: Single session
+        - generic [ref=e20]: No signup
+  - button "Open Next.js Dev Tools" [ref=e27] [cursor=pointer]:
+    - img [ref=e28]
+  - alert [ref=e21]

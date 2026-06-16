@@ -96,7 +96,7 @@ export function FootprintScreen() {
           onDrop={handleFileDrop}
           className={`
             border-[1.5px] border-dashed rounded-[10px] p-6 text-center transition-all
-            ${dragOver ? 'border-[var(--neon)] bg-[var(--neon-surface)]' : 'border-[var(--border-ws)] bg-[#1e1e1e]'}
+            ${dragOver ? 'border-[var(--neon)] bg-[var(--neon-surface)]' : 'border-[var(--border-ws)] bg-[var(--surface-dim)]'}
           `}
         >
           {primaryFile ? (

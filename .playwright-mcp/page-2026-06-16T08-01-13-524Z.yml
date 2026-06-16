@@ -1,0 +1,51 @@
+- generic [ref=e1]:
+  - main [ref=e2]:
+    - button "Toggle theme" [ref=e4]:
+      - img [ref=e6]
+    - generic [ref=e33]:
+      - generic [ref=e34]:
+        - text: Wingspan
+        - heading "Your professional footprint" [level=2] [ref=e35]
+        - paragraph [ref=e36]: Upload your resume to begin.
+      - generic [ref=e38] [cursor=pointer]:
+        - img [ref=e39]
+        - generic [ref=e42]: Upload Resume
+        - generic [ref=e43]: PDF · DOCX · XLSX · TXT · Drag & drop
+      - link "Download Project Repository Template" [ref=e44] [cursor=pointer]:
+        - /url: /api/template
+        - button "Download Project Repository Template" [ref=e45]:
+          - img [ref=e46]
+          - text: Download Project Repository Template
+      - generic [ref=e49]:
+        - generic [ref=e50]: Optional links
+        - generic [ref=e51]:
+          - textbox "LinkedIn URL" [ref=e52]
+          - textbox "GitHub URL" [ref=e53]
+          - textbox "Portfolio URL" [ref=e54]
+          - textbox "Behance URL" [ref=e55]
+          - textbox "Dribbble URL" [ref=e56]
+          - textbox "Medium URL" [ref=e57]
+      - button "Add more files (case studies, reports, templates…)" [ref=e59]:
+        - img [ref=e60]
+        - text: Add more files (case studies, reports, templates…)
+      - generic [ref=e62]:
+        - generic [ref=e63]: What excites you next? (pick 3–5)
+        - generic [ref=e64]:
+          - button "AI ✓" [ref=e80]
+          - button "Design Leadership ✓" [ref=e81]
+          - button "Product Strategy" [ref=e67]
+          - button "Entrepreneurship" [ref=e68]
+          - button "Design Systems" [ref=e69]
+          - button "Research ✓" [active] [ref=e82]
+          - button "Community Building" [ref=e71]
+          - button "Education" [ref=e72]
+          - button "Sustainability" [ref=e73]
+          - button "Innovation" [ref=e74]
+          - button "Emerging Technology" [ref=e75]
+          - button "Management" [ref=e76]
+          - button "Writing" [ref=e77]
+          - button "Public Speaking" [ref=e78]
+      - button "Begin Analysis →" [disabled] [ref=e79]
+  - button "Open Next.js Dev Tools" [ref=e27] [cursor=pointer]:
+    - img [ref=e28]
+  - alert [ref=e21]
