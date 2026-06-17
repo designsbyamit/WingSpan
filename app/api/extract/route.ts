@@ -2,8 +2,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { parseFile } from '@/lib/parsers'
 import { extractCareerData } from '@/lib/openai'
+import { mockExtractedData } from '@/lib/mock-data'
 
 export async function POST(req: NextRequest) {
+  if (process.env.NEXT_PUBLIC_MOCK === 'true') {
+    await new Promise((r) => setTimeout(r, 2000))
+    return NextResponse.json(mockExtractedData)
+  }
+
   try {
     const formData = await req.formData()
     const files = formData.getAll('files') as File[]
