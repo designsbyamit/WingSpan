@@ -30,6 +30,7 @@ export function FootprintScreen() {
 
   const primaryFile = state.files[0]
   const canProceed = !!primaryFile && state.interests.length >= 3
+  const error = state.error
 
   const handleFileDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -212,6 +213,12 @@ export function FootprintScreen() {
             })}
           </div>
         </div>
+
+        {error && (
+          <div className="rounded-[10px] bg-red-950/40 border border-red-800/50 p-3">
+            <p className="text-xs text-red-400 leading-relaxed">Analysis failed: {error}. Please try again.</p>
+          </div>
+        )}
 
         <NeonButton
           onClick={handleBeginAnalysis}
