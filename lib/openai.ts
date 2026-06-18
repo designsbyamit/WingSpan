@@ -108,10 +108,10 @@ export async function* streamBlueprint(
     "howToClose": "string (specific, actionable 2-3 sentences)"
   }],
   "actions": {
-    "immediate": [{ "title": "string", "description": "string", "measurable": "string (specific outcome)", "pathway": "string", "priority": "high|medium|low" }],
-    "mediumTerm": [{ "title": "string", "description": "string", "measurable": "string", "pathway": "string", "priority": "high|medium|low" }],
-    "longTerm": [{ "title": "string", "description": "string", "measurable": "string", "pathway": "string", "priority": "high|medium|low" }],
-    "resources": [{ "type": "book|course|community|event|article|framework", "title": "string", "url": "string or null", "pathway": "string" }]
+    "immediate": [{ "title": "string", "description": "string", "measurable": "string (specific outcome)", "pathway": "string", "priority": "high|medium|low", "actionType": "project|link|book|course|community|publish|connect|general", "howToStart": "string (exact first step — open X, click Y, do Z)", "link": "string (real working URL) or null", "linkLabel": "string (CTA label e.g. 'Open Course', 'Join Community') or null", "whereToStart": "string (platform or context) or null", "timeEstimate": "string (e.g. '2 hours', '1 weekend') or null" }],
+    "mediumTerm": [{ "title": "string", "description": "string", "measurable": "string", "pathway": "string", "priority": "high|medium|low", "actionType": "project|link|book|course|community|publish|connect|general", "howToStart": "string", "link": "string or null", "linkLabel": "string or null", "whereToStart": "string or null", "timeEstimate": "string or null" }],
+    "longTerm": [{ "title": "string", "description": "string", "measurable": "string", "pathway": "string", "priority": "high|medium|low", "actionType": "project|link|book|course|community|publish|connect|general", "howToStart": "string", "link": "string or null", "linkLabel": "string or null", "whereToStart": "string or null", "timeEstimate": "string or null" }],
+    "resources": [{ "type": "book|course|community|event|article|framework", "title": "string", "url": "string (real working URL) or null", "pathway": "string", "whereToStart": "string (e.g. which chapter to start from) or null", "firstStep": "string (e.g. how to access or buy) or null" }]
   },
   "confidenceScores": {
     "timeline": number (0-100),

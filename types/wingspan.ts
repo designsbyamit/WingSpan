@@ -70,12 +70,20 @@ export interface Gap {
   howToClose: string
 }
 
+export type ActionType = 'project' | 'link' | 'book' | 'course' | 'community' | 'publish' | 'connect' | 'general'
+
 export interface Action {
   title: string
   description: string
   measurable: string
   pathway: string
   priority: 'high' | 'medium' | 'low'
+  actionType: ActionType
+  howToStart: string       // specific first step — "Open X, click Y, do Z"
+  link?: string            // working URL for link/course/community/book actions
+  linkLabel?: string       // CTA label e.g. "Open Course", "Buy on Amazon", "Join Community"
+  whereToStart?: string    // for projects: platform or context (e.g. "Figma Community", "GitHub")
+  timeEstimate?: string    // e.g. "2 hours", "1 week", "ongoing"
 }
 
 export interface Resource {
@@ -83,6 +91,8 @@ export interface Resource {
   title: string
   url?: string
   pathway: string
+  whereToStart?: string
+  firstStep?: string
 }
 
 export interface Blueprint {
