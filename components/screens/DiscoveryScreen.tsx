@@ -95,7 +95,7 @@ export function DiscoveryScreen() {
     <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12">
       <div className="max-w-md w-full flex flex-col gap-6">
         <div>
-          <span className="text-xs font-normal tracking-[0.2em] text-[var(--neon)]" style={{ textShadow: '0 0 12px var(--neon-glow)' }}>
+          <span className="text-xs font-normal tracking-[0.2em] text-[var(--neon)]">
             Wingspan
           </span>
           <h2 className="text-xl font-semibold text-[var(--text-primary)] mt-2">
@@ -111,7 +111,7 @@ export function DiscoveryScreen() {
               <div key={id} className="flex items-center gap-3">
                 <div className="relative flex-shrink-0">
                   {status === 'done' && (
-                    <div className="w-2 h-2 rounded-full bg-[var(--neon)]" style={{ boxShadow: '0 0 5px var(--neon-glow)' }} />
+                    <div className="w-2 h-2 rounded-full bg-[var(--neon)]" />
                   )}
                   {status === 'active' && (
                     <motion.div

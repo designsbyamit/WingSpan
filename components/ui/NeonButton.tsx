@@ -27,7 +27,6 @@ export function NeonButton({ children, onClick, disabled, fullWidth, className =
           ? 'bg-[#2a2a2a] text-[#555] cursor-not-allowed'
           : 'bg-[var(--neon)] text-[#0a0a0a] cursor-pointer'
         }
-        ${!disabled ? 'shadow-[0_0_16px_var(--neon-glow)]' : ''}
         ${fullWidth ? 'w-full' : ''}
         ${className}
       `}

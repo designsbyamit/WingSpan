@@ -23,7 +23,6 @@ export function InsightCard({ name, confidence, evidence, rationale, projects, p
         <span className="text-sm font-semibold text-[var(--text-primary)]">{name}</span>
         <span
           className="text-xs font-bold text-[var(--neon)] tabular-nums"
-          style={{ textShadow: '0 0 8px var(--neon-glow)' }}
         >
           {confidence}%
         </span>

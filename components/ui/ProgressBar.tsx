@@ -16,7 +16,6 @@ export function ProgressBar({ value, showLabel, label }: ProgressBarProps) {
           <span className="text-[8px] text-[var(--text-muted)]">{label}</span>
           <span
             className="text-[8px] font-bold text-[var(--neon)]"
-            style={{ textShadow: '0 0 8px var(--neon-glow)' }}
           >
             {value}%
           </span>
@@ -25,7 +24,6 @@ export function ProgressBar({ value, showLabel, label }: ProgressBarProps) {
       <div className="h-[1.5px] rounded-full bg-[var(--border-ws)]">
         <motion.div
           className="h-full rounded-full bg-[var(--neon)]"
-          style={{ boxShadow: '0 0 5px var(--neon-glow)' }}
           initial={{ width: 0 }}
           animate={{ width: `${value}%` }}
           transition={{ duration: 0.6, ease: 'easeOut' }}

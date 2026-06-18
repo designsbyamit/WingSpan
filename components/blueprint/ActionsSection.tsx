@@ -248,7 +248,7 @@ export function ActionsSection({ blueprint }: { blueprint: Blueprint }) {
       {(doneCount > 0 || inProgressCount > 0) && (
         <div className="rounded-[12px] bg-[#111] border border-[var(--border-ws)] p-4 flex items-center gap-6">
           <div className="text-center">
-            <div className="text-xl font-bold text-[var(--neon)]" style={{ textShadow: '0 0 8px var(--neon-glow)' }}>{doneCount}</div>
+            <div className="text-xl font-bold text-[var(--neon)]">{doneCount}</div>
             <div className="text-[10px] text-[var(--text-muted)]">completed</div>
           </div>
           <div className="text-center">
@@ -259,7 +259,7 @@ export function ActionsSection({ blueprint }: { blueprint: Blueprint }) {
             <div className="h-[2px] rounded-full bg-[var(--border-ws)]">
               <div
                 className="h-full rounded-full bg-[var(--neon)] transition-all duration-700"
-                style={{ width: `${Math.round((doneCount / allActions.length) * 100)}%`, boxShadow: '0 0 6px var(--neon-glow)' }}
+                style={{ width: `${Math.round((doneCount / allActions.length) * 100)}%` }}
               />
             </div>
             <p className="text-[10px] text-[var(--text-muted)] mt-1">{Math.round((doneCount / allActions.length) * 100)}% complete</p>

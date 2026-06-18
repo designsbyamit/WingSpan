@@ -48,6 +48,14 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+.font-sora {
+  font-family: var(--font-sora, 'Sora', sans-serif);
+}
+
+.font-jakarta {
+  font-family: var(--font-jakarta, 'Plus Jakarta Sans', sans-serif);
+}
+
 :root {
   /* shadcn tokens */
   --background: oklch(1 0 0);

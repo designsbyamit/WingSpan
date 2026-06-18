@@ -79,7 +79,7 @@ export function FootprintScreen() {
     <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12">
       <div className="max-w-xl w-full flex flex-col gap-6">
         <div>
-          <span className="text-xs font-normal tracking-[0.2em] text-[var(--neon)]" style={{ textShadow: '0 0 12px var(--neon-glow)' }}>
+          <span className="text-xs font-normal tracking-[0.2em] text-[var(--neon)]">
             Wingspan
           </span>
           <h2 className="text-2xl font-semibold text-[var(--text-primary)] mt-2 leading-tight">

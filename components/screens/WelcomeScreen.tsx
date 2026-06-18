@@ -40,7 +40,6 @@ export function WelcomeScreen() {
         <motion.div variants={item}>
           <span
             className="text-xs font-normal tracking-[0.2em] text-[var(--neon)]"
-            style={{ textShadow: '0 0 16px var(--neon-glow)' }}
           >
             Wingspan
           </span>
