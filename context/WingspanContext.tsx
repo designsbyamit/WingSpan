@@ -25,6 +25,7 @@ const initialState: WingspanState = {
   validatedData: null,
   blueprint: null,
   error: null,
+  selectedPath: null,
 }
 
 function reducer(state: WingspanState, action: WingspanAction): WingspanState {
@@ -101,6 +102,8 @@ function reducer(state: WingspanState, action: WingspanAction): WingspanState {
       return { ...state, error: action.error }
     case 'CLEAR_ERROR':
       return { ...state, error: null }
+    case 'SELECT_PATH':
+      return { ...state, selectedPath: action.path }
     default:
       return state
   }

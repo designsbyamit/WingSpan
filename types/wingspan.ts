@@ -2,6 +2,8 @@
 
 export type Screen = 'welcome' | 'footprint' | 'discovering' | 'validating' | 'blueprint'
 
+export type BlueprintStep = 'profile' | 'intelligence' | 'path-selection' | 'gap-analysis' | 'roadmap' | 'resources'
+
 export interface TimelineEntry {
   id: string
   role: string
@@ -40,6 +42,7 @@ export interface Strength {
   name: string
   confidence: number
   evidence: string
+  careerAdvantage: string
   projectCount: number
   projects: string[]
   rationale: string
@@ -49,6 +52,9 @@ export interface Interest {
   name: string
   frequency: number
   evidence: string
+  whyItAppears: string[]
+  marketOutlook: 'Very High Growth' | 'High Growth' | 'Emerging' | 'Stable'
+  futureRelevance: string
 }
 
 export interface FuturePath {
@@ -57,14 +63,25 @@ export interface FuturePath {
   evidence: string[]
   opportunitySize: 'emerging' | 'growing' | 'established'
   confidence: number
+  recommendationStatus: 'Recommended' | 'Strongly Recommended' | 'Emerging Opportunity'
+  timeline: string
+  marketDemand: 'Very High' | 'High' | 'Moderate' | 'Emerging'
+  growthPotential: 'Excellent' | 'Strong' | 'Good' | 'Moderate'
+  keyTransitionAreas: string[]
 }
+
+export type GapType = 'Skills Gap' | 'Positioning Gap' | 'Leadership Gap' | 'Visibility Gap' | 'Domain Gap'
 
 export interface Gap {
   pathway: string
+  gapType: GapType
   currentReadiness: number
   futureReadiness: number
+  currentState: string
+  desiredState: string
   requiredCapabilities: string[]
   gapSize: 'small' | 'medium' | 'large'
+  whyItMatters: string
   timeline: string
   effort: string
   howToClose: string
@@ -151,6 +168,7 @@ export interface WingspanState {
   validatedData: ValidatedCareerData | null
   blueprint: Blueprint | null
   error: string | null
+  selectedPath: string | null
 }
 
 export type WingspanAction =
@@ -168,3 +186,4 @@ export type WingspanAction =
   | { type: 'SET_BLUEPRINT'; blueprint: Blueprint }
   | { type: 'SET_ERROR'; error: string }
   | { type: 'CLEAR_ERROR' }
+  | { type: 'SELECT_PATH'; path: string }
