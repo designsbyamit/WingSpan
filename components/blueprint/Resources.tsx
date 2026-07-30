@@ -1,9 +1,10 @@
 'use client'
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ExternalLink, BookOpen, Users, Link2, ChevronDown } from 'lucide-react'
+import { ExternalLink, BookOpen, Users, Link2, ChevronDown, Download, FileText } from 'lucide-react'
 import { Blueprint, Resource } from '@/types/wingspan'
 import { useWingspan } from '@/context/WingspanContext'
+import { exportToNotionMarkdown, downloadMarkdown, printAsPDF } from '@/lib/export'
 
 function ResourceCard({ resource }: { resource: Resource }) {
   const [expanded, setExpanded] = useState(false)
@@ -86,11 +87,20 @@ function ResourceCard({ resource }: { resource: Resource }) {
 export function Resources({ blueprint }: { blueprint: Blueprint }) {
   const { state } = useWingspan()
   const selectedPath = state.selectedPath
+  const [exporting, setExporting] = useState(false)
+
+  const handleNotionExport = () => {
+    setExporting(true)
+    const md = exportToNotionMarkdown(blueprint, selectedPath)
+    const filename = `wingspan-blueprint-${new Date().toISOString().split('T')[0]}.md`
+    downloadMarkdown(md, filename)
+    setTimeout(() => setExporting(false), 1500)
+  }
 
   if (!selectedPath) {
     return (
       <div className="rounded-[12px] bg-[var(--surface)] border border-[var(--border-ws)] p-8 text-center">
-        <p className="text-sm text-[var(--text-muted)]">Select a future path first to see contextual resources.</p>
+        <p className="text-sm text-[var(--text-muted)]">Pick a direction and we'll point you to the right resources.</p>
       </div>
     )
   }
@@ -102,7 +112,7 @@ export function Resources({ blueprint }: { blueprint: Blueprint }) {
   return (
     <div className="flex flex-col gap-4">
       <div className="mb-2">
-        <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">Resources for</p>
+        <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">Useful stuff for</p>
         <p className="text-base font-bold text-[var(--neon)]" style={{ fontFamily: 'var(--font-sora)' }}>
           {selectedPath}
         </p>
@@ -110,13 +120,48 @@ export function Resources({ blueprint }: { blueprint: Blueprint }) {
 
       {filteredResources.length === 0 ? (
         <div className="rounded-[12px] bg-[var(--surface)] border border-[var(--border-ws)] p-6 text-center">
-          <p className="text-sm text-[var(--text-muted)]">No specific resources for this path yet.</p>
+          <p className="text-sm text-[var(--text-muted)]">Nothing specific here yet — but that'll change as the Blueprint grows.</p>
         </div>
       ) : (
         filteredResources.map(resource => (
           <ResourceCard key={resource.title} resource={resource} />
         ))
       )}
+
+      {/* Export section */}
+      <div className="mt-4 rounded-[16px] bg-[var(--surface)] border border-[var(--border-ws)] p-5 flex flex-col gap-4">
+        <div>
+          <p className="text-[10px] font-bold tracking-[2.5px] uppercase text-[var(--neon)] mb-1">Continue in Notion</p>
+          <p className="text-sm font-semibold text-[var(--text-primary)] mb-2" style={{ fontFamily: 'var(--font-sora)' }}>
+            Take your Blueprint with you
+          </p>
+          <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+            Export your full roadmap — milestones, actions, gaps, and resources — into Notion-ready Markdown. Paste directly into any Notion page to continue tracking your progress.
+          </p>
+        </div>
+        <div className="flex flex-col gap-2">
+          <motion.button
+            whileTap={{ scale: 0.98 }}
+            onClick={handleNotionExport}
+            disabled={exporting}
+            className="flex items-center justify-center gap-2 py-3 px-5 rounded-[10px] bg-[var(--neon)] text-[#0a0a0a] text-sm font-bold transition-opacity"
+            style={{ opacity: exporting ? 0.7 : 1 }}
+          >
+            <Download size={14} />
+            {exporting ? 'Exporting…' : 'Export to Notion (.md)'}
+          </motion.button>
+          <button
+            onClick={() => printAsPDF(blueprint, selectedPath)}
+            className="flex items-center justify-center gap-2 py-3 px-5 rounded-[10px] border border-[var(--border-ws)] text-[var(--text-secondary)] text-sm font-semibold hover:border-[var(--neon)] hover:text-[var(--neon)] transition-colors"
+          >
+            <FileText size={14} />
+            Export as PDF
+          </button>
+        </div>
+        <p className="text-[10px] text-[var(--text-muted)]">
+          The Markdown file includes your roadmap, gap analysis, actions, and resources. Open Notion → New page → Paste to import.
+        </p>
+      </div>
     </div>
   )
 }
