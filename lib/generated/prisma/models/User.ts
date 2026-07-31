@@ -39,6 +39,7 @@ export type UserSumAggregateOutputType = {
 export type UserMinAggregateOutputType = {
   id: string | null
   email: string | null
+  phone: string | null
   name: string | null
   avatarUrl: string | null
   careerLevelId: string | null
@@ -53,6 +54,7 @@ export type UserMinAggregateOutputType = {
 export type UserMaxAggregateOutputType = {
   id: string | null
   email: string | null
+  phone: string | null
   name: string | null
   avatarUrl: string | null
   careerLevelId: string | null
@@ -67,6 +69,7 @@ export type UserMaxAggregateOutputType = {
 export type UserCountAggregateOutputType = {
   id: number
   email: number
+  phone: number
   name: number
   avatarUrl: number
   careerLevelId: number
@@ -93,6 +96,7 @@ export type UserSumAggregateInputType = {
 export type UserMinAggregateInputType = {
   id?: true
   email?: true
+  phone?: true
   name?: true
   avatarUrl?: true
   careerLevelId?: true
@@ -107,6 +111,7 @@ export type UserMinAggregateInputType = {
 export type UserMaxAggregateInputType = {
   id?: true
   email?: true
+  phone?: true
   name?: true
   avatarUrl?: true
   careerLevelId?: true
@@ -121,6 +126,7 @@ export type UserMaxAggregateInputType = {
 export type UserCountAggregateInputType = {
   id?: true
   email?: true
+  phone?: true
   name?: true
   avatarUrl?: true
   careerLevelId?: true
@@ -222,6 +228,7 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type UserGroupByOutputType = {
   id: string
   email: string
+  phone: string | null
   name: string | null
   avatarUrl: string | null
   careerLevelId: string | null
@@ -259,6 +266,7 @@ export type UserWhereInput = {
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
+  phone?: Prisma.StringNullableFilter<"User"> | string | null
   name?: Prisma.StringNullableFilter<"User"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
   careerLevelId?: Prisma.StringNullableFilter<"User"> | string | null
@@ -282,6 +290,7 @@ export type UserWhereInput = {
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   careerLevelId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -305,6 +314,7 @@ export type UserOrderByWithRelationInput = {
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   email?: string
+  phone?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
@@ -326,11 +336,12 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   learningPaths?: Prisma.UserLearningPathListRelationFilter
   aiMentorContext?: Prisma.XOR<Prisma.AIMentorContextNullableScalarRelationFilter, Prisma.AIMentorContextWhereInput> | null
   submissions?: Prisma.ChallengeSubmissionListRelationFilter
-}, "id" | "email">
+}, "id" | "email" | "phone">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   careerLevelId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -353,6 +364,7 @@ export type UserScalarWhereWithAggregatesInput = {
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
+  phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   careerLevelId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
@@ -367,6 +379,7 @@ export type UserScalarWhereWithAggregatesInput = {
 export type UserCreateInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   xp?: number
@@ -389,6 +402,7 @@ export type UserCreateInput = {
 export type UserUncheckedCreateInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   careerLevelId?: string | null
@@ -411,6 +425,7 @@ export type UserUncheckedCreateInput = {
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -433,6 +448,7 @@ export type UserUpdateInput = {
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -455,6 +471,7 @@ export type UserUncheckedUpdateInput = {
 export type UserCreateManyInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   careerLevelId?: string | null
@@ -469,6 +486,7 @@ export type UserCreateManyInput = {
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -482,6 +500,7 @@ export type UserUpdateManyMutationInput = {
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -506,6 +525,7 @@ export type UserOrderByRelationAggregateInput = {
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   name?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   careerLevelId?: Prisma.SortOrder
@@ -525,6 +545,7 @@ export type UserAvgOrderByAggregateInput = {
 export type UserMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   name?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   careerLevelId?: Prisma.SortOrder
@@ -539,6 +560,7 @@ export type UserMaxOrderByAggregateInput = {
 export type UserMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
   name?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   careerLevelId?: Prisma.SortOrder
@@ -728,6 +750,7 @@ export type UserUpdateOneRequiredWithoutSubmissionsNestedInput = {
 export type UserCreateWithoutCareerLevelInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   xp?: number
@@ -749,6 +772,7 @@ export type UserCreateWithoutCareerLevelInput = {
 export type UserUncheckedCreateWithoutCareerLevelInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   xp?: number
@@ -799,6 +823,7 @@ export type UserScalarWhereInput = {
   NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
+  phone?: Prisma.StringNullableFilter<"User"> | string | null
   name?: Prisma.StringNullableFilter<"User"> | string | null
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
   careerLevelId?: Prisma.StringNullableFilter<"User"> | string | null
@@ -813,6 +838,7 @@ export type UserScalarWhereInput = {
 export type UserCreateWithoutMagicLinkTokensInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   xp?: number
@@ -834,6 +860,7 @@ export type UserCreateWithoutMagicLinkTokensInput = {
 export type UserUncheckedCreateWithoutMagicLinkTokensInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   careerLevelId?: string | null
@@ -871,6 +898,7 @@ export type UserUpdateToOneWithWhereWithoutMagicLinkTokensInput = {
 export type UserUpdateWithoutMagicLinkTokensInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -892,6 +920,7 @@ export type UserUpdateWithoutMagicLinkTokensInput = {
 export type UserUncheckedUpdateWithoutMagicLinkTokensInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -913,6 +942,7 @@ export type UserUncheckedUpdateWithoutMagicLinkTokensInput = {
 export type UserCreateWithoutCompetenciesInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   xp?: number
@@ -934,6 +964,7 @@ export type UserCreateWithoutCompetenciesInput = {
 export type UserUncheckedCreateWithoutCompetenciesInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   careerLevelId?: string | null
@@ -971,6 +1002,7 @@ export type UserUpdateToOneWithWhereWithoutCompetenciesInput = {
 export type UserUpdateWithoutCompetenciesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -992,6 +1024,7 @@ export type UserUpdateWithoutCompetenciesInput = {
 export type UserUncheckedUpdateWithoutCompetenciesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1013,6 +1046,7 @@ export type UserUncheckedUpdateWithoutCompetenciesInput = {
 export type UserCreateWithoutSkillsInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   xp?: number
@@ -1034,6 +1068,7 @@ export type UserCreateWithoutSkillsInput = {
 export type UserUncheckedCreateWithoutSkillsInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   careerLevelId?: string | null
@@ -1071,6 +1106,7 @@ export type UserUpdateToOneWithWhereWithoutSkillsInput = {
 export type UserUpdateWithoutSkillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1092,6 +1128,7 @@ export type UserUpdateWithoutSkillsInput = {
 export type UserUncheckedUpdateWithoutSkillsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1113,6 +1150,7 @@ export type UserUncheckedUpdateWithoutSkillsInput = {
 export type UserCreateWithoutConceptMasteriesInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   xp?: number
@@ -1134,6 +1172,7 @@ export type UserCreateWithoutConceptMasteriesInput = {
 export type UserUncheckedCreateWithoutConceptMasteriesInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   careerLevelId?: string | null
@@ -1171,6 +1210,7 @@ export type UserUpdateToOneWithWhereWithoutConceptMasteriesInput = {
 export type UserUpdateWithoutConceptMasteriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1192,6 +1232,7 @@ export type UserUpdateWithoutConceptMasteriesInput = {
 export type UserUncheckedUpdateWithoutConceptMasteriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1213,6 +1254,7 @@ export type UserUncheckedUpdateWithoutConceptMasteriesInput = {
 export type UserCreateWithoutLearningSessionsInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   xp?: number
@@ -1234,6 +1276,7 @@ export type UserCreateWithoutLearningSessionsInput = {
 export type UserUncheckedCreateWithoutLearningSessionsInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   careerLevelId?: string | null
@@ -1271,6 +1314,7 @@ export type UserUpdateToOneWithWhereWithoutLearningSessionsInput = {
 export type UserUpdateWithoutLearningSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1292,6 +1336,7 @@ export type UserUpdateWithoutLearningSessionsInput = {
 export type UserUncheckedUpdateWithoutLearningSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1313,6 +1358,7 @@ export type UserUncheckedUpdateWithoutLearningSessionsInput = {
 export type UserCreateWithoutLearningPathsInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   xp?: number
@@ -1334,6 +1380,7 @@ export type UserCreateWithoutLearningPathsInput = {
 export type UserUncheckedCreateWithoutLearningPathsInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   careerLevelId?: string | null
@@ -1371,6 +1418,7 @@ export type UserUpdateToOneWithWhereWithoutLearningPathsInput = {
 export type UserUpdateWithoutLearningPathsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1392,6 +1440,7 @@ export type UserUpdateWithoutLearningPathsInput = {
 export type UserUncheckedUpdateWithoutLearningPathsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1413,6 +1462,7 @@ export type UserUncheckedUpdateWithoutLearningPathsInput = {
 export type UserCreateWithoutAiMentorContextInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   xp?: number
@@ -1434,6 +1484,7 @@ export type UserCreateWithoutAiMentorContextInput = {
 export type UserUncheckedCreateWithoutAiMentorContextInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   careerLevelId?: string | null
@@ -1471,6 +1522,7 @@ export type UserUpdateToOneWithWhereWithoutAiMentorContextInput = {
 export type UserUpdateWithoutAiMentorContextInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1492,6 +1544,7 @@ export type UserUpdateWithoutAiMentorContextInput = {
 export type UserUncheckedUpdateWithoutAiMentorContextInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1513,6 +1566,7 @@ export type UserUncheckedUpdateWithoutAiMentorContextInput = {
 export type UserCreateWithoutSubmissionsInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   xp?: number
@@ -1534,6 +1588,7 @@ export type UserCreateWithoutSubmissionsInput = {
 export type UserUncheckedCreateWithoutSubmissionsInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   careerLevelId?: string | null
@@ -1571,6 +1626,7 @@ export type UserUpdateToOneWithWhereWithoutSubmissionsInput = {
 export type UserUpdateWithoutSubmissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1592,6 +1648,7 @@ export type UserUpdateWithoutSubmissionsInput = {
 export type UserUncheckedUpdateWithoutSubmissionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1613,6 +1670,7 @@ export type UserUncheckedUpdateWithoutSubmissionsInput = {
 export type UserCreateManyCareerLevelInput = {
   id?: string
   email: string
+  phone?: string | null
   name?: string | null
   avatarUrl?: string | null
   xp?: number
@@ -1626,6 +1684,7 @@ export type UserCreateManyCareerLevelInput = {
 export type UserUpdateWithoutCareerLevelInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1647,6 +1706,7 @@ export type UserUpdateWithoutCareerLevelInput = {
 export type UserUncheckedUpdateWithoutCareerLevelInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1668,6 +1728,7 @@ export type UserUncheckedUpdateWithoutCareerLevelInput = {
 export type UserUncheckedUpdateManyWithoutCareerLevelInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   xp?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1766,6 +1827,7 @@ export type UserCountOutputTypeCountSubmissionsArgs<ExtArgs extends runtime.Type
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  phone?: boolean
   name?: boolean
   avatarUrl?: boolean
   careerLevelId?: boolean
@@ -1790,6 +1852,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  phone?: boolean
   name?: boolean
   avatarUrl?: boolean
   careerLevelId?: boolean
@@ -1805,6 +1868,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
+  phone?: boolean
   name?: boolean
   avatarUrl?: boolean
   careerLevelId?: boolean
@@ -1820,6 +1884,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
 export type UserSelectScalar = {
   id?: boolean
   email?: boolean
+  phone?: boolean
   name?: boolean
   avatarUrl?: boolean
   careerLevelId?: boolean
@@ -1831,7 +1896,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "avatarUrl" | "careerLevelId" | "xp" | "streak" | "lastActiveAt" | "activeLearningPathId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "phone" | "name" | "avatarUrl" | "careerLevelId" | "xp" | "streak" | "lastActiveAt" | "activeLearningPathId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   careerLevel?: boolean | Prisma.User$careerLevelArgs<ExtArgs>
   magicLinkTokens?: boolean | Prisma.User$magicLinkTokensArgs<ExtArgs>
@@ -1867,6 +1932,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
+    phone: string | null
     name: string | null
     avatarUrl: string | null
     careerLevelId: string | null
@@ -2310,6 +2376,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
+  readonly phone: Prisma.FieldRef<"User", 'String'>
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly avatarUrl: Prisma.FieldRef<"User", 'String'>
   readonly careerLevelId: Prisma.FieldRef<"User", 'String'>

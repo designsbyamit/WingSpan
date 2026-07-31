@@ -10,7 +10,7 @@ const PUBLIC_PATHS = [
   '/api/auth/verify',
   '/api/auth/logout',
   '/api/auth/me',
-  '/api/domains',
+  '/api/auth/firebase',
   '/wingspan',
   '/api/extract',
   '/api/career-alpha',

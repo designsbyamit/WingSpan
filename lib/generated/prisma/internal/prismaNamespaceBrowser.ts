@@ -356,6 +356,7 @@ export type ChallengeOnCompetencyScalarFieldEnum = (typeof ChallengeOnCompetency
 export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
+  phone: 'phone',
   name: 'name',
   avatarUrl: 'avatarUrl',
   careerLevelId: 'careerLevelId',

@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     'canvas',
     'mammoth',
     '@prisma/client',
+    'firebase-admin',
   ],
   images: {
     remotePatterns: [
