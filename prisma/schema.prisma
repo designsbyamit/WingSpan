@@ -1,0 +1,415 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../lib/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ──────────────────────────────────────────────
+// CONTENT TABLES
+// ──────────────────────────────────────────────
+
+model Domain {
+  id          String       @id @default(cuid())
+  slug        String       @unique
+  name        String
+  description String?
+  order       Int          @default(0)
+  createdAt   DateTime     @default(now())
+  competencies Competency[]
+  skills      Skill[]
+}
+
+model HumanPattern {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  name        String
+  description String?
+  createdAt   DateTime    @default(now())
+  concepts    ConceptOnHumanPattern[]
+  experiences ExperienceOnHumanPattern[]
+}
+
+model Competency {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  name        String
+  description String?
+  domainId    String
+  domain      Domain      @relation(fields: [domainId], references: [id])
+  level       Int         @default(1)
+  weight      Float       @default(1.0)
+  createdAt   DateTime    @default(now())
+  skills      SkillOnCompetency[]
+  experiences ExperienceOnCompetency[]
+  challenges  ChallengeOnCompetency[]
+  userCompetencies UserCompetency[]
+}
+
+model Skill {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  name        String
+  description String?
+  domainId    String
+  domain      Domain      @relation(fields: [domainId], references: [id])
+  createdAt   DateTime    @default(now())
+  concepts    ConceptOnSkill[]
+  competencies SkillOnCompetency[]
+  challenges  ChallengeOnSkill[]
+  careerLevels SkillOnCareerLevel[]
+  userSkills  UserSkill[]
+}
+
+model Concept {
+  id            String      @id @default(cuid())
+  slug          String      @unique
+  title         String
+  body          String
+  summary       String?
+  mediaUrl      String?
+  estimatedMins Int         @default(5)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  skills        ConceptOnSkill[]
+  humanPatterns ConceptOnHumanPattern[]
+  principles    ConceptOnPrinciple[]
+  experiences   ConceptOnExperience[]
+  prerequisites ConceptPrerequisite[] @relation("Concept")
+  requiredBy    ConceptPrerequisite[] @relation("Prerequisite")
+  masteries     UserConceptMastery[]
+}
+
+model ConceptPrerequisite {
+  conceptId      String
+  prerequisiteId String
+  concept        Concept @relation("Concept", fields: [conceptId], references: [id])
+  prerequisite   Concept @relation("Prerequisite", fields: [prerequisiteId], references: [id])
+
+  @@id([conceptId, prerequisiteId])
+}
+
+model Principle {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  name        String
+  description String?
+  createdAt   DateTime    @default(now())
+  concepts    ConceptOnPrinciple[]
+  experiences ExperienceOnPrinciple[]
+}
+
+model Experience {
+  id           String      @id @default(cuid())
+  slug         String      @unique
+  title        String
+  description  String?
+  narrativeText String     @default("")
+  scenarioText  String     @default("")
+  type         String      // e.g. "project", "exercise", "case-study"
+  durationMins Int         @default(30)
+  xpReward     Int         @default(50)
+  imageUrl     String?
+  imageAttribution String?
+  createdAt    DateTime    @default(now())
+  competencies ExperienceOnCompetency[]
+  humanPatterns ExperienceOnHumanPattern[]
+  principles   ExperienceOnPrinciple[]
+  concepts     ConceptOnExperience[]
+  learningSessions LearningSession[]
+}
+
+model Challenge {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  title       String
+  description String?
+  prompt      String
+  rubric      String?
+  type        String      // e.g. "brief", "critique", "redesign"
+  durationMins Int        @default(60)
+  createdAt   DateTime    @default(now())
+  skills      ChallengeOnSkill[]
+  competencies ChallengeOnCompetency[]
+  submissions ChallengeSubmission[]
+}
+
+model Asset {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  url       String
+  type      String   // e.g. "image", "pdf", "video", "figma"
+  tags      String   @default("") // comma-separated
+  createdAt DateTime @default(now())
+}
+
+model CareerLevel {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  name        String
+  order       Int         @default(0)
+  description String?
+  skills      SkillOnCareerLevel[]
+  learningPaths LearningPath[]
+  users       User[]
+}
+
+model LearningPath {
+  id           String      @id @default(cuid())
+  slug         String      @unique
+  title        String
+  description  String?
+  careerLevelId String?
+  careerLevel  CareerLevel? @relation(fields: [careerLevelId], references: [id])
+  createdAt    DateTime    @default(now())
+  entries      LearningPathEntry[]
+  userPaths    UserLearningPath[]
+}
+
+model LearningPathEntry {
+  id             String      @id @default(cuid())
+  learningPathId String
+  learningPath   LearningPath @relation(fields: [learningPathId], references: [id])
+  order          Int
+  entityType     String      // "concept" | "challenge" | "experience"
+  entityId       String
+}
+
+// ──────────────────────────────────────────────
+// JUNCTION TABLES — CONTENT
+// ──────────────────────────────────────────────
+
+model ConceptOnSkill {
+  conceptId String
+  skillId   String
+  concept   Concept @relation(fields: [conceptId], references: [id])
+  skill     Skill   @relation(fields: [skillId], references: [id])
+
+  @@id([conceptId, skillId])
+}
+
+model ConceptOnHumanPattern {
+  conceptId      String
+  humanPatternId String
+  concept        Concept      @relation(fields: [conceptId], references: [id])
+  humanPattern   HumanPattern @relation(fields: [humanPatternId], references: [id])
+
+  @@id([conceptId, humanPatternId])
+}
+
+model ConceptOnPrinciple {
+  conceptId   String
+  principleId String
+  concept     Concept   @relation(fields: [conceptId], references: [id])
+  principle   Principle @relation(fields: [principleId], references: [id])
+
+  @@id([conceptId, principleId])
+}
+
+model ConceptOnExperience {
+  conceptId    String
+  experienceId String
+  concept      Concept    @relation(fields: [conceptId], references: [id])
+  experience   Experience @relation(fields: [experienceId], references: [id])
+
+  @@id([conceptId, experienceId])
+}
+
+model SkillOnCompetency {
+  skillId      String
+  competencyId String
+  skill        Skill      @relation(fields: [skillId], references: [id])
+  competency   Competency @relation(fields: [competencyId], references: [id])
+
+  @@id([skillId, competencyId])
+}
+
+model SkillOnCareerLevel {
+  skillId       String
+  careerLevelId String
+  skill         Skill       @relation(fields: [skillId], references: [id])
+  careerLevel   CareerLevel @relation(fields: [careerLevelId], references: [id])
+
+  @@id([skillId, careerLevelId])
+}
+
+model ExperienceOnCompetency {
+  experienceId String
+  competencyId String
+  experience   Experience @relation(fields: [experienceId], references: [id])
+  competency   Competency @relation(fields: [competencyId], references: [id])
+
+  @@id([experienceId, competencyId])
+}
+
+model ExperienceOnHumanPattern {
+  experienceId   String
+  humanPatternId String
+  experience     Experience   @relation(fields: [experienceId], references: [id])
+  humanPattern   HumanPattern @relation(fields: [humanPatternId], references: [id])
+
+  @@id([experienceId, humanPatternId])
+}
+
+model ExperienceOnPrinciple {
+  experienceId String
+  principleId  String
+  experience   Experience @relation(fields: [experienceId], references: [id])
+  principle    Principle  @relation(fields: [principleId], references: [id])
+
+  @@id([experienceId, principleId])
+}
+
+model ChallengeOnSkill {
+  challengeId String
+  skillId     String
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  skill       Skill     @relation(fields: [skillId], references: [id])
+
+  @@id([challengeId, skillId])
+}
+
+model ChallengeOnCompetency {
+  challengeId  String
+  competencyId String
+  challenge    Challenge  @relation(fields: [challengeId], references: [id])
+  competency   Competency @relation(fields: [competencyId], references: [id])
+
+  @@id([challengeId, competencyId])
+}
+
+// ──────────────────────────────────────────────
+// USER, AUTH, PROGRESS TABLES
+// ──────────────────────────────────────────────
+
+model User {
+  id            String      @id @default(cuid())
+  email         String      @unique
+  name          String?
+  avatarUrl     String?
+  careerLevelId String?
+  careerLevel   CareerLevel? @relation(fields: [careerLevelId], references: [id])
+  xp            Int         @default(0)
+  streak        Int         @default(0)
+  lastActiveAt  DateTime?
+  activeLearningPathId String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  magicLinkTokens  MagicLinkToken[]
+  competencies     UserCompetency[]
+  skills           UserSkill[]
+  conceptMasteries UserConceptMastery[]
+  learningSessions LearningSession[]
+  learningPaths    UserLearningPath[]
+  aiMentorContext  AIMentorContext?
+  submissions      ChallengeSubmission[]
+}
+
+model MagicLinkToken {
+  id        String    @id @default(cuid())
+  email     String
+  token     String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  userId    String?
+  user      User?     @relation(fields: [userId], references: [id])
+}
+
+model UserCompetency {
+  id           String     @id @default(cuid())
+  userId       String
+  competencyId String
+  level        Int        @default(0)
+  score        Int        @default(0)
+  assessedAt   DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  user         User       @relation(fields: [userId], references: [id])
+  competency   Competency @relation(fields: [competencyId], references: [id])
+
+  @@unique([userId, competencyId])
+}
+
+model UserSkill {
+  id        String   @id @default(cuid())
+  userId    String
+  skillId   String
+  level     Int      @default(0)
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+  skill     Skill    @relation(fields: [skillId], references: [id])
+
+  @@unique([userId, skillId])
+}
+
+model UserConceptMastery {
+  id         String    @id @default(cuid())
+  userId     String
+  conceptId  String
+  mastered   Boolean   @default(false)
+  score      Int?
+  seenCount  Int       @default(0)
+  lastSeenAt DateTime  @default(now())
+  lastSeen   DateTime?
+  masteredAt DateTime?
+  user       User      @relation(fields: [userId], references: [id])
+  concept    Concept   @relation(fields: [conceptId], references: [id])
+
+  @@unique([userId, conceptId])
+}
+
+model LearningSession {
+  id            String    @id @default(cuid())
+  userId        String
+  entityType    String
+  entityId      String
+  experienceId  String?
+  experience    Experience? @relation(fields: [experienceId], references: [id])
+  startedAt     DateTime  @default(now())
+  completedAt   DateTime?
+  durationSec   Int?
+  reflectionText String?
+  aiMessages    String    @default("[]")  // JSON array of {role,content}
+  user          User      @relation(fields: [userId], references: [id])
+}
+
+model UserLearningPath {
+  id             String       @id @default(cuid())
+  userId         String
+  learningPathId String
+  enrolledAt     DateTime     @default(now())
+  completedAt    DateTime?
+  currentEntryId String?
+  user           User         @relation(fields: [userId], references: [id])
+  learningPath   LearningPath @relation(fields: [learningPathId], references: [id])
+
+  @@unique([userId, learningPathId])
+}
+
+model AIMentorContext {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  context           String   @default("")
+  weaknesses        String   @default("[]")   // JSON string[]
+  reflectionHistory String   @default("[]")   // JSON string[]
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id])
+}
+
+model ChallengeSubmission {
+  id          String    @id @default(cuid())
+  userId      String
+  challengeId String
+  response    String
+  feedback    String?
+  score       Int?
+  submittedAt DateTime  @default(now())
+  gradedAt    DateTime?
+  user        User      @relation(fields: [userId], references: [id])
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+}
