@@ -13,12 +13,12 @@ import { Resources } from '@/components/blueprint/Resources'
 import { Blueprint, BlueprintStep, ExtractedCareerData } from '@/types/wingspan'
 
 const STEPS: { id: BlueprintStep; title: string; subtitle: string }[] = [
-  { id: 'profile',        title: 'Profile Map',        subtitle: 'Who you are today' },
-  { id: 'intelligence',   title: 'Career Intelligence', subtitle: 'Strengths & interests' },
-  { id: 'path-selection', title: 'Future Paths',        subtitle: 'Choose your direction' },
-  { id: 'gap-analysis',   title: 'Gap Analysis',        subtitle: 'What stands between you and your goal' },
-  { id: 'roadmap',        title: 'Growth Roadmap',      subtitle: 'Your personalised action plan' },
-  { id: 'resources',      title: 'Resources',           subtitle: 'Tools to accelerate your journey' },
+  { id: 'profile',        title: 'Profile Map',        subtitle: "Here's what we found about you." },
+  { id: 'intelligence',   title: 'Career Intelligence', subtitle: "What you're good at. What draws you in." },
+  { id: 'path-selection', title: 'Future Paths',        subtitle: "A few directions that seem like a natural fit." },
+  { id: 'gap-analysis',   title: 'Gap Analysis',        subtitle: "What's standing between you and that future." },
+  { id: 'roadmap',        title: 'Growth Roadmap',      subtitle: "How you actually get there." },
+  { id: 'resources',      title: 'Resources',           subtitle: "Things worth exploring along the way." },
 ]
 
 function StepContent({
@@ -46,6 +46,7 @@ export function BlueprintScreen() {
   const { blueprint, selectedPath, extractedData } = state
   const [currentStep, setCurrentStep] = useState<BlueprintStep>('profile')
   const [completedSteps, setCompletedSteps] = useState<BlueprintStep[]>([])
+  const [nudgeVisible, setNudgeVisible] = useState(false)
 
   if (!blueprint) return null
 
@@ -54,16 +55,35 @@ export function BlueprintScreen() {
   const isLastStep = currentStepIdx === STEPS.length - 1
   const canAdvance = currentStep !== 'path-selection' || !!selectedPath
 
+  const navigateTo = (step: BlueprintStep) => {
+    // Scroll to top on every tab change, especially Future Paths
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setCurrentStep(step)
+    setCompletedSteps(prev => prev.includes(currentStep) ? prev : [...prev, currentStep])
+  }
+
+  const handleStepClick = (step: BlueprintStep) => {
+    const targetIdx = STEPS.findIndex(s => s.id === step)
+    const isLocked = step === 'path-selection' && !selectedPath && targetIdx > currentStepIdx + 1
+
+    if (isLocked) {
+      // Show friendly nudge instead of blocking
+      setNudgeVisible(true)
+      setTimeout(() => setNudgeVisible(false), 3000)
+      return
+    }
+    navigateTo(step)
+  }
+
   const handleNext = () => {
     if (!canAdvance) return
-    setCompletedSteps(prev => prev.includes(currentStep) ? prev : [...prev, currentStep])
     const next = STEPS[currentStepIdx + 1]
-    if (next) setCurrentStep(next.id)
+    if (next) navigateTo(next.id)
   }
 
   const handleBack = () => {
     const prev = STEPS[currentStepIdx - 1]
-    if (prev) setCurrentStep(prev.id)
+    if (prev) navigateTo(prev.id)
   }
 
   return (
@@ -71,7 +91,7 @@ export function BlueprintScreen() {
 
       {/* Sticky top nav */}
       <div className="sticky top-0 z-40 bg-[var(--bg)] border-b border-[var(--border-ws)] px-6 py-4">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           <div className="flex items-center justify-between mb-3">
             <span
               className="text-xs font-normal tracking-[0.2em] text-[var(--neon)]"
@@ -86,14 +106,14 @@ export function BlueprintScreen() {
           <StepNav
             currentStep={currentStep}
             completedSteps={completedSteps}
-            onStepClick={setCurrentStep}
+            onStepClick={handleStepClick}
           />
         </div>
       </div>
 
-      {/* Step content */}
-      <div className="flex-1 px-6 py-8">
-        <div className="max-w-2xl mx-auto">
+      {/* Step content — wider max-w for more breathing room */}
+      <div className="flex-1 px-6 py-10">
+        <div className="max-w-3xl mx-auto">
 
           {/* Step header */}
           <motion.div
@@ -111,6 +131,22 @@ export function BlueprintScreen() {
             </h2>
             <p className="text-sm text-[var(--text-muted)]">{currentStepMeta.subtitle}</p>
           </motion.div>
+
+          {/* Friendly nudge when a locked tab is tapped */}
+          <AnimatePresence>
+            {nudgeVisible && (
+              <motion.div
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                className="mb-6 rounded-[10px] px-4 py-3 bg-[var(--neon-surface)] border border-[var(--neon-border)]"
+              >
+                <p className="text-xs text-[var(--neon)]">
+                  Pick a path first — then Gap Analysis and everything after will be tailored to it.
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Step body */}
           <AnimatePresence mode="wait">
@@ -130,7 +166,7 @@ export function BlueprintScreen() {
           </AnimatePresence>
 
           {/* Navigation footer */}
-          <div className="mt-10 flex items-center justify-between">
+          <div className="mt-12 flex items-center justify-between">
             <button
               onClick={handleBack}
               disabled={currentStepIdx === 0}
@@ -152,8 +188,8 @@ export function BlueprintScreen() {
                 `}
               >
                 {currentStep === 'path-selection' && !selectedPath
-                  ? 'Select a path to continue'
-                  : `Continue to ${STEPS[currentStepIdx + 1]?.title} →`
+                  ? 'Pick a direction to keep going'
+                  : `Next: ${STEPS[currentStepIdx + 1]?.title} →`
                 }
               </button>
             )}

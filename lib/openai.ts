@@ -75,7 +75,8 @@ export async function* streamBlueprint(
     "industries": ["string"],
     "platforms": ["string"],
     "domains": ["string"],
-    "careerEvolution": "string (2-3 sentence arc narrative)"
+    "careerEvolution": "string (2-3 sentence arc narrative)",
+    "metrics": [{"label": "string (e.g. 'Years Experience')", "value": "number or string", "highlight": true}]
   },
   "strengths": [{
     "name": "string",
@@ -105,7 +106,8 @@ export async function* streamBlueprint(
     "gapSize": "small|medium|large",
     "timeline": "string (e.g. '6-12 months')",
     "effort": "string (e.g. 'High — requires active project work')",
-    "howToClose": "string (specific, actionable 2-3 sentences)"
+    "howToClose": "string (specific, actionable 2-3 sentences)",
+    "objectives": [{"id": "string (unique)", "text": "string (specific actionable checklist item)", "completed": false}]
   }],
   "actions": {
     "immediate": [{ "title": "string", "description": "string", "measurable": "string (specific outcome)", "pathway": "string", "priority": "high|medium|low", "actionType": "project|link|book|course|community|publish|connect|general", "howToStart": "string (exact first step — open X, click Y, do Z)", "link": "string (real working URL) or null", "linkLabel": "string (CTA label e.g. 'Open Course', 'Join Community') or null", "whereToStart": "string (platform or context) or null", "timeEstimate": "string (e.g. '2 hours', '1 weekend') or null" }],
@@ -120,7 +122,22 @@ export async function* streamBlueprint(
     "futurePaths": number (0-100)
   },
   "insights": ["string (3-5 surprising, specific observations about patterns)"],
-  "rationale": { "key": "value" }
+  "rationale": { "key": "value" },
+  "positioning": {
+    "targetRole": "string (e.g. 'VP of Design / Head of Design')",
+    "targetCompanies": ["string"],
+    "targetIdentity": ["string (e.g. 'Strategic Design Leader')"],
+    "positioningStatement": "string (1-2 sentences)"
+  },
+  "roadmapMilestones": [
+    {
+      "phase": "Today|30 Days|90 Days|6 Months|12 Months|18 Months",
+      "actions": ["string (specific, concrete)"],
+      "hardSkills": ["string"],
+      "softSkills": ["string"],
+      "positioningMoves": ["string"]
+    }
+  ]
 }
 
 Be deeply personal and specific. Reference actual projects and roles from the data. Every insight must have evidence. Make the person feel truly seen.`,

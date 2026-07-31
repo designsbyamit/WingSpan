@@ -46,8 +46,8 @@ export function ValidationScreen() {
           <span className="text-xs font-normal tracking-[0.2em] text-[var(--neon)]">
             Wingspan
           </span>
-          <h2 className="text-2xl font-semibold text-[var(--text-primary)] mt-2">Does this look right?</h2>
-          <p className="text-sm text-[var(--text-secondary)] mt-1">Confirm or correct before we finalize your Blueprint.</p>
+          <h2 className="text-2xl font-semibold text-[var(--text-primary)] mt-2">Quick check before we continue.</h2>
+          <p className="text-sm text-[var(--text-secondary)] mt-1">We pulled this from your resume. Fix anything that's off — it'll make your Blueprint more accurate.</p>
         </div>
 
         {/* Timeline */}
@@ -97,7 +97,7 @@ export function ValidationScreen() {
               ) : (
                 <div className="flex justify-between items-start">
                   <div>
-                    <p className="text-sm font-semibold text-[#e0e0e0]">{entry.role} · {entry.company}</p>
+                    <p className="text-sm font-semibold text-[var(--text-primary)]">{entry.role} · {entry.company}</p>
                     <p className="text-xs text-[var(--text-muted)]">{entry.startDate} – {entry.endDate}</p>
                   </div>
                   <div className="flex items-center gap-3">
@@ -139,16 +139,16 @@ export function ValidationScreen() {
         {lowConfidence && (
           <div className="rounded-[10px] bg-[var(--surface)] border border-[var(--border-ws)] p-3">
             <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-              Uploading a Project Repository Template can improve analysis accuracy.{' '}
+              Uploading a Project Repository Template gives us a lot more to work with.{' '}
               <a href="/api/template" download className="text-[var(--neon)] font-semibold">
-                Download template →
+                Download it here →
               </a>
             </p>
           </div>
         )}
 
         <NeonButton onClick={handleProceed} fullWidth>
-          View My Blueprint →
+          Show Me My Blueprint →
         </NeonButton>
       </div>
     </div>

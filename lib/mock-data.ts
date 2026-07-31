@@ -1,7 +1,7 @@
 // lib/mock-data.ts
 // Mock data based on Amit Kumar Tiwari's resume — used when NEXT_PUBLIC_MOCK=true
 
-import { ExtractedCareerData, Blueprint } from '@/types/wingspan'
+import { ExtractedCareerData, Blueprint, CareerAlphaIntelligence } from '@/types/wingspan'
 
 export const mockExtractedData: ExtractedCareerData = {
   timeline: [
@@ -145,6 +145,14 @@ export const mockBlueprint: Blueprint = {
     platforms: ['Enterprise SaaS', 'Mobile', 'Web', 'Design Systems'],
     domains: ['Experience Strategy', 'Design Leadership', 'Generative AI', 'DesignOps', 'Product Design'],
     careerEvolution: 'You began as a craftsman of interfaces at Infosys, sharpened into a creative lead at Photon, then stepped fully into strategic territory at HPE building foundational design systems. At Accenture, you\'ve evolved into a design executive — scaling teams, defining capability, and anchoring AI-first experiences for global enterprises. Your arc is unmistakably upward: from hands-on design to organisational transformation.',
+    metrics: [
+      { label: 'Years Experience', value: 13, highlight: true },
+      { label: 'Projects', value: 58, highlight: true },
+      { label: 'Industries', value: 7, highlight: true },
+      { label: 'Role Transitions', value: 6, highlight: false },
+      { label: 'Tools Mastered', value: 21, highlight: false },
+      { label: 'Leadership Positions', value: 4, highlight: false },
+    ],
   },
   strengths: [
     {
@@ -247,6 +255,15 @@ export const mockBlueprint: Blueprint = {
       marketDemand: 'Very High',
       growthPotential: 'Excellent',
       keyTransitionAreas: ['P&L Ownership', 'C-Suite Communication', 'Org Design at 50+', 'Executive Presence'],
+      betArchetype: 'safe',
+      betRationale: 'Builds directly on your 13-year leadership track record. Near-term demand for senior design executives is confirmed by Career Alpha market intelligence. This is your highest-confidence move.',
+      careerAlphaScore: 92,
+      marketOpportunityScore: 88,
+      futureResilienceScore: 85,
+      learningInvestment: 'low',
+      estimatedTransitionMonths: 12,
+      careerROIScore: 86,
+      whyNotOtherPaths: 'Lower ceiling than the Bold Bet, but higher near-term predictability. Career Alpha recommends this as the anchor path for those who want to de-risk the transition.',
     },
     {
       title: 'AI Design Strategist / CDO',
@@ -259,6 +276,15 @@ export const mockBlueprint: Blueprint = {
       marketDemand: 'Very High',
       growthPotential: 'Excellent',
       keyTransitionAreas: ['AI Prototyping', 'LLM Fluency', 'AI Ethics in Design', 'Product-Led Growth'],
+      betArchetype: 'growth',
+      betRationale: 'Your Generative AI cohort work and LLM research experience already position you inside this trajectory. Career Alpha futures analysis rates this domain as highest-growth for senior designers through 2030.',
+      careerAlphaScore: 87,
+      marketOpportunityScore: 85,
+      futureResilienceScore: 93,
+      learningInvestment: 'medium',
+      estimatedTransitionMonths: 18,
+      careerROIScore: 90,
+      whyNotOtherPaths: 'Requires more deliberate positioning than the Safe Bet. Career Alpha signals latent capacity — the key is converting internal project experience into external market signal.',
     },
     {
       title: 'Design Educator / Thought Leader',
@@ -271,6 +297,15 @@ export const mockBlueprint: Blueprint = {
       marketDemand: 'High',
       growthPotential: 'Strong',
       keyTransitionAreas: ['Curriculum Design', 'Platform Building', 'Community Leadership', 'Content Strategy'],
+      betArchetype: 'bold',
+      betRationale: 'Your Vedas series, DT Summit facilitation, and 13-year synthesis pattern reveal a consistent drive to teach at scale. Career Alpha human advantage analysis scores your facilitation and synthesis skills as rare and non-automatable.',
+      careerAlphaScore: 78,
+      marketOpportunityScore: 72,
+      futureResilienceScore: 88,
+      learningInvestment: 'high',
+      estimatedTransitionMonths: 24,
+      careerROIScore: 82,
+      whyNotOtherPaths: 'Longest horizon and most identity-shift required. Career Alpha rates this as the highest human-advantage path — but it requires building a public platform from the inside out.',
     },
     {
       title: 'Fractional CDO / Consultant',
@@ -283,6 +318,15 @@ export const mockBlueprint: Blueprint = {
       marketDemand: 'High',
       growthPotential: 'Strong',
       keyTransitionAreas: ['Personal Branding', 'Client Acquisition', 'Consulting Frameworks', 'Independent Operations'],
+      betArchetype: 'growth',
+      betRationale: 'Your breadth across five industry verticals and Design CoE setup experience is exactly the portfolio diversity consulting clients pay a premium for. Career Alpha market intelligence confirms growing demand for fractional design executives in India and remote markets.',
+      careerAlphaScore: 82,
+      marketOpportunityScore: 78,
+      futureResilienceScore: 80,
+      learningInvestment: 'medium',
+      estimatedTransitionMonths: 9,
+      careerROIScore: 84,
+      whyNotOtherPaths: 'Provides flexibility but trades leadership leverage for portfolio breadth. Career Alpha flags that this path optimises for autonomy, not impact-at-scale.',
     },
   ],
   gaps: [
@@ -299,6 +343,13 @@ export const mockBlueprint: Blueprint = {
       timeline: '12-18 months',
       effort: 'Medium — primarily visibility and positioning',
       howToClose: 'Publish thought leadership, seek a VP title in your next move, build relationships with CDOs at peer organisations.',
+      objectives: [
+        { id: 'pg-1', text: 'Build executive-level portfolio case studies (3 minimum)', completed: false },
+        { id: 'pg-2', text: 'Publish 1 thought leadership article on LinkedIn', completed: false },
+        { id: 'pg-3', text: 'Speak at 1 design conference in the next 12 months', completed: false },
+        { id: 'pg-4', text: 'Connect with 5 CDOs / Heads of Design at peer organisations', completed: false },
+        { id: 'pg-5', text: 'Update LinkedIn headline to reflect VP-level positioning', completed: false },
+      ],
     },
     {
       pathway: 'VP / Head of Design',
@@ -313,6 +364,12 @@ export const mockBlueprint: Blueprint = {
       timeline: '6-12 months',
       effort: 'Medium — sustained monthly publishing',
       howToClose: 'One LinkedIn article per month on AI + enterprise design. Speak at one conference in the next 12 months.',
+      objectives: [
+        { id: 'vg-1', text: 'Publish 1 article per month for 6 months (AI + enterprise design)', completed: false },
+        { id: 'vg-2', text: 'Grow LinkedIn followers to 5K through consistent content', completed: false },
+        { id: 'vg-3', text: 'Submit speaker proposal to 2 design conferences', completed: false },
+        { id: 'vg-4', text: 'Start a newsletter or content series (Design × AI)', completed: false },
+      ],
     },
     {
       pathway: 'AI Design Strategist / CDO',
@@ -327,6 +384,12 @@ export const mockBlueprint: Blueprint = {
       timeline: '12-24 months',
       effort: 'High — requires active experimentation and side projects',
       howToClose: 'Build 2-3 public AI design projects. Publish the process. Contribute to or advise an AI startup.',
+      objectives: [
+        { id: 'sg-1', text: 'Build and publish 2 AI design prototypes publicly', completed: false },
+        { id: 'sg-2', text: 'Complete an LLM fluency course (e.g. fast.ai or Coursera)', completed: false },
+        { id: 'sg-3', text: 'Advise or join an AI startup as design advisor', completed: false },
+        { id: 'sg-4', text: 'Document AI design process on Figma Community or GitHub', completed: false },
+      ],
     },
     {
       pathway: 'Fractional CDO / Consultant',
@@ -341,6 +404,12 @@ export const mockBlueprint: Blueprint = {
       timeline: '6-12 months to first client',
       effort: 'Medium — positioning and network activation',
       howToClose: 'Define your offer in one sentence. Register on Contra. Activate 10 conversations in your network.',
+      objectives: [
+        { id: 'fc-1', text: 'Define consulting offer in one sentence and test with 3 people', completed: false },
+        { id: 'fc-2', text: 'Create profile on Contra or Toptal as fractional CDO', completed: false },
+        { id: 'fc-3', text: 'Have 10 exploratory conversations with potential clients', completed: false },
+        { id: 'fc-4', text: 'Land first paid engagement (even small — proof of concept)', completed: false },
+      ],
     },
   ],
   actions: {
@@ -507,4 +576,124 @@ export const mockBlueprint: Blueprint = {
     'Systems Thinking': 'Evidenced across all 4 organisations — Infosys (20+ client accounts with consistent IA practice), Photon (founding design culture), HPE (Grommet.io design system), Accenture (DesignOps and Data Governance frameworks)',
     'AI confidence': 'Based on active cohort leadership of 20+ designers, published research, and Accenture AI product delivery — not just tool adoption',
   },
+  positioning: {
+    targetRole: 'VP of Design / Head of Design',
+    targetCompanies: [
+      'Enterprise SaaS companies (Series C+)',
+      'AI-first product companies',
+      'Global consulting firms (senior design leadership)',
+    ],
+    targetIdentity: [
+      'Strategic Design Leader',
+      'AI Transformation Leader',
+      'Design Executive',
+    ],
+    positioningStatement: 'I help organisations navigate complexity through design leadership, systems thinking, and AI-enabled transformation.',
+  },
+  roadmapMilestones: [
+    {
+      phase: 'Today',
+      actions: [
+        'Update LinkedIn headline to reflect VP-level positioning',
+        'Rewrite portfolio intro with executive framing',
+        'List your 3 highest-impact projects with measurable outcomes',
+      ],
+      positioningMoves: ['Refresh LinkedIn profile', 'Update portfolio'],
+    },
+    {
+      phase: '30 Days',
+      actions: [
+        'Publish first AI + enterprise design article on LinkedIn',
+        'Create executive resume (1 page, outcome-focused)',
+        'Document your 3 landmark case studies (SAR format)',
+      ],
+      hardSkills: ['Resume writing', 'Case study documentation'],
+      softSkills: ['Executive communication'],
+    },
+    {
+      phase: '90 Days',
+      actions: [
+        'Build and publish one public AI design prototype',
+        'Submit speaker proposal to 2 design conferences',
+        'Connect with 5 CDOs / Heads of Design at peer firms',
+      ],
+      hardSkills: ['AI prototyping', 'Figma plugin development'],
+      positioningMoves: ['Speaking applications', 'Executive networking'],
+    },
+    {
+      phase: '6 Months',
+      actions: [
+        'Speak at one conference or lead a public workshop',
+        'Grow LinkedIn to 5K followers through consistent content',
+        'Launch "Design × AI" newsletter (500+ subscribers)',
+      ],
+      softSkills: ['Thought leadership', 'Public speaking'],
+      positioningMoves: ['Content authority building'],
+    },
+    {
+      phase: '12 Months',
+      actions: [
+        'Secure VP / Head of Design title (internal or external)',
+        'Formalise one advisory role with an AI startup',
+        'Reach 1K newsletter subscribers',
+      ],
+      positioningMoves: ['Title elevation', 'Advisory positioning'],
+    },
+    {
+      phase: '18 Months',
+      actions: [
+        'Industry recognition as an AI design thought leader',
+        'Active advisory portfolio (2-3 companies)',
+        'First fractional CDO engagement (if pursuing)',
+      ],
+      positioningMoves: ['Institutional recognition', 'Consulting practice'],
+    },
+  ],
+  careerAlpha: {
+    careerStage: 'senior' as const,
+    archetypeLabel: 'Seasoned Enterprise Design Leader',
+    archetypeFingerprint: 'senior-ux-design-india-ai-design-leadership',
+    overallScore: 84,
+    synthesis: 'Your 13-year track record spanning enterprise, consumer, and AI-powered products positions you at the rare intersection of strategic design leadership and emerging AI capability. Clear signals suggest the market is moving toward your strengths faster than most peers are equipped to follow.',
+    weightingRationale: 'Intrinsic signal carries high weight given 13 years of rich evidence. Market intelligence amplifies this — enterprise AI design demand is at an inflection point.',
+    methodSummary: 'Career Alpha analyses your professional footprint across five dimensions: your personal evidence (intrinsic signal), current market demand for your archetype, futures research on where your domain is heading, your human advantage relative to AI automation, and the ROI of potential career transitions.',
+    observations: [
+      '13 years of enterprise design detected',
+      'Strong systems thinking pattern across 4 industries',
+      'AI/automation risk: low for this archetype',
+      'High demand signal in enterprise AI design roles',
+    ],
+    dimensions: {
+      intrinsicSignal: {
+        insight: 'Your track record strongly indicates a rare combination: you ship at scale (100-day MLP, 8x team growth) while simultaneously advancing design system maturity and AI capability. This pattern of execution-plus-elevation is a defining career signal.',
+        signals: ['100-day MLP airline app', '8x team scaling at Accenture', 'HPE Grommet co-definition', 'Data Governance AI track'],
+        cached_at: '2026-07-11',
+        confidenceScore: 88,
+      },
+      marketIntelligence: {
+        insight: 'Clear signals suggest enterprise AI design leadership is entering an inflection point. Companies scaling AI products are discovering a critical shortage of designers who understand both design systems and AI interaction patterns — your exact positioning.',
+        signals: ['Enterprise AI design roles up 40% YoY', 'India tech sector AI investment surge', 'Remote senior design roles growing'],
+        cached_at: '2026-07-11',
+        confidenceScore: 78,
+      },
+      futuresAnalysis: {
+        insight: 'WEF and McKinsey research consistently identifies human-AI collaboration design as one of the highest-growth adjacent roles through 2030. Your work at Accenture on AI-powered business insights already places you inside this trajectory.',
+        signals: ['WEF Future of Jobs 2025', 'McKinsey State of AI 2024', 'Oxford automation probability models'],
+        cached_at: '2026-07-11',
+        confidenceScore: 72,
+      },
+      humanAdvantageIndex: {
+        insight: 'Your advantage compounds at the intersection of systems thinking, stakeholder facilitation, and AI literacy. These are precisely the capabilities that AI augments rather than replaces — and they become more valuable as AI handles more execution work.',
+        signals: ['Cross-industry facilitation pattern', 'Design system co-authorship', 'Multi-stakeholder enterprise projects'],
+        cached_at: '2026-07-11',
+        confidenceScore: 82,
+      },
+      careerROI: {
+        insight: 'A move toward AI Design Leadership from your current position requires low transition effort (you already have the foundation) with disproportionate upside. Estimated 6-9 months to fully reposition, with senior IC to Director-equivalent roles within 18 months.',
+        signals: ['Current AI project exposure', 'Existing leadership track record', 'Design system depth'],
+        cached_at: '2026-07-11',
+        confidenceScore: 75,
+      },
+    },
+  } satisfies CareerAlphaIntelligence,
 }

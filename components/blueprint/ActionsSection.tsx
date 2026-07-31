@@ -37,7 +37,7 @@ function ProgressPill({ state, onChange }: { state: ProgressState; onChange: (s:
     'done': 'not-started',
   }
   const cfg = {
-    'not-started': { label: 'Not started', icon: <Circle size={11} />, cls: 'text-[var(--text-dim)] border-[var(--border-ws)] bg-transparent' },
+    'not-started': { label: 'Not started yet', icon: <Circle size={11} />, cls: 'text-[var(--text-dim)] border-[var(--border-ws)] bg-transparent' },
     'in-progress': { label: 'In progress', icon: <Clock size={11} />, cls: 'text-yellow-400 border-yellow-800/50 bg-yellow-950/30' },
     'done':        { label: 'Done', icon: <CheckCircle2 size={11} />, cls: 'text-[var(--neon)] border-[var(--neon-border)] bg-[var(--neon-surface)]' },
   }
@@ -70,7 +70,7 @@ function ActionCard({ action, progress, onProgress }: {
       layout
       className={`rounded-[12px] border transition-all overflow-hidden ${
         progress === 'done'
-          ? 'bg-[#111] border-[var(--border-ws)] opacity-60'
+          ? 'bg-[var(--card-inner)] border-[var(--border-ws)] opacity-60'
           : 'bg-[var(--surface)] border-[var(--border-ws)]'
       }`}
     >
@@ -117,8 +117,8 @@ function ActionCard({ action, progress, onProgress }: {
           >
             <div className="px-4 pb-4 flex flex-col gap-4 border-t border-[var(--border-ws)] pt-4">
               <div>
-                <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-2">How to start</p>
-                <p className="text-xs text-[var(--text-secondary)] leading-relaxed bg-[#1a1a1a] rounded-[8px] p-3 border border-[var(--border-ws)]">
+                <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-2">Where to begin</p>
+                <p className="text-xs text-[var(--text-secondary)] leading-relaxed bg-[var(--surface-dim)] rounded-[8px] p-3 border border-[var(--border-ws)]">
                   {action.howToStart}
                 </p>
               </div>
@@ -141,7 +141,7 @@ function ActionCard({ action, progress, onProgress }: {
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-[8px] bg-[var(--neon)] text-[#0a0a0a] text-xs font-bold hover:opacity-90 transition-opacity"
                     style={{ boxShadow: '0 0 14px var(--neon-glow)' }}
                   >
-                    {action.linkLabel ?? 'Open link'}
+                    {action.linkLabel ?? "Let's go"}
                     <ExternalLink size={11} />
                   </a>
                 )}
@@ -173,7 +173,7 @@ function ResourceCard({ resource }: { resource: Resource }) {
   return (
     <motion.div layout className="rounded-[12px] bg-[var(--surface)] border border-[var(--border-ws)] overflow-hidden">
       <button onClick={() => setExpanded(!expanded)} className="w-full text-left p-3 flex items-center gap-3">
-        <div className="flex-shrink-0 w-6 h-6 rounded-[6px] bg-[#222] border border-[var(--border-ws)] flex items-center justify-center text-[var(--text-muted)]">
+        <div className="flex-shrink-0 w-6 h-6 rounded-[6px] bg-[var(--surface-dim)] border border-[var(--border-ws)] flex items-center justify-center text-[var(--text-muted)]">
           {icon}
         </div>
         <div className="flex-1 min-w-0">
@@ -246,7 +246,7 @@ export function ActionsSection({ blueprint }: { blueprint: Blueprint }) {
 
       {/* Progress summary bar */}
       {(doneCount > 0 || inProgressCount > 0) && (
-        <div className="rounded-[12px] bg-[#111] border border-[var(--border-ws)] p-4 flex items-center gap-6">
+        <div className="rounded-[12px] bg-[var(--card-inner)] border border-[var(--border-ws)] p-4 flex items-center gap-6">
           <div className="text-center">
             <div className="text-xl font-bold text-[var(--neon)]">{doneCount}</div>
             <div className="text-[10px] text-[var(--text-muted)]">completed</div>
@@ -270,7 +270,7 @@ export function ActionsSection({ blueprint }: { blueprint: Blueprint }) {
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
           <h3 className="text-xs font-bold tracking-[2px] uppercase text-[var(--text-muted)]">Immediate Actions</h3>
-          <span className="text-[10px] text-[var(--text-dim)]">Start this week</span>
+          <span className="text-[10px] text-[var(--text-dim)]">Do these now</span>
         </div>
         {actions.immediate.map((action) => (
           <ActionCard key={action.title} action={action} progress={progress[action.title] ?? 'not-started'} onProgress={(s) => setActionProgress(action.title, s)} />
@@ -280,7 +280,7 @@ export function ActionsSection({ blueprint }: { blueprint: Blueprint }) {
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
           <h3 className="text-xs font-bold tracking-[2px] uppercase text-[var(--text-muted)]">Medium-Term</h3>
-          <span className="text-[10px] text-[var(--text-dim)]">Next 3–6 months</span>
+          <span className="text-[10px] text-[var(--text-dim)]">Build toward these</span>
         </div>
         {actions.mediumTerm.map((action) => (
           <ActionCard key={action.title} action={action} progress={progress[action.title] ?? 'not-started'} onProgress={(s) => setActionProgress(action.title, s)} />
@@ -290,7 +290,7 @@ export function ActionsSection({ blueprint }: { blueprint: Blueprint }) {
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2">
           <h3 className="text-xs font-bold tracking-[2px] uppercase text-[var(--text-muted)]">Long-Term</h3>
-          <span className="text-[10px] text-[var(--text-dim)]">6–18 months</span>
+          <span className="text-[10px] text-[var(--text-dim)]">Play the long game</span>
         </div>
         {actions.longTerm.map((action) => (
           <ActionCard key={action.title} action={action} progress={progress[action.title] ?? 'not-started'} onProgress={(s) => setActionProgress(action.title, s)} />

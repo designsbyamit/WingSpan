@@ -1,8 +1,11 @@
 // app/api/blueprint/route.ts
 import { NextRequest } from 'next/server'
-import { streamBlueprint } from '@/lib/openai'
-import { ValidatedCareerData } from '@/types/wingspan'
+import { streamBlueprint } from '@/lib/claude'
+import { ValidatedCareerData, CareerAlphaIntelligence } from '@/types/wingspan'
 import { mockBlueprint } from '@/lib/mock-data'
+
+// Extend Next.js route timeout to 5 minutes for long AI generation
+export const maxDuration = 300
 
 const MOCK_STEPS = [
   { step: 'timeline',  label: 'Reconstructing career timeline…',    percentage: 35, delay: 1500 },
@@ -46,16 +49,23 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json()
   const validatedData: ValidatedCareerData = body.validatedData
+  const careerAlpha: CareerAlphaIntelligence = body.careerAlpha
+  if (!careerAlpha) {
+    return new Response('careerAlpha is required', { status: 400 })
+  }
   const encoder = new TextEncoder()
 
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        for await (const event of streamBlueprint(validatedData)) {
+        for await (const event of streamBlueprint(validatedData, careerAlpha)) {
+          // 'ping' events are keepalives — still send them so the connection stays open
+          // but update percentage so the client's progress bar moves
           const line = `event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`
           controller.enqueue(encoder.encode(line))
         }
       } catch (err) {
+        console.error('Blueprint error:', err)
         const errLine = `event: error\ndata: ${JSON.stringify({ error: String(err) })}\n\n`
         controller.enqueue(encoder.encode(errLine))
       } finally {
@@ -65,6 +75,11 @@ export async function POST(req: NextRequest) {
   })
 
   return new Response(stream, {
-    headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive' },
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache, no-transform',
+      'Connection': 'keep-alive',
+      'X-Accel-Buffering': 'no', // Disable nginx buffering if behind proxy
+    },
   })
 }

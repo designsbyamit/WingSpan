@@ -12,6 +12,63 @@ const GAP_SIZE_STYLE = {
   large:  { label: 'High Gap',   cls: 'text-red-400 border-red-800/50 bg-red-950/20' },
 }
 
+const OBJECTIVES_KEY = 'wingspan-gap-objectives'
+
+function loadObjectives(): Record<string, boolean> {
+  if (typeof window === 'undefined') return {}
+  try { return JSON.parse(localStorage.getItem(OBJECTIVES_KEY) ?? '{}') } catch { return {} }
+}
+
+function saveObjective(key: string, completed: boolean) {
+  const all = loadObjectives()
+  all[key] = completed
+  localStorage.setItem(OBJECTIVES_KEY, JSON.stringify(all))
+}
+
+function ObjectiveItem({ objective, storageKey }: {
+  objective: import('@/types/wingspan').GapObjective
+  storageKey: string
+}) {
+  const [checked, setChecked] = useState(() => {
+    const stored = loadObjectives()
+    return stored[storageKey] ?? objective.completed
+  })
+
+  const toggle = () => {
+    const next = !checked
+    setChecked(next)
+    saveObjective(storageKey, next)
+  }
+
+  return (
+    <button
+      onClick={toggle}
+      className="flex items-start gap-3 text-left w-full group"
+    >
+      <div className={`
+        flex-shrink-0 mt-0.5 w-4 h-4 rounded-[4px] border-2 flex items-center justify-center transition-all
+        ${checked
+          ? 'bg-[var(--neon)] border-[var(--neon)]'
+          : 'border-[var(--border-ws)] group-hover:border-[var(--neon)]'
+        }
+      `}>
+        {checked && (
+          <svg width="8" height="6" viewBox="0 0 8 6" fill="none">
+            <path d="M1 3L3 5L7 1" stroke="#0a0a0a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        )}
+      </div>
+      <span className={`text-xs leading-relaxed transition-colors ${
+        checked
+          ? 'line-through text-[var(--text-muted)]'
+          : 'text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]'
+      }`}>
+        {objective.text}
+      </span>
+    </button>
+  )
+}
+
 function GapCard({ gap }: { gap: Gap }) {
   const [expanded, setExpanded] = useState(false)
   const sizeStyle = GAP_SIZE_STYLE[gap.gapSize]
@@ -75,7 +132,7 @@ function GapCard({ gap }: { gap: Gap }) {
 
               {/* Current vs Desired state */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-[8px] bg-[#111] border border-[var(--border-ws)] p-3">
+                <div className="rounded-[8px] bg-[var(--card-inner)] border border-[var(--border-ws)] p-3">
                   <p className="text-[9px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">Current State</p>
                   <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{gap.currentState}</p>
                 </div>
@@ -106,10 +163,26 @@ function GapCard({ gap }: { gap: Gap }) {
               </div>
 
               {/* How to close */}
-              <div className="rounded-[8px] bg-[#111] border border-[var(--border-ws)] p-3">
-                <p className="text-[9px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">How to Close</p>
+              <div className="rounded-[8px] bg-[var(--card-inner)] border border-[var(--border-ws)] p-3">
+                <p className="text-[9px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">How to close it</p>
                 <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{gap.howToClose}</p>
               </div>
+
+              {/* Checklist objectives */}
+              {gap.objectives && gap.objectives.length > 0 && (
+                <div>
+                  <p className="text-[9px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-3">Things to do</p>
+                  <div className="flex flex-col gap-2">
+                    {gap.objectives.map(obj => (
+                      <ObjectiveItem
+                        key={obj.id}
+                        objective={obj}
+                        storageKey={`${gap.pathway}-${gap.gapType}-${obj.id}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
 
             </div>
           </motion.div>
@@ -131,7 +204,7 @@ export function GapAnalysis({ blueprint }: { blueprint: Blueprint }) {
   if (!selectedPath) {
     return (
       <div className="rounded-[12px] bg-[var(--surface)] border border-[var(--border-ws)] p-8 text-center">
-        <p className="text-sm text-[var(--text-muted)]">Select a future path first to see your gap analysis.</p>
+        <p className="text-sm text-[var(--text-muted)]">Pick a direction first — we'll show you what's standing in the way.</p>
       </div>
     )
   }
@@ -139,7 +212,7 @@ export function GapAnalysis({ blueprint }: { blueprint: Blueprint }) {
   return (
     <div className="flex flex-col gap-4">
       <div className="mb-2">
-        <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">Analysing gaps for</p>
+        <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">Here's what to work on for</p>
         <p className="text-base font-bold text-[var(--neon)]" style={{ fontFamily: 'var(--font-sora)' }}>
           {selectedPath}
         </p>

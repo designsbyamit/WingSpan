@@ -1,7 +1,7 @@
 // app/api/extract/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { parseFile } from '@/lib/parsers'
-import { extractCareerData } from '@/lib/openai'
+import { extractCareerData } from '@/lib/claude'
 import { mockExtractedData } from '@/lib/mock-data'
 
 export async function POST(req: NextRequest) {

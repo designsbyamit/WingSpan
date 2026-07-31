@@ -94,7 +94,7 @@
   /* Wingspan dark-mode tokens (default) */
   --bg: #141414;
   --surface: #333333;
-  --surface-dim: #1a1a1a;
+  --surface-dim: #353B45;
   --border-ws: #404040;
   --border-dim: #363636;
   --text-primary: #f0f0f0;
@@ -105,22 +105,26 @@
   --neon-glow: rgba(163, 230, 53, 0.45);
   --neon-surface: rgba(163, 230, 53, 0.1);
   --neon-border: rgba(163, 230, 53, 0.22);
+  --card-inner: #2D3139;
 }
 
 .light {
   --bg: #f7f8ff;
   --surface: #ffffff;
-  --surface-dim: #f0f0f8;
-  --border-ws: rgba(99, 102, 241, 0.1);
+  --surface-dim: #f0f1fb;
+  --border-ws: rgba(99, 102, 241, 0.12);
   --border-dim: rgba(99, 102, 241, 0.07);
-  --text-primary: #11121e;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
-  --text-dim: #d1d5db;
-  --neon: #a3e635;
-  --neon-glow: rgba(163, 230, 53, 0.35);
-  --neon-surface: rgba(163, 230, 53, 0.08);
-  --neon-border: rgba(163, 230, 53, 0.2);
+  --text-primary: #0f1021;
+  --text-secondary: #4b5563;
+  --text-muted: #8b93a8;
+  --text-dim: #c4c9d8;
+  /* Indigo accent replaces neon green in light mode */
+  --neon: #9EE020;
+  --neon-glow: rgba(79, 70, 229, 0.30);
+  --neon-surface: rgba(79, 70, 229, 0.07);
+  --neon-border: rgba(79, 70, 229, 0.18);
+  /* Card surface override — used instead of hard-coded #111 in components */
+  --card-inner: #f3f4f8;
 }
 
 .dark {

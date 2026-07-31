@@ -1,5 +1,4 @@
 // lib/parsers/pdf.ts
-import OpenAI from 'openai'
 
 const VISION_THRESHOLD = 100
 
@@ -11,13 +10,20 @@ async function disablePdfjsWorker() {
 }
 
 export async function parsePdf(buffer: Buffer): Promise<string> {
-  await disablePdfjsWorker()
-  const { PDFParse } = await import('pdf-parse')
-  const parser = new PDFParse({ data: buffer })
-  const data = await parser.getText()
-  if (data.text.trim().length >= VISION_THRESHOLD) {
-    return data.text
+  // Try text extraction first
+  try {
+    await disablePdfjsWorker()
+    const { PDFParse } = await import('pdf-parse')
+    const parser = new PDFParse({ data: buffer })
+    const data = await parser.getText()
+    if (data.text.trim().length >= VISION_THRESHOLD) {
+      return data.text
+    }
+  } catch {
+    // Fall through to vision
   }
+
+  // Fallback: render pages as images and extract via Claude Vision
   return extractPdfViaVision(buffer)
 }
 
@@ -28,11 +34,12 @@ async function extractPdfViaVision(buffer: Buffer): Promise<string> {
     useWorkerFetch: false,
     useSystemFonts: true,
   }).promise
+
   const pageImages: string[] = []
 
-  for (let i = 1; i <= Math.min(pdf.numPages, 6); i++) {
+  for (let i = 1; i <= Math.min(pdf.numPages, 8); i++) {
     const page = await pdf.getPage(i)
-    const viewport = page.getViewport({ scale: 1.5 })
+    const viewport = page.getViewport({ scale: 1.0 }) // Keep at 1x — Claude Vision max is 1568px per side
     const { createCanvas } = await import('canvas')
     const canvas = createCanvas(viewport.width, viewport.height)
     const ctx = canvas.getContext('2d')
@@ -41,29 +48,9 @@ async function extractPdfViaVision(buffer: Buffer): Promise<string> {
       canvasContext: ctx as unknown as CanvasRenderingContext2D,
       viewport,
     }).promise
-    pageImages.push(canvas.toDataURL('image/jpeg', 0.85).split(',')[1])
+    pageImages.push(canvas.toDataURL('image/jpeg', 0.9).split(',')[1])
   }
 
-  const client = new OpenAI()
-  const response = await client.chat.completions.create({
-    model: 'gpt-4o',
-    messages: [
-      {
-        role: 'user',
-        content: [
-          {
-            type: 'text',
-            text: 'Extract all text content from these resume pages. Return plain text only, preserving structure (job titles, dates, descriptions). No commentary.',
-          },
-          ...pageImages.map((img) => ({
-            type: 'image_url' as const,
-            image_url: { url: `data:image/jpeg;base64,${img}` },
-          })),
-        ],
-      },
-    ],
-    max_tokens: 4096,
-  })
-
-  return response.choices[0].message.content ?? ''
+  const { extractPdfViaClaudeVision } = await import('@/lib/claude')
+  return extractPdfViaClaudeVision(pageImages)
 }

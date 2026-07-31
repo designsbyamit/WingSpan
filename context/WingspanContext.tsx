@@ -6,6 +6,7 @@ import {
   WingspanState,
   WingspanAction,
   DiscoveryProgress,
+  ProjectView,
 } from '@/types/wingspan'
 
 const initialProgress: DiscoveryProgress = {
@@ -26,6 +27,8 @@ const initialState: WingspanState = {
   blueprint: null,
   error: null,
   selectedPath: null,
+  activeProjectView: 'card' as ProjectView,
+  careerAlpha: null,
 }
 
 function reducer(state: WingspanState, action: WingspanAction): WingspanState {
@@ -97,13 +100,32 @@ function reducer(state: WingspanState, action: WingspanAction): WingspanState {
           : state.extractedData,
       }
     case 'SET_BLUEPRINT':
-      return { ...state, blueprint: action.blueprint }
+      return {
+        ...state,
+        blueprint: action.blueprint.careerAlpha
+          ? action.blueprint
+          : { ...action.blueprint, careerAlpha: state.careerAlpha ?? undefined },
+      }
     case 'SET_ERROR':
       return { ...state, error: action.error }
     case 'CLEAR_ERROR':
       return { ...state, error: null }
     case 'SELECT_PATH':
       return { ...state, selectedPath: action.path }
+    case 'SET_PROJECT_VIEW':
+      return { ...state, activeProjectView: action.view }
+    case 'UPDATE_PROJECT':
+      return {
+        ...state,
+        extractedData: state.extractedData ? {
+          ...state.extractedData,
+          projects: state.extractedData.projects.map(p =>
+            p.id === action.project.id ? action.project : p
+          ),
+        } : state.extractedData,
+      }
+    case 'SET_CAREER_ALPHA':
+      return { ...state, careerAlpha: action.data }
     default:
       return state
   }

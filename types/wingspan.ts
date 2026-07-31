@@ -32,6 +32,10 @@ export interface ExtractedCareerData {
   skills: string[]
   education: Array<{ institution: string; degree: string; year?: string }>
   rawText: string
+  careerStageSignals?: string[]
+  evidenceQuality?: 'rich' | 'moderate' | 'sparse'
+  geographySignals?: string[]
+  footprintSignals?: string[]
 }
 
 export interface ValidatedCareerData extends ExtractedCareerData {
@@ -68,9 +72,49 @@ export interface FuturePath {
   marketDemand: 'Very High' | 'High' | 'Moderate' | 'Emerging'
   growthPotential: 'Excellent' | 'Strong' | 'Good' | 'Moderate'
   keyTransitionAreas: string[]
+  betArchetype: BetArchetype
+  betRationale: string
+  careerAlphaScore: number
+  marketOpportunityScore: number
+  futureResilienceScore: number
+  learningInvestment: 'low' | 'medium' | 'high' | 'very-high'
+  estimatedTransitionMonths: number
+  careerROIScore: number
+  whyNotOtherPaths: string
 }
 
 export type GapType = 'Skills Gap' | 'Positioning Gap' | 'Leadership Gap' | 'Visibility Gap' | 'Domain Gap'
+
+// v2.1 additions
+
+export type ProjectView = 'card' | 'grid' | 'timeline' | 'analytics'
+
+export interface CareerMetric {
+  label: string
+  value: string | number
+  highlight?: boolean
+}
+
+export interface GapObjective {
+  id: string
+  text: string
+  completed: boolean
+}
+
+export interface PositioningStrategy {
+  targetRole: string
+  targetCompanies: string[]
+  targetIdentity: string[]
+  positioningStatement: string
+}
+
+export interface RoadmapMilestone {
+  phase: 'Today' | '30 Days' | '90 Days' | '6 Months' | '12 Months' | '18 Months'
+  actions: string[]
+  hardSkills?: string[]
+  softSkills?: string[]
+  positioningMoves?: string[]
+}
 
 export interface Gap {
   pathway: string
@@ -85,6 +129,7 @@ export interface Gap {
   timeline: string
   effort: string
   howToClose: string
+  objectives?: GapObjective[]
 }
 
 export type ActionType = 'project' | 'link' | 'book' | 'course' | 'community' | 'publish' | 'connect' | 'general'
@@ -120,6 +165,7 @@ export interface Blueprint {
     platforms: string[]
     domains: string[]
     careerEvolution: string
+    metrics?: CareerMetric[]
   }
   strengths: Strength[]
   interests: Interest[]
@@ -139,6 +185,9 @@ export interface Blueprint {
   }
   insights: string[]
   rationale: Record<string, string>
+  positioning?: PositioningStrategy
+  roadmapMilestones?: RoadmapMilestone[]
+  careerAlpha?: CareerAlphaIntelligence
 }
 
 export type DiscoveryStep =
@@ -169,6 +218,8 @@ export interface WingspanState {
   blueprint: Blueprint | null
   error: string | null
   selectedPath: string | null
+  activeProjectView: ProjectView
+  careerAlpha: CareerAlphaIntelligence | null
 }
 
 export type WingspanAction =
@@ -187,3 +238,37 @@ export type WingspanAction =
   | { type: 'SET_ERROR'; error: string }
   | { type: 'CLEAR_ERROR' }
   | { type: 'SELECT_PATH'; path: string }
+  | { type: 'SET_PROJECT_VIEW'; view: ProjectView }
+  | { type: 'UPDATE_PROJECT'; project: Project }
+  | { type: 'SET_CAREER_ALPHA'; data: CareerAlphaIntelligence }
+
+// ── Career Alpha types ─────────────────────────────────────────────────────
+
+export type CareerStage = 'student' | 'early' | 'mid' | 'senior' | 'leader'
+
+export type BetArchetype = 'safe' | 'growth' | 'bold'
+
+export interface CareerAlphaDimension {
+  insight: string
+  signals: string[]
+  cached_at: string
+  confidenceScore: number  // 0-100, internal only — never shown as a number to users
+}
+
+export interface CareerAlphaIntelligence {
+  careerStage: CareerStage
+  archetypeLabel: string
+  archetypeFingerprint: string
+  dimensions: {
+    intrinsicSignal: CareerAlphaDimension
+    marketIntelligence: CareerAlphaDimension
+    futuresAnalysis: CareerAlphaDimension
+    humanAdvantageIndex: CareerAlphaDimension
+    careerROI: CareerAlphaDimension
+  }
+  overallScore: number
+  synthesis: string
+  weightingRationale: string
+  methodSummary: string
+  observations: string[]  // surfaced to DiscoveryScreen observation feed
+}
