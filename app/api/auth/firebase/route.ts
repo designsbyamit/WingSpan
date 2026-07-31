@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     response.headers.set('Set-Cookie', cookieHeader)
     return response
   } catch (err) {
-    console.error('Firebase auth error:', err)
-    return NextResponse.json({ error: 'Authentication failed' }, { status: 401 })
+    console.error('Firebase auth error:', JSON.stringify(err, Object.getOwnPropertyNames(err)))
+    return NextResponse.json({ error: 'Authentication failed', detail: String(err) }, { status: 401 })
   }
 }
