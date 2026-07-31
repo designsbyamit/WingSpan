@@ -9,22 +9,40 @@ export async function POST(req: NextRequest) {
     const { idToken } = await req.json()
     if (!idToken) return NextResponse.json({ error: 'Missing idToken' }, { status: 400 })
 
-    // Verify Firebase ID token
     const decoded = await getAdminAuth().verifyIdToken(idToken)
     const phone = decoded.phone_number
-    if (!phone) return NextResponse.json({ error: 'No phone number in token' }, { status: 400 })
+    const email = decoded.email
 
-    // Upsert user by phone
-    let user = await db.user.findFirst({ where: { phone } })
-    if (!user) {
-      user = await db.user.create({
-        data: { phone, email: `${phone.replace('+', '')}@phone.wingspan.app` },
-      })
+    if (!phone && !email) {
+      return NextResponse.json({ error: 'No identifier in token' }, { status: 400 })
     }
 
-    // Create JWT session cookie
-    const cookieHeader = await createSession(user.id, user.email)
+    let user = null
 
+    if (email) {
+      // Google sign-in — upsert by email
+      user = await db.user.findUnique({ where: { email } })
+      if (!user) {
+        user = await db.user.create({
+          data: {
+            email,
+            name: decoded.name ?? null,
+          },
+        })
+      }
+    } else if (phone) {
+      // Phone sign-in — upsert by phone
+      user = await db.user.findFirst({ where: { phone } })
+      if (!user) {
+        user = await db.user.create({
+          data: { phone, email: `${phone.replace('+', '')}@phone.wingspan.app` },
+        })
+      }
+    }
+
+    if (!user) return NextResponse.json({ error: 'Failed to create user' }, { status: 500 })
+
+    const cookieHeader = await createSession(user.id, user.email)
     const response = NextResponse.json({ ok: true })
     response.headers.set('Set-Cookie', cookieHeader)
     return response
