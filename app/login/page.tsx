@@ -24,9 +24,9 @@ function LoginForm() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4" style={{ backgroundColor: '#23262F' }}>
       <div className="w-full max-w-sm flex flex-col items-center gap-8">
-        <div className="text-center">
-          <h1 className="text-2xl font-semibold tracking-tight text-white font-sora">Design Evolution</h1>
-          <p className="mt-2 text-sm text-[var(--text-muted)] font-jakarta leading-relaxed">
+        <div className="text-center flex flex-col items-center gap-4">
+          <img src="/LogoColor.svg" alt="Wingspan" className="h-12 w-auto" />
+          <p className="text-sm text-[var(--text-muted)] font-jakarta leading-relaxed">
             Become a better designer.<br />One experience at a time.
           </p>
         </div>
