@@ -1,7 +1,9 @@
 // lib/email.ts
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY ?? 'placeholder')
+}
 
 export async function sendMagicLink(email: string, token: string): Promise<void> {
   if (!process.env.RESEND_API_KEY) {
@@ -15,7 +17,7 @@ export async function sendMagicLink(email: string, token: string): Promise<void>
 
   const magicLinkUrl = `${appUrl}/api/auth/verify?token=${token}`
 
-  const { error } = await resend.emails.send({
+  const { error } = await getResend().emails.send({
     from: 'Design Evolution <onboarding@resend.dev>',
     to: [email],
     subject: 'Your sign-in link for Design Evolution',
