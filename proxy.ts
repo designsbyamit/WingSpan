@@ -5,6 +5,7 @@ import { getSession } from '@/lib/auth'
 
 // Paths that do NOT require authentication
 const PUBLIC_PATHS = [
+  '/',
   '/login',
   '/api/auth/magic-link',
   '/api/auth/verify',
