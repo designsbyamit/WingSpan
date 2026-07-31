@@ -6,7 +6,16 @@ const nextConfig: NextConfig = {
     'pdfjs-dist',
     'canvas',
     'mammoth',
+    '@prisma/client',
   ],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
+  },
 };
 
 export default nextConfig;
