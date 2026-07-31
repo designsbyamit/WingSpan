@@ -158,24 +158,38 @@ function markdownToHTMLDocument(markdown: string): string {
   const lines = markdown.split('\n')
   const htmlLines: string[] = []
   let inTable = false
+  let inList = false
+
+  const closeOpenBlocks = () => {
+    if (inTable) { htmlLines.push('</table>'); inTable = false }
+    if (inList) { htmlLines.push('</ul>'); inList = false }
+  }
 
   for (const line of lines) {
     if (line.startsWith('# ')) {
+      closeOpenBlocks()
       htmlLines.push(`<h1>${escapeHtml(line.slice(2))}</h1>`)
     } else if (line.startsWith('## ')) {
+      closeOpenBlocks()
       htmlLines.push(`<h2>${escapeHtml(line.slice(3))}</h2>`)
     } else if (line.startsWith('### ')) {
+      closeOpenBlocks()
       htmlLines.push(`<h3>${escapeHtml(line.slice(4))}</h3>`)
     } else if (line.startsWith('> ')) {
+      closeOpenBlocks()
       htmlLines.push(`<blockquote>${escapeHtml(line.slice(2))}</blockquote>`)
     } else if (line.startsWith('- [ ] ')) {
-      htmlLines.push(`<p class="task">☐ ${escapeHtml(line.slice(6))}</p>`)
+      closeOpenBlocks()
+      htmlLines.push(`<p class="task">☐ ${inlineMd(line.slice(6))}</p>`)
     } else if (line.startsWith('- ')) {
+      if (inTable) { htmlLines.push('</table>'); inTable = false }
+      if (!inList) { htmlLines.push('<ul>'); inList = true }
       htmlLines.push(`<li>${inlineMd(line.slice(2))}</li>`)
     } else if (line.startsWith('---')) {
-      inTable = false
+      closeOpenBlocks()
       htmlLines.push(`<hr>`)
     } else if (line.startsWith('|')) {
+      if (inList) { htmlLines.push('</ul>'); inList = false }
       if (!inTable) {
         htmlLines.push('<table>')
         inTable = true
@@ -187,7 +201,7 @@ function markdownToHTMLDocument(markdown: string): string {
         htmlLines.push(`<tr>${cells.map(c => `<${tag}>${inlineMd(c.trim())}</${tag}>`).join('')}</tr>`)
       }
     } else {
-      if (inTable) { htmlLines.push('</table>'); inTable = false }
+      closeOpenBlocks()
       if (line.trim() === '') {
         htmlLines.push('<br>')
       } else {
@@ -196,6 +210,7 @@ function markdownToHTMLDocument(markdown: string): string {
     }
   }
   if (inTable) htmlLines.push('</table>')
+  if (inList) htmlLines.push('</ul>')
 
   const body = htmlLines.join('\n')
 
