@@ -1,13 +1,9 @@
 // lib/mentor.ts
-import Anthropic from '@anthropic-ai/sdk'
+import Groq from 'groq-sdk'
 import type { MentorMessage } from '@/types/design-evolution'
 
-const claude = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-  baseURL: process.env.ANTHROPIC_BASE_URL,
-})
-
-const MODEL = process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-latest'
+const MODEL = process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile'
+function getGroq() { return new Groq({ apiKey: process.env.GROQ_API_KEY ?? '' }) }
 
 interface StreamMentorParams {
   messages: MentorMessage[]
@@ -42,19 +38,19 @@ Guidelines:
     async start(controller) {
       let accumulated = ''
       try {
-        const stream = claude.messages.stream({
+        const stream = await getGroq().chat.completions.create({
           model: MODEL,
           max_tokens: 512,
-          system: systemPrompt,
-          messages: messages.map((m) => ({ role: m.role, content: m.content })),
+          stream: true,
+          messages: [
+            { role: 'system', content: systemPrompt },
+            ...messages.map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content })),
+          ],
         })
 
         for await (const chunk of stream) {
-          if (
-            chunk.type === 'content_block_delta' &&
-            chunk.delta.type === 'text_delta'
-          ) {
-            const text = chunk.delta.text
+          const text = chunk.choices[0]?.delta?.content ?? ''
+          if (text) {
             accumulated += text
             controller.enqueue(encoder.encode(text))
           }
@@ -63,9 +59,7 @@ Guidelines:
         onComplete?.(accumulated)
       } catch (err) {
         console.error('streamMentorResponse error:', err)
-        controller.enqueue(
-          encoder.encode('\n[Mentor unavailable. Try again.]')
-        )
+        controller.enqueue(encoder.encode('\n[Mentor unavailable. Try again.]'))
       } finally {
         controller.close()
       }

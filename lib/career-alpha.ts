@@ -1,16 +1,12 @@
 // lib/career-alpha.ts
 // Career Alpha Stage 2 — archetype fingerprinting, freshness probing, and
-// five-dimension intelligence generation via Claude.
-import Anthropic from '@anthropic-ai/sdk'
+// five-dimension intelligence generation via Groq.
+import Groq from 'groq-sdk'
 import { ExtractedCareerData, CareerAlphaIntelligence, CareerStage } from '@/types/wingspan'
 import { loadCacheEntry, updateCacheDimensions, CacheEntry, CacheDimensionEntry } from '@/lib/career-alpha-cache'
 
-const claude = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-  baseURL: process.env.ANTHROPIC_BASE_URL,
-})
-
-const MODEL = process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-latest'
+const MODEL = process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile'
+function getGroq() { return new Groq({ apiKey: process.env.GROQ_API_KEY ?? '' }) }
 
 // ── Archetype Fingerprint ──────────────────────────────────────────────────
 
@@ -132,13 +128,13 @@ Return only JSON:
   "allFresh": boolean
 }`
 
-  const response = await claude.messages.create({
+  const response = await getGroq().chat.completions.create({
     model: MODEL,
     max_tokens: 512,
     messages: [{ role: 'user', content: prompt }],
   })
 
-  const text = response.content[0].type === 'text' ? response.content[0].text : '{}'
+  const text = response.choices[0]?.message?.content ?? '{}'
   const clean = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
   const result = JSON.parse(clean) as {
     staleDimensions: string[]
@@ -260,15 +256,17 @@ ${cachedContext ? `Pre-computed dimensions (use these values verbatim for the li
 Return ONLY valid JSON matching this schema:
 ${CAREER_ALPHA_SCHEMA}`
 
-  // Step 5: Call Claude
-  const response = await claude.messages.create({
+  // Step 5: Call Groq
+  const response = await getGroq().chat.completions.create({
     model: MODEL,
     max_tokens: 4096,
-    system: CAREER_ALPHA_SYSTEM_PROMPT,
-    messages: [{ role: 'user', content: userPrompt }],
+    messages: [
+      { role: 'system', content: CAREER_ALPHA_SYSTEM_PROMPT },
+      { role: 'user', content: userPrompt },
+    ],
   })
 
-  const text = response.content[0].type === 'text' ? response.content[0].text : '{}'
+  const text = response.choices[0]?.message?.content ?? '{}'
   const clean = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
 
   // Step 6: Parse

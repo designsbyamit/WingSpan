@@ -1,14 +1,10 @@
 // lib/claude.ts
-// All AI calls via Anthropic Claude — replaces lib/openai.ts
-import Anthropic from '@anthropic-ai/sdk'
+// All AI calls via Groq
+import Groq from 'groq-sdk'
 import { ExtractedCareerData, Blueprint, ValidatedCareerData, CareerAlphaIntelligence } from '@/types/wingspan'
 
-const claude = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-  baseURL: process.env.ANTHROPIC_BASE_URL,
-})
-
-const MODEL = process.env.ANTHROPIC_MODEL ?? 'claude-sonnet-latest'
+const MODEL = process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile'
+function getGroq() { return new Groq({ apiKey: process.env.GROQ_API_KEY ?? '' }) }
 
 // ── Stage 1: Extract structured career data from raw text ──────────────────
 
@@ -21,7 +17,7 @@ export async function extractCareerData(
     .map(([k, v]) => `${k}: ${v}`)
     .join('\n')
 
-  const response = await claude.messages.create({
+  const response = await getGroq().chat.completions.create({
     model: MODEL,
     max_tokens: 4096,
     messages: [
@@ -76,7 +72,7 @@ ${urlContext ? `Profile URLs:\n${urlContext}` : ''}`,
     ],
   })
 
-  const text = response.content[0].type === 'text' ? response.content[0].text : '{}'
+  const text = response.choices[0]?.message?.content ?? '{}'
   // Strip any accidental markdown fences
   const clean = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
   const json = JSON.parse(clean)
@@ -86,31 +82,19 @@ ${urlContext ? `Profile URLs:\n${urlContext}` : ''}`,
 // ── PDF Vision fallback: extract text from image-based PDFs using Claude ───
 
 export async function extractPdfViaClaudeVision(pageImages: string[]): Promise<string> {
-  const response = await claude.messages.create({
-    model: MODEL,
-    max_tokens: 4096,
-    messages: [
-      {
-        role: 'user',
-        content: [
-          ...pageImages.map(img => ({
-            type: 'image' as const,
-            source: {
-              type: 'base64' as const,
-              media_type: 'image/jpeg' as const,
-              data: img,
-            },
-          })),
-          {
-            type: 'text' as const,
-            text: 'Extract all text content from these resume pages. Return plain text only, preserving structure (job titles, dates, company names, descriptions). No commentary, no formatting, just the text.',
-          },
-        ],
-      },
-    ],
-  })
+  const { GoogleGenerativeAI } = await import('@google/generative-ai')
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '')
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
 
-  return response.content[0].type === 'text' ? response.content[0].text : ''
+  const parts = [
+    ...pageImages.map(img => ({
+      inlineData: { mimeType: 'image/jpeg' as const, data: img },
+    })),
+    { text: 'Extract all text content from these resume pages. Return plain text only, preserving structure (job titles, dates, company names, descriptions). No commentary, no formatting, just the text.' },
+  ]
+
+  const result = await model.generateContent(parts)
+  return result.response.text()
 }
 
 // ── Stage 2: Stream Blueprint generation ──────────────────────────────────
@@ -285,11 +269,12 @@ ${BLUEPRINT_SCHEMA}`
   // Send initial step immediately so the client knows we've started
   yield { type: 'step', step: 'timeline', label: 'Reconstructing career timeline…', percentage: STEP_PERCENTAGES.timeline }
 
-  // Use Claude streaming so we can flush keepalives and progress events
+  // Use Groq streaming so we can flush keepalives and progress events
   // while the model is generating — prevents browser SSE timeout
-  const stream = claude.messages.stream({
+  const stream = await getGroq().chat.completions.create({
     model: MODEL,
-    max_tokens: 16000,  // Raised from 8192 — full blueprint JSON can exceed 10k tokens
+    max_tokens: 8000,
+    stream: true,
     messages: [{ role: 'user', content: userPrompt }],
   })
 
@@ -306,8 +291,9 @@ ${BLUEPRINT_SCHEMA}`
   ]
 
   for await (const chunk of stream) {
-    if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
-      accumulated += chunk.delta.text
+    const text = chunk.choices[0]?.delta?.content ?? ''
+    if (text) {
+      accumulated += text
 
       // Emit progress steps based on how much JSON has been generated
       while (stepIndex < STEPS_DURING_STREAM.length) {
