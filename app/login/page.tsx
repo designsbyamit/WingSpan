@@ -1,38 +1,49 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { Loader2 } from 'lucide-react'
 import { auth } from '@/lib/firebase'
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { GoogleAuthProvider, signInWithRedirect, getRedirectResult } from 'firebase/auth'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 function LoginForm() {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const router = useRouter()
   const searchParams = useSearchParams()
 
+  useEffect(() => {
+    getRedirectResult(auth).then(async (result) => {
+      if (!result) { setLoading(false); return }
+      try {
+        const idToken = await result.user.getIdToken()
+        const res = await fetch('/api/auth/firebase', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken }),
+        })
+        if (!res.ok) {
+          const data = await res.json()
+          throw new Error(data.detail ?? data.error ?? 'Authentication failed')
+        }
+        router.push(searchParams.get('redirect') ?? '/')
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Sign-in failed.')
+        setLoading(false)
+      }
+    }).catch((err: unknown) => {
+      const code = (err as { code?: string })?.code
+      if (code !== 'auth/popup-closed-by-user') {
+        setError(err instanceof Error ? err.message : 'Sign-in failed.')
+      }
+      setLoading(false)
+    })
+  }, [router, searchParams])
+
   async function handleGoogle() {
     setLoading(true)
     setError('')
-    try {
-      const result = await signInWithPopup(auth, new GoogleAuthProvider())
-      const idToken = await result.user.getIdToken()
-      const res = await fetch('/api/auth/firebase', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idToken }),
-      })
-      if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.detail ?? data.error ?? 'Authentication failed')
-      }
-      router.push(searchParams.get('redirect') ?? '/')
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Sign-in failed. Please try again.')
-    } finally {
-      setLoading(false)
-    }
+    await signInWithRedirect(auth, new GoogleAuthProvider())
   }
 
   return (
@@ -65,9 +76,7 @@ function LoginForm() {
             {loading ? 'Signing in…' : 'Continue with Google'}
           </button>
 
-          {error && (
-            <p className="text-xs text-red-400 text-center font-jakarta">{error}</p>
-          )}
+          {error && <p className="text-xs text-red-400 text-center font-jakarta">{error}</p>}
 
           <p className="text-center text-xs text-[var(--text-muted)] font-jakarta">
             No password. No OTP. Just Google.
