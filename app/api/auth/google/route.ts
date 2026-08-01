@@ -23,13 +23,13 @@ export async function GET(req: NextRequest) {
     .update(codeVerifier)
     .digest('base64url')
 
+  const { CodeChallengeMethod } = await import('google-auth-library')
   const url = client.generateAuthUrl({
-    // No offline access — we only need the ID token for sign-in
     scope: ['openid', 'email', 'profile'],
     state,
     prompt: 'select_account',
     code_challenge: codeChallenge,
-    code_challenge_method: 'S256',
+    code_challenge_method: CodeChallengeMethod.S256,
   })
 
   const response = NextResponse.json({ url })
