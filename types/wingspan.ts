@@ -220,6 +220,9 @@ export interface WingspanState {
   selectedPath: string | null
   activeProjectView: ProjectView
   careerAlpha: CareerAlphaIntelligence | null
+  blueprintLoading: boolean
+  blueprintReady: boolean
+  pipelineStage: 'extract' | 'career-alpha' | 'blueprint' | null
 }
 
 export type WingspanAction =
@@ -241,6 +244,9 @@ export type WingspanAction =
   | { type: 'SET_PROJECT_VIEW'; view: ProjectView }
   | { type: 'UPDATE_PROJECT'; project: Project }
   | { type: 'SET_CAREER_ALPHA'; data: CareerAlphaIntelligence }
+  | { type: 'SET_BLUEPRINT_BACKGROUND'; blueprint: Blueprint }
+  | { type: 'SET_BLUEPRINT_LOADING'; loading: boolean }
+  | { type: 'SET_PIPELINE_STAGE'; stage: 'extract' | 'career-alpha' | 'blueprint' | null }
 
 // ── Career Alpha types ─────────────────────────────────────────────────────
 

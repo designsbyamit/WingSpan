@@ -33,11 +33,12 @@ export function ValidationScreen() {
 
   const handleProceed = () => {
     if (!extractedData) return
-    dispatch({
-      type: 'SET_VALIDATED_DATA',
-      data: { ...extractedData, interests: state.interests },
-    })
-    dispatch({ type: 'SET_SCREEN', screen: 'blueprint' })
+    dispatch({ type: 'SET_VALIDATED_DATA', data: { ...extractedData, interests: state.interests } })
+    if (state.blueprintReady) {
+      dispatch({ type: 'SET_SCREEN', screen: 'blueprint' })
+    } else {
+      dispatch({ type: 'SET_SCREEN', screen: 'discovering' })
+    }
   }
 
   return (
@@ -122,8 +123,29 @@ export function ValidationScreen() {
           ))}
         </div>
 
-        {/* Confidence scores */}
-        {scores && (
+        {/* Confidence scores — skeleton while loading, real scores when ready */}
+        {state.blueprintLoading && !state.blueprintReady && (
+          <div className="flex flex-col gap-3">
+            <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)]">Analysis Confidence</p>
+            {['Career Timeline', 'Strength Analysis', 'Future Opportunities'].map(label => (
+              <div key={label} className="flex flex-col gap-1">
+                <div className="flex justify-between mb-0.5">
+                  <span className="text-[10px] text-[var(--text-muted)]">{label}</span>
+                  <span className="text-[10px] text-[var(--text-muted)]">Analysing…</span>
+                </div>
+                <div className="h-[1.5px] rounded-full bg-[var(--border-ws)] overflow-hidden">
+                  <motion.div
+                    className="h-full bg-[var(--neon)] opacity-30 rounded-full"
+                    animate={{ x: ['-100%', '200%'] }}
+                    transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ width: '40%' }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {(!state.blueprintLoading || state.blueprintReady) && scores && (
           <div className="flex flex-col gap-3">
             <span className="text-xs font-bold tracking-[2px] uppercase text-[var(--text-muted)]">Analysis Confidence</span>
             {[
@@ -149,7 +171,9 @@ export function ValidationScreen() {
         )}
 
         <NeonButton onClick={handleProceed} fullWidth>
-          Show Me My Blueprint →
+          {state.blueprintLoading && !state.blueprintReady
+            ? 'Analysing your career… (view progress →)'
+            : 'Show Me My Blueprint →'}
         </NeonButton>
       </div>
     </div>

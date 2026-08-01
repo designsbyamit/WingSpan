@@ -139,6 +139,8 @@ export function DiscoveryScreen() {
 
   useEffect(() => {
     if (!extractedData || sseStarted.current) return
+    // Guard: skip if background pipeline is already running (from FootprintScreen)
+    if (state.blueprintLoading || state.blueprintReady) return
     sseStarted.current = true
 
     const run = async () => {
@@ -209,7 +211,7 @@ export function DiscoveryScreen() {
               if (currentStep) dispatch({ type: 'COMPLETE_STEP', step: currentStep })
               dispatch({ type: 'SET_BLUEPRINT', blueprint: data.blueprint })
               dispatch({ type: 'SET_VALIDATED_DATA', data: validatedData })
-              setTimeout(() => dispatch({ type: 'SET_SCREEN', screen: 'validating' }), 800)
+              setTimeout(() => dispatch({ type: 'SET_SCREEN', screen: 'blueprint' }), 800)
             } else if (eventType === 'error') {
               dispatch({ type: 'SET_ERROR', error: data.error })
               dispatch({ type: 'SET_SCREEN', screen: 'footprint' })
@@ -223,7 +225,7 @@ export function DiscoveryScreen() {
     }
 
     run()
-  }, [extractedData])
+  }, [extractedData, state.blueprintLoading, state.blueprintReady])
 
   const currentIdx = STEP_ORDER.indexOf(discoveryProgress.currentStep ?? 'parsing')
   const visibleSteps = STEP_ORDER.slice(0, currentIdx + 1)

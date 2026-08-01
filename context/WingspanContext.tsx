@@ -29,6 +29,9 @@ const initialState: WingspanState = {
   selectedPath: null,
   activeProjectView: 'card' as ProjectView,
   careerAlpha: null,
+  blueprintLoading: false,
+  blueprintReady: false,
+  pipelineStage: null,
 }
 
 function reducer(state: WingspanState, action: WingspanAction): WingspanState {
@@ -126,6 +129,20 @@ function reducer(state: WingspanState, action: WingspanAction): WingspanState {
       }
     case 'SET_CAREER_ALPHA':
       return { ...state, careerAlpha: action.data }
+    case 'SET_BLUEPRINT_LOADING':
+      return { ...state, blueprintLoading: action.loading }
+    case 'SET_PIPELINE_STAGE':
+      return { ...state, pipelineStage: action.stage }
+    case 'SET_BLUEPRINT_BACKGROUND':
+      return {
+        ...state,
+        blueprint: action.blueprint.careerAlpha
+          ? action.blueprint
+          : { ...action.blueprint, careerAlpha: state.careerAlpha ?? undefined },
+        blueprintReady: true,
+        blueprintLoading: false,
+        pipelineStage: null,
+      }
     default:
       return state
   }

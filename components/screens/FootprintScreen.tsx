@@ -5,6 +5,7 @@ import { Upload, Download, ChevronDown, ChevronUp, X, Link2, ArrowRight } from '
 import { useWingspan } from '@/context/WingspanContext'
 import { NeonButton } from '@/components/ui/NeonButton'
 import { GhostButton } from '@/components/ui/GhostButton'
+import { runCareerPipeline } from '@/lib/pipeline'
 
 const INTEREST_CATEGORIES: { label: string; interests: string[] }[] = [
   {
@@ -120,8 +121,6 @@ export function FootprintScreen() {
   const handleBeginAnalysis = async () => {
     if (!canBeginAnalysis) return
     setLoading(true)
-    dispatch({ type: 'SET_SCREEN', screen: 'discovering' })
-
     try {
       const formData = new FormData()
       for (const file of state.files) formData.append('files', file)
@@ -130,7 +129,14 @@ export function FootprintScreen() {
       const res = await fetch('/api/extract', { method: 'POST', body: formData })
       if (!res.ok) throw new Error('Extraction failed')
       const data = await res.json()
+
       dispatch({ type: 'SET_EXTRACTED_DATA', data })
+      dispatch({ type: 'SET_BLUEPRINT_LOADING', loading: true })
+      dispatch({ type: 'SET_PIPELINE_STAGE', stage: 'extract' })
+      dispatch({ type: 'SET_SCREEN', screen: 'validating' })
+
+      // Fire and forget — runs while user reviews timeline
+      runCareerPipeline(data, state.interests, dispatch)
     } catch (err) {
       dispatch({ type: 'SET_ERROR', error: String(err) })
       dispatch({ type: 'SET_SCREEN', screen: 'footprint' })
