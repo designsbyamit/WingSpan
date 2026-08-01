@@ -14,6 +14,8 @@ export async function GET(req: NextRequest) {
 
   try {
     // Exchange code for tokens
+    const origin = new URL(req.url).origin
+    const redirectUri = `${origin}/api/auth/google/callback`
     const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -21,13 +23,16 @@ export async function GET(req: NextRequest) {
         code,
         client_id: process.env.GOOGLE_CLIENT_ID!,
         client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-        redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/google/callback`,
+        redirect_uri: redirectUri,
         grant_type: 'authorization_code',
       }),
     })
 
     const tokens = await tokenRes.json()
-    if (!tokenRes.ok) throw new Error(tokens.error_description ?? 'Token exchange failed')
+    if (!tokenRes.ok) {
+      console.error('Token exchange failed:', JSON.stringify(tokens))
+      throw new Error(tokens.error_description ?? tokens.error ?? 'Token exchange failed')
+    }
 
     // Get user info
     const userRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
@@ -52,6 +57,7 @@ export async function GET(req: NextRequest) {
     return response
   } catch (err) {
     console.error('Google OAuth error:', err)
-    return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(String(err))}`, req.url))
+    const msg = err instanceof Error ? err.message : String(err)
+    return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(msg)}`, req.url))
   }
 }
