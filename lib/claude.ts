@@ -351,13 +351,9 @@ Never write sentences that would be equally true of any designer at the same car
 
 Your output is the first thing this person will read about their own career potential. Make it feel like it was written specifically for them — because it must be.`
 
-  // Use Gemini for high-quality blueprint analysis with streaming
-  const geminiModel = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '').getGenerativeModel({
-    model: GEMINI_MODEL,
-    systemInstruction,
-  })
-
-  const geminiStream = await geminiModel.generateContentStream(userPrompt)
+  // Use Gemini for high-quality blueprint analysis (Groq fallback when Gemini unavailable)
+  const geminiKey = (process.env.GEMINI_API_KEY ?? '').trim()
+  const geminiModelName = (process.env.GEMINI_MODEL ?? 'gemini-2.0-flash').split('\n')[0].trim()
 
   // Accumulate tokens while sending periodic progress pings
   let accumulated = ''
@@ -371,40 +367,68 @@ Your output is the first thing this person will read about their own career pote
     { step: 'actions',   label: 'Generating your Blueprint…',     percentage: STEP_PERCENTAGES.actions,    minChars: 3000 },
   ]
 
-  for await (const chunk of geminiStream.stream) {
-    const text = chunk.text()
-    if (text) {
-      accumulated += text
+  const handleChunk = (text: string) => {
+    accumulated += text
+    while (stepIndex < STEPS_DURING_STREAM.length) {
+      const next = STEPS_DURING_STREAM[stepIndex]
+      if (accumulated.length >= next.minChars) { stepIndex++ } else break
+    }
+  }
 
-      // Emit progress steps based on how much JSON has been generated
-      while (stepIndex < STEPS_DURING_STREAM.length) {
-        const next = STEPS_DURING_STREAM[stepIndex]
-        if (accumulated.length >= next.minChars) {
-          yield { type: 'step', step: next.step, label: next.label, percentage: next.percentage }
-          if (stepIndex === 0) {
-            yield { type: 'observation', text: 'Patterns emerging from your career data…' }
-          }
-          stepIndex++
-        } else {
-          break
-        }
+  let usedGemini = false
+  if (geminiKey) {
+    try {
+      const geminiModel = new GoogleGenerativeAI(geminiKey).getGenerativeModel({
+        model: geminiModelName,
+        systemInstruction,
+      })
+      const geminiStream = await geminiModel.generateContentStream(userPrompt)
+      for await (const chunk of geminiStream.stream) {
+        const text = chunk.text()
+        if (text) handleChunk(text)
       }
+      usedGemini = true
+    } catch (e) {
+      console.warn('Gemini failed, falling back to Groq:', e instanceof Error ? e.message.slice(0, 100) : String(e))
+      accumulated = ''
+      stepIndex = 0
+    }
+  }
 
-      // Send a keepalive every 10s to prevent SSE timeout
-      if (Date.now() - lastPingAt > 10000) {
-        yield { type: 'ping', percentage: Math.min(
-          STEP_PERCENTAGES.timeline + Math.round((accumulated.length / 12000) * 55),
-          89
-        )}
-        lastPingAt = Date.now()
+  if (!usedGemini) {
+    const stream = await getGroq().chat.completions.create({
+      model: GROQ_MODEL,
+      max_tokens: 8000,
+      stream: true,
+      messages: [
+        { role: 'system' as const, content: systemInstruction },
+        { role: 'user', content: userPrompt },
+      ],
+    })
+    for await (const chunk of stream) {
+      const text = chunk.choices[0]?.delta?.content ?? ''
+      if (text) {
+        handleChunk(text)
+        if (Date.now() - lastPingAt > 10000) {
+          yield { type: 'ping', percentage: Math.min(STEP_PERCENTAGES.timeline + Math.round((accumulated.length / 12000) * 55), 89) }
+          lastPingAt = Date.now()
+        }
       }
     }
   }
 
-  // Emit any remaining steps we didn't hit during streaming
-  while (stepIndex < STEPS_DURING_STREAM.length) {
-    const s = STEPS_DURING_STREAM[stepIndex++]
-    yield { type: 'step', step: s.step, label: s.label, percentage: s.percentage }
+  // Yield progress steps based on final accumulated length
+  stepIndex = 0
+  for (const s of STEPS_DURING_STREAM) {
+    if (accumulated.length >= s.minChars) {
+      yield { type: 'step', step: s.step, label: s.label, percentage: s.percentage }
+      if (stepIndex === 0) yield { type: 'observation', text: 'Patterns emerging from your career data…' }
+      stepIndex++
+    }
+  }
+  // Emit any remaining steps
+  for (let i = stepIndex; i < STEPS_DURING_STREAM.length; i++) {
+    yield { type: 'step', step: STEPS_DURING_STREAM[i].step, label: STEPS_DURING_STREAM[i].label, percentage: STEPS_DURING_STREAM[i].percentage }
   }
 
   let clean = accumulated.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()

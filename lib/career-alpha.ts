@@ -1,14 +1,37 @@
 // lib/career-alpha.ts
 // Career Alpha Stage 2 — archetype fingerprinting, freshness probing, and
-// five-dimension intelligence generation via Gemini.
+// five-dimension intelligence generation via Gemini (Groq fallback).
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import Groq from 'groq-sdk'
 import { ExtractedCareerData, CareerAlphaIntelligence, CareerStage } from '@/types/wingspan'
 import { loadCacheEntry, updateCacheDimensions, CacheEntry, CacheDimensionEntry } from '@/lib/career-alpha-cache'
 
-const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash'
-function getGemini() {
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '')
-  return genAI.getGenerativeModel({ model: GEMINI_MODEL })
+const GEMINI_MODEL = (process.env.GEMINI_MODEL ?? 'gemini-2.0-flash').split('\n')[0].trim()
+const GROQ_MODEL = process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile'
+
+async function generateContent(systemPrompt: string, userPrompt: string): Promise<string> {
+  const geminiKey = process.env.GEMINI_API_KEY ?? ''
+  if (geminiKey) {
+    try {
+      const genAI = new GoogleGenerativeAI(geminiKey)
+      const model = genAI.getGenerativeModel({ model: GEMINI_MODEL, systemInstruction: systemPrompt })
+      const result = await model.generateContent(userPrompt)
+      return result.response.text()
+    } catch (e) {
+      console.warn('Gemini failed, falling back to Groq:', e instanceof Error ? e.message.slice(0, 80) : e)
+    }
+  }
+  // Groq fallback
+  const groq = new Groq({ apiKey: process.env.GROQ_API_KEY ?? '' })
+  const response = await groq.chat.completions.create({
+    model: GROQ_MODEL,
+    max_tokens: 4096,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt },
+    ],
+  })
+  return response.choices[0]?.message?.content ?? '{}'
 }
 
 // ── Archetype Fingerprint ──────────────────────────────────────────────────
@@ -131,8 +154,7 @@ Return only JSON:
   "allFresh": boolean
 }`
 
-  const geminiResponse = await getGemini().generateContent(prompt)
-  const text = geminiResponse.response.text()
+  const text = await generateContent('You are a market intelligence freshness checker. Return only JSON.', prompt)
   const clean = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
   const result = JSON.parse(clean) as {
     staleDimensions: string[]
@@ -254,13 +276,8 @@ ${cachedContext ? `Pre-computed dimensions (use these values verbatim for the li
 Return ONLY valid JSON matching this schema:
 ${CAREER_ALPHA_SCHEMA}`
 
-  // Step 5: Call Gemini for high-quality career analysis
-  const geminiModel = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '').getGenerativeModel({
-    model: GEMINI_MODEL,
-    systemInstruction: CAREER_ALPHA_SYSTEM_PROMPT,
-  })
-  const geminiResponse = await geminiModel.generateContent(userPrompt)
-  const text = geminiResponse.response.text()
+  // Step 5: Call Gemini (with Groq fallback)
+  const text = await generateContent(CAREER_ALPHA_SYSTEM_PROMPT, userPrompt)
   const clean = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
 
   // Step 6: Parse
