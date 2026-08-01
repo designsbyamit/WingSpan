@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
     'mammoth',
     '@prisma/client',
     'firebase-admin',
+    'groq-sdk',
+    'google-auth-library',
+    '@google/generative-ai',
   ],
   images: {
     remotePatterns: [
