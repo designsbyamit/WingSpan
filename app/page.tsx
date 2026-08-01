@@ -12,7 +12,7 @@ export default async function RootPage() {
 
       {/* Nav */}
       <nav className="flex items-center justify-between px-8 py-5 border-b border-white/10">
-        <Image src="/LogoColor.svg" alt="WingSpan" width={120} height={30} />
+        <Image src="/brand/LogoColor.svg" alt="WingSpan" width={120} height={30} />
         <div className="flex items-center gap-4">
           <Link href="/wingspan" className="text-sm text-white/60 hover:text-white transition-colors">Try Blueprint</Link>
           <Link href="/login" className="text-sm font-semibold bg-[#B6FF2E] text-[#23262F] px-4 py-2 rounded-lg hover:bg-[#9EE020] transition-colors">Sign in</Link>
