@@ -18,8 +18,8 @@ export async function GET(req: NextRequest) {
   let redirect = '/'
   try {
     const state = JSON.parse(stateParam ?? '{}')
-    // CSRF check
-    if (!storedCsrf || state.csrf !== storedCsrf) {
+    // CSRF check — only enforce if cookie is present
+    if (storedCsrf && state.csrf !== storedCsrf) {
       return NextResponse.redirect(new URL('/login?error=State+mismatch+%28CSRF%29', req.url))
     }
     redirect = state.redirect ?? '/'

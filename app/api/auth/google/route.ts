@@ -36,15 +36,15 @@ export async function GET(req: NextRequest) {
   // Store CSRF token and PKCE verifier in secure HTTP-only cookies
   response.cookies.set('oauth_state', csrfToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: true,
+    sameSite: 'none',
     maxAge: 60 * 10,
     path: '/',
   })
   response.cookies.set('pkce_verifier', codeVerifier, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: true,
+    sameSite: 'none',
     maxAge: 60 * 10,
     path: '/',
   })
