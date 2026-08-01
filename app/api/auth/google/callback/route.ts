@@ -29,14 +29,19 @@ export async function GET(req: NextRequest) {
 
   try {
     const origin = new URL(req.url).origin
+    const codeVerifier = req.cookies.get('pkce_verifier')?.value
+
     const client = new OAuth2Client(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
       `${origin}/api/auth/google/callback`
     )
 
-    // Exchange code for tokens
-    const { tokens } = await client.getToken(code)
+    // Exchange code for tokens with PKCE verifier
+    const { tokens } = await client.getToken({
+      code,
+      codeVerifier,
+    })
     client.setCredentials(tokens)
 
     // Verify ID token to get user info
@@ -60,8 +65,9 @@ export async function GET(req: NextRequest) {
     const cookieHeader = await createSession(user.id, user.email)
     const response = NextResponse.redirect(new URL(redirect, req.url))
     response.headers.append('Set-Cookie', cookieHeader)
-    // Clear CSRF cookie
+    // Clear CSRF and PKCE cookies
     response.cookies.delete('oauth_state')
+    response.cookies.delete('pkce_verifier')
     return response
   } catch (err) {
     console.error('Google OAuth callback error:', err)
