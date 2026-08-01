@@ -9,10 +9,16 @@ function LoginForm() {
   const error = searchParams.get('error')
 
   async function handleGoogle() {
-    // Get the auth URL from our server (which sets the CSRF cookie)
-    const res = await fetch(`/api/auth/google?redirect=${encodeURIComponent(redirect)}`)
-    const { url } = await res.json()
-    window.location.href = url
+    try {
+      const res = await fetch(`/api/auth/google?redirect=${encodeURIComponent(redirect)}`)
+      if (!res.ok) throw new Error(`Server error: ${res.status}`)
+      const { url } = await res.json()
+      window.location.href = url
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Network error — please try again'
+      // Set error in URL so it persists after redirect
+      window.location.href = `/login?error=${encodeURIComponent(msg)}`
+    }
   }
 
   return (
