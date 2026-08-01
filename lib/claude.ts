@@ -19,11 +19,15 @@ export async function extractCareerData(
 
   const response = await getGroq().chat.completions.create({
     model: MODEL,
-    max_tokens: 4096,
+    max_tokens: 8192,
     messages: [
       {
+        role: 'system',
+        content: `You are an expert career data extraction engine. Your job is to extract EVERY piece of career information from a resume — missing a project or role is a critical failure. Be exhaustive and aggressive in your extraction.`,
+      },
+      {
         role: 'user',
-        content: `You are a career data extraction assistant. Extract structured career information from the resume text below and return ONLY valid JSON — no explanation, no markdown, no code fences.
+        content: `Extract ALL structured career information from the resume text below. Return ONLY valid JSON — no explanation, no markdown, no code fences.
 
 Return JSON matching this schema exactly:
 {
@@ -38,31 +42,39 @@ Return JSON matching this schema exactly:
   "footprintSignals": ["string"]
 }
 
-Rules:
-- Generate a unique UUID v4 string for each id field
-- Extract every role, project, skill, and education entry you can find
-- For projects: infer industry, platform (Web/Mobile/Enterprise SaaS/etc), audience (B2B/B2C/Internal)
-- Skills: extract technical skills, design skills, soft skills, and tools separately
-- Be comprehensive — extract everything present
+CRITICAL EXTRACTION RULES:
 
-Additional extraction tasks:
+timeline — Every role must be captured:
+- Extract EVERY job, role, position, or engagement mentioned anywhere in the resume
+- Include freelance, contract, consulting, and part-time work
+- For each role, write a detailed description summarising responsibilities
 
-careerStageSignals: extract all signals indicating career maturity —
-years active, role seniority progression, team/org size indicators,
-education recency, presence of side projects, community contributions,
-certifications, hackathons, publications, conference participation.
+projects — Extract AGGRESSIVELY from all sources:
+- Explicitly named projects (e.g. "Project X", "Led the redesign of...")
+- Client engagements described in job descriptions (e.g. "Worked with a Middle Eastern airline...")
+- Any product, feature, or initiative described with a verb ("designed", "led", "built", "launched", "created", "developed", "redesigned")
+- Internal tools, platforms, or systems mentioned
+- Measurable outcomes (conversion improvement, user growth, engagement metrics) signal a project
+- If a job description mentions multiple distinct clients or outcomes — create one project per client/outcome
+- NEVER leave a role with 0 projects if work is described. Extract at minimum 1 project per role.
+- For name: use the product/client/initiative name, or construct one from the description (e.g. "Airline Booking App Redesign")
+- For impact: extract any metrics, percentages, outcomes mentioned — if none, infer from context
 
-evidenceQuality: rate overall evidence richness as one of:
+skills — Be comprehensive:
+- Design tools (Figma, Sketch, Adobe XD, InVision, etc.)
+- Methods (UX Research, Design Thinking, Service Design, etc.)
+- Technical skills (HTML/CSS, Prototyping, etc.)
+- Soft skills (Leadership, Stakeholder Management, etc.)
+- Domain knowledge (E-commerce, Enterprise, Healthcare, etc.)
+
+evidenceQuality:
   "rich"     — 10+ years, multiple projects with impact metrics, diverse roles
   "moderate" — 3-9 years, some projects, reasonable progression
   "sparse"   — student, bootcamp, 1-2 internships, limited measurable impact
 
-geographySignals: infer likely market context from company names, education
-institutions, location mentions, client names.
-
-footprintSignals: from provided URLs, identify type of digital presence:
-portfolio, github, behance, dribbble, personal-site, publications, none.
-List each type found.
+careerStageSignals: years active, role seniority, team size, education, publications, certifications
+geographySignals: infer market context from company names, institutions, client names
+footprintSignals: from provided URLs — portfolio, github, behance, dribbble, personal-site, none
 
 Resume text:
 ${rawText}
@@ -73,10 +85,31 @@ ${urlContext ? `Profile URLs:\n${urlContext}` : ''}`,
   })
 
   const text = response.choices[0]?.message?.content ?? '{}'
-  // Strip any accidental markdown fences
-  const clean = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
-  const json = JSON.parse(clean)
-  return { ...json, rawText: rawText.slice(0, 2000) }
+  let clean = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
+
+  // Repair truncated JSON (same pattern as streamBlueprint)
+  if (!clean.endsWith('}')) {
+    const stack: string[] = []
+    let inString = false, escaped = false
+    for (const ch of clean) {
+      if (escaped) { escaped = false; continue }
+      if (ch === '\\' && inString) { escaped = true; continue }
+      if (ch === '"') { inString = !inString; continue }
+      if (inString) continue
+      if (ch === '{' || ch === '[') stack.push(ch === '{' ? '}' : ']')
+      if (ch === '}' || ch === ']') stack.pop()
+    }
+    if (inString) clean += '"'
+    while (stack.length > 0) clean += stack.pop()
+  }
+
+  let json: Record<string, unknown> = {}
+  try {
+    json = JSON.parse(clean)
+  } catch {
+    console.error('extractCareerData: JSON parse failed, returning partial data')
+  }
+  return { ...json, rawText: rawText.slice(0, 4000) } as ExtractedCareerData
 }
 
 // ── PDF Vision fallback: extract text from image-based PDFs using Claude ───
