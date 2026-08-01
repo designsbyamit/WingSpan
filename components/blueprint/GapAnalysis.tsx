@@ -72,9 +72,9 @@ function ObjectiveItem({ objective, storageKey }: {
 function GapCard({ gap }: { gap: Gap }) {
   const [expanded, setExpanded] = useState(false)
   const sizeStyle = GAP_SIZE_STYLE[gap.gapSize]
-  const currentPct = gap.currentReadiness
-  const futurePct = gap.futureReadiness
-  const gapPct = futurePct - currentPct
+  const currentPct = gap.currentReadiness < 2 ? Math.round(gap.currentReadiness * 100) : Math.round(gap.currentReadiness)
+  const futurePct  = gap.futureReadiness  < 2 ? Math.round(gap.futureReadiness  * 100) : Math.round(gap.futureReadiness)
+  const gapPct     = Math.round(futurePct - currentPct)
 
   return (
     <motion.div layout className="rounded-[12px] bg-[var(--surface)] border border-[var(--border-ws)] overflow-hidden">

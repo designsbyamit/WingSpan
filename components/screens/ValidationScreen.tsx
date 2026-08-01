@@ -14,7 +14,8 @@ export function ValidationScreen() {
   const [editDraft, setEditDraft] = useState<Partial<TimelineEntry>>({})
 
   const scores = blueprint?.confidenceScores
-  const lowConfidence = scores && Object.values(scores).some((s) => s < 80)
+  const toPercent = (v: number) => v < 2 ? Math.round(v * 100) : Math.round(v)
+  const lowConfidence = scores && Object.values(scores).some((s) => toPercent(s) < 80)
 
   const startEdit = (entry: TimelineEntry) => {
     setEditingId(entry.id)
@@ -126,9 +127,9 @@ export function ValidationScreen() {
           <div className="flex flex-col gap-3">
             <span className="text-xs font-bold tracking-[2px] uppercase text-[var(--text-muted)]">Analysis Confidence</span>
             {[
-              { label: 'Career Timeline', value: scores.timeline },
-              { label: 'Strength Analysis', value: scores.strengths },
-              { label: 'Future Opportunities', value: scores.futurePaths },
+              { label: 'Career Timeline', value: toPercent(scores.timeline) },
+              { label: 'Strength Analysis', value: toPercent(scores.strengths) },
+              { label: 'Future Opportunities', value: toPercent(scores.futurePaths) },
             ].map(({ label, value }) => (
               <ProgressBar key={label} label={label} value={value} showLabel />
             ))}
