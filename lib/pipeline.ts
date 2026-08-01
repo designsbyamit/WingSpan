@@ -1,7 +1,7 @@
 // lib/pipeline.ts
 // Background pipeline runner — no React runtime imports
 import type { Dispatch } from 'react'
-import type { WingspanAction, ExtractedCareerData } from '@/types/wingspan'
+import type { WingspanAction, ExtractedCareerData, Blueprint, DiscoveryStep } from '@/types/wingspan'
 
 export async function runCareerPipeline(
   extractedData: ExtractedCareerData,
@@ -50,19 +50,23 @@ export async function runCareerPipeline(
 
       for (const line of lines) {
         if (line.startsWith('data: ')) {
+          let event: { type: string; [key: string]: unknown } | null = null
           try {
-            const event = JSON.parse(line.slice(6))
-            if (event.type === 'step') {
-              dispatch({ type: 'SET_DISCOVERY_STEP', step: event.step, percentage: event.percentage })
-            } else if (event.type === 'observation') {
-              dispatch({ type: 'ADD_OBSERVATION', text: event.text })
-            } else if (event.type === 'complete') {
-              dispatch({ type: 'SET_VALIDATED_DATA', data: validatedData })
-              dispatch({ type: 'SET_BLUEPRINT_BACKGROUND', blueprint: { ...event.blueprint, careerAlpha } })
-            } else if (event.type === 'error') {
-              throw new Error(event.error)
-            }
-          } catch { /* skip malformed lines */ }
+            event = JSON.parse(line.slice(6))
+          } catch { /* skip malformed JSON lines */ }
+
+          if (!event) continue
+
+          if (event.type === 'step') {
+            dispatch({ type: 'SET_DISCOVERY_STEP', step: event.step as DiscoveryStep, percentage: event.percentage as number })
+          } else if (event.type === 'observation') {
+            dispatch({ type: 'ADD_OBSERVATION', text: event.text as string })
+          } else if (event.type === 'complete') {
+            dispatch({ type: 'SET_VALIDATED_DATA', data: validatedData })
+            dispatch({ type: 'SET_BLUEPRINT_BACKGROUND', blueprint: { ...(event.blueprint as object), careerAlpha } as Blueprint })
+          } else if (event.type === 'error') {
+            throw new Error(event.error as string)
+          }
         }
       }
     }
