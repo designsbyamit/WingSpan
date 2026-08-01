@@ -1,63 +1,71 @@
 // app/api/auth/google/callback/route.ts
 import { NextRequest, NextResponse } from 'next/server'
+import { OAuth2Client } from 'google-auth-library'
 import { db } from '@/lib/db'
 import { createSession } from '@/lib/auth'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
   const code = searchParams.get('code')
-  const state = searchParams.get('state') ?? '/'
+  const stateParam = searchParams.get('state')
+  const storedCsrf = req.cookies.get('oauth_state')?.value
 
   if (!code) {
     return NextResponse.redirect(new URL('/login?error=no_code', req.url))
   }
 
+  // Parse state
+  let redirect = '/'
   try {
-    // Exchange code for tokens
-    const origin = new URL(req.url).origin
-    const redirectUri = `${origin}/api/auth/google/callback`
-    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        code,
-        client_id: process.env.GOOGLE_CLIENT_ID!,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-        redirect_uri: redirectUri,
-        grant_type: 'authorization_code',
-      }),
-    })
-
-    const tokens = await tokenRes.json()
-    if (!tokenRes.ok) {
-      console.error('Token exchange failed:', JSON.stringify(tokens))
-      throw new Error(tokens.error_description ?? tokens.error ?? 'Token exchange failed')
+    const state = JSON.parse(stateParam ?? '{}')
+    // CSRF check
+    if (!storedCsrf || state.csrf !== storedCsrf) {
+      return NextResponse.redirect(new URL('/login?error=State+mismatch+%28CSRF%29', req.url))
     }
+    redirect = state.redirect ?? '/'
+  } catch {
+    return NextResponse.redirect(new URL('/login?error=Invalid+state', req.url))
+  }
 
-    // Get user info
-    const userRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-      headers: { Authorization: `Bearer ${tokens.access_token}` },
+  try {
+    const origin = new URL(req.url).origin
+    const client = new OAuth2Client(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      `${origin}/api/auth/google/callback`
+    )
+
+    // Exchange code for tokens
+    const { tokens } = await client.getToken(code)
+    client.setCredentials(tokens)
+
+    // Verify ID token to get user info
+    const ticket = await client.verifyIdToken({
+      idToken: tokens.id_token!,
+      audience: process.env.GOOGLE_CLIENT_ID!,
     })
-    const googleUser = await userRes.json()
-    const email: string = googleUser.email
-    const name: string | undefined = googleUser.name
+    const payload = ticket.getPayload()
+    if (!payload?.email) throw new Error('No email from Google')
 
-    if (!email) throw new Error('No email from Google')
+    const email = payload.email
+    const name = payload.name ?? null
 
     // Upsert user
     let user = await db.user.findUnique({ where: { email } })
     if (!user) {
-      user = await db.user.create({ data: { email, name: name ?? null } })
+      user = await db.user.create({ data: { email, name } })
     }
 
     // Create session
     const cookieHeader = await createSession(user.id, user.email)
-    const response = NextResponse.redirect(new URL(state, req.url))
-    response.headers.set('Set-Cookie', cookieHeader)
+    const response = NextResponse.redirect(new URL(redirect, req.url))
+    response.headers.append('Set-Cookie', cookieHeader)
+    // Clear CSRF cookie
+    response.cookies.delete('oauth_state')
     return response
   } catch (err) {
-    console.error('Google OAuth error:', err)
-    const msg = err instanceof Error ? err.message : (typeof err === 'object' ? JSON.stringify(err) : String(err))
+    console.error('Google OAuth callback error:', err)
+    const msg = err instanceof Error ? err.message : String(err)
     return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(msg)}`, req.url))
   }
 }

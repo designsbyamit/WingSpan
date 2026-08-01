@@ -8,17 +8,11 @@ function LoginForm() {
   const redirect = searchParams.get('redirect') ?? '/'
   const error = searchParams.get('error')
 
-  function handleGoogle() {
-    const params = new URLSearchParams({
-      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-      redirect_uri: `${window.location.origin}/api/auth/google/callback`,
-      response_type: 'code',
-      scope: 'openid email profile',
-      state: redirect,
-      access_type: 'offline',
-      prompt: 'select_account',
-    })
-    window.location.href = `https://accounts.google.com/o/oauth2/auth?${params}`
+  async function handleGoogle() {
+    // Get the auth URL from our server (which sets the CSRF cookie)
+    const res = await fetch(`/api/auth/google?redirect=${encodeURIComponent(redirect)}`)
+    const { url } = await res.json()
+    window.location.href = url
   }
 
   return (

@@ -22,6 +22,7 @@
     "firebase": "^12.17.0",
     "firebase-admin": "^13.10.0",
     "framer-motion": "^12.40.0",
+    "google-auth-library": "^10.9.1",
     "groq-sdk": "^1.4.1",
     "jose": "^6.2.4",
     "lucide-react": "^1.18.0",
