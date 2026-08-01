@@ -1,10 +1,19 @@
 // lib/claude.ts
-// All AI calls via Groq
+// Groq for fast extraction (Stage 1), Gemini for deep analysis (Blueprint streaming)
 import Groq from 'groq-sdk'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import { ExtractedCareerData, Blueprint, ValidatedCareerData, CareerAlphaIntelligence } from '@/types/wingspan'
 
-const MODEL = process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile'
+// Groq — fast, used for extraction only
+const GROQ_MODEL = process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile'
 function getGroq() { return new Groq({ apiKey: process.env.GROQ_API_KEY ?? '' }) }
+
+// Gemini — high quality, used for Blueprint analysis
+const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash'
+function getGemini() {
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '')
+  return genAI.getGenerativeModel({ model: GEMINI_MODEL })
+}
 
 // ── Stage 1: Extract structured career data from raw text ──────────────────
 
@@ -18,8 +27,7 @@ export async function extractCareerData(
     .join('\n')
 
   const response = await getGroq().chat.completions.create({
-    model: MODEL,
-    max_tokens: 8192,
+    model: GROQ_MODEL,
     messages: [
       {
         role: 'system',
@@ -327,16 +335,7 @@ ${BLUEPRINT_SCHEMA}`
   // Send initial step immediately so the client knows we've started
   yield { type: 'step', step: 'timeline', label: 'Reconstructing career timeline…', percentage: STEP_PERCENTAGES.timeline }
 
-  // Use Groq streaming so we can flush keepalives and progress events
-  // while the model is generating — prevents browser SSE timeout
-  const stream = await getGroq().chat.completions.create({
-    model: MODEL,
-    max_tokens: 8000,
-    stream: true,
-    messages: [
-      {
-        role: 'system' as const,
-        content: `You are a senior career strategist and labor market economist with 20 years of experience helping professionals navigate career inflection points — from early-career designers to C-suite executives.
+  const systemInstruction = `You are a senior career strategist and labor market economist with 20 years of experience helping professionals navigate career inflection points — from early-career designers to C-suite executives.
 
 Your analysis is grounded in specific evidence, not platitudes. Every sentence you write about a person must reference a specific role, project, company, skill, or timeframe from their actual career data. Generic statements that could apply to any professional in the same domain are a failure of your craft.
 
@@ -350,11 +349,15 @@ Never assign confidenceScores above 65 for a sparse profile (evidenceQuality: "s
 Never use the words "passion", "passionate", "strong communicator", "team player", or "results-driven".
 Never write sentences that would be equally true of any designer at the same career stage.
 
-Your output is the first thing this person will read about their own career potential. Make it feel like it was written specifically for them — because it must be.`,
-      },
-      { role: 'user', content: userPrompt },
-    ],
+Your output is the first thing this person will read about their own career potential. Make it feel like it was written specifically for them — because it must be.`
+
+  // Use Gemini for high-quality blueprint analysis with streaming
+  const geminiModel = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '').getGenerativeModel({
+    model: GEMINI_MODEL,
+    systemInstruction,
   })
+
+  const geminiStream = await geminiModel.generateContentStream(userPrompt)
 
   // Accumulate tokens while sending periodic progress pings
   let accumulated = ''
@@ -368,8 +371,8 @@ Your output is the first thing this person will read about their own career pote
     { step: 'actions',   label: 'Generating your Blueprint…',     percentage: STEP_PERCENTAGES.actions,    minChars: 3000 },
   ]
 
-  for await (const chunk of stream) {
-    const text = chunk.choices[0]?.delta?.content ?? ''
+  for await (const chunk of geminiStream.stream) {
+    const text = chunk.text()
     if (text) {
       accumulated += text
 

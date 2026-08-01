@@ -1,9 +1,8 @@
 // lib/mentor.ts
-import Groq from 'groq-sdk'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import type { MentorMessage } from '@/types/design-evolution'
 
-const MODEL = process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile'
-function getGroq() { return new Groq({ apiKey: process.env.GROQ_API_KEY ?? '' }) }
+const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash'
 
 interface StreamMentorParams {
   messages: MentorMessage[]
@@ -22,7 +21,7 @@ export function streamMentorResponse({
 }: StreamMentorParams): ReadableStream<Uint8Array> {
   const encoder = new TextEncoder()
 
-  const systemPrompt = `You are an expert design mentor. Your role is to guide designers to think more deeply — never give direct answers.
+  const systemInstruction = `You are an expert design mentor. Your role is to guide designers to think more deeply — never give direct answers.
 Always ask questions that develop the learner's reasoning. Reference the specific experience they are working on.
 Current experience: ${experienceTitle}
 Concepts being explored: ${conceptNames.join(', ')}
@@ -38,18 +37,21 @@ Guidelines:
     async start(controller) {
       let accumulated = ''
       try {
-        const stream = await getGroq().chat.completions.create({
-          model: MODEL,
-          max_tokens: 512,
-          stream: true,
-          messages: [
-            { role: 'system', content: systemPrompt },
-            ...messages.map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content })),
-          ],
-        })
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '')
+        const model = genAI.getGenerativeModel({ model: GEMINI_MODEL, systemInstruction })
 
-        for await (const chunk of stream) {
-          const text = chunk.choices[0]?.delta?.content ?? ''
+        // Convert message history to Gemini format
+        const history = messages.slice(0, -1).map(m => ({
+          role: m.role === 'assistant' ? 'model' as const : 'user' as const,
+          parts: [{ text: m.content }],
+        }))
+        const lastMessage = messages[messages.length - 1]?.content ?? ''
+
+        const chat = model.startChat({ history })
+        const result = await chat.sendMessageStream(lastMessage)
+
+        for await (const chunk of result.stream) {
+          const text = chunk.text()
           if (text) {
             accumulated += text
             controller.enqueue(encoder.encode(text))

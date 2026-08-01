@@ -1,9 +1,15 @@
 // app/api/refine/route.ts
 import { NextRequest, NextResponse } from 'next/server'
-import Groq from 'groq-sdk'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 
-const MODEL = process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile'
-function getGroq() { return new Groq({ apiKey: process.env.GROQ_API_KEY ?? '' }) }
+const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash'
+function getGemini() {
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '')
+  return genAI.getGenerativeModel({
+    model: GEMINI_MODEL,
+    systemInstruction: 'You are a career strategist. Return ONLY valid JSON — no explanation, no markdown fences, no commentary.',
+  })
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -58,19 +64,8 @@ pathway fields must still match a futurePaths title.`,
       return NextResponse.json({ error: `Unknown section: ${section}` }, { status: 400 })
     }
 
-    const response = await getGroq().chat.completions.create({
-      model: MODEL,
-      max_tokens: 2048,
-      messages: [
-        {
-          role: 'system',
-          content: 'You are a career strategist. Return ONLY valid JSON — no explanation, no markdown fences, no commentary.',
-        },
-        { role: 'user', content: prompt },
-      ],
-    })
-
-    const text = response.choices[0]?.message?.content ?? '{}'
+    const geminiResponse = await getGemini().generateContent(prompt)
+    const text = geminiResponse.response.text()
     const clean = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
     const refined = JSON.parse(clean)
 

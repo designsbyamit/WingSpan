@@ -1,12 +1,15 @@
 // lib/career-alpha.ts
 // Career Alpha Stage 2 — archetype fingerprinting, freshness probing, and
-// five-dimension intelligence generation via Groq.
-import Groq from 'groq-sdk'
+// five-dimension intelligence generation via Gemini.
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import { ExtractedCareerData, CareerAlphaIntelligence, CareerStage } from '@/types/wingspan'
 import { loadCacheEntry, updateCacheDimensions, CacheEntry, CacheDimensionEntry } from '@/lib/career-alpha-cache'
 
-const MODEL = process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile'
-function getGroq() { return new Groq({ apiKey: process.env.GROQ_API_KEY ?? '' }) }
+const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash'
+function getGemini() {
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '')
+  return genAI.getGenerativeModel({ model: GEMINI_MODEL })
+}
 
 // ── Archetype Fingerprint ──────────────────────────────────────────────────
 
@@ -128,13 +131,8 @@ Return only JSON:
   "allFresh": boolean
 }`
 
-  const response = await getGroq().chat.completions.create({
-    model: MODEL,
-    max_tokens: 512,
-    messages: [{ role: 'user', content: prompt }],
-  })
-
-  const text = response.choices[0]?.message?.content ?? '{}'
+  const geminiResponse = await getGemini().generateContent(prompt)
+  const text = geminiResponse.response.text()
   const clean = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
   const result = JSON.parse(clean) as {
     staleDimensions: string[]
@@ -256,17 +254,13 @@ ${cachedContext ? `Pre-computed dimensions (use these values verbatim for the li
 Return ONLY valid JSON matching this schema:
 ${CAREER_ALPHA_SCHEMA}`
 
-  // Step 5: Call Groq
-  const response = await getGroq().chat.completions.create({
-    model: MODEL,
-    max_tokens: 4096,
-    messages: [
-      { role: 'system', content: CAREER_ALPHA_SYSTEM_PROMPT },
-      { role: 'user', content: userPrompt },
-    ],
+  // Step 5: Call Gemini for high-quality career analysis
+  const geminiModel = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '').getGenerativeModel({
+    model: GEMINI_MODEL,
+    systemInstruction: CAREER_ALPHA_SYSTEM_PROMPT,
   })
-
-  const text = response.choices[0]?.message?.content ?? '{}'
+  const geminiResponse = await geminiModel.generateContent(userPrompt)
+  const text = geminiResponse.response.text()
   const clean = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
 
   // Step 6: Parse
