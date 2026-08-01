@@ -138,6 +138,12 @@ export function DiscoveryScreen() {
   }, [activeStage, activeMessages.length])
 
   useEffect(() => {
+    if (state.blueprintReady) {
+      dispatch({ type: 'SET_SCREEN', screen: 'blueprint' })
+    }
+  }, [state.blueprintReady, dispatch])
+
+  useEffect(() => {
     if (!extractedData || sseStarted.current) return
     // Guard: skip if background pipeline is already running (from FootprintScreen)
     if (state.blueprintLoading || state.blueprintReady) return

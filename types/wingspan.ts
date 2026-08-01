@@ -67,7 +67,7 @@ export interface FuturePath {
   evidence: string[]
   opportunitySize: 'emerging' | 'growing' | 'established'
   confidence: number
-  recommendationStatus: 'Recommended' | 'Strongly Recommended' | 'Emerging Opportunity'
+  recommendationStatus?: 'Recommended' | 'Strongly Recommended' | 'Emerging Opportunity'
   timeline: string
   marketDemand: 'Very High' | 'High' | 'Moderate' | 'Emerging'
   growthPotential: 'Excellent' | 'Strong' | 'Good' | 'Moderate'
