@@ -60,7 +60,8 @@ export function PathSelection({ blueprint }: { blueprint: Blueprint }) {
   const [expandedPath, setExpandedPath] = useState<string | null>(null)
   const [adjustOpenFor, setAdjustOpenFor] = useState<string | null>(null)
   const [refineDrafts, setRefineDrafts] = useState<Record<string, string>>({})
-  const [refining, setRefining] = useState(false)
+  const [refiningFor, setRefiningFor] = useState<string | null>(null)
+  const [refineErrors, setRefineErrors] = useState<Record<string, string>>({})
   const bottomRef = useRef<HTMLDivElement>(null)
 
   const recommendedTitle = futurePaths.reduce((best, p) =>
@@ -77,7 +78,8 @@ export function PathSelection({ blueprint }: { blueprint: Blueprint }) {
   const handlePathRefine = async (pathTitle: string) => {
     const draft = refineDrafts[pathTitle] ?? ''
     if (!draft.trim()) return
-    setRefining(true)
+    setRefineErrors(prev => ({ ...prev, [pathTitle]: '' }))
+    setRefiningFor(pathTitle)
     try {
       const res = await fetch('/api/refine', {
         method: 'POST',
@@ -90,16 +92,20 @@ export function PathSelection({ blueprint }: { blueprint: Blueprint }) {
         }),
       })
       const data = await res.json()
-      if (data.refined?.futurePaths) {
-        dispatch({
-          type: 'SET_BLUEPRINT',
-          blueprint: { ...blueprint, futurePaths: data.refined.futurePaths },
-        })
-        setRefineDrafts(prev => ({ ...prev, [pathTitle]: '' }))
-        setAdjustOpenFor(null)
+      if (!res.ok || !data.refined?.futurePaths) {
+        setRefineErrors(prev => ({ ...prev, [pathTitle]: data.error ?? 'Refinement failed.' }))
+        return
       }
+      dispatch({
+        type: 'SET_BLUEPRINT',
+        blueprint: { ...blueprint, futurePaths: data.refined.futurePaths },
+      })
+      setRefineDrafts(prev => ({ ...prev, [pathTitle]: '' }))
+      setAdjustOpenFor(null)
+    } catch {
+      setRefineErrors(prev => ({ ...prev, [pathTitle]: 'Refinement failed. Please try again.' }))
     } finally {
-      setRefining(false)
+      setRefiningFor(null)
     }
   }
 
@@ -241,13 +247,14 @@ export function PathSelection({ blueprint }: { blueprint: Blueprint }) {
                         rows={2}
                         className="w-full bg-[var(--card-inner)] border border-[var(--border-ws)] rounded-[8px] px-3 py-2 text-xs text-[var(--text-secondary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--neon)] transition-colors resize-none"
                       />
+                      {refineErrors[path.title] && <p className="text-xs text-red-400 mt-1">{refineErrors[path.title]}</p>}
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => handlePathRefine(path.title)}
-                          disabled={refining || !(refineDrafts[path.title] ?? '').trim()}
+                          disabled={refiningFor === path.title || !(refineDrafts[path.title] ?? '').trim()}
                           className="px-4 py-1.5 rounded-[7px] bg-[var(--neon)] text-[#0a0a0a] text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
                         >
-                          {refining ? 'Refining…' : 'Refine →'}
+                          {refiningFor === path.title ? 'Refining…' : 'Refine →'}
                         </button>
                         <button
                           onClick={() => { setAdjustOpenFor(null); setRefineDrafts(prev => ({ ...prev, [path.title]: '' })) }}

@@ -33,6 +33,7 @@ export function CareerIntelligence({ blueprint }: { blueprint: Blueprint }) {
   const topRef = useRef<HTMLDivElement>(null)
   const [refineDraft, setRefineDraft] = useState('')
   const [refining, setRefining] = useState(false)
+  const [refineError, setRefineError] = useState('')
 
   useEffect(() => {
     topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -46,6 +47,7 @@ export function CareerIntelligence({ blueprint }: { blueprint: Blueprint }) {
 
   const handleIntelRefine = async () => {
     if (!refineDraft.trim()) return
+    setRefineError('')
     setRefining(true)
     try {
       const res = await fetch('/api/refine', {
@@ -58,13 +60,17 @@ export function CareerIntelligence({ blueprint }: { blueprint: Blueprint }) {
         }),
       })
       const data = await res.json()
-      if (data.refined) {
-        dispatch({
-          type: 'SET_BLUEPRINT',
-          blueprint: { ...blueprint, ...data.refined },
-        })
-        setRefineDraft('')
+      if (!res.ok || !data.refined) {
+        setRefineError(data.error ?? 'Refinement failed.')
+        return
       }
+      dispatch({
+        type: 'SET_BLUEPRINT',
+        blueprint: { ...blueprint, ...data.refined },
+      })
+      setRefineDraft('')
+    } catch {
+      setRefineError('Refinement failed. Please try again.')
     } finally {
       setRefining(false)
     }
@@ -238,6 +244,7 @@ export function CareerIntelligence({ blueprint }: { blueprint: Blueprint }) {
           rows={3}
           className="w-full bg-[var(--card-inner)] border border-[var(--border-ws)] rounded-[8px] px-3 py-2 text-xs text-[var(--text-secondary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--neon)] transition-colors resize-none"
         />
+        {refineError && <p className="text-xs text-red-400 mt-1">{refineError}</p>}
         <button
           onClick={handleIntelRefine}
           disabled={refining || !refineDraft.trim()}

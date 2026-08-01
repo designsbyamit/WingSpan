@@ -164,6 +164,7 @@ export function ProfileMap({ blueprint, extractedData }: ProfileMapProps) {
   const [refineOpen, setRefineOpen] = useState(false)
   const [refineDraft, setRefineDraft] = useState('')
   const [refining, setRefining] = useState(false)
+  const [refineError, setRefineError] = useState('')
 
   const allSkills = extractedData?.skills ?? []
   const tools = allSkills.filter(s => DESIGN_TOOLS.includes(s)).length > 0
@@ -188,6 +189,7 @@ export function ProfileMap({ blueprint, extractedData }: ProfileMapProps) {
 
   const handleProfileRefine = async () => {
     if (!refineDraft.trim()) return
+    setRefineError('')
     setRefining(true)
     try {
       const res = await fetch('/api/refine', {
@@ -201,14 +203,18 @@ export function ProfileMap({ blueprint, extractedData }: ProfileMapProps) {
         }),
       })
       const data = await res.json()
-      if (data.refined) {
-        dispatch({
-          type: 'SET_BLUEPRINT',
-          blueprint: { ...blueprint, profileMap: { ...blueprint.profileMap, ...data.refined } },
-        })
-        setRefineDraft('')
-        setRefineOpen(false)
+      if (!res.ok || !data.refined) {
+        setRefineError(data.error ?? 'Refinement failed.')
+        return
       }
+      dispatch({
+        type: 'SET_BLUEPRINT',
+        blueprint: { ...blueprint, profileMap: { ...blueprint.profileMap, ...data.refined } },
+      })
+      setRefineDraft('')
+      setRefineOpen(false)
+    } catch {
+      setRefineError('Refinement failed. Please try again.')
     } finally {
       setRefining(false)
     }
@@ -280,6 +286,7 @@ export function ProfileMap({ blueprint, extractedData }: ProfileMapProps) {
                   rows={3}
                   className="w-full bg-[var(--surface)] border border-[var(--border-ws)] rounded-[8px] px-3 py-2 text-xs text-[var(--text-secondary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--neon)] transition-colors resize-none"
                 />
+                {refineError && <p className="text-xs text-red-400 mt-1">{refineError}</p>}
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleProfileRefine}
