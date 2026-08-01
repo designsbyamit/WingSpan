@@ -19,6 +19,9 @@ const plusJakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: 'Wingspan — Future Self Blueprint',
   description: 'Discover the patterns hidden in your career.',
+  verification: {
+    google: 'oLN6nHM8tsRnwQYdaYN9reXxItorFTB6FWE0in8dAtQ',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
