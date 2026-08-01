@@ -220,9 +220,9 @@ export function FootprintScreen() {
                     </div>
                     <div>
                       <span className="text-sm font-bold text-[var(--neon)] block">Upload Resume</span>
-                    <span className="text-xs text-[var(--text-muted)]">DOCX · TXT · Drag & drop</span>
+                    <span className="text-xs text-[var(--text-muted)]">PDF · DOCX · XLSX · TXT · Drag & drop</span>
                     </div>
-                    <input type="file" accept=".docx,.txt" className="hidden" onChange={(e) => handleFileInput(e, true)} />
+                    <input type="file" accept=".pdf,.docx,.xlsx,.csv,.txt" className="hidden" onChange={(e) => handleFileInput(e, true)} />
                   </label>
                 )}
               </div>
@@ -295,7 +295,7 @@ export function FootprintScreen() {
                   >
                     <Upload size={12} />
                     Choose additional files
-                    <input type="file" multiple accept=".docx,.txt" className="hidden" onChange={(e) => handleFileInput(e, false)} />
+                    <input type="file" multiple accept=".pdf,.docx,.xlsx,.csv,.txt,.pptx" className="hidden" onChange={(e) => handleFileInput(e, false)} />
                   </motion.label>
                 )}
                 {state.files.slice(1).map(f => (

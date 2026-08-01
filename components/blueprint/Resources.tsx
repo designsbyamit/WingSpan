@@ -150,13 +150,8 @@ export function Resources({ blueprint }: { blueprint: Blueprint }) {
             <Download size={14} />
             {exporting ? 'Exporting…' : 'Export to Notion (.md)'}
           </motion.button>
-          <button
-            onClick={() => printAsPDF(blueprint, selectedPath)}
-            className="flex items-center justify-center gap-2 py-3 px-5 rounded-[10px] border border-[var(--border-ws)] text-[var(--text-secondary)] text-sm font-semibold hover:border-[var(--neon)] hover:text-[var(--neon)] transition-colors"
-          >
-            <FileText size={14} />
-            Export as PDF
-          </button>
+          {/* PDF export temporarily hidden */}
+          {/* <button onClick={() => printAsPDF(blueprint, selectedPath)} ...>Export as PDF</button> */}
         </div>
         <p className="text-[10px] text-[var(--text-muted)]">
           The Markdown file includes your roadmap, gap analysis, actions, and resources. Open Notion → New page → Paste to import.
