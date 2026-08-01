@@ -4,8 +4,8 @@ const nextConfig: NextConfig = {
   serverExternalPackages: [
     'pdf-parse',
     'mammoth',
+    'xlsx',
     '@prisma/client',
-    'firebase-admin',
     'groq-sdk',
     'google-auth-library',
     '@google/generative-ai',

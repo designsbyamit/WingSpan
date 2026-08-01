@@ -1,7 +1,6 @@
 // lib/parsers/xlsx.ts
-import * as XLSX from 'xlsx'
-
-export function parseXlsx(buffer: Buffer): string {
+export async function parseXlsx(buffer: Buffer): Promise<string> {
+  const XLSX = await import('xlsx')
   const workbook = XLSX.read(buffer, { type: 'buffer' })
   const lines: string[] = []
   for (const sheetName of workbook.SheetNames) {
