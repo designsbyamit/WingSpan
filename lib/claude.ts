@@ -122,7 +122,7 @@ const BLUEPRINT_SCHEMA = `{
   },
   "strengths": [{
     "name": "string",
-    "confidence": number,
+    "confidence": "number 0-100 (not 0-1)",
     "evidence": "string (1 sentence with specific evidence)",
     "careerAdvantage": "string (how this strength benefits future growth)",
     "projectCount": number,
@@ -142,8 +142,7 @@ const BLUEPRINT_SCHEMA = `{
     "whyItFits": "string (2-3 sentences, highly specific)",
     "evidence": ["string"],
     "opportunitySize": "emerging|growing|established",
-    "confidence": number,
-    "recommendationStatus": "Recommended|Strongly Recommended|Emerging Opportunity",
+    "confidence": "number 0-1 (this IS a 0-1 field — do not change)",
     "timeline": "string (e.g. '12-18 Months')",
     "marketDemand": "Very High|High|Moderate|Emerging",
     "growthPotential": "Excellent|Strong|Good|Moderate",
@@ -161,8 +160,8 @@ const BLUEPRINT_SCHEMA = `{
   "gaps": [{
     "pathway": "string (must match a futurePaths title)",
     "gapType": "Skills Gap|Positioning Gap|Leadership Gap|Visibility Gap|Domain Gap",
-    "currentReadiness": number,
-    "futureReadiness": number,
+    "currentReadiness": "number 0-100 (not 0-1)",
+    "futureReadiness": "number 0-100 (not 0-1)",
     "currentState": "string",
     "desiredState": "string",
     "requiredCapabilities": ["string"],
@@ -180,12 +179,12 @@ const BLUEPRINT_SCHEMA = `{
     "resources": [{"type":"book|course|community|event|article|framework","title":"string","url":"string or null","pathway":"string","whereToStart":"string or null","firstStep":"string or null"}]
   },
   "confidenceScores": {
-    "timeline": number,
-    "projects": number,
-    "strengths": number,
-    "futurePaths": number
+    "timeline": "number 0-100 (not 0-1)",
+    "projects": "number 0-100 (not 0-1)",
+    "strengths": "number 0-100 (not 0-1)",
+    "futurePaths": "number 0-100 (not 0-1)"
   },
-  "insights": ["string (3-5 surprising, specific observations)"],
+  "insights": ["string — exactly 3-5 observations, each citing specific named evidence from this person's career (company, project, role, or timeframe). BAD: 'You have strong cross-functional experience.' GOOD: 'Your N-year tenure at Company during their [context] phase signals [specific pattern] — rare at [level] and a predictor of success in [path].'"],
   "rationale": {"key": "value"},
   "positioning": {
     "targetRole": "string",
@@ -245,9 +244,35 @@ For each bet populate all fields including betRationale, whyNotOtherPaths, caree
 NOT: "You lack X" — INSTEAD: "X could unlock your path to Y"
 For each gap include: why it matters for the selected Career Bet, recommended acquisition sequence, estimated effort aligned with Career Alpha ROI analysis, specific actionable milestones.`
 
-  const userPrompt = `${caCtx}
+  const evidenceInstruction = validatedData.evidenceQuality === 'sparse'
+    ? `Evidence quality: SPARSE. Use hedged language throughout ("early signals suggest", "your trajectory hints at"). Keep all confidenceScores in the 45–65 range. Do not invent specific projects or outcomes not present in the data.`
+    : validatedData.evidenceQuality === 'rich'
+    ? `Evidence quality: RICH. For every claim in identityStatement, careerEvolution, strengths, and insights, name at least one specific project, role, company, or metric from the career data below. ConfidenceScores may reach 75–90 where the data supports it.`
+    : `Evidence quality: MODERATE. Balance grounded claims with calibrated confidence. ConfidenceScores should fall in the 60–80 range.`
 
+  const negativeExamples = `
+Negative examples — these patterns are failures, do not produce them:
+
+identityStatement
+  BAD: "A strategic designer with 8 years of enterprise experience."
+  GOOD: "The designer who led [specific Company]'s [specific Project] from [startDate] to [outcome], now moving toward [specific direction based on their interests]."
+
+careerEvolution
+  BAD: "Has grown from individual contributor to senior designer, developing expertise across multiple industries."
+  GOOD: "Started as [role] at [Company1], shifted focus to [specific domain] after [specific event or project], then spent [N] years at [Company2] solving [specific problem] — an arc that reveals [specific pattern unique to this person]."
+
+positioningStatement
+  BAD: "An experienced UX designer ready for leadership roles."
+  GOOD: "The go-to [specific role] for [specific context] — uniquely equipped after [specific project at specific company] to [specific capability] in a way that most [peers] cannot."
+
+insights
+  BAD: "You have strong cross-functional experience."
+  GOOD: "Your [N]-year tenure at [Company] during their [specific context] phase signals unusually high tolerance for ambiguity — rare at the [level] level and a direct predictor of success in [specific future path]."
+`
+
+  const userPrompt = `${caCtx}
 Career stage tone: ${stageInstruction}
+${evidenceInstruction}
 
 ${careerBetsInstruction}
 
@@ -259,7 +284,7 @@ Career Profile:
 - Skills: ${validatedData.skills.join(', ')}
 - Education: ${JSON.stringify(validatedData.education)}
 - Future Interests: ${validatedData.interests.join(', ')}
-
+${negativeExamples}
 Generate a comprehensive, deeply personal Future Self Blueprint. Reference actual projects, roles, and companies by name. Every insight must cite real evidence. Make the person feel this was written only for them.
 
 Return ONLY valid JSON matching the schema below — no explanation, no markdown fences.
@@ -275,7 +300,27 @@ ${BLUEPRINT_SCHEMA}`
     model: MODEL,
     max_tokens: 8000,
     stream: true,
-    messages: [{ role: 'user', content: userPrompt }],
+    messages: [
+      {
+        role: 'system' as const,
+        content: `You are a senior career strategist and labor market economist with 20 years of experience helping professionals navigate career inflection points — from early-career designers to C-suite executives.
+
+Your analysis is grounded in specific evidence, not platitudes. Every sentence you write about a person must reference a specific role, project, company, skill, or timeframe from their actual career data. Generic statements that could apply to any professional in the same domain are a failure of your craft.
+
+Confidence calibration rules:
+- Score 75–90: confirmed signal — multiple named pieces of evidence, named projects and roles, sustained pattern
+- Score 60–75: strong signal — clear evidence but fewer sources or shorter timeframe
+- Score 45–60: emerging signal — single data point or inferred from adjacent evidence
+- Score 30–45: speculative — extrapolated from weak signals; always use hedged language ("early indicators suggest", "if this pattern holds")
+
+Never assign confidenceScores above 65 for a sparse profile (evidenceQuality: "sparse").
+Never use the words "passion", "passionate", "strong communicator", "team player", or "results-driven".
+Never write sentences that would be equally true of any designer at the same career stage.
+
+Your output is the first thing this person will read about their own career potential. Make it feel like it was written specifically for them — because it must be.`,
+      },
+      { role: 'user', content: userPrompt },
+    ],
   })
 
   // Accumulate tokens while sending periodic progress pings
