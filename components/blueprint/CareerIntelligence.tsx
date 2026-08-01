@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Blueprint } from '@/types/wingspan'
 import { StrengthRadar } from '@/components/ui/StrengthRadar'
 import { CareerAlphaDashboard } from '@/components/blueprint/CareerAlphaDashboard'
+import { useWingspan } from '@/context/WingspanContext'
 
 type IntelTab = 'career-alpha' | 'strengths' | 'interests'
 
@@ -25,10 +26,13 @@ const MARKET_COLOR: Record<string, string> = {
 
 export function CareerIntelligence({ blueprint }: { blueprint: Blueprint }) {
   const { strengths, interests, careerAlpha } = blueprint
+  const { dispatch } = useWingspan()
   const defaultTab: IntelTab = careerAlpha ? 'career-alpha' : 'strengths'
   const [activeTab, setActiveTab] = useState<IntelTab>(defaultTab)
   const [activeStrength, setActiveStrength] = useState(0)
   const topRef = useRef<HTMLDivElement>(null)
+  const [refineDraft, setRefineDraft] = useState('')
+  const [refining, setRefining] = useState(false)
 
   useEffect(() => {
     topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -39,6 +43,32 @@ export function CareerIntelligence({ blueprint }: { blueprint: Blueprint }) {
     { id: 'strengths', label: 'Strengths' },
     { id: 'interests', label: 'Interests' },
   ]
+
+  const handleIntelRefine = async () => {
+    if (!refineDraft.trim()) return
+    setRefining(true)
+    try {
+      const res = await fetch('/api/refine', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          section: 'intelligence',
+          blueprint,
+          instruction: refineDraft,
+        }),
+      })
+      const data = await res.json()
+      if (data.refined) {
+        dispatch({
+          type: 'SET_BLUEPRINT',
+          blueprint: { ...blueprint, ...data.refined },
+        })
+        setRefineDraft('')
+      }
+    } finally {
+      setRefining(false)
+    }
+  }
 
   return (
     <div ref={topRef} className="flex flex-col gap-6">
@@ -197,6 +227,26 @@ export function CareerIntelligence({ blueprint }: { blueprint: Blueprint }) {
         )}
 
       </AnimatePresence>
+
+      {/* AI Refine section */}
+      <div className="rounded-[12px] bg-[var(--surface)] border border-[var(--border-ws)] p-4 flex flex-col gap-3">
+        <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)]">Refine with AI</p>
+        <textarea
+          value={refineDraft}
+          onChange={e => setRefineDraft(e.target.value)}
+          placeholder="Adjust your strengths or interests… (e.g. 'I'm not interested in management', 'Add more weight to AI-native design')"
+          rows={3}
+          className="w-full bg-[var(--card-inner)] border border-[var(--border-ws)] rounded-[8px] px-3 py-2 text-xs text-[var(--text-secondary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--neon)] transition-colors resize-none"
+        />
+        <button
+          onClick={handleIntelRefine}
+          disabled={refining || !refineDraft.trim()}
+          className="self-start px-4 py-1.5 rounded-[7px] bg-[var(--neon)] text-[#0a0a0a] text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+        >
+          {refining ? 'Refining…' : 'Refine →'}
+        </button>
+      </div>
+
     </div>
   )
 }

@@ -161,6 +161,9 @@ export function ProfileMap({ blueprint, extractedData }: ProfileMapProps) {
   const [editingProject, setEditingProject] = useState<string | null>(null)
   const [backgroundExpanded, setBackgroundExpanded] = useState(false)
   const activeView = state.activeProjectView
+  const [refineOpen, setRefineOpen] = useState(false)
+  const [refineDraft, setRefineDraft] = useState('')
+  const [refining, setRefining] = useState(false)
 
   const allSkills = extractedData?.skills ?? []
   const tools = allSkills.filter(s => DESIGN_TOOLS.includes(s)).length > 0
@@ -183,6 +186,34 @@ export function ProfileMap({ blueprint, extractedData }: ProfileMapProps) {
     { label: 'Projects', value: projects.length || '7+', highlight: false },
   ]
 
+  const handleProfileRefine = async () => {
+    if (!refineDraft.trim()) return
+    setRefining(true)
+    try {
+      const res = await fetch('/api/refine', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          section: 'profile',
+          blueprint,
+          instruction: refineDraft,
+          careerAlpha: state.careerAlpha,
+        }),
+      })
+      const data = await res.json()
+      if (data.refined) {
+        dispatch({
+          type: 'SET_BLUEPRINT',
+          blueprint: { ...blueprint, profileMap: { ...blueprint.profileMap, ...data.refined } },
+        })
+        setRefineDraft('')
+        setRefineOpen(false)
+      }
+    } finally {
+      setRefining(false)
+    }
+  }
+
   return (
     <div className="flex flex-col gap-8">
 
@@ -203,7 +234,16 @@ export function ProfileMap({ blueprint, extractedData }: ProfileMapProps) {
 
       {/* Career Summary — break into short paragraphs */}
       <div>
-        <SectionLabel>Career Summary</SectionLabel>
+        <div className="flex items-center justify-between mb-3">
+          <SectionLabel>Career Summary</SectionLabel>
+          <button
+            onClick={() => setRefineOpen(o => !o)}
+            className="text-[10px] font-semibold text-[var(--text-muted)] hover:text-[var(--neon)] transition-colors flex items-center gap-1"
+          >
+            <Pencil size={10} />
+            Edit context
+          </button>
+        </div>
         <div className="flex flex-col gap-3">
           {profileMap.careerEvolution
             .split(/(?<=[.!?])\s+/)
@@ -223,6 +263,42 @@ export function ProfileMap({ blueprint, extractedData }: ProfileMapProps) {
             ))
           }
         </div>
+        <AnimatePresence>
+          {refineOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden"
+            >
+              <div className="mt-3 flex flex-col gap-2">
+                <textarea
+                  value={refineDraft}
+                  onChange={e => setRefineDraft(e.target.value)}
+                  placeholder="Add context to refine your profile summary… (e.g. 'I also led a team of 8', 'My main focus has been healthcare UX')"
+                  rows={3}
+                  className="w-full bg-[var(--surface)] border border-[var(--border-ws)] rounded-[8px] px-3 py-2 text-xs text-[var(--text-secondary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--neon)] transition-colors resize-none"
+                />
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleProfileRefine}
+                    disabled={refining || !refineDraft.trim()}
+                    className="px-4 py-1.5 rounded-[7px] bg-[var(--neon)] text-[#0a0a0a] text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+                  >
+                    {refining ? 'Refining…' : 'Refine →'}
+                  </button>
+                  <button
+                    onClick={() => { setRefineOpen(false); setRefineDraft('') }}
+                    className="text-xs text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Profile enrichment nudges */}

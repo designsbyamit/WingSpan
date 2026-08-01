@@ -58,6 +58,9 @@ export function PathSelection({ blueprint }: { blueprint: Blueprint }) {
   const { state, dispatch } = useWingspan()
   const { futurePaths } = blueprint
   const [expandedPath, setExpandedPath] = useState<string | null>(null)
+  const [adjustOpenFor, setAdjustOpenFor] = useState<string | null>(null)
+  const [refineDrafts, setRefineDrafts] = useState<Record<string, string>>({})
+  const [refining, setRefining] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   const recommendedTitle = futurePaths.reduce((best, p) =>
@@ -66,10 +69,38 @@ export function PathSelection({ blueprint }: { blueprint: Blueprint }) {
 
   const handleSelectPath = (pathTitle: string) => {
     dispatch({ type: 'SELECT_PATH', path: pathTitle })
-    // Scroll to bottom of section after a brief delay — guides user toward Gap Analysis
     setTimeout(() => {
       bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
     }, 400)
+  }
+
+  const handlePathRefine = async (pathTitle: string) => {
+    const draft = refineDrafts[pathTitle] ?? ''
+    if (!draft.trim()) return
+    setRefining(true)
+    try {
+      const res = await fetch('/api/refine', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          section: 'paths',
+          blueprint,
+          instruction: `For the path '${pathTitle}': ${draft}`,
+          careerAlpha: state.careerAlpha,
+        }),
+      })
+      const data = await res.json()
+      if (data.refined?.futurePaths) {
+        dispatch({
+          type: 'SET_BLUEPRINT',
+          blueprint: { ...blueprint, futurePaths: data.refined.futurePaths },
+        })
+        setRefineDrafts(prev => ({ ...prev, [pathTitle]: '' }))
+        setAdjustOpenFor(null)
+      }
+    } finally {
+      setRefining(false)
+    }
   }
 
   return (
@@ -181,6 +212,55 @@ export function PathSelection({ blueprint }: { blueprint: Blueprint }) {
                 </AnimatePresence>
               </div>
             )}
+
+            {/* Adjust this path */}
+            <div>
+              <button
+                onClick={() => setAdjustOpenFor(adjustOpenFor === path.title ? null : path.title)}
+                className="flex items-center gap-1.5 text-[10px] text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
+              >
+                <span>Adjust this path</span>
+                <motion.div animate={{ rotate: adjustOpenFor === path.title ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                  <ChevronDown size={10} />
+                </motion.div>
+              </button>
+              <AnimatePresence>
+                {adjustOpenFor === path.title && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="mt-2 flex flex-col gap-2">
+                      <textarea
+                        value={refineDrafts[path.title] ?? ''}
+                        onChange={e => setRefineDrafts(prev => ({ ...prev, [path.title]: e.target.value }))}
+                        placeholder={`Make this path more focused on AI-native product design…`}
+                        rows={2}
+                        className="w-full bg-[var(--card-inner)] border border-[var(--border-ws)] rounded-[8px] px-3 py-2 text-xs text-[var(--text-secondary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--neon)] transition-colors resize-none"
+                      />
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handlePathRefine(path.title)}
+                          disabled={refining || !(refineDrafts[path.title] ?? '').trim()}
+                          className="px-4 py-1.5 rounded-[7px] bg-[var(--neon)] text-[#0a0a0a] text-xs font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+                        >
+                          {refining ? 'Refining…' : 'Refine →'}
+                        </button>
+                        <button
+                          onClick={() => { setAdjustOpenFor(null); setRefineDrafts(prev => ({ ...prev, [path.title]: '' })) }}
+                          className="text-xs text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* CTA */}
             <motion.button

@@ -13,6 +13,7 @@ const GAP_SIZE_STYLE = {
 }
 
 const OBJECTIVES_KEY = 'wingspan-gap-objectives'
+const IN_PROGRESS_KEY = 'wingspan_inprogress_gaps'
 
 function loadObjectives(): Record<string, boolean> {
   if (typeof window === 'undefined') return {}
@@ -69,12 +70,29 @@ function ObjectiveItem({ objective, storageKey }: {
   )
 }
 
-function GapCard({ gap }: { gap: Gap }) {
+function GapCard({ gap, inProgressGaps, setInProgressGaps }: {
+  gap: Gap
+  inProgressGaps: Set<string>
+  setInProgressGaps: (s: Set<string>) => void
+}) {
   const [expanded, setExpanded] = useState(false)
   const sizeStyle = GAP_SIZE_STYLE[gap.gapSize]
   const currentPct = gap.currentReadiness < 2 ? Math.round(gap.currentReadiness * 100) : Math.round(gap.currentReadiness)
   const futurePct  = gap.futureReadiness  < 2 ? Math.round(gap.futureReadiness  * 100) : Math.round(gap.futureReadiness)
   const gapPct     = Math.round(futurePct - currentPct)
+  const inProgressKey = gap.pathway + gap.gapType
+  const isInProgress = inProgressGaps.has(inProgressKey)
+
+  const toggleInProgress = () => {
+    const next = new Set(inProgressGaps)
+    if (next.has(inProgressKey)) {
+      next.delete(inProgressKey)
+    } else {
+      next.add(inProgressKey)
+    }
+    setInProgressGaps(next)
+    localStorage.setItem(IN_PROGRESS_KEY, JSON.stringify([...next]))
+  }
 
   return (
     <motion.div layout className="rounded-[12px] bg-[var(--surface)] border border-[var(--border-ws)] overflow-hidden">
@@ -87,9 +105,16 @@ function GapCard({ gap }: { gap: Gap }) {
             <span className="text-sm font-bold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-sora)' }}>
               {gap.gapType}
             </span>
-            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${sizeStyle.cls}`}>
-              {sizeStyle.label}
-            </span>
+            <div className="flex items-center gap-2">
+              {isInProgress && (
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border border-[var(--neon)] text-[var(--neon)] bg-[var(--neon-surface)]">
+                  In progress
+                </span>
+              )}
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${sizeStyle.cls}`}>
+                {sizeStyle.label}
+              </span>
+            </div>
           </div>
 
           {/* Current vs desired visual */}
@@ -184,6 +209,18 @@ function GapCard({ gap }: { gap: Gap }) {
                 </div>
               )}
 
+              {/* In-progress toggle */}
+              <button
+                onClick={toggleInProgress}
+                className={`text-xs px-3 py-1.5 rounded-full border transition-colors self-start ${
+                  isInProgress
+                    ? 'border-[var(--neon)] text-[var(--neon)] bg-[var(--neon-surface)]'
+                    : 'border-[var(--border-ws)] text-[var(--text-muted)] hover:border-[var(--text-muted)]'
+                }`}
+              >
+                {isInProgress ? '✓ In progress' : 'Already working on this'}
+              </button>
+
             </div>
           </motion.div>
         )}
@@ -195,6 +232,14 @@ function GapCard({ gap }: { gap: Gap }) {
 export function GapAnalysis({ blueprint }: { blueprint: Blueprint }) {
   const { state } = useWingspan()
   const { gaps } = blueprint
+
+  const [inProgressGaps, setInProgressGaps] = useState<Set<string>>(() => {
+    if (typeof window === 'undefined') return new Set()
+    try {
+      const stored = localStorage.getItem(IN_PROGRESS_KEY)
+      return new Set(stored ? JSON.parse(stored) : [])
+    } catch { return new Set() }
+  })
 
   const selectedPath = state.selectedPath
   const filteredGaps = selectedPath
@@ -218,7 +263,12 @@ export function GapAnalysis({ blueprint }: { blueprint: Blueprint }) {
         </p>
       </div>
       {filteredGaps.map(gap => (
-        <GapCard key={`${gap.pathway}-${gap.gapType}`} gap={gap} />
+        <GapCard
+          key={`${gap.pathway}-${gap.gapType}`}
+          gap={gap}
+          inProgressGaps={inProgressGaps}
+          setInProgressGaps={setInProgressGaps}
+        />
       ))}
     </div>
   )

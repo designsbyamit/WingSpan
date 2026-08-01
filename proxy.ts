@@ -20,6 +20,7 @@ const PUBLIC_PATHS = [
   '/api/career-alpha',
   '/api/blueprint',
   '/api/template',
+  '/api/refine',
 ]
 
 export async function proxy(request: NextRequest): Promise<NextResponse | undefined> {
