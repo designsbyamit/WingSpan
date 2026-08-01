@@ -12,6 +12,7 @@ const PUBLIC_PATHS = [
   '/api/auth/logout',
   '/api/auth/me',
   '/api/auth/google',
+  '/api/health',
   '/privacy',
   '/terms',
   '/wingspan',
