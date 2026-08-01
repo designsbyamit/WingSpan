@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
     return response
   } catch (err) {
     console.error('Google OAuth error:', err)
-    const msg = err instanceof Error ? err.message : String(err)
+    const msg = err instanceof Error ? err.message : (typeof err === 'object' ? JSON.stringify(err) : String(err))
     return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(msg)}`, req.url))
   }
 }
