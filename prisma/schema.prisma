@@ -291,6 +291,7 @@ model User {
   email         String      @unique
   phone         String?     @unique
   name          String?
+  passwordHash  String?
   avatarUrl     String?
   careerLevelId String?
   careerLevel   CareerLevel? @relation(fields: [careerLevelId], references: [id])
