@@ -170,7 +170,7 @@ function MaskedHeadline({ children, delay = 0, className = '', style }: { childr
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '0px' })
   return (
-    <div ref={ref} style={{ overflow: 'hidden', paddingBottom: '0.15em' }}>
+    <div ref={ref} style={{ clipPath: 'inset(-20% 0 -20% 0)' }}>
       <motion.div className={className} style={style}
         initial={{ y: '110%', opacity: 0 }}
         animate={inView ? { y: 0, opacity: 1 } : {}}
@@ -288,19 +288,19 @@ function Hero() {
 
         {/* Headline */}
         <div className="flex flex-col items-center gap-2">
-          <div style={{ overflow: 'hidden', paddingBottom: '0.12em' }}>
+          <div style={{ clipPath: 'inset(-20% 0 -20% 0)' }}>
             <motion.h1 initial={{ y: '110%' }} animate={{ y: 0 }}
               transition={{ delay: 0.55, ...SPRING_SLOW }}
-              className="text-[clamp(2.8rem,8vw,5.5rem)] font-extralight leading-[1.05]"
-              style={{ color: '#f5f5f5', letterSpacing: '-0.04em' }}>
+              className="text-[clamp(2.8rem,8vw,5.5rem)] font-extralight"
+              style={{ color: '#f5f5f5', letterSpacing: '-0.04em', lineHeight: 1.1 }}>
               Design a career
             </motion.h1>
           </div>
-          <div style={{ overflow: 'hidden', paddingBottom: '0.12em' }}>
+          <div style={{ clipPath: 'inset(-20% 0 -20% 0)' }}>
             <motion.h1 initial={{ y: '110%' }} animate={{ y: 0 }}
               transition={{ delay: 0.7, ...SPRING_SLOW }}
-              className="text-[clamp(2.8rem,8vw,5.5rem)] font-extralight leading-[1.05]"
-              style={{ color: '#B6FF2E', letterSpacing: '-0.04em' }}>
+              className="text-[clamp(2.8rem,8vw,5.5rem)] font-extralight"
+              style={{ color: '#B6FF2E', letterSpacing: '-0.04em', lineHeight: 1.1 }}>
               that keeps evolving.
             </motion.h1>
           </div>
