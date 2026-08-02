@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { House, User, Map, Sparkles } from 'lucide-react'
+import { House, User, Map } from 'lucide-react'
 
 interface NavItem {
   href: string
@@ -59,9 +59,9 @@ export function AppNav({ userName, xp }: Props) {
         aria-label="Main navigation"
       >
         {/* Brand mark */}
-        <div className="w-8 h-8 rounded-lg bg-[#B6FF2E] flex items-center justify-center mb-4 flex-none">
-          <Sparkles size={16} className="text-white" />
-        </div>
+        <Link href="/" className="flex items-center justify-center mb-4 flex-none">
+          <img src="/brand/LogoWings.svg" alt="Wingspan" style={{ width: '36px', height: 'auto' }} />
+        </Link>
 
         {/* Nav items */}
         {NAV_ITEMS.map(({ href, label, Icon }) => {

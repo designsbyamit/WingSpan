@@ -239,9 +239,7 @@ export function FootprintScreen() {
       <div className="max-w-2xl w-full flex flex-col gap-8">
         {/* Header */}
         <div>
-          <span className="text-xs font-normal tracking-[0.2em] text-[var(--neon)]" style={{ fontFamily: 'var(--font-sora)' }}>
-            Wingspan
-          </span>
+          <img src="/brand/LogoColor.svg" alt="Wingspan" style={{ height: '24px', width: 'auto' }} />
           <div className="flex items-center gap-4 mt-4">
             {(['upload', 'interests'] as FootprintStep[]).map((s, i) => (
               <button

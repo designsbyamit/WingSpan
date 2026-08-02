@@ -38,11 +38,7 @@ export function WelcomeScreen() {
       >
         {/* Wordmark */}
         <motion.div variants={item}>
-          <span
-            className="text-xs font-normal tracking-[0.2em] text-[var(--neon)]"
-          >
-            Wingspan
-          </span>
+          <img src="/brand/LogoColor.svg" alt="Wingspan" style={{ height: '28px', width: 'auto' }} />
         </motion.div>
 
         {/* Headline */}
