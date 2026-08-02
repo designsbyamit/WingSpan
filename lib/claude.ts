@@ -351,9 +351,8 @@ Never write sentences that would be equally true of any designer at the same car
 
 Your output is the first thing this person will read about their own career potential. Make it feel like it was written specifically for them — because it must be.`
 
-  // Use Gemini for high-quality blueprint analysis (Groq fallback when Gemini unavailable)
-  const geminiKey = (process.env.GEMINI_API_KEY ?? '').trim()
-  const geminiModelName = (process.env.GEMINI_MODEL ?? 'gemini-2.0-flash').split('\n')[0].trim()
+  // Use unified router: Gemini → OpenRouter/DeepSeek → Groq
+  const { routeStream } = await import('@/lib/router')
 
   // Accumulate tokens while sending periodic progress pings
   let accumulated = ''
@@ -367,68 +366,28 @@ Your output is the first thing this person will read about their own career pote
     { step: 'actions',   label: 'Generating your Blueprint…',     percentage: STEP_PERCENTAGES.actions,    minChars: 3000 },
   ]
 
-  const handleChunk = (text: string) => {
+  for await (const text of routeStream(systemInstruction, userPrompt)) {
     accumulated += text
+
     while (stepIndex < STEPS_DURING_STREAM.length) {
       const next = STEPS_DURING_STREAM[stepIndex]
-      if (accumulated.length >= next.minChars) { stepIndex++ } else break
+      if (accumulated.length >= next.minChars) {
+        yield { type: 'step', step: next.step, label: next.label, percentage: next.percentage }
+        if (stepIndex === 0) yield { type: 'observation', text: 'Patterns emerging from your career data…' }
+        stepIndex++
+      } else break
+    }
+
+    if (Date.now() - lastPingAt > 10000) {
+      yield { type: 'ping', percentage: Math.min(STEP_PERCENTAGES.timeline + Math.round((accumulated.length / 12000) * 55), 89) }
+      lastPingAt = Date.now()
     }
   }
 
-  let usedGemini = false
-  if (geminiKey) {
-    try {
-      const geminiModel = new GoogleGenerativeAI(geminiKey).getGenerativeModel({
-        model: geminiModelName,
-        systemInstruction,
-      })
-      const geminiStream = await geminiModel.generateContentStream(userPrompt)
-      for await (const chunk of geminiStream.stream) {
-        const text = chunk.text()
-        if (text) handleChunk(text)
-      }
-      usedGemini = true
-    } catch (e) {
-      console.warn('Gemini failed, falling back to Groq:', e instanceof Error ? e.message.slice(0, 100) : String(e))
-      accumulated = ''
-      stepIndex = 0
-    }
-  }
-
-  if (!usedGemini) {
-    const stream = await getGroq().chat.completions.create({
-      model: GROQ_MODEL,
-      max_tokens: 8000,
-      stream: true,
-      messages: [
-        { role: 'system' as const, content: systemInstruction },
-        { role: 'user', content: userPrompt },
-      ],
-    })
-    for await (const chunk of stream) {
-      const text = chunk.choices[0]?.delta?.content ?? ''
-      if (text) {
-        handleChunk(text)
-        if (Date.now() - lastPingAt > 10000) {
-          yield { type: 'ping', percentage: Math.min(STEP_PERCENTAGES.timeline + Math.round((accumulated.length / 12000) * 55), 89) }
-          lastPingAt = Date.now()
-        }
-      }
-    }
-  }
-
-  // Yield progress steps based on final accumulated length
-  stepIndex = 0
-  for (const s of STEPS_DURING_STREAM) {
-    if (accumulated.length >= s.minChars) {
-      yield { type: 'step', step: s.step, label: s.label, percentage: s.percentage }
-      if (stepIndex === 0) yield { type: 'observation', text: 'Patterns emerging from your career data…' }
-      stepIndex++
-    }
-  }
   // Emit any remaining steps
-  for (let i = stepIndex; i < STEPS_DURING_STREAM.length; i++) {
-    yield { type: 'step', step: STEPS_DURING_STREAM[i].step, label: STEPS_DURING_STREAM[i].label, percentage: STEPS_DURING_STREAM[i].percentage }
+  while (stepIndex < STEPS_DURING_STREAM.length) {
+    const s = STEPS_DURING_STREAM[stepIndex++]
+    yield { type: 'step', step: s.step, label: s.label, percentage: s.percentage }
   }
 
   let clean = accumulated.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
