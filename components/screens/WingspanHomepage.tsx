@@ -288,18 +288,18 @@ function Hero() {
 
         {/* Headline */}
         <div className="flex flex-col items-center gap-2">
-          <div style={{ overflow: 'hidden' }}>
-            <motion.h1 initial={{ y: '100%' }} animate={{ y: 0 }}
+          <div style={{ overflow: 'hidden', paddingBottom: '0.12em' }}>
+            <motion.h1 initial={{ y: '110%' }} animate={{ y: 0 }}
               transition={{ delay: 0.55, ...SPRING_SLOW }}
-              className="text-[clamp(2.8rem,8vw,5.5rem)] font-extralight leading-none"
+              className="text-[clamp(2.8rem,8vw,5.5rem)] font-extralight leading-[1.05]"
               style={{ color: '#f5f5f5', letterSpacing: '-0.04em' }}>
               Design a career
             </motion.h1>
           </div>
-          <div style={{ overflow: 'hidden' }}>
-            <motion.h1 initial={{ y: '100%' }} animate={{ y: 0 }}
+          <div style={{ overflow: 'hidden', paddingBottom: '0.12em' }}>
+            <motion.h1 initial={{ y: '110%' }} animate={{ y: 0 }}
               transition={{ delay: 0.7, ...SPRING_SLOW }}
-              className="text-[clamp(2.8rem,8vw,5.5rem)] font-extralight leading-none"
+              className="text-[clamp(2.8rem,8vw,5.5rem)] font-extralight leading-[1.05]"
               style={{ color: '#B6FF2E', letterSpacing: '-0.04em' }}>
               that keeps evolving.
             </motion.h1>
