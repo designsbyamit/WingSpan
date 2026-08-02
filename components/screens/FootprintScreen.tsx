@@ -1,11 +1,95 @@
 'use client'
 import { useCallback, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Upload, Download, ChevronDown, ChevronUp, X, Link2, ArrowRight } from 'lucide-react'
+import { Upload, Download, ChevronDown, ChevronUp, X, Link2, ArrowRight, FileText, Cpu, Sparkles } from 'lucide-react'
 import { useWingspan } from '@/context/WingspanContext'
 import { NeonButton } from '@/components/ui/NeonButton'
 import { GhostButton } from '@/components/ui/GhostButton'
 import { runCareerPipeline } from '@/lib/pipeline'
+
+// ── Extraction animation overlay ──────────────────────────────────────────
+function ExtractionOverlay() {
+  const steps = [
+    { icon: FileText, label: 'Reading document structure', delay: 0 },
+    { icon: Cpu, label: 'Extracting career signals', delay: 0.6 },
+    { icon: Sparkles, label: 'Building your profile', delay: 1.2 },
+  ]
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center"
+      style={{ background: 'rgba(13,13,13,0.96)', backdropFilter: 'blur(12px)' }}
+    >
+      {/* Document animation */}
+      <div className="relative mb-12">
+        <svg width="120" height="140" viewBox="0 0 120 140" fill="none">
+          {/* Document base */}
+          <motion.rect x="20" y="10" width="80" height="100" rx="6"
+            stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" fill="none"
+            initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+          />
+          {/* Page fold corner */}
+          <motion.path d="M80 10 L100 30 L80 30 Z"
+            fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" strokeWidth="1"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            transition={{ delay: 0.4, duration: 0.4 }}
+          />
+          {/* Lines being extracted */}
+          {[30, 45, 60, 75, 88].map((y, i) => (
+            <motion.line key={i} x1="32" y1={y} x2="88" y2={y}
+              stroke="#B6FF2E" strokeWidth="1.5" strokeLinecap="round"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: [0, 0.8, 0.4] }}
+              transition={{ delay: 0.3 + i * 0.18, duration: 0.5, ease: 'easeOut' }}
+            />
+          ))}
+          {/* Nodes flying out */}
+          {[
+            { cx: 32, cy: 30, tx: -40, ty: -20 },
+            { cx: 60, cy: 45, tx: 45, ty: -30 },
+            { cx: 45, cy: 60, tx: -50, ty: 10 },
+            { cx: 75, cy: 75, tx: 40, ty: 20 },
+            { cx: 35, cy: 88, tx: -35, ty: 30 },
+          ].map((n, i) => (
+            <motion.circle key={i} cx={n.cx} cy={n.cy} r="3"
+              fill="#B6FF2E"
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: [0, 1.5, 1], opacity: [0, 1, 0], x: n.tx, y: n.ty }}
+              transition={{ delay: 0.5 + i * 0.2, duration: 0.8, ease: [0.16,1,0.3,1] }}
+            />
+          ))}
+        </svg>
+        {/* Orbital ring */}
+        <motion.div className="absolute inset-0 -m-4 rounded-full border"
+          style={{ borderColor: 'rgba(182,255,46,0.15)' }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+        />
+      </div>
+
+      {/* Step labels */}
+      <div className="flex flex-col items-center gap-3">
+        {steps.map(({ icon: Icon, label, delay }, i) => (
+          <motion.div key={i} className="flex items-center gap-2.5"
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 + delay, duration: 0.6, ease: [0.16,1,0.3,1] }}>
+            <motion.div
+              animate={{ opacity: [0.4, 1, 0.4] }}
+              transition={{ duration: 1.5, repeat: Infinity, delay: delay }}>
+              <Icon size={14} style={{ color: '#B6FF2E' }} />
+            </motion.div>
+            <span className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>{label}</span>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  )
+}
 
 const INTEREST_CATEGORIES: { label: string; interests: string[] }[] = [
   {
@@ -147,8 +231,12 @@ export function FootprintScreen() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12">
-      <div className="max-w-2xl w-full flex flex-col gap-8">
+      {/* Extraction overlay */}
+      <AnimatePresence>
+        {loading && <ExtractionOverlay />}
+      </AnimatePresence>
 
+      <div className="max-w-2xl w-full flex flex-col gap-8">
         {/* Header */}
         <div>
           <span className="text-xs font-normal tracking-[0.2em] text-[var(--neon)]" style={{ fontFamily: 'var(--font-sora)' }}>
@@ -332,7 +420,7 @@ export function FootprintScreen() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.3 }}
-              className="flex flex-col gap-6"
+              className="flex flex-col gap-4"
             >
               <div>
                 <h2 className="text-2xl font-bold text-[var(--text-primary)] leading-tight mb-1" style={{ fontFamily: 'var(--font-sora)' }}>
@@ -343,12 +431,12 @@ export function FootprintScreen() {
                 </p>
               </div>
 
-              {/* Interest categories */}
-              <div className="flex flex-col gap-6">
+              {/* Interest categories — scrollable */}
+              <div className="flex flex-col gap-4 max-h-[45vh] overflow-y-auto pr-1" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.1) transparent' }}>
                 {INTEREST_CATEGORIES.map(({ label, interests }) => {
                   const selectedInCategory = interests.filter(i => state.interests.includes(i)).length
                   return (
-                    <div key={label} className="flex flex-col gap-3">
+                    <div key={label} className="flex flex-col gap-2">
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)]">
                           {label}
@@ -395,7 +483,7 @@ export function FootprintScreen() {
               </div>
 
               {/* Progress indicator */}
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between pt-1">
                 <span className="text-xs text-[var(--text-muted)]">
                   {state.interests.length === 0 && 'Pick at least 3 to keep going'}
                   {state.interests.length >= 1 && state.interests.length < 3 && `${3 - state.interests.length} more and we're good`}
@@ -415,7 +503,8 @@ export function FootprintScreen() {
                 </div>
               )}
 
-              <div className="flex gap-3">
+              {/* Sticky CTA — always visible */}
+              <div className="flex gap-3 pt-2">
                 <button
                   onClick={() => setStep('upload')}
                   className="px-5 py-2.5 rounded-[10px] border border-[var(--border-ws)] text-sm text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
