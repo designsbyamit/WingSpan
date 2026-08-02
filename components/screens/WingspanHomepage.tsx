@@ -99,51 +99,53 @@ function ConstellationViz({ progress }: { progress: number }) {
 function Background() {
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
-      {/* Layer 1: slow mesh gradients */}
-      <motion.div className="absolute inset-0"
-        animate={{ backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'] }}
-        transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-        style={{
-          background: `
-            radial-gradient(ellipse 80% 60% at 15% -10%, rgba(182,255,46,0.06) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 50% at 85% 15%, rgba(96,165,250,0.05) 0%, transparent 55%),
-            radial-gradient(ellipse 50% 40% at 10% 85%, rgba(167,139,250,0.04) 0%, transparent 50%),
-            radial-gradient(ellipse 40% 35% at 90% 80%, rgba(182,255,46,0.03) 0%, transparent 50%)
-          `,
-          backgroundSize: '200% 200%',
-        }}
-      />
-      {/* Layer 2: slow light blobs */}
+      {/* Layer 1: mesh gradients — visible */}
+      <div className="absolute inset-0" style={{
+        background: `
+          radial-gradient(ellipse 80% 60% at 15% -10%, rgba(182,255,46,0.12) 0%, transparent 60%),
+          radial-gradient(ellipse 60% 50% at 85% 15%, rgba(96,165,250,0.09) 0%, transparent 55%),
+          radial-gradient(ellipse 50% 40% at 10% 85%, rgba(167,139,250,0.07) 0%, transparent 50%),
+          radial-gradient(ellipse 40% 35% at 90% 80%, rgba(182,255,46,0.06) 0%, transparent 50%)
+        `
+      }} />
+      {/* Layer 2: slow animated blobs */}
       <motion.div className="absolute"
         animate={{ x: [0, 80, -40, 0], y: [0, -60, 80, 0], scale: [1, 1.3, 0.9, 1] }}
         transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-        style={{ width: 600, height: 600, top: '-10%', left: '-10%',
-          background: 'radial-gradient(ellipse, rgba(182,255,46,0.04) 0%, transparent 70%)',
-          filter: 'blur(60px)' }}
+        style={{ width: 700, height: 700, top: '-15%', left: '-15%',
+          background: 'radial-gradient(ellipse, rgba(182,255,46,0.08) 0%, transparent 65%)',
+          filter: 'blur(50px)' }}
       />
       <motion.div className="absolute"
         animate={{ x: [0, -100, 60, 0], y: [0, 80, -40, 0], scale: [1, 0.8, 1.2, 1] }}
         transition={{ duration: 28, repeat: Infinity, ease: 'easeInOut', delay: 5 }}
-        style={{ width: 500, height: 500, bottom: '-5%', right: '-5%',
-          background: 'radial-gradient(ellipse, rgba(96,165,250,0.04) 0%, transparent 70%)',
-          filter: 'blur(80px)' }}
+        style={{ width: 600, height: 600, bottom: '-10%', right: '-10%',
+          background: 'radial-gradient(ellipse, rgba(96,165,250,0.07) 0%, transparent 65%)',
+          filter: 'blur(70px)' }}
+      />
+      <motion.div className="absolute"
+        animate={{ x: [0, 50, -30, 0], y: [0, -40, 60, 0] }}
+        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 10 }}
+        style={{ width: 400, height: 400, top: '40%', left: '40%',
+          background: 'radial-gradient(ellipse, rgba(167,139,250,0.06) 0%, transparent 65%)',
+          filter: 'blur(60px)' }}
       />
       {/* Layer 3: grid lines */}
-      <div className="absolute inset-0 opacity-30">
+      <div className="absolute inset-0" style={{ opacity: 0.5 }}>
         {[20,40,60,80].map(p => (
           <div key={p} className="absolute left-0 right-0 h-px" style={{ top:`${p}%`,
-            background:'linear-gradient(90deg,transparent,rgba(255,255,255,0.035) 20%,rgba(255,255,255,0.035) 80%,transparent)' }} />
+            background:'linear-gradient(90deg,transparent,rgba(255,255,255,0.05) 20%,rgba(255,255,255,0.05) 80%,transparent)' }} />
         ))}
         {[25,50,75].map(p => (
           <div key={p} className="absolute top-0 bottom-0 w-px" style={{ left:`${p}%`,
-            background:'linear-gradient(0deg,transparent,rgba(255,255,255,0.035) 20%,rgba(255,255,255,0.035) 80%,transparent)' }} />
+            background:'linear-gradient(0deg,transparent,rgba(255,255,255,0.05) 20%,rgba(255,255,255,0.05) 80%,transparent)' }} />
         ))}
       </div>
       {/* Layer 4: light sweep */}
       <motion.div className="absolute top-0 left-0 right-0 h-px"
         animate={{ x: ['-100%', '200%'] }}
-        transition={{ duration: 8, repeat: Infinity, repeatDelay: 12, ease: 'easeInOut' }}
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(182,255,46,0.25), transparent)', filter: 'blur(1px)' }}
+        transition={{ duration: 6, repeat: Infinity, repeatDelay: 10, ease: 'easeInOut' }}
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(182,255,46,0.5), transparent)', filter: 'blur(1px)' }}
       />
     </div>
   )
@@ -152,7 +154,7 @@ function Background() {
 // ── Reveal ─────────────────────────────────────────────────────────────────
 function Reveal({ children, delay = 0, y = 28 }: { children: React.ReactNode; delay?: number; y?: number }) {
   const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-12% 0px' })
+  const inView = useInView(ref, { once: true, margin: '0px' })
   return (
     <motion.div ref={ref}
       initial={{ opacity: 0, y }}
@@ -166,11 +168,11 @@ function Reveal({ children, delay = 0, y = 28 }: { children: React.ReactNode; de
 // ── Masked headline reveal ─────────────────────────────────────────────────
 function MaskedHeadline({ children, delay = 0, className = '', style }: { children: React.ReactNode; delay?: number; className?: string; style?: React.CSSProperties }) {
   const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-10% 0px' })
+  const inView = useInView(ref, { once: true, margin: '0px' })
   return (
-    <div ref={ref} style={{ overflow: 'hidden' }}>
+    <div ref={ref} style={{ overflow: 'hidden', paddingBottom: '0.15em' }}>
       <motion.div className={className} style={style}
-        initial={{ y: '100%', opacity: 0 }}
+        initial={{ y: '110%', opacity: 0 }}
         animate={inView ? { y: 0, opacity: 1 } : {}}
         transition={{ delay, ...SPRING_SLOW }}>
         {children}
@@ -207,7 +209,7 @@ function MagneticButton({ children, href, className, style }: { children: React.
 // ── Glass card ─────────────────────────────────────────────────────────────
 function GlassCard({ children, className = '', delay = 0, style }: { children: React.ReactNode; className?: string; delay?: number; style?: React.CSSProperties }) {
   const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-8% 0px' })
+  const inView = useInView(ref, { once: true, margin: '0px' })
   return (
     <motion.div ref={ref}
       initial={{ opacity: 0, y: 20, scale: 0.98 }}
