@@ -18,8 +18,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <>
       <AppNav userName={userName} xp={xp} />
-      {/* Offset for desktop sidebar (ml-16) and mobile bottom bar (pb-16) */}
-      <div className="md:ml-16 pb-16 md:pb-0 min-h-screen bg-[#0d0d0d] text-white" style={{ fontFamily: 'var(--font-jakarta)' }}>
+      {/* No sidebar offset — top nav only, mobile bottom bar */}
+      <div className="pb-14 md:pb-0 min-h-screen bg-[#0d0d0d] text-white" style={{ fontFamily: 'var(--font-jakarta)' }}>
         {children}
       </div>
     </>
