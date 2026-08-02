@@ -99,53 +99,53 @@ function ConstellationViz({ progress }: { progress: number }) {
 function Background() {
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
-      {/* Layer 1: mesh gradients — visible */}
+      {/* Layer 1: strong mesh gradients */}
       <div className="absolute inset-0" style={{
         background: `
-          radial-gradient(ellipse 80% 60% at 15% -10%, rgba(182,255,46,0.12) 0%, transparent 60%),
-          radial-gradient(ellipse 60% 50% at 85% 15%, rgba(96,165,250,0.09) 0%, transparent 55%),
-          radial-gradient(ellipse 50% 40% at 10% 85%, rgba(167,139,250,0.07) 0%, transparent 50%),
-          radial-gradient(ellipse 40% 35% at 90% 80%, rgba(182,255,46,0.06) 0%, transparent 50%)
+          radial-gradient(ellipse 70% 60% at 20% 0%, rgba(182,255,46,0.22) 0%, transparent 55%),
+          radial-gradient(ellipse 55% 50% at 85% 15%, rgba(96,165,250,0.16) 0%, transparent 50%),
+          radial-gradient(ellipse 45% 40% at 8% 90%, rgba(167,139,250,0.14) 0%, transparent 48%),
+          radial-gradient(ellipse 40% 35% at 88% 82%, rgba(182,255,46,0.12) 0%, transparent 48%)
         `
       }} />
-      {/* Layer 2: slow animated blobs */}
+      {/* Layer 2: large animated blobs */}
       <motion.div className="absolute"
         animate={{ x: [0, 80, -40, 0], y: [0, -60, 80, 0], scale: [1, 1.3, 0.9, 1] }}
         transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
-        style={{ width: 700, height: 700, top: '-15%', left: '-15%',
-          background: 'radial-gradient(ellipse, rgba(182,255,46,0.08) 0%, transparent 65%)',
-          filter: 'blur(50px)' }}
+        style={{ width: 800, height: 800, top: '-20%', left: '-20%',
+          background: 'radial-gradient(ellipse, rgba(182,255,46,0.15) 0%, transparent 60%)',
+          filter: 'blur(40px)' }}
       />
       <motion.div className="absolute"
         animate={{ x: [0, -100, 60, 0], y: [0, 80, -40, 0], scale: [1, 0.8, 1.2, 1] }}
         transition={{ duration: 28, repeat: Infinity, ease: 'easeInOut', delay: 5 }}
-        style={{ width: 600, height: 600, bottom: '-10%', right: '-10%',
-          background: 'radial-gradient(ellipse, rgba(96,165,250,0.07) 0%, transparent 65%)',
-          filter: 'blur(70px)' }}
+        style={{ width: 700, height: 700, bottom: '-15%', right: '-15%',
+          background: 'radial-gradient(ellipse, rgba(96,165,250,0.13) 0%, transparent 60%)',
+          filter: 'blur(50px)' }}
       />
       <motion.div className="absolute"
         animate={{ x: [0, 50, -30, 0], y: [0, -40, 60, 0] }}
         transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 10 }}
-        style={{ width: 400, height: 400, top: '40%', left: '40%',
-          background: 'radial-gradient(ellipse, rgba(167,139,250,0.06) 0%, transparent 65%)',
-          filter: 'blur(60px)' }}
+        style={{ width: 500, height: 500, top: '35%', left: '35%',
+          background: 'radial-gradient(ellipse, rgba(167,139,250,0.11) 0%, transparent 60%)',
+          filter: 'blur(50px)' }}
       />
       {/* Layer 3: grid lines */}
-      <div className="absolute inset-0" style={{ opacity: 0.5 }}>
+      <div className="absolute inset-0" style={{ opacity: 0.7 }}>
         {[20,40,60,80].map(p => (
           <div key={p} className="absolute left-0 right-0 h-px" style={{ top:`${p}%`,
-            background:'linear-gradient(90deg,transparent,rgba(255,255,255,0.05) 20%,rgba(255,255,255,0.05) 80%,transparent)' }} />
+            background:'linear-gradient(90deg,transparent,rgba(255,255,255,0.07) 20%,rgba(255,255,255,0.07) 80%,transparent)' }} />
         ))}
         {[25,50,75].map(p => (
           <div key={p} className="absolute top-0 bottom-0 w-px" style={{ left:`${p}%`,
-            background:'linear-gradient(0deg,transparent,rgba(255,255,255,0.05) 20%,rgba(255,255,255,0.05) 80%,transparent)' }} />
+            background:'linear-gradient(0deg,transparent,rgba(255,255,255,0.07) 20%,rgba(255,255,255,0.07) 80%,transparent)' }} />
         ))}
       </div>
       {/* Layer 4: light sweep */}
       <motion.div className="absolute top-0 left-0 right-0 h-px"
         animate={{ x: ['-100%', '200%'] }}
-        transition={{ duration: 6, repeat: Infinity, repeatDelay: 10, ease: 'easeInOut' }}
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(182,255,46,0.5), transparent)', filter: 'blur(1px)' }}
+        transition={{ duration: 5, repeat: Infinity, repeatDelay: 8, ease: 'easeInOut' }}
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(182,255,46,0.7), transparent)', filter: 'blur(1px)' }}
       />
     </div>
   )
