@@ -287,7 +287,7 @@ function Nav() {
         borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : '1px solid transparent',
         transition: 'all 0.5s cubic-bezier(0.16,1,0.3,1)',
       }}>
-      <Image src="/brand/WingSpanLogo_V.svg" alt="Wingspan" width={44} height={44} />
+      <Image src="/brand/WingSpanLogo_V.svg" alt="Wingspan" width={88} height={88} />
       <div className="flex items-center gap-6">
         <motion.a href="/wingspan" className="text-sm font-medium"
           style={{ color: 'rgba(255,255,255,0.45)' }}
