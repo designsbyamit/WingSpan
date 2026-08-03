@@ -118,7 +118,7 @@ function Background() {
           scale: [1, 1.25, 0.95, 1.1, 1],
           opacity: [0.9, 0.6, 0.85, 0.5, 0.9],
         }}
-        transition={{ duration: 40, repeat: Infinity, ease: 'easeInOut', times: [0, 0.25, 0.5, 0.75, 1] }}
+        transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut', times: [0, 0.25, 0.5, 0.75, 1] }}
         style={{ width: 900, height: 900, top: '-25%', left: '-25%',
           background: 'radial-gradient(ellipse 55% 45% at 50% 50%, rgba(182,255,46,0.18) 0%, transparent 65%)',
           filter: 'blur(45px)' }}
@@ -132,8 +132,8 @@ function Background() {
           scale: [1, 0.85, 1.2, 0.95, 1],
           opacity: [0.85, 0.55, 0.75, 0.9, 0.85],
         }}
-        transition={{ duration: 48, repeat: Infinity, ease: 'easeInOut', delay: 8, times: [0, 0.25, 0.5, 0.75, 1] }}
-        style={{ width: 800, height: 800, bottom: '-20%', right: '-20%',
+        transition={{ duration: 24, repeat: Infinity, ease: 'easeInOut', delay: 8, times: [0, 0.25, 0.5, 0.75, 1] }}
+        style={{ width: 800, height: 800, bottom: '-20%', right: '-40%',
           background: 'radial-gradient(ellipse 50% 55% at 50% 50%, rgba(96,165,250,0.14) 0%, transparent 65%)',
           filter: 'blur(55px)' }}
       />
@@ -146,7 +146,7 @@ function Background() {
           scale: [1, 1.15, 0.9, 1.05, 1],
           opacity: [0.7, 0.45, 0.65, 0.8, 0.7],
         }}
-        transition={{ duration: 35, repeat: Infinity, ease: 'easeInOut', delay: 15, times: [0, 0.25, 0.5, 0.75, 1] }}
+        transition={{ duration: 17, repeat: Infinity, ease: 'easeInOut', delay: 15, times: [0, 0.25, 0.5, 0.75, 1] }}
         style={{ width: 600, height: 600, top: '30%', left: '30%',
           background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(167,139,250,0.12) 0%, transparent 65%)',
           filter: 'blur(55px)' }}
@@ -160,7 +160,7 @@ function Background() {
           scale: [0.9, 1.1, 0.85, 1, 0.9],
           opacity: [0.5, 0.75, 0.4, 0.65, 0.5],
         }}
-        transition={{ duration: 42, repeat: Infinity, ease: 'easeInOut', delay: 22, times: [0, 0.25, 0.5, 0.75, 1] }}
+        transition={{ duration: 21, repeat: Infinity, ease: 'easeInOut', delay: 22, times: [0, 0.25, 0.5, 0.75, 1] }}
         style={{ width: 500, height: 500, top: '5%', right: '-5%',
           background: 'radial-gradient(ellipse 55% 60% at 50% 50%, rgba(182,255,46,0.10) 0%, transparent 65%)',
           filter: 'blur(60px)' }}
@@ -287,7 +287,7 @@ function Nav() {
         borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : '1px solid transparent',
         transition: 'all 0.5s cubic-bezier(0.16,1,0.3,1)',
       }}>
-      <Image src="/brand/LogoColor.svg" alt="Wingspan" width={110} height={28} />
+      <Image src="/brand/WingSpanLogo_V.svg" alt="Wingspan" width={44} height={44} />
       <div className="flex items-center gap-6">
         <motion.a href="/wingspan" className="text-sm font-medium"
           style={{ color: 'rgba(255,255,255,0.45)' }}
@@ -756,7 +756,7 @@ export function WingspanHomepage() {
         {/* ── Footer ── */}
         <footer className="px-8 py-8 border-t flex items-center justify-between" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
           <div className="flex items-center gap-5">
-            <Image src="/brand/LogoColor.svg" alt="Wingspan" width={90} height={22} />
+            
             <span className="text-xs" style={{ color: 'rgba(255,255,255,0.18)' }}>© 2026 Wingspan</span>
           </div>
           <div className="flex gap-5">

@@ -239,8 +239,7 @@ export function FootprintScreen() {
       <div className="max-w-2xl w-full flex flex-col gap-8">
         {/* Header */}
         <div>
-          <img src="/brand/LogoColor.svg" alt="Wingspan" style={{ height: '24px', width: 'auto' }} />
-          <div className="flex items-center gap-4 mt-4">
+          <div className="flex items-center gap-4 mt-2">
             {(['upload', 'interests'] as FootprintStep[]).map((s, i) => (
               <button
                 key={s}
@@ -395,18 +394,20 @@ export function FootprintScreen() {
                 ))}
               </div>
 
-              {/* CTA */}
-              <NeonButton
-                onClick={() => setStep('interests')}
-                disabled={!canProceedStep1}
-                fullWidth
-              >
-                Continue <ArrowRight size={14} />
-              </NeonButton>
-
-              {!canProceedStep1 && (
-                <p className="text-[11px] text-center text-[var(--text-dim)]">Drop a resume or add a link to keep going.</p>
-              )}
+              {/* Sticky action bar */}
+              <div className="sticky bottom-0 left-0 right-0 pt-3 pb-2"
+                style={{ background: 'linear-gradient(to top, var(--bg) 70%, transparent)' }}>
+                <NeonButton
+                  onClick={() => setStep('interests')}
+                  disabled={!canProceedStep1}
+                  fullWidth
+                >
+                  Continue <ArrowRight size={14} />
+                </NeonButton>
+                {!canProceedStep1 && (
+                  <p className="text-[11px] text-center text-[var(--text-dim)] mt-2">Drop a resume or add a link to keep going.</p>
+                )}
+              </div>
             </motion.div>
           )}
 

@@ -33,7 +33,7 @@ export function TopNav({ userName, xp }: TopNavProps) {
       >
         {/* Logo */}
         <Link href="/" className="flex-shrink-0">
-          <img src="/brand/LogoColor.svg" alt="Wingspan" style={{ height: '22px', width: 'auto' }} />
+          <img src="/brand/WingSpanLogo_H.svg" alt="Wingspan" style={{ height: "28px", width: "auto" }} />
         </Link>
 
         {/* Center nav — only for logged in */}
@@ -41,7 +41,6 @@ export function TopNav({ userName, xp }: TopNavProps) {
           <div className="hidden md:flex items-center gap-1">
             {[
               { href: '/', label: 'Home' },
-              { href: '/paths', label: 'Paths' },
               { href: '/profile', label: 'Profile' },
             ].map(({ href, label }) => {
               const active = href === '/' ? pathname === '/' : pathname.startsWith(href)
@@ -77,7 +76,7 @@ export function TopNav({ userName, xp }: TopNavProps) {
                     <p className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.85)' }}>{userName}</p>
                     <p className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>{xp?.toLocaleString()} XP</p>
                   </div>
-                  {[{ href: '/', label: 'Home' }, { href: '/paths', label: 'Paths' }, { href: '/profile', label: 'Profile' }].map(({ href, label }) => (
+                  {[{ href: '/', label: 'Home' }, { href: '/profile', label: 'Profile' }].map(({ href, label }) => (
                     <Link key={href} href={href} onClick={() => setMenuOpen(false)}
                       className="flex items-center px-4 py-2.5 text-xs transition-colors hover:bg-[rgba(255,255,255,0.05)]"
                       style={{ color: 'rgba(255,255,255,0.6)' }}>
