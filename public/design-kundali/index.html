@@ -414,6 +414,40 @@ main:before{content:"";position:absolute;inset:24px 0 0;border:1px solid #c8aa63
  #s1 .orbit{animation:none}
  #s1 .planet,#s1 .hero-sun{animation:none}
 }
+
+/* secondary DOB action - quiet editorial link */
+#s4 .btn.secondary{
+  appearance:none;
+  display:inline-flex;
+  width:auto;
+  align-self:flex-start;
+  padding:4px 0 5px;
+  margin-top:2px;
+  background:transparent;
+  color:#999398;
+  border:0;
+  border-bottom:1px solid #777178;
+  border-radius:0;
+  box-shadow:none;
+  font-family:var(--serif);
+  font-size:15px;
+  font-weight:400;
+  letter-spacing:-.01em;
+  justify-content:flex-start;
+  gap:7px;
+  transition:color .2s ease,border-color .2s ease,transform .2s ease;
+}
+#s4 .btn.secondary:before{display:none}
+#s4 .btn.secondary:hover{
+  color:#e8d9b8;
+  border-bottom-color:#c9a85d;
+  box-shadow:none;
+  transform:translateX(2px);
+}
+#s4 .btn.secondary .arrow{font-family:var(--sans);font-size:13px;opacity:.55}
+@media(max-width:460px){
+  #s4 .btn.secondary{font-size:14px}
+}
 </style>
 </head>
 <body>
