@@ -222,7 +222,69 @@ p{font-family:var(--sans);font-size:16px;line-height:1.65;letter-spacing:-.008em
  h2{font-size:clamp(39px,10vw,52px)}
  p{font-size:15px}
 }
-</style>
+
+/* premium celestial homepage */
+#s1{min-height:calc(100vh - 66px);justify-content:flex-start;padding:24px 0 18px;overflow:hidden}
+#s1 .hero-skyline{width:100%;display:flex;justify-content:space-between;align-items:center;color:#8f8d90;font-family:var(--sans);font-size:7px;letter-spacing:.2em;text-transform:uppercase;position:relative;z-index:4}
+#s1 .sky-mark{color:#e3c77d;font-size:16px;transform:rotate(15deg)}
+#s1 .hero-copy{width:min(760px,100%);text-align:center;position:relative;z-index:4;margin:18px auto 0}
+#s1 .hero-copy .eyebrow{margin-bottom:16px}
+#s1 .hero-copy h1{font-size:clamp(54px,9vw,78px);line-height:.88;margin-bottom:18px;letter-spacing:-.055em}
+#s1 .hero-copy h1 em{font-style:italic;font-weight:400;color:#e8d6aa}
+#s1 .hero-copy p{max-width:500px;margin:0 auto;font-size:14px;line-height:1.55;color:#b6b5ba}
+#s1 .orbital-stage{width:min(760px,115vw);height:min(570px,67vh);min-height:390px;position:relative;margin:-12px auto -34px;z-index:2}
+#s1 .orbital-stage:before{content:"";position:absolute;width:78%;height:78%;left:11%;top:8%;border:1px solid #d3b87119;border-radius:50%;box-shadow:0 0 90px #8fa9c41a}
+#s1 .orbital-stage:after{content:"";position:absolute;inset:2% 5%;background:radial-gradient(ellipse at 50% 50%,#b89b5710 0,transparent 48%);pointer-events:none}
+#s1 .axis{position:absolute;background:#d8bd7825;z-index:1}
+#s1 .axis-x{height:1px;width:88%;left:6%;top:48%}
+#s1 .axis-y{width:1px;height:92%;left:50%;top:3%}
+#s1 .orbit{position:absolute;left:50%;top:48%;border:1px solid #d7bd7850;border-radius:50%;transform:translate(-50%,-50%) rotate(-8deg);box-shadow:inset 0 0 25px #9fb1c51a}
+#s1 .orbit:after{content:"";position:absolute;inset:6px;border:1px dashed #d7bd7818;border-radius:50%}
+#s1 .orbit-1{width:31%;height:31%}
+#s1 .orbit-2{width:43%;height:43%}
+#s1 .orbit-3{width:55%;height:55%}
+#s1 .orbit-4{width:67%;height:67%}
+#s1 .orbit-5{width:79%;height:79%}
+#s1 .planet{position:absolute;border-radius:50%;display:block;top:50%;left:0;transform:translate(-50%,-50%);box-shadow:0 0 18px #d7bd7844}
+#s1 .planet-a{width:7px;height:7px;background:#e6d3a2;left:18%}
+#s1 .planet-b{width:11px;height:11px;background:radial-gradient(circle at 35% 30%,#f0d995,#9c733d);left:72%}
+#s1 .planet-c{width:17px;height:17px;background:radial-gradient(circle at 30% 25%,#8b9ab4,#30384b);left:9%}
+#s1 .planet-d{width:12px;height:12px;background:radial-gradient(circle at 35% 25%,#d2b977,#584833);left:88%}
+#s1 .planet-e{width:22px;height:22px;background:radial-gradient(circle at 32% 27%,#cfd2d3,#6b6e72);left:47%}
+#s1 .hero-sun{position:absolute;left:50%;top:48%;width:92px;height:92px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff4c8 0,#e6c875 17%,#8f6938 55%,#182031 100%);box-shadow:0 0 0 1px #efd891,0 0 28px #e7c66a66,0 0 110px #d6a4511f;z-index:3}
+#s1 .hero-sun:before{content:"";position:absolute;inset:-11px;border:1px solid #e1c47b66;border-radius:50%;box-shadow:0 0 0 6px #d7bd7808}
+#s1 .hero-sun:after{content:"";position:absolute;width:150%;height:1px;background:#e0c67e44;left:-25%;top:50%}
+#s1 .hero-sun span{position:absolute;width:18px;height:18px;border:1px solid #fff0b4;border-radius:50%;left:25%;top:21%;opacity:.7}
+#s1 .orbit-label{position:absolute;font-family:var(--sans);font-size:7px;letter-spacing:.24em;color:#c7b98f;display:flex;align-items:center;gap:8px;z-index:4}
+#s1 .orbit-label b{width:5px;height:5px;background:#e8cc83;border-radius:50%;box-shadow:0 0 10px #e8cc83}
+#s1 .orbit-label:after{content:"";height:1px;width:90px;background:#d7bd7840}
+#s1 .label-creativity{left:3%;top:29%}
+#s1 .label-growth{right:3%;top:29%;flex-direction:row-reverse}
+#s1 .label-discipline{left:3%;bottom:25%}
+#s1 .label-impact{right:3%;bottom:25%;flex-direction:row-reverse}
+#s1 .orbital-caption{position:absolute;left:50%;bottom:13%;transform:translateX(-50%);font-family:var(--sans);font-size:7px;line-height:1.7;letter-spacing:.22em;text-align:center;color:#716f74;white-space:nowrap}
+#s1 .hero-action{position:relative;z-index:5;text-align:center;margin-top:-2px}
+#s1 .hero-action .btn{width:min(360px,82vw);margin:0 auto;padding:17px 21px;font-family:var(--serif);font-size:17px;justify-content:center;gap:30px;border-radius:4px;background:#eee1c4}
+#s1 .hero-action .arrow{font-family:var(--sans);font-size:22px}
+#s1 .micro-note{display:block;margin:15px auto 0;color:#747278;font-family:var(--sans);font-size:9px;line-height:1.5;letter-spacing:.08em}
+#s1 .micro-note em{font-family:var(--serif);font-size:11px;color:#aaa097}
+@media(max-width:460px){
+ #s1{min-height:calc(100vh - 54px);padding-top:16px}
+ #s1 .hero-skyline{font-size:6px}
+ #s1 .hero-copy{margin-top:15px}
+ #s1 .hero-copy h1{font-size:clamp(48px,14vw,66px)}
+ #s1 .hero-copy p{font-size:13px;max-width:330px}
+ #s1 .orbital-stage{height:390px;min-height:390px;width:126vw;margin:-4px -13vw -18px}
+ #s1 .hero-sun{width:68px;height:68px}
+ #s1 .orbit-label{font-size:6px;letter-spacing:.18em}
+ #s1 .orbit-label:after{width:45px}
+ #s1 .label-creativity{left:10%;top:24%}
+ #s1 .label-growth{right:10%;top:24%}
+ #s1 .label-discipline{left:10%;bottom:20%}
+ #s1 .label-impact{right:10%;bottom:20%}
+ #s1 .orbital-caption{bottom:8%;font-size:6px}
+ #s1 .hero-action .btn{width:min(320px,84vw)}
+}</style>
 </head>
 <body>
 <div class="app">
@@ -230,17 +292,35 @@ p{font-family:var(--sans);font-size:16px;line-height:1.65;letter-spacing:-.008em
 <main>
 
 <section class="screen active cosmic" id="s1">
-<div class="mystic-mark">
-  <div class="mystic-ring"></div>
-  <div class="mystic-ring ring-inner"></div>
-  <div class="mystic-glyphs"><span>☉</span><span>♈</span><span>♃</span><span>♄</span></div>
-  <div class="celestial-core"><i></i><b>✦</b></div>
-  <div class="chart-ticks"></div>
-</div>
-<div class="eyebrow">A little cosmic. A little suspicious.</div>
-<h1>Create your Design Kundali.</h1>
-<p>Give us your birth details. We’ll do what every good fortune teller does - pretend we know your future.</p>
-<div class="buttons"><button class="btn" onclick="go(2)">Let’s do it <span class="arrow">→</span></button></div>
+  <div class="hero-skyline">
+    <span class="sky-coord">12° 48' 09" N</span>
+    <span class="sky-date">DESIGN KUNDALI / 001</span>
+    <span class="sky-mark">✦</span>
+  </div>
+  <div class="hero-copy">
+    <div class="eyebrow">A little cosmic. A little suspicious.</div>
+    <h1>Create your<br><em>Design Kundali.</em></h1>
+    <p>Give us your birth details. We’ll do what every good fortune teller does - pretend we know your future.</p>
+  </div>
+  <div class="orbital-stage" aria-hidden="true">
+    <div class="axis axis-x"></div>
+    <div class="axis axis-y"></div>
+    <div class="orbit orbit-1"><i class="planet planet-a"></i></div>
+    <div class="orbit orbit-2"><i class="planet planet-b"></i></div>
+    <div class="orbit orbit-3"><i class="planet planet-c"></i></div>
+    <div class="orbit orbit-4"><i class="planet planet-d"></i></div>
+    <div class="orbit orbit-5"><i class="planet planet-e"></i></div>
+    <div class="hero-sun"><span></span></div>
+    <div class="orbit-label label-creativity"><b></b><span>CREATIVITY</span></div>
+    <div class="orbit-label label-growth"><b></b><span>GROWTH</span></div>
+    <div class="orbit-label label-discipline"><b></b><span>DISCIPLINE</span></div>
+    <div class="orbit-label label-impact"><b></b><span>IMPACT</span></div>
+    <div class="orbital-caption">THE CELESTIAL MAP OF YOUR<br>DESIGN LIFE</div>
+  </div>
+  <div class="hero-action">
+    <button class="btn" onclick="go(2)">Let’s do it <span class="arrow">→</span></button>
+    <span class="micro-note">No bad predictions.<br><em>Only good conversations.</em></span>
+  </div>
 </section>
 
 <section class="screen" id="s2"><div class="eyebrow">First, who are you?</div><h2>What should we call you?</h2><div class="field"><label>Your name</label><input id="name" autocomplete="name" placeholder="e.g. Amit"></div><div class="buttons"><button class="btn" onclick="nextName()">Continue <span class="arrow">→</span></button></div><button class="back" onclick="go(1)">← Back</button></section>
@@ -265,7 +345,7 @@ p{font-family:var(--sans);font-size:16px;line-height:1.65;letter-spacing:-.008em
 
 <section class="screen" id="s7"><div class="eyebrow">Your cosmic reading</div><div class="kundali-wrap"><div class="kundali"><div class="diag"></div><i class="symbol s1">☉</i><i class="symbol s2">☽</i><i class="symbol s3">♃</i><i class="symbol s4">♄</i><div class="orb">✦</div></div></div><h2 id="fakeTitle">The stars have spoken.</h2><p>According to your birth details, you have a natural tendency to connect ideas, make things clearer and eventually ask why everyone is doing it this way.</p><div class="report"><div class="report-title">Your cosmic reading</div><div class="report-sub">A playful interpretation of your birth details</div><div class="chips"><span class="chip">Creative</span><span class="chip">Curious</span><span class="chip">Independent</span></div><div class="grid"><div class="cell"><small>Career planet</small><strong>Mercury</strong></div><div class="cell"><small>Creative house</small><strong>Ideas</strong></div><div class="cell"><small>Rising influence</small><strong>Problem solving</strong></div><div class="cell"><small>Design element</small><strong>Air</strong></div></div></div><div style="margin-top:20px"><div class="buttons"><button class="btn" onclick="fakeReaction(true)">✓ That’s me</button><button class="btn secondary" onclick="fakeReaction(false)">✕ Not really</button></div></div></section>
 
-<section class="screen" id="s8"><div class="eyebrow">Plot twist</div><h2 id="revealTitle">Whoa. You got lucky. 😄</h2><p id="revealText">That reading wasn’t based on your career at all. It was deliberately generic. If it felt accurate, that says something interesting about how easily we can see ourselves in a prediction.</p><div class="reveal">Your career is a little less mystical. It leaves evidence - the work you’ve done, the skills you’ve built, the problems you’ve solved and the directions you keep moving toward.</div><h2 style="font-size:28px">So... luck or hard work?</h2><div class="buttons"><button class="btn" onclick="chooseWork(false)">I’ll take my luck <span>✦</span></button><button class="btn secondary" onclick="chooseWork(true)">Show me the hard work <span>→</span></button></div></section>
+<section class="screen" id="s8"><div class="eyebrow">Plot twist</div><h2 id="revealTitle">Whoa. You got lucky.</h2><p id="revealText">That reading wasn’t based on your career at all. It was deliberately generic. If it felt accurate, that says something interesting about how easily we can see ourselves in a prediction.</p><div class="reveal">Your career is a little less mystical. It leaves evidence - the work you’ve done, the skills you’ve built, the problems you’ve solved and the directions you keep moving toward.</div><h2 style="font-size:28px">So... luck or hard work?</h2><div class="buttons"><button class="btn" onclick="chooseWork(false)">I’ll take my luck <span>✦</span></button><button class="btn secondary" onclick="chooseWork(true)">Show me the hard work <span>→</span></button></div></section>
 
 <section class="screen" id="s9"><div class="eyebrow">Enough astrology</div><h2>Okay then, boss. Upload your resume.</h2><p>I’ll build a Design Kundali from what you’ve actually done - not when Mercury was in retrograde.</p><div class="field"><label>Resume / CV</label><input id="resume" type="file" accept=".pdf,.doc,.docx" style="font-size:15px"></div><div class="note">PDF, DOC and DOCX are accepted. The current demo uses sample intelligence until resume parsing is connected.</div><div class="buttons" style="margin-top:25px"><button class="btn" onclick="analyze()">Read my real Kundali <span>✦</span></button></div></section>
 
@@ -295,7 +375,7 @@ function skipDob(){startGeneration()}
 function startGeneration(){go(5);setTimeout(()=>go(6),2200)}
 function believe(yes){if(yes)go(7);else go(9)}
 function fakeReaction(match){if(match){document.getElementById('revealTitle').textContent='Whoa. You got lucky. 😄';document.getElementById('revealText').textContent='That reading wasn’t based on your career at all. It was deliberately generic. If it felt accurate, that says something interesting about how easily we can see ourselves in a prediction.'}else{document.getElementById('revealTitle').textContent='Fair enough. The stars didn’t know much about you.';document.getElementById('revealText').textContent='Exactly. Birth details can make for a fun story, but they don’t tell us what you’ve actually learned, built or struggled through as a designer.'}go(8)}
-function chooseWork(work){go(9);if(!work){document.getElementById('revealTitle').textContent='Fair. Keep the luck. 😄';document.getElementById('revealText').textContent='But if you ever want to replace luck with something more useful, upload your resume. We’ll look at the evidence.'}}
+function chooseWork(work){go(9);if(!work){document.getElementById('revealTitle').textContent='Fair. Keep the luck.';document.getElementById('revealText').textContent='But if you ever want to replace luck with something more useful, upload your resume. We’ll look at the evidence.'}}
 function analyze(){if(!document.getElementById('resume').files.length){document.getElementById('resume').click();return}go(5);setTimeout(()=>go(10),1800)}
 function exportPDF(){window.print()}
 function wingspan(){window.location.href='https://wingspan.designsbyamit.com/'}
