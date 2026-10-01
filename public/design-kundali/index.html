@@ -3,65 +3,137 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f4efe5">
+<meta name="theme-color" content="#090a12">
 <title>Design Kundali | WingSpan</title>
 <style>
-:root{--paper:#f4efe5;--ink:#171717;--muted:#77736b;--line:#292722;--accent:#d85c36;--gold:#b58b42;--green:#405f4a;--card:#fbf8f0}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-body{display:flex;justify-content:center}.app{width:100%;max-width:720px;min-height:100vh;padding:22px 20px 30px;display:flex;flex-direction:column}
-.top{display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.12em;text-transform:uppercase}.brand{font-weight:800}.step{color:var(--muted)}
-main{flex:1;display:flex;align-items:center;padding:38px 0}.screen{width:100%;display:none;animation:in .35s ease}.screen.active{display:block}@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);font-weight:800;margin-bottom:14px}
-h1{font-size:clamp(42px,10vw,78px);line-height:.92;letter-spacing:-.055em;margin:0 0 22px;max-width:650px}
-h2{font-size:clamp(30px,7vw,50px);line-height:.95;letter-spacing:-.04em;margin:0 0 18px}
-p{font-size:17px;line-height:1.5;color:#4e4a43;max-width:570px;margin:0 0 26px}
-.kundali{width:min(310px,72vw);aspect-ratio:1;margin:0 auto 38px;position:relative;transform:rotate(45deg);border:1.5px solid var(--ink);background:rgba(255,255,255,.12)}
-.kundali:before,.kundali:after{content:"";position:absolute;inset:18%;border:1px solid var(--ink)}.kundali:after{transform:rotate(90deg)}
-.kundali .orb{position:absolute;inset:34%;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;font-size:28px;transform:rotate(-45deg)}
-.kundali .orb:after{content:"✦";color:var(--gold)}
-.symbol{position:absolute;font-size:18px;color:var(--gold);transform:rotate(-45deg)}
-.s1{top:5%;left:45%}.s2{right:7%;top:45%}.s3{bottom:7%;left:45%}.s4{left:7%;top:45%}
-.buttons{display:grid;gap:10px}.btn{appearance:none;border:1px solid var(--ink);background:var(--ink);color:white;border-radius:2px;padding:17px 18px;font:inherit;font-weight:750;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center}.btn.secondary{background:transparent;color:var(--ink)}.btn:hover{transform:translateY(-1px)}.btn span{opacity:.6}
-.field{margin:26px 0}.field label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:800;margin-bottom:9px}.field input{width:100%;border:0;border-bottom:1.5px solid var(--ink);background:transparent;padding:12px 0;font-size:25px;outline:0;color:var(--ink)}.field input:focus{border-color:var(--accent)}
-.note{font-size:13px;color:var(--muted);margin-top:12px}.back{border:0;background:none;padding:0;color:var(--muted);font:inherit;cursor:pointer;margin-top:15px}
-.loader{height:220px;display:grid;place-items:center}.loader .orbit{width:150px;height:150px;border:1px solid var(--ink);border-radius:50%;position:relative;animation:spin 4s linear infinite}.loader .orbit:before,.loader .orbit:after{content:"";position:absolute;inset:22px;border:1px solid var(--gold);border-radius:50%}.loader .orbit:after{inset:50% -4px 50% -4px;border:0;border-top:1px solid var(--accent)}@keyframes spin{to{transform:rotate(360deg)}}
-.report{border:1.5px solid var(--ink);background:var(--card);padding:18px;position:relative}.report:before{content:"DESIGN KUNDALI";position:absolute;right:16px;top:16px;font-size:9px;letter-spacing:.16em;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--ink);border-left:1px solid var(--ink);margin-top:26px}.cell{min-height:105px;padding:13px;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink)}.cell small{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:9px}.cell strong{font-size:19px;line-height:1.05}.chips{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 22px}.chip{border:1px solid var(--ink);padding:6px 9px;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
-.meter{margin:18px 0}.meterline{display:flex;justify-content:space-between;font-size:12px;margin-bottom:7px}.bar{height:6px;background:#ded9cf}.fill{height:100%;background:var(--ink)}.reveal{font-size:12px;line-height:1.4;color:var(--muted);border-left:2px solid var(--accent);padding-left:12px;margin:18px 0 25px}
-.footer{text-align:center;font-size:12px;color:var(--muted);padding-top:18px}.footer strong{color:var(--ink)}
-@media(max-width:460px){.app{padding:18px 16px 24px}main{padding:28px 0}.kundali{width:260px}p{font-size:16px}.grid{grid-template-columns:1fr 1fr}.cell{min-height:92px;padding:11px}}
+:root{
+ --ink:#171615;--paper:#f2ede2;--paper2:#faf7ef;--muted:#766f63;--line:#27241f;
+ --saffron:#d86b3d;--gold:#c39a4a;--gold2:#f0d48b;--green:#425b4b;
+ --night:#070812;--night2:#101226;--violet:#6e61a8;--white:#f8f5ed;
+ --display:"Georgia","Times New Roman",serif;--sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:var(--sans)}
+body{display:flex;justify-content:center}.app{width:100%;max-width:760px;min-height:100vh;padding:22px 20px 30px;display:flex;flex-direction:column}
+.top{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.16em;text-transform:uppercase;position:relative;z-index:5}.brand{font-weight:850}.step{color:var(--muted)}
+main{flex:1;display:flex;align-items:center;padding:38px 0}.screen{width:100%;display:none;animation:rise .5s cubic-bezier(.2,.8,.2,1)}.screen.active{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(14px) scale(.99)}to{opacity:1;transform:none}}
+.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.18em;color:var(--saffron);font-weight:850;margin-bottom:14px}
+h1,h2{font-family:var(--display);font-weight:500}h1{font-size:clamp(48px,11vw,86px);line-height:.88;letter-spacing:-.055em;margin:0 0 24px;max-width:690px}
+h2{font-size:clamp(34px,8vw,56px);line-height:.92;letter-spacing:-.045em;margin:0 0 18px}p{font-size:17px;line-height:1.55;color:#504b43;max-width:590px;margin:0 0 27px}
+.buttons{display:grid;gap:10px}.btn{appearance:none;border:1px solid var(--ink);background:var(--ink);color:white;border-radius:3px;padding:16px 18px;font:inherit;font-weight:760;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;transition:.2s ease}.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px #0001}.btn.secondary{background:transparent;color:var(--ink)}.btn .arrow{opacity:.6}
+.field{margin:26px 0}.field label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.16em;font-weight:850;margin-bottom:9px}.field input{width:100%;border:0;border-bottom:1.5px solid var(--ink);background:transparent;padding:12px 0;font-size:25px;outline:0;color:var(--ink)}.field input:focus{border-color:var(--saffron)}
+.note{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5}.back{border:0;background:none;padding:0;color:var(--muted);font:inherit;cursor:pointer;margin-top:15px}
+
+/* Cosmic intro */
+.cosmic{margin:-22px -20px -30px;padding:34px 20px 42px;min-height:calc(100vh - 52px);display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;background:
+ radial-gradient(circle at 50% 30%,#24264b 0,#111326 28%,#080912 66%,#05060b 100%);color:var(--white)}
+.cosmic:before{content:"";position:absolute;inset:0;opacity:.85;background-image:radial-gradient(circle,#fff 0 1px,transparent 1.5px),radial-gradient(circle,#d8c997 0 1px,transparent 1.4px),radial-gradient(circle,#fff 0 1px,transparent 1.5px);background-size:83px 91px,137px 149px,211px 173px;background-position:10px 20px,42px 66px,88px 12px;animation:starfield 22s linear infinite}
+.cosmic:after{content:"";position:absolute;width:620px;height:620px;border:1px solid #d7bd7040;border-radius:50%;left:50%;top:34%;transform:translate(-50%,-50%);box-shadow:0 0 90px #6c61b833,inset 0 0 80px #6c61b822;animation:breath 5s ease-in-out infinite}
+@keyframes starfield{to{background-position:90px 100px,0 10px,-30px 70px}}@keyframes breath{50%{transform:translate(-50%,-50%) scale(1.06);opacity:.7}}
+.cosmic>*{position:relative;z-index:2}.cosmic .eyebrow{color:var(--gold2)}.cosmic h1{max-width:640px}.cosmic p{color:#cbc8d3}.cosmic .btn{background:var(--white);color:#11121a;border-color:var(--white)}
+.mystic-mark{height:210px;position:relative;display:grid;place-items:center;margin:0 auto 25px;width:min(430px,92vw)}
+.mystic-mark .om{font-family:var(--display);font-size:116px;font-weight:400;color:#e7d19a;line-height:1;filter:drop-shadow(0 0 20px #d4b86633);animation:omfloat 5s ease-in-out infinite}
+@keyframes omfloat{50%{transform:translateY(-5px) scale(1.025)}}
+.mystic-ring{position:absolute;width:190px;height:190px;border:1px solid #c39a4a88;border-radius:50%;animation:slowspin 28s linear infinite}
+.mystic-ring:before,.mystic-ring:after{content:"✦";position:absolute;color:var(--gold2);font-size:15px}.mystic-ring:before{top:-9px;left:50%}.mystic-ring:after{bottom:-9px;left:50%}
+.mystic-glyphs{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;color:#bda86e;font-size:21px}.mystic-glyphs span:nth-child(2){align-self:flex-start}.mystic-glyphs span:nth-child(3){align-self:flex-end}.mystic-glyphs span:nth-child(4){align-self:flex-start}
+@keyframes slowspin{to{transform:rotate(360deg)}}
+
+/* Planetary generation */
+.planet-scene{height:270px;display:grid;place-items:center;position:relative;margin-bottom:12px;overflow:hidden}
+.planet-system{width:220px;height:220px;position:relative}
+.planet-orbit{position:absolute;border:1px solid #b89b5b66;border-radius:50%;inset:0;animation:slowspin 10s linear infinite}
+.planet-orbit:nth-child(2){inset:24px;animation-duration:7s;animation-direction:reverse}.planet-orbit:nth-child(3){inset:54px;animation-duration:5s}
+.sun{position:absolute;width:52px;height:52px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff0b0,#d69a43 55%,#8b542b);box-shadow:0 0 35px #d6a45177}
+.planet{position:absolute;width:14px;height:14px;border-radius:50%;background:#d8c38b;top:7px;left:50%;margin-left:-7px;box-shadow:0 0 12px #e7d6a655}
+.planet.p2{top:31px}.planet.p3{top:68px;width:19px;height:19px;margin-left:-9.5px;background:#8d8dbd}.planet.p4{top:25px;width:10px;height:10px;margin-left:-5px;background:#a96e4b}
+.cosmic-copy{text-align:center;position:relative;z-index:3}.cosmic-copy h2{font-size:40px}.cosmic-copy p{margin-left:auto;margin-right:auto}
+
+/* Kundali visual */
+.kundali-wrap{display:grid;place-items:center;margin:4px auto 32px}.kundali{width:min(315px,76vw);aspect-ratio:1;position:relative;transform:rotate(45deg);border:1.5px solid currentColor;background:#ffffff09;box-shadow:0 18px 55px #00000012}
+.kundali:before{content:"";position:absolute;inset:16%;border:1px solid currentColor}.kundali:after{content:"";position:absolute;inset:16%;border:1px solid currentColor;transform:rotate(90deg)}
+.kundali .diag{position:absolute;inset:0}.kundali .diag:before,.kundali .diag:after{content:"";position:absolute;background:currentColor}.kundali .diag:before{width:141%;height:1px;left:-20.5%;top:50%;transform:rotate(45deg)}.kundali .diag:after{width:141%;height:1px;left:-20.5%;top:50%;transform:rotate(-45deg)}
+.kundali .orb{position:absolute;inset:34%;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;transform:rotate(-45deg);font-family:var(--display);font-size:30px;color:var(--gold)}
+.kundali .orb:after{content:"✦";font-family:var(--sans);position:absolute;font-size:11px;top:10px}
+.kundali .symbol{position:absolute;font-family:var(--display);font-size:18px;color:var(--gold);transform:rotate(-45deg)}.s1{top:5%;left:45%}.s2{right:7%;top:45%}.s3{bottom:7%;left:45%}.s4{left:7%;top:45%}
+
+/* Reports */
+.report{border:1.5px solid var(--ink);background:var(--paper2);padding:18px;position:relative;box-shadow:0 14px 40px #0000000d}.report:before{content:"DESIGN KUNDALI • WINGSPAN";position:absolute;right:16px;top:16px;font-size:8px;letter-spacing:.16em;color:var(--muted)}
+.report-title{font-family:var(--display);font-size:25px;padding-right:100px;margin-bottom:8px}.report-sub{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--ink);border-left:1px solid var(--ink);margin-top:26px}.cell{min-height:105px;padding:13px;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink)}.cell small{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:9px}.cell strong{font-family:var(--display);font-size:21px;line-height:1.02;font-weight:500}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 22px}.chip{border:1px solid var(--ink);padding:6px 9px;font-size:9px;text-transform:uppercase;letter-spacing:.08em}
+.meter{margin:18px 0}.meterline{display:flex;justify-content:space-between;font-size:11px;margin-bottom:7px}.bar{height:5px;background:#ded7ca}.fill{height:100%;background:var(--ink)}
+.reveal{font-size:12px;line-height:1.5;color:var(--muted);border-left:2px solid var(--saffron);padding-left:12px;margin:18px 0 25px}
+.report-actions{display:grid;grid-template-columns:1fr 1.25fr;gap:10px;margin-top:16px}.report-actions .btn{font-size:13px}.footer{text-align:center;font-size:12px;color:var(--muted);padding-top:18px}.footer strong{color:var(--ink)}
+@media(max-width:460px){.app{padding:18px 16px 24px}.cosmic{margin:-18px -16px -24px;padding:30px 16px 36px}.mystic-mark{height:190px}.mystic-mark .om{font-size:104px}.planet-scene{height:235px}.grid{grid-template-columns:1fr 1fr}.cell{min-height:92px;padding:11px}.report-actions{grid-template-columns:1fr}.report-actions .btn{font-size:14px}}
+@media print{
+ body{background:white}.app{max-width:none;padding:0}.top, .screen:not(#s10), #s10>.eyebrow, #s10>h2, #s10>p, #s10>.report-actions{display:none!important}
+ main{padding:0}.screen.active{display:block!important}.report{box-shadow:none;border:2px solid #111}.footer{padding-bottom:20px}
+}
 </style>
 </head>
 <body>
 <div class="app">
 <header class="top"><div class="brand">WingSpan</div><div class="step" id="step">Design Kundali</div></header>
 <main>
-<section class="screen active" id="s1">
-<div class="kundali"><i class="symbol s1">☉</i><i class="symbol s2">☽</i><i class="symbol s3">♃</i><i class="symbol s4">♄</i><div class="orb">ॐ</div></div>
-<div class="eyebrow">A little cosmic. A little suspicious.</div><h1>Create your Design Kundali.</h1><p>Give us your birth details. We’ll do what every good fortune teller does - pretend we know your future.</p>
-<div class="buttons"><button class="btn" onclick="go(2)">Let’s do it <span>→</span></button></div>
+
+<section class="screen active cosmic" id="s1">
+<div class="mystic-mark"><div class="mystic-ring"></div><div class="mystic-glyphs"><span>☉</span><span>☽</span><span>♃</span><span>♄</span></div><div class="om">ॐ</div></div>
+<div class="eyebrow">A little cosmic. A little suspicious.</div>
+<h1>Create your Design Kundali.</h1>
+<p>Give us your birth details. We’ll do what every good fortune teller does - pretend we know your future.</p>
+<div class="buttons"><button class="btn" onclick="go(2)">Let’s do it <span class="arrow">→</span></button></div>
 </section>
-<section class="screen" id="s2"><div class="eyebrow">First, who are you?</div><h2>What should we call you?</h2><div class="field"><label>Your name</label><input id="name" autocomplete="name" placeholder="e.g. Amit"></div><div class="buttons"><button class="btn" onclick="nextName()">Continue <span>→</span></button></div><button class="back" onclick="go(1)">← Back</button></section>
-<section class="screen" id="s3"><div class="eyebrow">The birthplace matters. Apparently.</div><h2>Where were you born?</h2><div class="field"><label>Place of birth</label><input id="place" placeholder="e.g. Bengaluru"></div><div class="buttons"><button class="btn" onclick="nextPlace()">Continue <span>→</span></button></div><button class="back" onclick="go(2)">← Back</button></section>
-<section class="screen" id="s4"><div class="eyebrow">The big one</div><h2>When did your story begin?</h2><div class="field"><label>Date of birth</label><input id="dob" type="date"></div><div class="buttons"><button class="btn" onclick="generate()">Generate my Kundali <span>✦</span></button></div><button class="back" onclick="go(3)">← Back</button></section>
-<section class="screen" id="s5"><div class="loader"><div class="orbit"></div></div><div style="text-align:center"><div class="eyebrow">Consulting the stars</div><h2>Reading your design destiny...</h2><p style="margin-left:auto;margin-right:auto">Calculating planets, houses and an entirely questionable amount of cosmic confidence.</p></div></section>
+
+<section class="screen" id="s2"><div class="eyebrow">First, who are you?</div><h2>What should we call you?</h2><div class="field"><label>Your name</label><input id="name" autocomplete="name" placeholder="e.g. Amit"></div><div class="buttons"><button class="btn" onclick="nextName()">Continue <span class="arrow">→</span></button></div><button class="back" onclick="go(1)">← Back</button></section>
+
+<section class="screen" id="s3"><div class="eyebrow">The birthplace matters. Apparently.</div><h2>Where were you born?</h2><div class="field"><label>Place of birth</label><input id="place" placeholder="e.g. Bengaluru"></div><div class="buttons"><button class="btn" onclick="nextPlace()">Continue <span class="arrow">→</span></button></div><button class="back" onclick="go(2)">← Back</button></section>
+
+<section class="screen" id="s4"><div class="eyebrow">The big one</div><h2>When did your story begin?</h2><div class="field"><label>Date of birth</label><input id="dob" type="date"></div><div class="note">Don’t have it handy? That’s okay. You can skip this.</div><div class="buttons" style="margin-top:20px"><button class="btn" onclick="generate()">Generate my Kundali <span>✦</span></button><button class="btn secondary" onclick="skipDob()">Skip for now <span>→</span></button></div><button class="back" onclick="go(3)">← Back</button></section>
+
+<section class="screen cosmic" id="s5">
+<div class="planet-scene"><div class="planet-system"><div class="planet-orbit"><i class="planet"></i></div><div class="planet-orbit"><i class="planet p2"></i></div><div class="planet-orbit"><i class="planet p3"></i></div><div class="planet-orbit"><i class="planet p4"></i></div><div class="sun"></div></div></div>
+<div class="cosmic-copy"><div class="eyebrow">Consulting the stars</div><h2>Reading your design destiny...</h2><p>Aligning planets, houses and an entirely questionable amount of cosmic confidence.</p></div>
+</section>
+
 <section class="screen" id="s6"><div class="eyebrow">One important question</div><h2>Do you still believe in it?</h2><p>Be honest. We promise the planets won’t judge.</p><div class="buttons"><button class="btn" onclick="believe(true)">Yes, I do <span>✦</span></button><button class="btn secondary" onclick="believe(false)">No, I don’t <span>↘</span></button></div></section>
-<section class="screen" id="s7"><div class="eyebrow">Your cosmic reading</div><h2 id="fakeTitle">The stars have spoken.</h2><p>According to your birth details, you have a natural tendency to connect ideas, make things clearer and eventually ask why everyone is doing it this way.</p><div class="report"><div class="chips"><span class="chip">Creative</span><span class="chip">Curious</span><span class="chip">Independent</span></div><div class="grid"><div class="cell"><small>Career planet</small><strong>Mercury</strong></div><div class="cell"><small>Creative house</small><strong>Ideas</strong></div><div class="cell"><small>Rising influence</small><strong>Problem solving</strong></div><div class="cell"><small>Design element</small><strong>Air</strong></div></div></div><div style="margin-top:20px"><div class="buttons"><button class="btn" onclick="fakeReaction(true)">✓ That’s me</button><button class="btn secondary" onclick="fakeReaction(false)">✕ Not really</button></div></div></section>
+
+<section class="screen" id="s7"><div class="eyebrow">Your cosmic reading</div><div class="kundali-wrap"><div class="kundali"><div class="diag"></div><i class="symbol s1">☉</i><i class="symbol s2">☽</i><i class="symbol s3">♃</i><i class="symbol s4">♄</i><div class="orb">ॐ</div></div></div><h2 id="fakeTitle">The stars have spoken.</h2><p>According to your birth details, you have a natural tendency to connect ideas, make things clearer and eventually ask why everyone is doing it this way.</p><div class="report"><div class="report-title">Your cosmic reading</div><div class="report-sub">A playful interpretation of your birth details</div><div class="chips"><span class="chip">Creative</span><span class="chip">Curious</span><span class="chip">Independent</span></div><div class="grid"><div class="cell"><small>Career planet</small><strong>Mercury</strong></div><div class="cell"><small>Creative house</small><strong>Ideas</strong></div><div class="cell"><small>Rising influence</small><strong>Problem solving</strong></div><div class="cell"><small>Design element</small><strong>Air</strong></div></div></div><div style="margin-top:20px"><div class="buttons"><button class="btn" onclick="fakeReaction(true)">✓ That’s me</button><button class="btn secondary" onclick="fakeReaction(false)">✕ Not really</button></div></div></section>
+
 <section class="screen" id="s8"><div class="eyebrow">Plot twist</div><h2 id="revealTitle">Whoa. You got lucky. 😄</h2><p id="revealText">That reading wasn’t based on your career at all. It was deliberately generic. If it felt accurate, that says something interesting about how easily we can see ourselves in a prediction.</p><div class="reveal">Your career is a little less mystical. It leaves evidence - the work you’ve done, the skills you’ve built, the problems you’ve solved and the directions you keep moving toward.</div><h2 style="font-size:28px">So... luck or hard work?</h2><div class="buttons"><button class="btn" onclick="chooseWork(false)">I’ll take my luck <span>✦</span></button><button class="btn secondary" onclick="chooseWork(true)">Show me the hard work <span>→</span></button></div></section>
-<section class="screen" id="s9"><div class="eyebrow">Enough astrology</div><h2>Okay then, boss. Upload your resume.</h2><p>I’ll build a Design Kundali from what you’ve actually done - not when Mercury was in retrograde.</p><div class="field"><label>Resume / CV</label><input id="resume" type="file" accept=".pdf,.doc,.docx" style="font-size:15px"></div><div class="note">Prototype: PDF, DOC and DOCX are accepted. The current demo uses sample intelligence until resume parsing is connected.</div><div class="buttons" style="margin-top:25px"><button class="btn" onclick="analyze()">Read my real Kundali <span>✦</span></button></div></section>
-<section class="screen" id="s10"><div class="eyebrow">Now this is interesting.</div><h2>Your Design Kundali.</h2><p id="realIntro">Not a prediction. A reading of the evidence in your career so far.</p><div class="report"><div class="chips"><span class="chip">Craft</span><span class="chip">Systems</span><span class="chip">Strategy</span><span class="chip">AI</span><span class="chip">Influence</span></div><div class="grid"><div class="cell"><small>Strongest house</small><strong>Influence</strong></div><div class="cell"><small>Emerging house</small><strong>AI</strong></div><div class="cell"><small>Career tension</small><strong>Craft × Scale</strong></div><div class="cell"><small>Open house</small><strong>Business</strong></div></div><div class="meter"><div class="meterline"><span>Craft</span><b>86</b></div><div class="bar"><div class="fill" style="width:86%"></div></div></div><div class="meter"><div class="meterline"><span>Strategy</span><b>78</b></div><div class="bar"><div class="fill" style="width:78%"></div></div></div><div class="meter"><div class="meterline"><span>Influence</span><b>82</b></div><div class="bar"><div class="fill" style="width:82%"></div></div></div><div class="meter"><div class="meterline"><span>Technology</span><b>69</b></div><div class="bar"><div class="fill" style="width:69%"></div></div></div><div class="meter"><div class="meterline"><span>AI</span><b>61</b></div><div class="bar"><div class="fill" style="width:61%"></div></div></div></div><div class="reveal"><strong>Direction worth exploring:</strong> Design Strategy. Not because your stars say so - because your evidence suggests you may be ready to explore it.</div><div class="buttons"><button class="btn" onclick="wingspan()">Explore Wingspan <span>→</span></button></div><div class="footer">Don’t predict your future. <strong>Understand your journey.</strong></div></section>
-</main>
+
+<section class="screen" id="s9"><div class="eyebrow">Enough astrology</div><h2>Okay then, boss. Upload your resume.</h2><p>I’ll build a Design Kundali from what you’ve actually done - not when Mercury was in retrograde.</p><div class="field"><label>Resume / CV</label><input id="resume" type="file" accept=".pdf,.doc,.docx" style="font-size:15px"></div><div class="note">PDF, DOC and DOCX are accepted. The current demo uses sample intelligence until resume parsing is connected.</div><div class="buttons" style="margin-top:25px"><button class="btn" onclick="analyze()">Read my real Kundali <span>✦</span></button></div></section>
+
+<section class="screen" id="s10"><div class="eyebrow">Now this is interesting.</div><h2>Your Design Kundali.</h2><p id="realIntro">Not a prediction. A reading of the evidence in your career so far.</p><div class="report">
+<div class="report-title">Design Kundali</div><div class="report-sub">Evidence from your career journey</div>
+<div class="chips"><span class="chip">Craft</span><span class="chip">Systems</span><span class="chip">Strategy</span><span class="chip">AI</span><span class="chip">Influence</span></div>
+<div class="grid"><div class="cell"><small>Strongest house</small><strong>Influence</strong></div><div class="cell"><small>Emerging house</small><strong>AI</strong></div><div class="cell"><small>Career tension</small><strong>Craft × Scale</strong></div><div class="cell"><small>Open house</small><strong>Business</strong></div></div>
+<div class="meter"><div class="meterline"><span>Craft</span><b>86</b></div><div class="bar"><div class="fill" style="width:86%"></div></div></div>
+<div class="meter"><div class="meterline"><span>Strategy</span><b>78</b></div><div class="bar"><div class="fill" style="width:78%"></div></div></div>
+<div class="meter"><div class="meterline"><span>Influence</span><b>82</b></div><div class="bar"><div class="fill" style="width:82%"></div></div></div>
+<div class="meter"><div class="meterline"><span>Technology</span><b>69</b></div><div class="bar"><div class="fill" style="width:69%"></div></div></div>
+<div class="meter"><div class="meterline"><span>AI</span><b>61</b></div><div class="bar"><div class="fill" style="width:61%"></div></div></div>
 </div>
+<div class="reveal"><strong>Direction worth exploring:</strong> Design Strategy. Not because your stars say so - because your evidence suggests you may be ready to explore it.</div>
+<div class="report-actions"><button class="btn secondary" onclick="exportPDF()">Export as PDF <span>↓</span></button><button class="btn" onclick="wingspan()">Explore Wingspan <span>→</span></button></div>
+<div class="footer">Don’t predict your future. <strong>Understand your journey through Wingspan.</strong></div>
+</section>
+
+</main></div>
 <script>
 let current=1;const total=10;
-function go(n){document.getElementById('s'+current).classList.remove('active');current=n;document.getElementById('s'+current).classList.add('active');document.getElementById('step').textContent=current===10?'Your real Kundali':current+' / '+total}
+function go(n){document.getElementById('s'+current).classList.remove('active');current=n;document.getElementById('s'+current).classList.add('active');document.getElementById('step').textContent=current===10?'Your real Kundali':current===1?'Design Kundali':current+' / '+total;window.scrollTo({top:0,behavior:'smooth'})}
 function nextName(){if(!document.getElementById('name').value.trim()){document.getElementById('name').focus();return}go(3)}
 function nextPlace(){if(!document.getElementById('place').value.trim()){document.getElementById('place').focus();return}go(4)}
-function generate(){if(!document.getElementById('dob').value){document.getElementById('dob').focus();return}go(5);setTimeout(()=>go(6),1700)}
+function generate(){if(document.getElementById('dob').value) startGeneration();else skipDob()}
+function skipDob(){startGeneration()}
+function startGeneration(){go(5);setTimeout(()=>go(6),2200)}
 function believe(yes){if(yes)go(7);else go(9)}
 function fakeReaction(match){if(match){document.getElementById('revealTitle').textContent='Whoa. You got lucky. 😄';document.getElementById('revealText').textContent='That reading wasn’t based on your career at all. It was deliberately generic. If it felt accurate, that says something interesting about how easily we can see ourselves in a prediction.'}else{document.getElementById('revealTitle').textContent='Fair enough. The stars didn’t know much about you.';document.getElementById('revealText').textContent='Exactly. Birth details can make for a fun story, but they don’t tell us what you’ve actually learned, built or struggled through as a designer.'}go(8)}
-function chooseWork(work){if(work)go(9);else{document.getElementById('revealTitle').textContent='Fair. Keep the luck. 😄';document.getElementById('revealText').textContent='But if you ever want to replace luck with something more useful, upload your resume. We’ll look at the evidence.';go(9)}}
-function analyze(){if(!document.getElementById('resume').files.length){document.getElementById('resume').click();return}go(5);setTimeout(()=>go(10),1400)}
-function wingspan(){window.location.href='https://designsbyamit.github.io/WingSpan/'}
+function chooseWork(work){go(9);if(!work){document.getElementById('revealTitle').textContent='Fair. Keep the luck. 😄';document.getElementById('revealText').textContent='But if you ever want to replace luck with something more useful, upload your resume. We’ll look at the evidence.'}}
+function analyze(){if(!document.getElementById('resume').files.length){document.getElementById('resume').click();return}go(5);setTimeout(()=>go(10),1800)}
+function exportPDF(){window.print()}
+function wingspan(){window.location.href='https://wingspan.designsbyamit.com/'}
 </script>
 </body>
 </html>
