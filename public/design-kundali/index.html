@@ -136,7 +136,58 @@ p{font-size:17px;line-height:1.58;color:#c1bdc2;max-width:590px;margin:0 0 28px}
   .top,.screen:not(#s10),#s10>.eyebrow,#s10>h2,#s10>p,#s10>.report-actions{display:none!important}
   main{padding:0}.screen.active{display:block!important}.report{box-shadow:none;border:2px solid #777}
   .footer{padding-bottom:20px}
-}</style>
+}
+/* celestial-chart moodboard layer */
+.app{background:
+ radial-gradient(circle at 50% -10%,#263954 0,transparent 32%),
+ radial-gradient(circle at 8% 62%,#151e31 0,transparent 30%),
+ radial-gradient(circle at 92% 78%,#182238 0,transparent 28%),
+ #060a12}
+.app:after{content:"";position:fixed;inset:14px;pointer-events:none;border:1px solid #c8aa6330;box-shadow:inset 0 0 0 1px #c8aa6310;z-index:30}
+.top{border-bottom-color:#c8aa6326}
+.step{font-family:var(--serif);letter-spacing:.18em;color:#cdb679}
+.screen:not(.cosmic):before{content:"✦  ·  ◌  ·  ✦";font-size:15px;letter-spacing:12px;right:3%;top:0;color:#c9a85d45}
+.screen:not(.cosmic):after{width:120px;height:120px;border-color:#c9a85d24;border-radius:50%;box-shadow:inset 0 0 0 14px #c9a85d06,0 0 35px #c9a85d08}
+.eyebrow{font-family:var(--sans);background:#d8bd78;box-shadow:3px 4px 0 #020308;position:relative}
+.eyebrow:after{content:"";position:absolute;right:-8px;top:-5px;width:8px;height:8px;border:1px solid #d8bd78;border-radius:50%;background:#080b12}
+h1,h2{font-family:var(--serif);text-shadow:0 3px 28px #0009}
+p{color:#b8b8bd}
+.btn{background:#e8ddc6;border-color:#e8ddc6;box-shadow:0 7px 0 #151821,0 12px 30px #0006}
+.btn:hover{box-shadow:4px 7px 0 #c9a85d,0 14px 35px #0008}
+.btn.secondary{background:#0c1019;border-color:#6c624e;color:#eee7d8;box-shadow:0 5px 0 #020308}
+.field input{border-bottom-color:#665f51}
+.field input:focus{border-color:#d8bd78;box-shadow:0 7px 0 -6px #d8bd78}
+.cosmic{background:
+ radial-gradient(circle at 50% 24%,#30435d 0,transparent 23%),
+ radial-gradient(circle at 50% 80%,#131c2c 0,transparent 40%),
+ linear-gradient(160deg,#07101c,#080b13 52%,#05070d)}
+.cosmic:before{opacity:.5}
+.cosmic:after{width:760px;height:760px;border-color:#d8bd7833;box-shadow:0 0 120px #7183a833,inset 0 0 100px #c9a85d0e}
+.mystic-mark{height:250px;margin-bottom:20px}
+.mystic-ring{width:214px;height:214px;border-color:#d2b46d99;border-radius:50%;box-shadow:0 0 0 8px #d2b46d0b,0 0 45px #c39a4a16}
+.mystic-ring.ring-inner{width:165px;height:165px;border-color:#d2b46d55;animation:slowSpin 19s linear infinite reverse}
+.mystic-ring.ring-inner:before,.mystic-ring.ring-inner:after{content:"·";font-size:25px}
+.mystic-glyphs{inset:10px;color:#d1b66e;font-size:18px}
+.celestial-core{width:72px;height:72px;border:1px solid #e2ca83;border-radius:50%;display:grid;place-items:center;position:relative;background:radial-gradient(circle,#e9cf85 0,#9f7840 28%,#131722 62%);box-shadow:0 0 25px #d6b96855,0 0 70px #d6b96822}
+.celestial-core i{position:absolute;width:48px;height:48px;border:1px solid #f1d99455;border-radius:50%}
+.celestial-core b{font-family:var(--serif);font-size:20px;color:#fff1bc;font-weight:400}
+.chart-ticks{position:absolute;width:246px;height:246px;border-radius:50%;background:repeating-conic-gradient(from 0deg,#d8bd7830 0deg 1deg,transparent 1deg 15deg);mask:radial-gradient(circle,transparent 72%,#000 73%,#000 75%,transparent 76%);-webkit-mask:radial-gradient(circle,transparent 72%,#000 73%,#000 75%,transparent 76%)}
+.planet-scene{height:300px}
+.planet-system{width:260px;height:260px}
+.planet-orbit{border-color:#d0b36c66}
+.zodiac-ring{position:absolute;inset:-27px;border:1px solid #d0b36c35;border-radius:50%;font-family:var(--serif);font-size:12px;letter-spacing:3px;color:#d5bb79;display:grid;place-items:center;white-space:nowrap;transform:rotate(-14deg);opacity:.8;animation:slowSpin 50s linear infinite}
+.sun{width:58px;height:58px;background:radial-gradient(circle at 35% 30%,#fff2b5,#d5a44c 48%,#76502c 100%);box-shadow:0 0 45px #e0b45f88,0 0 110px #d6a45122}
+.kundali{background:radial-gradient(circle,#172238,#0d121d 70%);border-color:#d7bd78;box-shadow:0 25px 80px #000b,0 0 0 8px #d7bd7810}
+.kundali:before,.kundali:after{border-color:#d7bd7866}
+.kundali .diag:before,.kundali .diag:after{background:#d7bd7866}
+.kundali .orb{border-color:#e2c87d;color:#f0d78f;background:#0a0e17;box-shadow:0 0 30px #d5b35b33}
+.report{background:
+ radial-gradient(circle at 100% 0,#27344b 0,transparent 32%),
+ linear-gradient(145deg,#121924,#090d15);border-color:#5d6570}
+.report:after{border-color:#c9a85d14}
+.chip{border-color:#c9a85d66;background:#c9a85d0d}
+@media(max-width:460px){.mystic-mark{height:215px}.mystic-ring{width:185px;height:185px}.mystic-ring.ring-inner{width:143px;height:143px}.chart-ticks{width:213px;height:213px}.planet-scene{height:255px}.planet-system{width:225px;height:225px}.zodiac-ring{font-size:9px;letter-spacing:2px;inset:-20px}}
+</style>
 </head>
 <body>
 <div class="app">
@@ -144,7 +195,13 @@ p{font-size:17px;line-height:1.58;color:#c1bdc2;max-width:590px;margin:0 0 28px}
 <main>
 
 <section class="screen active cosmic" id="s1">
-<div class="mystic-mark"><div class="mystic-ring"></div><div class="mystic-glyphs"><span>☉</span><span>☽</span><span>♃</span><span>♄</span></div><div class="om">ॐ</div></div>
+<div class="mystic-mark">
+  <div class="mystic-ring"></div>
+  <div class="mystic-ring ring-inner"></div>
+  <div class="mystic-glyphs"><span>☉</span><span>♈</span><span>♃</span><span>♄</span></div>
+  <div class="celestial-core"><i></i><b>✦</b></div>
+  <div class="chart-ticks"></div>
+</div>
 <div class="eyebrow">A little cosmic. A little suspicious.</div>
 <h1>Create your Design Kundali.</h1>
 <p>Give us your birth details. We’ll do what every good fortune teller does - pretend we know your future.</p>
@@ -158,13 +215,20 @@ p{font-size:17px;line-height:1.58;color:#c1bdc2;max-width:590px;margin:0 0 28px}
 <section class="screen" id="s4"><div class="eyebrow">The big one</div><h2>When did your story begin?</h2><div class="field"><label>Date of birth</label><input id="dob" type="date"></div><div class="note">Don’t have it handy? That’s okay. You can skip this.</div><div class="buttons" style="margin-top:20px"><button class="btn" onclick="generate()">Generate my Kundali <span>✦</span></button><button class="btn secondary" onclick="skipDob()">Enough that I’m still alive <span>→</span></button></div><button class="back" onclick="go(3)">← Back</button></section>
 
 <section class="screen cosmic" id="s5">
-<div class="planet-scene"><div class="planet-system"><div class="planet-orbit"><i class="planet"></i></div><div class="planet-orbit"><i class="planet p2"></i></div><div class="planet-orbit"><i class="planet p3"></i></div><div class="planet-orbit"><i class="planet p4"></i></div><div class="sun"></div></div></div>
+<div class="planet-scene"><div class="planet-system">
+  <div class="planet-orbit"><i class="planet"></i></div>
+  <div class="planet-orbit"><i class="planet p2"></i></div>
+  <div class="planet-orbit"><i class="planet p3"></i></div>
+  <div class="planet-orbit"><i class="planet p4"></i></div>
+  <div class="sun"></div>
+  <div class="zodiac-ring">♈　♉　♊　♋　♌　♍　♎　♏　♐　♑　♒　♓</div>
+</div></div>
 <div class="cosmic-copy"><div class="eyebrow">Consulting the stars</div><h2>Reading your design destiny...</h2><p>Aligning planets, houses and an entirely questionable amount of cosmic confidence.</p></div>
 </section>
 
 <section class="screen" id="s6"><div class="eyebrow">One important question</div><h2>Do you still believe in it?</h2><p>Be honest. We promise the planets won’t judge.</p><div class="buttons"><button class="btn" onclick="believe(true)">Yes, I do <span>✦</span></button><button class="btn secondary" onclick="believe(false)">No, I don’t <span>↘</span></button></div></section>
 
-<section class="screen" id="s7"><div class="eyebrow">Your cosmic reading</div><div class="kundali-wrap"><div class="kundali"><div class="diag"></div><i class="symbol s1">☉</i><i class="symbol s2">☽</i><i class="symbol s3">♃</i><i class="symbol s4">♄</i><div class="orb">ॐ</div></div></div><h2 id="fakeTitle">The stars have spoken.</h2><p>According to your birth details, you have a natural tendency to connect ideas, make things clearer and eventually ask why everyone is doing it this way.</p><div class="report"><div class="report-title">Your cosmic reading</div><div class="report-sub">A playful interpretation of your birth details</div><div class="chips"><span class="chip">Creative</span><span class="chip">Curious</span><span class="chip">Independent</span></div><div class="grid"><div class="cell"><small>Career planet</small><strong>Mercury</strong></div><div class="cell"><small>Creative house</small><strong>Ideas</strong></div><div class="cell"><small>Rising influence</small><strong>Problem solving</strong></div><div class="cell"><small>Design element</small><strong>Air</strong></div></div></div><div style="margin-top:20px"><div class="buttons"><button class="btn" onclick="fakeReaction(true)">✓ That’s me</button><button class="btn secondary" onclick="fakeReaction(false)">✕ Not really</button></div></div></section>
+<section class="screen" id="s7"><div class="eyebrow">Your cosmic reading</div><div class="kundali-wrap"><div class="kundali"><div class="diag"></div><i class="symbol s1">☉</i><i class="symbol s2">☽</i><i class="symbol s3">♃</i><i class="symbol s4">♄</i><div class="orb">✦</div></div></div><h2 id="fakeTitle">The stars have spoken.</h2><p>According to your birth details, you have a natural tendency to connect ideas, make things clearer and eventually ask why everyone is doing it this way.</p><div class="report"><div class="report-title">Your cosmic reading</div><div class="report-sub">A playful interpretation of your birth details</div><div class="chips"><span class="chip">Creative</span><span class="chip">Curious</span><span class="chip">Independent</span></div><div class="grid"><div class="cell"><small>Career planet</small><strong>Mercury</strong></div><div class="cell"><small>Creative house</small><strong>Ideas</strong></div><div class="cell"><small>Rising influence</small><strong>Problem solving</strong></div><div class="cell"><small>Design element</small><strong>Air</strong></div></div></div><div style="margin-top:20px"><div class="buttons"><button class="btn" onclick="fakeReaction(true)">✓ That’s me</button><button class="btn secondary" onclick="fakeReaction(false)">✕ Not really</button></div></div></section>
 
 <section class="screen" id="s8"><div class="eyebrow">Plot twist</div><h2 id="revealTitle">Whoa. You got lucky. 😄</h2><p id="revealText">That reading wasn’t based on your career at all. It was deliberately generic. If it felt accurate, that says something interesting about how easily we can see ourselves in a prediction.</p><div class="reveal">Your career is a little less mystical. It leaves evidence - the work you’ve done, the skills you’ve built, the problems you’ve solved and the directions you keep moving toward.</div><h2 style="font-size:28px">So... luck or hard work?</h2><div class="buttons"><button class="btn" onclick="chooseWork(false)">I’ll take my luck <span>✦</span></button><button class="btn secondary" onclick="chooseWork(true)">Show me the hard work <span>→</span></button></div></section>
 
