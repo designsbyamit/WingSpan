@@ -448,6 +448,53 @@ main:before{content:"";position:absolute;inset:24px 0 0;border:1px solid #c8aa63
 @media(max-width:460px){
   #s4 .btn.secondary{font-size:14px}
 }
+
+/* chapter objects - simple, quirky, aligned */
+.chapter-object{width:100%;height:82px;position:relative;margin:0 0 10px;display:flex;align-items:center;justify-content:flex-start;overflow:visible}
+.chapter-object:after{content:"";position:absolute;left:0;top:50%;width:190px;height:1px;background:#c8aa6320;transform-origin:left;animation:lineReveal 1s cubic-bezier(.16,1,.3,1)}
+.name-object-line{width:74px;height:74px;border:1px solid #c8aa6355;border-radius:50%;position:relative;animation:instrumentFloat 4s ease-in-out infinite}
+.name-object-line:before,.name-object-line:after{content:"";position:absolute;left:50%;top:50%;background:#c8aa6340;transform:translate(-50%,-50%)}
+.name-object-line:before{width:92px;height:1px}.name-object-line:after{width:1px;height:92px}
+.name-object-orb{position:absolute;width:9px;height:9px;border-radius:50%;background:#d8bd78;box-shadow:0 0 18px #d8bd7866;left:53px;top:18px;animation:nameOrb 3.6s ease-in-out infinite}
+@keyframes nameOrb{50%{transform:translate(12px,28px);box-shadow:0 0 28px #d8bd78aa}}
+.map-object{height:96px}.map-orbit{width:94px;height:58px;border:1px solid #c8aa6355;border-radius:50%;transform:rotate(-22deg);animation:mapSpin 9s linear infinite}.map-pin{position:absolute;width:13px;height:13px;border:1px solid #e2c87d;border-radius:50% 50% 50% 0;transform:rotate(-45deg);left:41px;top:28px;box-shadow:0 0 18px #c8aa6344}.map-dot{position:absolute;width:5px;height:5px;border-radius:50%;background:#e2c87d;left:45px;top:32px}.map-object:before{content:"LAT · LONG · HOME";position:absolute;left:112px;top:25px;font-size:7px;letter-spacing:.2em;color:#7e7a72}
+@keyframes mapSpin{to{transform:rotate(338deg)}}
+.cake-object{height:112px;align-items:flex-end;padding-bottom:6px}.cake{width:104px;height:48px;background:linear-gradient(#d8bd78,#9d7944);border:1px solid #e4cc8d;position:relative;border-radius:3px 3px 7px 7px;box-shadow:0 13px 28px #0005}.cake:before{content:"";position:absolute;left:0;right:0;top:10px;height:5px;background:#f1dfb3;box-shadow:0 9px 0 #b88e54}.cake i{position:absolute;bottom:0;width:2px;height:38px;background:#3c2a22}.cake i:nth-of-type(1){left:27px}.cake i:nth-of-type(2){left:51px}.cake i:nth-of-type(3){left:75px}.flame{position:absolute;width:9px;height:14px;border-radius:60% 40% 55% 45%;background:#e5bd62;bottom:49px;box-shadow:0 0 18px #dca84d88;animation:candleFlicker 1.1s ease-in-out infinite alternate}.f1{left:23px}.f2{left:47px;animation-delay:-.35s}.f3{left:71px;animation-delay:-.7s}@keyframes candleFlicker{to{transform:translateY(-2px) scale(.86) rotate(3deg);opacity:.72}}
+.observatory-scene{width:min(360px,80vw);height:min(360px,80vw);position:relative;margin:0 auto 30px;display:grid;place-items:center}
+.observatory-ring{position:absolute;border:1px solid #d5b86e33;border-radius:50%}.ring-a{inset:4%;animation:calibrate 18s linear infinite}.ring-b{inset:17%;border-style:dashed;animation:calibrate 13s linear infinite reverse}.ring-c{inset:31%;border-color:#d5b86e55;animation:calibrate 9s linear infinite}
+.observatory-axis{position:absolute;background:#d5b86e25}.axis-a{width:108%;height:1px;transform:rotate(17deg)}.axis-b{width:1px;height:108%;transform:rotate(17deg)}
+.observatory-needle{position:absolute;width:46%;height:1px;background:linear-gradient(90deg,transparent,#e2c87d,transparent);transform-origin:80% 50%;animation:needleScan 3.8s ease-in-out infinite}
+.observatory-core{width:76px;height:76px;border:1px solid #e2c87d;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle,#ead28f 0,#a0783f 20%,#111722 60%);box-shadow:0 0 34px #d8bd7844,0 0 100px #d8bd7816;animation:coreBreathe 3.6s ease-in-out infinite}
+.observatory-core span{width:40px;height:40px;border:1px solid #f0d99466;border-radius:50%}
+.calibration-dot{position:absolute;width:7px;height:7px;border-radius:50%;background:#e2c87d;box-shadow:0 0 14px #e2c87d88}.dot-a{top:13%;left:63%;animation:dotFloat 4s infinite}.dot-b{right:12%;bottom:30%;animation:dotFloat 5s -.8s infinite}.dot-c{left:19%;bottom:16%;animation:dotFloat 4.5s -1.4s infinite}
+@keyframes calibrate{to{transform:rotate(360deg)}}@keyframes needleScan{0%,100%{transform:rotate(-42deg)}50%{transform:rotate(48deg)}}@keyframes coreBreathe{50%{transform:scale(1.045)}}@keyframes dotFloat{50%{transform:translate(7px,-8px);opacity:.55}}
+/* old-paper kundali, deliberately different from the homepage */
+#s7{background:radial-gradient(circle at 50% 45%,#16130f 0,#0b0c10 48%,#07080d 100%)}
+#s7 .kundali-wrap{margin-bottom:20px}
+#s7 .kundali{width:min(250px,62vw);background:#e9dfc6;border-color:#6d5532;box-shadow:0 20px 60px #000b,0 0 0 5px #c9a85d12;filter:sepia(.12)}
+#s7 .kundali:before,#s7 .kundali:after{border-color:#8a6d43}
+#s7 .kundali .diag:before,#s7 .kundali .diag:after{background:#8a6d43}
+#s7 .kundali .orb{border-color:#8a6d43;color:#6b4d2c;background:#e9dfc6;box-shadow:none;font-family:Georgia,serif;font-size:18px}
+#s7 .kundali .symbol{color:#6b4d2c;font-family:Georgia,serif}
+#s7 .kundali-wrap:after{content:"";position:absolute;width:min(315px,76vw);aspect-ratio:1;background:radial-gradient(#5f4a2d1a 1px,transparent 1.4px);background-size:5px 5px;mix-blend-mode:multiply;pointer-events:none;opacity:.35}
+.parchment-report{background:
+radial-gradient(circle at 18% 15%,#ffffff45 0,transparent 25%),
+radial-gradient(circle at 80% 78%,#8d6b3d18 0,transparent 32%),
+repeating-linear-gradient(0deg,#00000006 0 1px,transparent 1px 4px),
+#e8ddc3 !important;
+color:#34291d;border-color:#9b7a4c !important;box-shadow:0 22px 70px #000a,0 0 0 5px #d5bd8820 !important;border-radius:1px;transform:rotate(-.25deg)}
+.parchment-report:after{inset:9px !important;border-color:#765a351c !important}
+.parchment-report:before{color:#755b3b !important}
+.parchment-report .report-title{font-family:Georgia,"Times New Roman",serif;color:#2f2419;font-size:27px;letter-spacing:-.02em}
+.parchment-report .report-sub{font-family:Georgia,serif;color:#735a3b}
+.parchment-report .sanskrit-note{font-family:Georgia,serif;color:#6b4e2d;font-size:12px;font-style:italic;margin-top:9px;letter-spacing:.04em}
+.parchment-report .cell{border-color:#a98b62 !important}.parchment-report .cell small{color:#725b3e}.parchment-report .cell strong{font-family:Georgia,serif;color:#302519;font-size:21px}.parchment-report .cell em{display:block;font-family:Georgia,serif;font-size:11px;color:#7b6447;margin-top:5px;line-height:1.25}
+.parchment-report .chip{background:#6e543514;border-color:#80623b88;color:#5e472d;font-family:Georgia,serif;text-transform:none;letter-spacing:.02em;border-radius:0}
+.parchment-report .paper-rule{height:1px;background:#8b6b451f;margin:20px 0 14px}.paper-footnote{font-family:Georgia,serif !important;color:#59432b !important;font-size:14px !important;line-height:1.55 !important;margin:0 !important;max-width:none !important}
+.literary-intro{font-family:Georgia,"Times New Roman",serif !important;color:#b8ad9c !important}
+#s7 .buttons .btn{font-size:13px}
+@media(max-width:460px){.chapter-object{height:70px}.cake-object{height:92px}.observatory-scene{width:290px;height:290px}.parchment-report .report-title{font-size:23px}.parchment-report .cell strong{font-size:19px}}
+
 </style>
 </head>
 <body>
@@ -487,27 +534,31 @@ main:before{content:"";position:absolute;inset:24px 0 0;border:1px solid #c8aa63
   </div>
 </section>
 
-<section class="screen" id="s2"><div class="eyebrow">First, who are you?</div><h2>What should we call you?</h2><div class="field"><label>Your name</label><input id="name" autocomplete="name" placeholder="e.g. Amit"></div><div class="buttons"><button class="btn" onclick="nextName()">Continue <span class="arrow">→</span></button></div><button class="back" onclick="go(1)">← Back</button></section>
+<section class="screen" id="s2"><div class="chapter-object name-object" aria-hidden="true"><span class="name-object-line"></span><span class="name-object-orb"></span></div><div class="eyebrow">First, who are you?</div><h2>What should we call you?</h2><div class="field"><label>Your name</label><input id="name" autocomplete="name" placeholder="e.g. Amit"></div><div class="buttons"><button class="btn" onclick="nextName()">Continue <span class="arrow">→</span></button></div><button class="back" onclick="go(1)">← Back</button></section>
 
-<section class="screen" id="s3"><div class="eyebrow">The birthplace matters. Apparently.</div><h2>Where were you born?</h2><div class="field"><label>Place of birth</label><input id="place" placeholder="e.g. Bengaluru"></div><div class="buttons"><button class="btn" onclick="nextPlace()">Continue <span class="arrow">→</span></button></div><button class="back" onclick="go(2)">← Back</button></section>
+<section class="screen" id="s3"><div class="chapter-object map-object" aria-hidden="true"><span class="map-pin"></span><span class="map-orbit"></span><span class="map-dot"></span></div><div class="eyebrow">The birthplace matters. Apparently.</div><h2 id="placePrompt">Where were you born?</h2><div class="field"><label>Place of birth</label><input id="place" placeholder="e.g. Bengaluru"></div><div class="buttons"><button class="btn" onclick="nextPlace()">Continue <span class="arrow">→</span></button></div><button class="back" onclick="go(2)">← Back</button></section>
 
-<section class="screen" id="s4"><div class="eyebrow">The big one</div><h2>When did your story begin?</h2><div class="field"><label>Date of birth</label><input id="dob" type="date"></div><div class="note">Don’t have it handy? That’s okay. You can skip this.</div><div class="buttons" style="margin-top:20px"><button class="btn" onclick="generate()">Generate my Kundali <span>✦</span></button><button class="btn secondary" onclick="skipDob()">Enough that I’m still alive <span>→</span></button></div><button class="back" onclick="go(3)">← Back</button></section>
+<section class="screen" id="s4"><div class="chapter-object cake-object" aria-hidden="true"><div class="cake"><span class="flame f1"></span><span class="flame f2"></span><span class="flame f3"></span><i></i><i></i><i></i></div></div><div class="eyebrow">The big one</div><h2 id="dobTitle">When did your story begin?</h2><div class="field"><label>Date of birth</label><input id="dob" type="date"></div><div class="note">Don’t have it handy? That’s okay. You can skip this.</div><div class="buttons" style="margin-top:20px"><button class="btn" onclick="generate()">Generate my Kundali <span>✦</span></button><button class="btn secondary" onclick="skipDob()">Enough that I’m still alive <span>→</span></button></div><button class="back" onclick="go(3)">← Back</button></section>
 
 <section class="screen cosmic" id="s5">
-<div class="planet-scene"><div class="planet-system">
-  <div class="planet-orbit"><i class="planet"></i></div>
-  <div class="planet-orbit"><i class="planet p2"></i></div>
-  <div class="planet-orbit"><i class="planet p3"></i></div>
-  <div class="planet-orbit"><i class="planet p4"></i></div>
-  <div class="sun"></div>
-  <div class="zodiac-ring">♈　♉　♊　♋　♌　♍　♎　♏　♐　♑　♒　♓</div>
-</div></div>
-<div class="cosmic-copy"><div class="eyebrow">Consulting the stars</div><h2>Reading your design destiny...</h2><p>Aligning planets, houses and an entirely questionable amount of cosmic confidence.</p></div>
+<div class="observatory-scene" aria-hidden="true">
+  <div class="observatory-ring ring-a"></div>
+  <div class="observatory-ring ring-b"></div>
+  <div class="observatory-ring ring-c"></div>
+  <div class="observatory-axis axis-a"></div>
+  <div class="observatory-axis axis-b"></div>
+  <div class="observatory-needle"></div>
+  <div class="observatory-core"><span></span></div>
+  <div class="calibration-dot dot-a"></div>
+  <div class="calibration-dot dot-b"></div>
+  <div class="calibration-dot dot-c"></div>
+</div>
+<div class="cosmic-copy"><div class="eyebrow">Consulting the stars</div><h2>Reading your design destiny...</h2><p>Calibrating the chart, locating the houses and making a little room for doubt.</p></div>
 </section>
 
 <section class="screen" id="s6"><div class="eyebrow">One important question</div><h2>Do you still believe in it?</h2><p>Be honest. We promise the planets won’t judge.</p><div class="buttons"><button class="btn" onclick="believe(true)">Yes, I do <span>✦</span></button><button class="btn secondary" onclick="believe(false)">No, I don’t <span>↘</span></button></div></section>
 
-<section class="screen" id="s7"><div class="eyebrow">Your cosmic reading</div><div class="kundali-wrap"><div class="kundali"><div class="diag"></div><i class="symbol s1">☉</i><i class="symbol s2">☽</i><i class="symbol s3">♃</i><i class="symbol s4">♄</i><div class="orb">✦</div></div></div><h2 id="fakeTitle">The stars have spoken.</h2><p>According to your birth details, you have a natural tendency to connect ideas, make things clearer and eventually ask why everyone is doing it this way.</p><div class="report"><div class="report-title">Your cosmic reading</div><div class="report-sub">A playful interpretation of your birth details</div><div class="chips"><span class="chip">Creative</span><span class="chip">Curious</span><span class="chip">Independent</span></div><div class="grid"><div class="cell"><small>Career planet</small><strong>Mercury</strong></div><div class="cell"><small>Creative house</small><strong>Ideas</strong></div><div class="cell"><small>Rising influence</small><strong>Problem solving</strong></div><div class="cell"><small>Design element</small><strong>Air</strong></div></div></div><div style="margin-top:20px"><div class="buttons"><button class="btn" onclick="fakeReaction(true)">✓ That’s me</button><button class="btn secondary" onclick="fakeReaction(false)">✕ Not really</button></div></div></section>
+<section class="screen" id="s7"><div class="eyebrow">Your cosmic reading</div><div class="kundali-wrap"><div class="kundali"><div class="diag"></div><i class="symbol s1">I</i><i class="symbol s2">II</i><i class="symbol s3">III</i><i class="symbol s4">IV</i><div class="orb">K</div></div></div><h2 id="fakeTitle">The stars have spoken.</h2><p class="literary-intro">A little <em>jyotisha</em>, a little theatre. The chart offers a charming account of your <em>svabhava</em> - a supposed inclination toward making sense of complexity, shaping ideas and asking why the familiar must remain familiar.</p><div class="report parchment-report"><div class="report-title">Kundali of the Design Temperament</div><div class="report-sub">A playful reading · for entertainment, not divination</div><div class="sanskrit-note">पत्रम् प्रथमम् · The first reading</div><div class="chips"><span class="chip">Creative mind</span><span class="chip">Curious spirit</span><span class="chip">Independent hand</span></div><div class="grid"><div class="cell"><small>Graha · career influence</small><strong>Budha</strong><em>the messenger</em></div><div class="cell"><small>Bhava · creative house</small><strong>Ideas</strong><em>where thought takes form</em></div><div class="cell"><small>Udaya · rising tendency</small><strong>Problem solving</strong><em>to clarify, arrange, resolve</em></div><div class="cell"><small>Tattva · design element</small><strong>Vayu</strong><em>air, movement, possibility</em></div></div><div class="paper-rule"></div><p class="paper-footnote">Thus the chart declares: <em>you are inclined to make the complicated legible.</em> Whether this is wisdom or simply a flattering sentence, the stars remain politely silent.</p></div><div style="margin-top:20px"><div class="buttons"><button class="btn" onclick="fakeReaction(true)">That sounds like me <span>→</span></button><button class="btn secondary" onclick="fakeReaction(false)">Not quite <span>↘</span></button></div></div></section>
 
 <section class="screen" id="s8"><div class="eyebrow">Plot twist</div><h2 id="revealTitle">Whoa. You got lucky.</h2><p id="revealText">That reading wasn’t based on your career at all. It was deliberately generic. If it felt accurate, that says something interesting about how easily we can see ourselves in a prediction.</p><div class="reveal">Your career is a little less mystical. It leaves evidence - the work you’ve done, the skills you’ve built, the problems you’ve solved and the directions you keep moving toward.</div><h2 style="font-size:28px">So... luck or hard work?</h2><div class="buttons"><button class="btn" onclick="chooseWork(false)">I’ll take my luck <span>✦</span></button><button class="btn secondary" onclick="chooseWork(true)">Show me the hard work <span>→</span></button></div></section>
 
@@ -532,13 +583,13 @@ main:before{content:"";position:absolute;inset:24px 0 0;border:1px solid #c8aa63
 <script>
 let current=1;const total=10;
 function go(n){document.getElementById('s'+current).classList.remove('active');current=n;document.getElementById('s'+current).classList.add('active');document.getElementById('step').textContent=current===10?'Your real Kundali':current===1?'Design Kundali':current+' / '+total;window.scrollTo({top:0,behavior:'smooth'})}
-function nextName(){if(!document.getElementById('name').value.trim()){document.getElementById('name').focus();return}go(3)}
-function nextPlace(){if(!document.getElementById('place').value.trim()){document.getElementById('place').focus();return}go(4)}
+function nextName(){const name=document.getElementById('name').value.trim();if(!name){document.getElementById('name').focus();return}document.getElementById('placePrompt').textContent=name+', when you were born, where was it?';go(3)}
+function nextPlace(){const place=document.getElementById('place').value.trim();if(!place){document.getElementById('place').focus();return}const name=document.getElementById('name').value.trim();document.getElementById('dobTitle').textContent=name+', born in '+place+'. What date was that?';go(4)}
 function generate(){if(document.getElementById('dob').value) startGeneration();else skipDob()}
 function skipDob(){startGeneration()}
 function startGeneration(){go(5);setTimeout(()=>go(6),2200)}
 function believe(yes){if(yes)go(7);else go(9)}
-function fakeReaction(match){if(match){document.getElementById('revealTitle').textContent='Whoa. You got lucky. 😄';document.getElementById('revealText').textContent='That reading wasn’t based on your career at all. It was deliberately generic. If it felt accurate, that says something interesting about how easily we can see ourselves in a prediction.'}else{document.getElementById('revealTitle').textContent='Fair enough. The stars didn’t know much about you.';document.getElementById('revealText').textContent='Exactly. Birth details can make for a fun story, but they don’t tell us what you’ve actually learned, built or struggled through as a designer.'}go(8)}
+function fakeReaction(match){if(match){document.getElementById('revealTitle').textContent='Whoa. You got lucky.';document.getElementById('revealText').textContent='That reading wasn’t based on your career at all. It was deliberately generic. If it felt accurate, that says something interesting about how easily we can see ourselves in a prediction.'}else{document.getElementById('revealTitle').textContent='Fair enough. The stars didn’t know much about you.';document.getElementById('revealText').textContent='Exactly. Birth details can make for a fun story, but they don’t tell us what you’ve actually learned, built or struggled through as a designer.'}go(8)}
 function chooseWork(work){go(9);if(!work){document.getElementById('revealTitle').textContent='Fair. Keep the luck.';document.getElementById('revealText').textContent='But if you ever want to replace luck with something more useful, upload your resume. We’ll look at the evidence.'}}
 function analyze(){if(!document.getElementById('resume').files.length){document.getElementById('resume').click();return}go(5);setTimeout(()=>go(10),1800)}
 function exportPDF(){window.print()}
