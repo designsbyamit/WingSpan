@@ -20,8 +20,8 @@
   --gold2:#f0d78f;
   --line:#3b3a42;
   --accent:#e38b5f;
-  --serif:Georgia,"Times New Roman",Times,serif;
-  --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --serif:"Bodoni 72","Didot","Iowan Old Style","Baskerville","Times New Roman",serif;
+  --sans:"Avenir Next","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--white);font-family:var(--sans);color-scheme:dark}
@@ -187,6 +187,41 @@ p{color:#b8b8bd}
 .report:after{border-color:#c9a85d14}
 .chip{border-color:#c9a85d66;background:#c9a85d0d}
 @media(max-width:460px){.mystic-mark{height:215px}.mystic-ring{width:185px;height:185px}.mystic-ring.ring-inner{width:143px;height:143px}.chart-ticks{width:213px;height:213px}.planet-scene{height:255px}.planet-system{width:225px;height:225px}.zodiac-ring{font-size:9px;letter-spacing:2px;inset:-20px}}
+
+/* premium editorial typography */
+body{font-feature-settings:"liga","kern";-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.brand{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.34em}
+.step{font-family:var(--sans);font-size:9px;font-weight:500;letter-spacing:.24em;text-transform:uppercase}
+.eyebrow{font-family:var(--sans);font-size:8px;font-weight:700;letter-spacing:.24em;padding:8px 12px 7px}
+h1,h2{font-family:var(--serif);font-weight:400;font-variant-ligatures:common-ligatures;letter-spacing:-.045em}
+h1{font-size:clamp(56px,10vw,82px);line-height:.88;letter-spacing:-.055em;max-width:650px}
+h2{font-size:clamp(42px,7.5vw,60px);line-height:.91;letter-spacing:-.045em}
+p{font-family:var(--sans);font-size:16px;line-height:1.65;letter-spacing:-.008em;color:#bbb9be;max-width:560px}
+.field label,.note,.back{font-family:var(--sans)}
+.field label{font-size:8px;letter-spacing:.22em;font-weight:650}
+.field input{font-family:var(--sans);font-size:24px;font-weight:400;letter-spacing:-.015em}
+.btn{font-family:var(--sans);font-size:14px;letter-spacing:-.01em;font-weight:650}
+.btn .arrow{font-size:21px;font-weight:300}
+.cosmic h1,.cosmic h2{letter-spacing:-.055em}
+.cosmic-copy h2{font-size:clamp(42px,7.5vw,58px);line-height:.9}
+.cosmic-copy p{max-width:500px}
+.report-title{font-family:var(--serif);font-size:30px;line-height:1;letter-spacing:-.035em}
+.report-sub,.report:before{font-family:var(--sans);font-weight:500;letter-spacing:.16em}
+.cell small{font-family:var(--sans);font-size:8px;letter-spacing:.18em;font-weight:600}
+.cell strong{font-family:var(--serif);font-size:23px;letter-spacing:-.025em}
+.chip{font-family:var(--sans);font-size:8px;font-weight:650;letter-spacing:.14em}
+.meterline{font-family:var(--sans);font-size:10px;letter-spacing:.02em}
+.reveal,.footer{font-family:var(--sans)}
+.reveal{font-size:12px;line-height:1.65;letter-spacing:-.005em}
+.footer{font-size:10px;letter-spacing:.01em}
+.mystic-mark .om{font-family:var(--serif)}
+.celestial-core b{font-family:var(--serif);font-weight:400}
+.kundali .orb,.kundali .symbol{font-family:var(--serif)}
+@media(max-width:460px){
+ h1{font-size:clamp(50px,14vw,70px)}
+ h2{font-size:clamp(39px,10vw,52px)}
+ p{font-size:15px}
+}
 </style>
 </head>
 <body>
