@@ -393,6 +393,27 @@ main:before{content:"";position:absolute;inset:24px 0 0;border:1px solid #c8aa63
 #s1 .hero-sun:before{border-color:#e1c47b45}
 #s1 .hero-sun:after{background:#e0c67e20}
 #s1 .orbit-label:after{background:#d7bd7820}
+
+/* living orbital system - slow, elegant motion */
+#s1 .orbit{animation:orbitDrift 24s linear infinite}
+#s1 .orbit-1{animation-duration:11s}
+#s1 .orbit-2{animation-duration:17s;animation-direction:reverse}
+#s1 .orbit-3{animation-duration:24s}
+#s1 .orbit-4{animation-duration:34s;animation-direction:reverse}
+#s1 .orbit-5{animation-duration:48s}
+#s1 .planet{animation:planetGlow 3.8s ease-in-out infinite}
+#s1 .planet-b{animation-delay:-1.2s}
+#s1 .planet-c{animation-delay:-2.1s}
+#s1 .planet-d{animation-delay:-.6s}
+#s1 .planet-e{animation-delay:-2.8s}
+#s1 .hero-sun{animation:sunBreathe 5s ease-in-out infinite}
+@keyframes orbitDrift{from{transform:translate(-50%,-50%) rotate(-8deg)}to{transform:translate(-50%,-50%) rotate(352deg)}}
+@keyframes planetGlow{0%,100%{filter:brightness(.95);box-shadow:0 0 12px #d7bd7825}50%{filter:brightness(1.16);box-shadow:0 0 22px #d7bd7848}}
+@keyframes sunBreathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.045)}}
+@media(prefers-reduced-motion:reduce){
+ #s1 .orbit{animation:none}
+ #s1 .planet,#s1 .hero-sun{animation:none}
+}
 </style>
 </head>
 <body>
