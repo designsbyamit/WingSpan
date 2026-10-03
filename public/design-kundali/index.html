@@ -586,7 +586,7 @@ function nextName(){const name=document.getElementById('name').value.trim();if(!
 function nextPlace(){const place=document.getElementById('place').value.trim();if(!place){document.getElementById('place').focus();return}const name=document.getElementById('name').value.trim();document.getElementById('dobTitle').textContent=name+', born in '+place+'. What date was that?';go(4)}
 function generate(){startGeneration()}
 function skipDob(){startGeneration()}
-function startGeneration(){go(5);window.setTimeout(function(){go(6)},12000)}
+function startGeneration(){go(5);var started=Date.now();window.setTimeout(function(){if(current===5)go(6)},12000);window.setTimeout(function(){if(current===5)go(6)},19000)}
 function believe(yes){if(yes)go(7);else go(9)}
 function fakeReaction(match){if(match){document.getElementById('revealTitle').textContent='Whoa. You got lucky.';document.getElementById('revealText').textContent='That reading wasn’t based on your career at all. It was deliberately generic. If it felt accurate, that says something interesting about how easily we can see ourselves in a prediction.'}else{document.getElementById('revealTitle').textContent='Fair enough. The stars didn’t know much about you.';document.getElementById('revealText').textContent='Exactly. Birth details can make for a fun story, but they don’t tell us what you’ve actually learned, built or struggled through as a designer.'}go(8)}
 function chooseWork(work){go(9);if(!work){document.getElementById('revealTitle').textContent='Fair. Keep the luck.';document.getElementById('revealText').textContent='But if you ever want to replace luck with something more useful, upload your resume. We’ll look at the evidence.'}}
