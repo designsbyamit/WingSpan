@@ -1,4 +1,5 @@
 name: Deploy Design Kundali
+# Automatic deployment for the standalone conference experience
 
 on:
   push:
