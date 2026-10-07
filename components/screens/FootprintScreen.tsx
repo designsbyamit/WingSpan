@@ -277,7 +277,7 @@ export function FootprintScreen() {
                   Let's see what you've been building.
                 </h2>
                 <p className="text-sm text-[var(--text-secondary)]">
-                  Drop your resume here, or share a link to your portfolio. Both works great.
+                  Drop your resume here, or share a link to your portfolio. Either works great.
                 </p>
               </div>
 
@@ -323,7 +323,7 @@ export function FootprintScreen() {
                 <div className="flex items-center gap-2">
                   <Link2 size={13} className="text-[var(--neon)]" />
                   <span className="text-xs font-bold tracking-[2px] uppercase text-[var(--text-muted)]">Portfolio or Website</span>
-                  <span className="text-[10px] text-[var(--text-dim)]">— helps us understand you better</span>
+                  <span className="text-[10px] text-[var(--text-dim)]">helps us understand you better</span>
                 </div>
                 <input
                   type="url"
@@ -431,11 +431,11 @@ export function FootprintScreen() {
               </div>
 
               {/* Interest categories — scrollable */}
-              <div className="flex flex-col gap-4 max-h-[45vh] overflow-y-auto pr-1" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.1) transparent' }}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.1) transparent' }}>
                 {INTEREST_CATEGORIES.map(({ label, interests }) => {
                   const selectedInCategory = interests.filter(i => state.interests.includes(i)).length
                   return (
-                    <div key={label} className="flex flex-col gap-2">
+                    <div key={label} className="flex flex-col gap-2 rounded-[12px] border border-[var(--border-ws)] bg-[var(--surface)] p-3">
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)]">
                           {label}
