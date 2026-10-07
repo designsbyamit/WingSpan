@@ -72,6 +72,10 @@ export async function runCareerPipeline(
     }
   } catch (err) {
     console.error('Background pipeline error:', err)
+    dispatch({
+      type: 'SET_ERROR',
+      error: err instanceof Error ? err.message : 'Something went wrong while building your Blueprint.',
+    })
     dispatch({ type: 'SET_BLUEPRINT_LOADING', loading: false })
     dispatch({ type: 'SET_PIPELINE_STAGE', stage: null })
   }
