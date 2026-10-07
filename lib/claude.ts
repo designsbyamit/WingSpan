@@ -30,11 +30,11 @@ export async function extractCareerData(
   const groq = getGroq()
   const extractionMessages = [
       {
-        role: 'system',
+        role: 'system' as const,
         content: `You are an expert career data extraction engine. Your job is to extract EVERY piece of career information from a resume — missing a project or role is a critical failure. Be exhaustive and aggressive in your extraction.`,
       },
       {
-        role: 'user',
+        role: 'user' as const,
         content: `Extract ALL structured career information from the resume text below. Return ONLY valid JSON — no explanation, no markdown, no code fences.
 
 Return JSON matching this schema exactly:
