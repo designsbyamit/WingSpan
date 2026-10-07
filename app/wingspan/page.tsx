@@ -20,7 +20,7 @@ export default function WingspanPage() {
   return (
     <>
       {state.screen !== 'blueprint' && <TopNav />}
-      {screens[state.screen] ?? <FootprintScreen />}
+      {screens[state.screen as keyof typeof screens] ?? <FootprintScreen />}
     </>
   )
 }
