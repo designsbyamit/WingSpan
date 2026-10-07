@@ -17,7 +17,7 @@ const initialProgress: DiscoveryProgress = {
 }
 
 const initialState: WingspanState = {
-  screen: 'welcome',
+  screen: 'footprint',
   files: [],
   urls: {},
   interests: [],
