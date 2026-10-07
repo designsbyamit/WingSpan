@@ -95,6 +95,8 @@ ${urlContext ? `Profile URLs:\n${urlContext}` : ''}`,
   try {
     response = await groq.chat.completions.create({
       model: GROQ_MODEL,
+      temperature: 0,
+      response_format: { type: 'json_object' },
       messages: extractionMessages,
     })
   } catch (err) {
@@ -105,6 +107,8 @@ ${urlContext ? `Profile URLs:\n${urlContext}` : ''}`,
     console.warn(`Groq model ${GROQ_MODEL} unavailable. Retrying with ${GROQ_FALLBACK_MODEL}.`)
     response = await groq.chat.completions.create({
       model: GROQ_FALLBACK_MODEL,
+      temperature: 0,
+      response_format: { type: 'json_object' },
       messages: extractionMessages,
     })
   }
@@ -128,13 +132,56 @@ ${urlContext ? `Profile URLs:\n${urlContext}` : ''}`,
     while (stack.length > 0) clean += stack.pop()
   }
 
-  let json: Record<string, unknown> = {}
+  let json: Record<string, unknown> | null = null
   try {
-    json = JSON.parse(clean)
+    const parsed = JSON.parse(clean)
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+      json = parsed as Record<string, unknown>
+    }
   } catch {
-    console.error('extractCareerData: JSON parse failed, returning partial data')
+    // Try extracting the outermost JSON object if the provider wrapped it unexpectedly.
+    const first = clean.indexOf('{')
+    const last = clean.lastIndexOf('}')
+    if (first >= 0 && last > first) {
+      try {
+        const parsed = JSON.parse(clean.slice(first, last + 1))
+        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+          json = parsed as Record<string, unknown>
+        }
+      } catch {
+        // handled below
+      }
+    }
   }
-  return { ...json, rawText: rawText.slice(0, 4000) } as ExtractedCareerData
+
+  if (!json) {
+    throw new Error('Resume extraction returned invalid structured data. Please try the document again.')
+  }
+
+  const asArray = (value: unknown): unknown[] => Array.isArray(value) ? value : []
+  const timeline = asArray(json.timeline)
+  const projects = asArray(json.projects)
+  const skills = asArray(json.skills)
+  const education = asArray(json.education)
+  const careerStageSignals = asArray(json.careerStageSignals)
+  const geographySignals = asArray(json.geographySignals)
+  const footprintSignals = asArray(json.footprintSignals)
+
+  if (timeline.length === 0 && projects.length === 0 && skills.length === 0) {
+    throw new Error('We could not find enough career information in this document. Please upload a text-based resume or add a portfolio/LinkedIn link.')
+  }
+
+  return {
+    ...json,
+    timeline,
+    projects,
+    skills,
+    education,
+    careerStageSignals,
+    geographySignals,
+    footprintSignals,
+    rawText: rawText.slice(0, 4000),
+  } as ExtractedCareerData
 }
 
 // ── PDF Vision fallback: extract text from image-based PDFs using Claude ───
