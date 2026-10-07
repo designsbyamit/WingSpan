@@ -5,7 +5,8 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { ExtractedCareerData, Blueprint, ValidatedCareerData, CareerAlphaIntelligence } from '@/types/wingspan'
 
 // Groq — fast, used for extraction only
-const GROQ_MODEL = process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile'
+const GROQ_MODEL = process.env.GROQ_MODEL ?? 'openai/gpt-oss-120b'
+const GROQ_FALLBACK_MODEL = 'openai/gpt-oss-20b'
 function getGroq() { return new Groq({ apiKey: process.env.GROQ_API_KEY ?? '' }) }
 
 // Gemini — high quality, used for Blueprint analysis
@@ -26,9 +27,8 @@ export async function extractCareerData(
     .map(([k, v]) => `${k}: ${v}`)
     .join('\n')
 
-  const response = await getGroq().chat.completions.create({
-    model: GROQ_MODEL,
-    messages: [
+  const groq = getGroq()
+  const extractionMessages = [
       {
         role: 'system',
         content: `You are an expert career data extraction engine. Your job is to extract EVERY piece of career information from a resume — missing a project or role is a critical failure. Be exhaustive and aggressive in your extraction.`,
@@ -89,8 +89,25 @@ ${rawText}
 
 ${urlContext ? `Profile URLs:\n${urlContext}` : ''}`,
       },
-    ],
-  })
+    ]
+
+  let response
+  try {
+    response = await groq.chat.completions.create({
+      model: GROQ_MODEL,
+      messages: extractionMessages,
+    })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
+    const isModelError = message.includes('model_not_found') || message.includes('does not exist')
+    if (!isModelError || GROQ_MODEL === GROQ_FALLBACK_MODEL) throw err
+
+    console.warn(`Groq model ${GROQ_MODEL} unavailable. Retrying with ${GROQ_FALLBACK_MODEL}.`)
+    response = await groq.chat.completions.create({
+      model: GROQ_FALLBACK_MODEL,
+      messages: extractionMessages,
+    })
+  }
 
   const text = response.choices[0]?.message?.content ?? '{}'
   let clean = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
