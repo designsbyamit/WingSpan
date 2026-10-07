@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     const texts: string[] = []
     for (const file of files) {
       const buffer = Buffer.from(await file.arrayBuffer())
-      const text = await parseFile(buffer, file.name)
+      const text = await parseFile(buffer, file.name, file.type)
       texts.push(text)
     }
 
