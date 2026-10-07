@@ -19,7 +19,7 @@ export default function WingspanPage() {
 
   return (
     <>
-      <TopNav />
+      {state.screen !== 'blueprint' && <TopNav />}
       {screens[state.screen] ?? <FootprintScreen />}
     </>
   )
