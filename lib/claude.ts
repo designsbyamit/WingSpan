@@ -416,7 +416,7 @@ Never write sentences that would be equally true of any designer at the same car
 Your output is the first thing this person will read about their own career potential. Make it feel like it was written specifically for them — because it must be.`
 
   // Use unified router: Gemini → OpenRouter/DeepSeek → Groq
-  const { routeStream } = await import('@/lib/router')
+  const { routeStream, routeCall } = await import('@/lib/router')
 
   // Accumulate tokens while sending periodic progress pings
   let accumulated = ''
@@ -501,7 +501,7 @@ Your output is the first thing this person will read about their own career pote
     throw new Error('Blueprint generation was cut short. Please try again with a shorter resume or fewer projects.')
   }
 
-  if (blueprint.insights?.length > 0) {
+  // Defensive recovery for a valid Blueprint where the model omitted gap analysis.\n  // This does not alter Career Alpha, path scoring, recommendations, actions, or roadmap logic.\n  if (Array.isArray(blueprint.futurePaths) && blueprint.futurePaths.length > 0 && (!Array.isArray(blueprint.gaps) || blueprint.gaps.length === 0)) {\n    try {\n      const gapRecoveryPrompt = 'The Blueprint below is already final. Do not change any Future Path, Career Alpha result, recommendation, score, action, or roadmap. The only missing section is gaps. Generate at least one evidence-grounded capability gap for EACH Future Path. pathway must exactly match a Future Path title. Frame gaps as capability unlocks, not deficits. Use only supplied evidence.\n\nCareer evidence:\\nTimeline: ' + JSON.stringify(validatedData.timeline) + '\\nProjects: ' + JSON.stringify(validatedData.projects) + '\\nSkills: ' + JSON.stringify(validatedData.skills) + '\\nInterests: ' + JSON.stringify(validatedData.interests) + '\\n\\nFuture Paths:\\n' + JSON.stringify(blueprint.futurePaths) + '\\n\\nReturn ONLY JSON with a gaps array. Each gap must contain pathway, gapType, currentReadiness, futureReadiness, currentState, desiredState, requiredCapabilities, gapSize, whyItMatters, timeline, effort, howToClose, and objectives.';\n      const recovered = await routeCall('You are a precise career capability-gap analyst. Return only valid JSON. Never invent evidence.', gapRecoveryPrompt, 'blueprint', 4096);\n      const recoveredClean = recovered.replace(/^```(?:json)?\\n?/m, '').replace(/\\n?```$/m, '').trim();\n      const parsedRecovery = JSON.parse(recoveredClean) as { gaps?: Blueprint['gaps'] };\n      if (Array.isArray(parsedRecovery.gaps) && parsedRecovery.gaps.length > 0) blueprint.gaps = parsedRecovery.gaps;\n    } catch (recoveryError) {\n      console.warn('Gap analysis recovery failed:', recoveryError instanceof Error ? recoveryError.message : recoveryError);\n    }\n  }\n\n  if (blueprint.insights?.length > 0) {
     yield { type: 'observation', text: blueprint.insights[0] }
   }
 
