@@ -5,9 +5,23 @@ import { parseXlsx } from './xlsx'
 
 export async function parseFile(
   buffer: Buffer,
-  filename: string
+  filename: string,
+  mimeType = ''
 ): Promise<string> {
-  const ext = filename.split('.').pop()?.toLowerCase()
+  // Some browsers/mobile file providers can send an unreliable filename
+  // (for example "0") even though the MIME type is correct. Prefer the
+  // extension when it is trustworthy, then fall back to the MIME type.
+  const rawExt = filename.includes('.') ? filename.split('.').pop()?.toLowerCase() : ''
+  const mime = mimeType.toLowerCase()
+
+  const ext =
+    rawExt ||
+    (mime === 'application/pdf' ? 'pdf' : '') ||
+    (mime === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ? 'docx' : '') ||
+    (mime === 'text/plain' ? 'txt' : '') ||
+    (mime === 'text/csv' || mime === 'application/csv' ? 'csv' : '') ||
+    (mime === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ? 'xlsx' : '')
+
   switch (ext) {
     case 'pdf':
       return parsePdf(buffer)
@@ -19,6 +33,6 @@ export async function parseFile(
     case 'txt':
       return buffer.toString('utf-8')
     default:
-      throw new Error(`Unsupported file type: ${ext}`)
+      throw new Error('Unsupported file type: ' + (rawExt || mime || 'unknown'))
   }
 }
