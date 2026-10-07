@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Check, Pencil, X } from 'lucide-react'
+import { Check, Pencil, X, AlertTriangle } from 'lucide-react'
 import { useWingspan } from '@/context/WingspanContext'
 import { NeonButton } from '@/components/ui/NeonButton'
 import { ProgressBar } from '@/components/ui/ProgressBar'
@@ -51,6 +51,38 @@ export function ValidationScreen() {
           <h2 className="text-2xl font-semibold text-[var(--text-primary)] mt-2">Quick check before we continue.</h2>
           <p className="text-sm text-[var(--text-secondary)] mt-1">We pulled this from your resume. Fix anything that's off — it'll make your Blueprint more accurate.</p>
         </div>
+
+        {/* Findings snapshot */}
+        {extractedData && (
+          <div className="rounded-[12px] bg-[var(--surface)] border border-[var(--border-ws)] p-4">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-bold tracking-[2px] uppercase text-[var(--text-muted)]">Findings Snapshot</span>
+              <span className="text-[10px] text-[var(--text-dim)]">From your document</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { label: 'Roles', value: extractedData.timeline?.length ?? 0 },
+                { label: 'Projects', value: extractedData.projects?.length ?? 0 },
+                { label: 'Skills', value: extractedData.skills?.length ?? 0 },
+              ].map(({ label, value }) => (
+                <div key={label} className="rounded-[8px] bg-[var(--surface-dim)] border border-[var(--border-ws)] px-3 py-2.5">
+                  <div className="text-lg font-semibold text-[var(--text-primary)]">{value}</div>
+                  <div className="text-[10px] text-[var(--text-muted)]">{label} found</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {state.error && (
+          <div className="rounded-[10px] border border-red-400/20 bg-red-400/5 px-4 py-3 flex items-start gap-3">
+            <AlertTriangle size={15} className="text-red-300 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-xs font-semibold text-red-200">We hit a snag</p>
+              <p className="text-xs text-[var(--text-secondary)] mt-1 leading-relaxed">{state.error}</p>
+            </div>
+          </div>
+        )}
 
         {/* Timeline */}
         <div className="flex flex-col gap-2">
@@ -122,6 +154,13 @@ export function ValidationScreen() {
             </motion.div>
           ))}
         </div>
+
+          {(extractedData?.timeline ?? []).length === 0 && (
+            <div className="rounded-[10px] border border-[var(--border-ws)] bg-[var(--surface-dim)] px-4 py-5">
+              <p className="text-sm text-[var(--text-secondary)]">No career timeline could be confidently extracted yet.</p>
+              <p className="text-xs text-[var(--text-muted)] mt-1">We won't let an empty extraction silently pass into the next stage.</p>
+            </div>
+          )}
 
         {/* Confidence scores — skeleton while loading, real scores when ready */}
         {state.blueprintLoading && !state.blueprintReady && (
