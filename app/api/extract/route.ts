@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
     const urlsRaw = formData.get('urls') as string | null
     const urls: Record<string, string> = urlsRaw ? JSON.parse(urlsRaw) : {}
 
-    if (files.length === 0) {
-      return NextResponse.json({ error: 'No files provided' }, { status: 400 })
+    if (files.length === 0 && !Object.values(urls).some(Boolean)) {
+      return NextResponse.json({ error: 'Add a resume, portfolio, or profile link to continue.' }, { status: 400 })
     }
 
     const texts: string[] = []
