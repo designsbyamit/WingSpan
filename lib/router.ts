@@ -36,7 +36,7 @@ async function callOpenRouter(messages: ChatMessage[], model = 'deepseek/deepsee
 // have free-tier quota. A model that fails with quota/not-found is skipped for a
 // while so every later call doesn't pay for the same failure.
 
-const DEFAULT_GEMINI_FALLBACKS = ['gemini-3-flash-preview', 'gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash']
+const DEFAULT_GEMINI_FALLBACKS = ['gemini-3.8-flash', 'gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-3.5-flash-lite']
 const DEAD_MODEL_MS = 15 * 60 * 1000
 const deadModels = new Map<string, number>()
 
