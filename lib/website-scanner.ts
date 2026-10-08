@@ -1,5 +1,4 @@
 import { careerEvidenceToCareerAlphaInput, CareerEvidence, CareerEvidenceProject, EvidenceSource } from './career-evidence'
-import { routeCall } from './router'
 
 const MAX_PAGES = 10
 const MAX_SCREENSHOTS = 6
@@ -57,11 +56,18 @@ async function scanWithPlaywright(url: string, targets: string[]): Promise<Scann
 
   const browserWSEndpoint = process.env.PLAYWRIGHT_BROWSER_WS
   const executablePath = process.env.PLAYWRIGHT_EXECUTABLE_PATH
-  if (!browserWSEndpoint && !executablePath) return []
 
-  const browser = browserWSEndpoint
-    ? await chromium.connectOverCDP(browserWSEndpoint)
-    : await chromium.launch({ headless: true, executablePath, args: ['--no-sandbox', '--disable-dev-shm-usage'] })
+  let browser: any
+  if (browserWSEndpoint) {
+    browser = await chromium.connectOverCDP(browserWSEndpoint)
+  } else {
+    const serverlessChromium = await import('@sparticuz/chromium')
+    browser = await chromium.launch({
+      headless: true,
+      args: serverlessChromium.default.args,
+      executablePath: executablePath || await serverlessChromium.default.executablePath(),
+    })
+  }
 
   try {
     const context = await browser.newContext({
