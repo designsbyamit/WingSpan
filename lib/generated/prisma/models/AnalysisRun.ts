@@ -349,6 +349,7 @@ export type AnalysisRunWhereInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementListRelationFilter
   candidates?: Prisma.CareerCandidateListRelationFilter
   usage?: Prisma.UsageLedgerListRelationFilter
+  blueprintSnapshots?: Prisma.BlueprintSnapshotListRelationFilter
 }
 
 export type AnalysisRunOrderByWithRelationInput = {
@@ -381,6 +382,7 @@ export type AnalysisRunOrderByWithRelationInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementOrderByRelationAggregateInput
   candidates?: Prisma.CareerCandidateOrderByRelationAggregateInput
   usage?: Prisma.UsageLedgerOrderByRelationAggregateInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotOrderByRelationAggregateInput
 }
 
 export type AnalysisRunWhereUniqueInput = Prisma.AtLeast<{
@@ -416,6 +418,7 @@ export type AnalysisRunWhereUniqueInput = Prisma.AtLeast<{
   capabilityRequirements?: Prisma.CapabilityRequirementListRelationFilter
   candidates?: Prisma.CareerCandidateListRelationFilter
   usage?: Prisma.UsageLedgerListRelationFilter
+  blueprintSnapshots?: Prisma.BlueprintSnapshotListRelationFilter
 }, "id">
 
 export type AnalysisRunOrderByWithAggregationInput = {
@@ -501,6 +504,7 @@ export type AnalysisRunCreateInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunUncheckedCreateInput = {
@@ -532,6 +536,7 @@ export type AnalysisRunUncheckedCreateInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateUncheckedCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunUpdateInput = {
@@ -563,6 +568,7 @@ export type AnalysisRunUpdateInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunUncheckedUpdateInput = {
@@ -594,6 +600,7 @@ export type AnalysisRunUncheckedUpdateInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUncheckedUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunCreateManyInput = {
@@ -944,6 +951,22 @@ export type AnalysisRunUpdateOneWithoutUsageNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AnalysisRunUpdateToOneWithWhereWithoutUsageInput, Prisma.AnalysisRunUpdateWithoutUsageInput>, Prisma.AnalysisRunUncheckedUpdateWithoutUsageInput>
 }
 
+export type AnalysisRunCreateNestedOneWithoutBlueprintSnapshotsInput = {
+  create?: Prisma.XOR<Prisma.AnalysisRunCreateWithoutBlueprintSnapshotsInput, Prisma.AnalysisRunUncheckedCreateWithoutBlueprintSnapshotsInput>
+  connectOrCreate?: Prisma.AnalysisRunCreateOrConnectWithoutBlueprintSnapshotsInput
+  connect?: Prisma.AnalysisRunWhereUniqueInput
+}
+
+export type AnalysisRunUpdateOneWithoutBlueprintSnapshotsNestedInput = {
+  create?: Prisma.XOR<Prisma.AnalysisRunCreateWithoutBlueprintSnapshotsInput, Prisma.AnalysisRunUncheckedCreateWithoutBlueprintSnapshotsInput>
+  connectOrCreate?: Prisma.AnalysisRunCreateOrConnectWithoutBlueprintSnapshotsInput
+  upsert?: Prisma.AnalysisRunUpsertWithoutBlueprintSnapshotsInput
+  disconnect?: Prisma.AnalysisRunWhereInput | boolean
+  delete?: Prisma.AnalysisRunWhereInput | boolean
+  connect?: Prisma.AnalysisRunWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AnalysisRunUpdateToOneWithWhereWithoutBlueprintSnapshotsInput, Prisma.AnalysisRunUpdateWithoutBlueprintSnapshotsInput>, Prisma.AnalysisRunUncheckedUpdateWithoutBlueprintSnapshotsInput>
+}
+
 export type AnalysisRunCreateWithoutUserInput = {
   id?: string
   status?: $Enums.RunStatus
@@ -972,6 +995,7 @@ export type AnalysisRunCreateWithoutUserInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunUncheckedCreateWithoutUserInput = {
@@ -1002,6 +1026,7 @@ export type AnalysisRunUncheckedCreateWithoutUserInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateUncheckedCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunCreateOrConnectWithoutUserInput = {
@@ -1084,6 +1109,7 @@ export type AnalysisRunCreateWithoutAgentOutputsInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunUncheckedCreateWithoutAgentOutputsInput = {
@@ -1114,6 +1140,7 @@ export type AnalysisRunUncheckedCreateWithoutAgentOutputsInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateUncheckedCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunCreateOrConnectWithoutAgentOutputsInput = {
@@ -1160,6 +1187,7 @@ export type AnalysisRunUpdateWithoutAgentOutputsInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunUncheckedUpdateWithoutAgentOutputsInput = {
@@ -1190,6 +1218,7 @@ export type AnalysisRunUncheckedUpdateWithoutAgentOutputsInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUncheckedUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunCreateWithoutEvidenceInput = {
@@ -1220,6 +1249,7 @@ export type AnalysisRunCreateWithoutEvidenceInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunUncheckedCreateWithoutEvidenceInput = {
@@ -1250,6 +1280,7 @@ export type AnalysisRunUncheckedCreateWithoutEvidenceInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateUncheckedCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunCreateOrConnectWithoutEvidenceInput = {
@@ -1296,6 +1327,7 @@ export type AnalysisRunUpdateWithoutEvidenceInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunUncheckedUpdateWithoutEvidenceInput = {
@@ -1326,6 +1358,7 @@ export type AnalysisRunUncheckedUpdateWithoutEvidenceInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUncheckedUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunCreateWithoutCapabilitiesInput = {
@@ -1356,6 +1389,7 @@ export type AnalysisRunCreateWithoutCapabilitiesInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunUncheckedCreateWithoutCapabilitiesInput = {
@@ -1386,6 +1420,7 @@ export type AnalysisRunUncheckedCreateWithoutCapabilitiesInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateUncheckedCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunCreateOrConnectWithoutCapabilitiesInput = {
@@ -1432,6 +1467,7 @@ export type AnalysisRunUpdateWithoutCapabilitiesInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunUncheckedUpdateWithoutCapabilitiesInput = {
@@ -1462,6 +1498,7 @@ export type AnalysisRunUncheckedUpdateWithoutCapabilitiesInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUncheckedUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunCreateWithoutDnaInput = {
@@ -1492,6 +1529,7 @@ export type AnalysisRunCreateWithoutDnaInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunUncheckedCreateWithoutDnaInput = {
@@ -1522,6 +1560,7 @@ export type AnalysisRunUncheckedCreateWithoutDnaInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateUncheckedCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunCreateOrConnectWithoutDnaInput = {
@@ -1568,6 +1607,7 @@ export type AnalysisRunUpdateWithoutDnaInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunUncheckedUpdateWithoutDnaInput = {
@@ -1598,6 +1638,7 @@ export type AnalysisRunUncheckedUpdateWithoutDnaInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUncheckedUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunCreateWithoutMarketDirectionsInput = {
@@ -1628,6 +1669,7 @@ export type AnalysisRunCreateWithoutMarketDirectionsInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunUncheckedCreateWithoutMarketDirectionsInput = {
@@ -1658,6 +1700,7 @@ export type AnalysisRunUncheckedCreateWithoutMarketDirectionsInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateUncheckedCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunCreateOrConnectWithoutMarketDirectionsInput = {
@@ -1704,6 +1747,7 @@ export type AnalysisRunUpdateWithoutMarketDirectionsInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunUncheckedUpdateWithoutMarketDirectionsInput = {
@@ -1734,6 +1778,7 @@ export type AnalysisRunUncheckedUpdateWithoutMarketDirectionsInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUncheckedUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunCreateWithoutCapabilityRequirementsInput = {
@@ -1764,6 +1809,7 @@ export type AnalysisRunCreateWithoutCapabilityRequirementsInput = {
   marketDirections?: Prisma.MarketDirectionCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunUncheckedCreateWithoutCapabilityRequirementsInput = {
@@ -1794,6 +1840,7 @@ export type AnalysisRunUncheckedCreateWithoutCapabilityRequirementsInput = {
   marketDirections?: Prisma.MarketDirectionUncheckedCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateUncheckedCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunCreateOrConnectWithoutCapabilityRequirementsInput = {
@@ -1840,6 +1887,7 @@ export type AnalysisRunUpdateWithoutCapabilityRequirementsInput = {
   marketDirections?: Prisma.MarketDirectionUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunUncheckedUpdateWithoutCapabilityRequirementsInput = {
@@ -1870,6 +1918,7 @@ export type AnalysisRunUncheckedUpdateWithoutCapabilityRequirementsInput = {
   marketDirections?: Prisma.MarketDirectionUncheckedUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUncheckedUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunCreateWithoutCandidatesInput = {
@@ -1900,6 +1949,7 @@ export type AnalysisRunCreateWithoutCandidatesInput = {
   marketDirections?: Prisma.MarketDirectionCreateNestedManyWithoutRunInput
   capabilityRequirements?: Prisma.CapabilityRequirementCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunUncheckedCreateWithoutCandidatesInput = {
@@ -1930,6 +1980,7 @@ export type AnalysisRunUncheckedCreateWithoutCandidatesInput = {
   marketDirections?: Prisma.MarketDirectionUncheckedCreateNestedManyWithoutRunInput
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedCreateNestedManyWithoutRunInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunCreateOrConnectWithoutCandidatesInput = {
@@ -1976,6 +2027,7 @@ export type AnalysisRunUpdateWithoutCandidatesInput = {
   marketDirections?: Prisma.MarketDirectionUpdateManyWithoutRunNestedInput
   capabilityRequirements?: Prisma.CapabilityRequirementUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunUncheckedUpdateWithoutCandidatesInput = {
@@ -2006,6 +2058,7 @@ export type AnalysisRunUncheckedUpdateWithoutCandidatesInput = {
   marketDirections?: Prisma.MarketDirectionUncheckedUpdateManyWithoutRunNestedInput
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunCreateWithoutUsageInput = {
@@ -2036,6 +2089,7 @@ export type AnalysisRunCreateWithoutUsageInput = {
   marketDirections?: Prisma.MarketDirectionCreateNestedManyWithoutRunInput
   capabilityRequirements?: Prisma.CapabilityRequirementCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunUncheckedCreateWithoutUsageInput = {
@@ -2066,6 +2120,7 @@ export type AnalysisRunUncheckedCreateWithoutUsageInput = {
   marketDirections?: Prisma.MarketDirectionUncheckedCreateNestedManyWithoutRunInput
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedCreateNestedManyWithoutRunInput
   candidates?: Prisma.CareerCandidateUncheckedCreateNestedManyWithoutRunInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutAnalysisRunInput
 }
 
 export type AnalysisRunCreateOrConnectWithoutUsageInput = {
@@ -2112,6 +2167,7 @@ export type AnalysisRunUpdateWithoutUsageInput = {
   marketDirections?: Prisma.MarketDirectionUpdateManyWithoutRunNestedInput
   capabilityRequirements?: Prisma.CapabilityRequirementUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunUncheckedUpdateWithoutUsageInput = {
@@ -2142,6 +2198,147 @@ export type AnalysisRunUncheckedUpdateWithoutUsageInput = {
   marketDirections?: Prisma.MarketDirectionUncheckedUpdateManyWithoutRunNestedInput
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUncheckedUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutAnalysisRunNestedInput
+}
+
+export type AnalysisRunCreateWithoutBlueprintSnapshotsInput = {
+  id?: string
+  status?: $Enums.RunStatus
+  isWorking?: boolean
+  versionLabel?: string | null
+  savedAt?: Date | string | null
+  pipelineVersion: string
+  formulaVersion: string
+  weights: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  models?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  tokensIn?: number | null
+  tokensOut?: number | null
+  costMicros?: number | null
+  durationMs?: number | null
+  confidence?: number | null
+  failedStage?: $Enums.AgentName | null
+  error?: string | null
+  validationNotes?: Prisma.AnalysisRunCreatevalidationNotesInput | string[]
+  createdAt?: Date | string
+  completedAt?: Date | string | null
+  user: Prisma.UserCreateNestedOneWithoutAnalysisRunsInput
+  agentOutputs?: Prisma.AgentOutputCreateNestedManyWithoutRunInput
+  evidence?: Prisma.EvidenceCreateNestedManyWithoutRunInput
+  capabilities?: Prisma.CapabilityCreateNestedManyWithoutRunInput
+  dna?: Prisma.CareerDnaSnapshotCreateNestedOneWithoutRunInput
+  marketDirections?: Prisma.MarketDirectionCreateNestedManyWithoutRunInput
+  capabilityRequirements?: Prisma.CapabilityRequirementCreateNestedManyWithoutRunInput
+  candidates?: Prisma.CareerCandidateCreateNestedManyWithoutRunInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutRunInput
+}
+
+export type AnalysisRunUncheckedCreateWithoutBlueprintSnapshotsInput = {
+  id?: string
+  userId: string
+  status?: $Enums.RunStatus
+  isWorking?: boolean
+  versionLabel?: string | null
+  savedAt?: Date | string | null
+  pipelineVersion: string
+  formulaVersion: string
+  weights: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  models?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  tokensIn?: number | null
+  tokensOut?: number | null
+  costMicros?: number | null
+  durationMs?: number | null
+  confidence?: number | null
+  failedStage?: $Enums.AgentName | null
+  error?: string | null
+  validationNotes?: Prisma.AnalysisRunCreatevalidationNotesInput | string[]
+  createdAt?: Date | string
+  completedAt?: Date | string | null
+  agentOutputs?: Prisma.AgentOutputUncheckedCreateNestedManyWithoutRunInput
+  evidence?: Prisma.EvidenceUncheckedCreateNestedManyWithoutRunInput
+  capabilities?: Prisma.CapabilityUncheckedCreateNestedManyWithoutRunInput
+  dna?: Prisma.CareerDnaSnapshotUncheckedCreateNestedOneWithoutRunInput
+  marketDirections?: Prisma.MarketDirectionUncheckedCreateNestedManyWithoutRunInput
+  capabilityRequirements?: Prisma.CapabilityRequirementUncheckedCreateNestedManyWithoutRunInput
+  candidates?: Prisma.CareerCandidateUncheckedCreateNestedManyWithoutRunInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutRunInput
+}
+
+export type AnalysisRunCreateOrConnectWithoutBlueprintSnapshotsInput = {
+  where: Prisma.AnalysisRunWhereUniqueInput
+  create: Prisma.XOR<Prisma.AnalysisRunCreateWithoutBlueprintSnapshotsInput, Prisma.AnalysisRunUncheckedCreateWithoutBlueprintSnapshotsInput>
+}
+
+export type AnalysisRunUpsertWithoutBlueprintSnapshotsInput = {
+  update: Prisma.XOR<Prisma.AnalysisRunUpdateWithoutBlueprintSnapshotsInput, Prisma.AnalysisRunUncheckedUpdateWithoutBlueprintSnapshotsInput>
+  create: Prisma.XOR<Prisma.AnalysisRunCreateWithoutBlueprintSnapshotsInput, Prisma.AnalysisRunUncheckedCreateWithoutBlueprintSnapshotsInput>
+  where?: Prisma.AnalysisRunWhereInput
+}
+
+export type AnalysisRunUpdateToOneWithWhereWithoutBlueprintSnapshotsInput = {
+  where?: Prisma.AnalysisRunWhereInput
+  data: Prisma.XOR<Prisma.AnalysisRunUpdateWithoutBlueprintSnapshotsInput, Prisma.AnalysisRunUncheckedUpdateWithoutBlueprintSnapshotsInput>
+}
+
+export type AnalysisRunUpdateWithoutBlueprintSnapshotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRunStatusFieldUpdateOperationsInput | $Enums.RunStatus
+  isWorking?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versionLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pipelineVersion?: Prisma.StringFieldUpdateOperationsInput | string
+  formulaVersion?: Prisma.StringFieldUpdateOperationsInput | string
+  weights?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  models?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  tokensIn?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tokensOut?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  costMicros?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  failedStage?: Prisma.NullableEnumAgentNameFieldUpdateOperationsInput | $Enums.AgentName | null
+  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  validationNotes?: Prisma.AnalysisRunUpdatevalidationNotesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutAnalysisRunsNestedInput
+  agentOutputs?: Prisma.AgentOutputUpdateManyWithoutRunNestedInput
+  evidence?: Prisma.EvidenceUpdateManyWithoutRunNestedInput
+  capabilities?: Prisma.CapabilityUpdateManyWithoutRunNestedInput
+  dna?: Prisma.CareerDnaSnapshotUpdateOneWithoutRunNestedInput
+  marketDirections?: Prisma.MarketDirectionUpdateManyWithoutRunNestedInput
+  capabilityRequirements?: Prisma.CapabilityRequirementUpdateManyWithoutRunNestedInput
+  candidates?: Prisma.CareerCandidateUpdateManyWithoutRunNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutRunNestedInput
+}
+
+export type AnalysisRunUncheckedUpdateWithoutBlueprintSnapshotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRunStatusFieldUpdateOperationsInput | $Enums.RunStatus
+  isWorking?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  versionLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  savedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pipelineVersion?: Prisma.StringFieldUpdateOperationsInput | string
+  formulaVersion?: Prisma.StringFieldUpdateOperationsInput | string
+  weights?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  models?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  tokensIn?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  tokensOut?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  costMicros?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  confidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  failedStage?: Prisma.NullableEnumAgentNameFieldUpdateOperationsInput | $Enums.AgentName | null
+  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  validationNotes?: Prisma.AnalysisRunUpdatevalidationNotesInput | string[]
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  agentOutputs?: Prisma.AgentOutputUncheckedUpdateManyWithoutRunNestedInput
+  evidence?: Prisma.EvidenceUncheckedUpdateManyWithoutRunNestedInput
+  capabilities?: Prisma.CapabilityUncheckedUpdateManyWithoutRunNestedInput
+  dna?: Prisma.CareerDnaSnapshotUncheckedUpdateOneWithoutRunNestedInput
+  marketDirections?: Prisma.MarketDirectionUncheckedUpdateManyWithoutRunNestedInput
+  capabilityRequirements?: Prisma.CapabilityRequirementUncheckedUpdateManyWithoutRunNestedInput
+  candidates?: Prisma.CareerCandidateUncheckedUpdateManyWithoutRunNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutRunNestedInput
 }
 
 export type AnalysisRunCreateManyUserInput = {
@@ -2194,6 +2391,7 @@ export type AnalysisRunUpdateWithoutUserInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunUncheckedUpdateWithoutUserInput = {
@@ -2224,6 +2422,7 @@ export type AnalysisRunUncheckedUpdateWithoutUserInput = {
   capabilityRequirements?: Prisma.CapabilityRequirementUncheckedUpdateManyWithoutRunNestedInput
   candidates?: Prisma.CareerCandidateUncheckedUpdateManyWithoutRunNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutRunNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutAnalysisRunNestedInput
 }
 
 export type AnalysisRunUncheckedUpdateManyWithoutUserInput = {
@@ -2261,6 +2460,7 @@ export type AnalysisRunCountOutputType = {
   capabilityRequirements: number
   candidates: number
   usage: number
+  blueprintSnapshots: number
 }
 
 export type AnalysisRunCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2271,6 +2471,7 @@ export type AnalysisRunCountOutputTypeSelect<ExtArgs extends runtime.Types.Exten
   capabilityRequirements?: boolean | AnalysisRunCountOutputTypeCountCapabilityRequirementsArgs
   candidates?: boolean | AnalysisRunCountOutputTypeCountCandidatesArgs
   usage?: boolean | AnalysisRunCountOutputTypeCountUsageArgs
+  blueprintSnapshots?: boolean | AnalysisRunCountOutputTypeCountBlueprintSnapshotsArgs
 }
 
 /**
@@ -2332,6 +2533,13 @@ export type AnalysisRunCountOutputTypeCountUsageArgs<ExtArgs extends runtime.Typ
   where?: Prisma.UsageLedgerWhereInput
 }
 
+/**
+ * AnalysisRunCountOutputType without action
+ */
+export type AnalysisRunCountOutputTypeCountBlueprintSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BlueprintSnapshotWhereInput
+}
+
 
 export type AnalysisRunSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2363,6 +2571,7 @@ export type AnalysisRunSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   capabilityRequirements?: boolean | Prisma.AnalysisRun$capabilityRequirementsArgs<ExtArgs>
   candidates?: boolean | Prisma.AnalysisRun$candidatesArgs<ExtArgs>
   usage?: boolean | Prisma.AnalysisRun$usageArgs<ExtArgs>
+  blueprintSnapshots?: boolean | Prisma.AnalysisRun$blueprintSnapshotsArgs<ExtArgs>
   _count?: boolean | Prisma.AnalysisRunCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["analysisRun"]>
 
@@ -2448,6 +2657,7 @@ export type AnalysisRunInclude<ExtArgs extends runtime.Types.Extensions.Internal
   capabilityRequirements?: boolean | Prisma.AnalysisRun$capabilityRequirementsArgs<ExtArgs>
   candidates?: boolean | Prisma.AnalysisRun$candidatesArgs<ExtArgs>
   usage?: boolean | Prisma.AnalysisRun$usageArgs<ExtArgs>
+  blueprintSnapshots?: boolean | Prisma.AnalysisRun$blueprintSnapshotsArgs<ExtArgs>
   _count?: boolean | Prisma.AnalysisRunCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AnalysisRunIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2469,6 +2679,7 @@ export type $AnalysisRunPayload<ExtArgs extends runtime.Types.Extensions.Interna
     capabilityRequirements: Prisma.$CapabilityRequirementPayload<ExtArgs>[]
     candidates: Prisma.$CareerCandidatePayload<ExtArgs>[]
     usage: Prisma.$UsageLedgerPayload<ExtArgs>[]
+    blueprintSnapshots: Prisma.$BlueprintSnapshotPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2894,6 +3105,7 @@ export interface Prisma__AnalysisRunClient<T, Null = never, ExtArgs extends runt
   capabilityRequirements<T extends Prisma.AnalysisRun$capabilityRequirementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AnalysisRun$capabilityRequirementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CapabilityRequirementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   candidates<T extends Prisma.AnalysisRun$candidatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AnalysisRun$candidatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CareerCandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   usage<T extends Prisma.AnalysisRun$usageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AnalysisRun$usageArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UsageLedgerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  blueprintSnapshots<T extends Prisma.AnalysisRun$blueprintSnapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.AnalysisRun$blueprintSnapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlueprintSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3528,6 +3740,30 @@ export type AnalysisRun$usageArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.UsageLedgerScalarFieldEnum | Prisma.UsageLedgerScalarFieldEnum[]
+}
+
+/**
+ * AnalysisRun.blueprintSnapshots
+ */
+export type AnalysisRun$blueprintSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BlueprintSnapshot
+   */
+  select?: Prisma.BlueprintSnapshotSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BlueprintSnapshot
+   */
+  omit?: Prisma.BlueprintSnapshotOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlueprintSnapshotInclude<ExtArgs> | null
+  where?: Prisma.BlueprintSnapshotWhereInput
+  orderBy?: Prisma.BlueprintSnapshotOrderByWithRelationInput | Prisma.BlueprintSnapshotOrderByWithRelationInput[]
+  cursor?: Prisma.BlueprintSnapshotWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BlueprintSnapshotScalarFieldEnum | Prisma.BlueprintSnapshotScalarFieldEnum[]
 }
 
 /**

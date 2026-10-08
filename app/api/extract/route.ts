@@ -3,6 +3,9 @@ import { parseFile } from '@/lib/parsers'
 import { mockExtractedData } from '@/lib/mock-data'
 import { normalizeCareerEvidence, scanWebsiteToCareerEvidence } from '@/lib/website-scanner'
 import { buildCareerInputBundle, CareerInputSource } from '@/lib/career-input'
+import { getSession } from '@/lib/auth'
+import { saveIngestion } from '@/lib/ingestion-store'
+import type { IngestSource } from '@/lib/ingestion-mapping'
 
 export const maxDuration = 120
 
@@ -40,11 +43,13 @@ export async function POST(req: NextRequest) {
     const texts: string[] = []
     const documentTexts: Array<{ filename: string; text: string }> = []
     const sources: CareerInputSource[] = []
+    const fileMeta = new Map<string, { sizeBytes: number; mimeType: string }>()
 
     for (const file of files) {
       const buffer = Buffer.from(await file.arrayBuffer())
       const text = await parseFile(buffer, file.name, file.type)
 
+      fileMeta.set(file.name, { sizeBytes: file.size, mimeType: file.type })
       if (text.trim()) {
         texts.push(`[UPLOADED DOCUMENT: ${file.name}]\n${text}`)
         documentTexts.push({ filename: file.name, text })
@@ -76,6 +81,17 @@ export async function POST(req: NextRequest) {
       bundle.careerAlpha.rawText,
       ...texts,
     ].filter(Boolean).join('\n\n').slice(0, 20000)
+
+    // Signed-in users: remember what was found. Never blocks or fails the extraction.
+    const session = await getSession().catch(() => null)
+    if (session) {
+      const ingestSources: IngestSource[] = sources.map((s) => ({
+        kind: s.kind, name: s.name, url: s.url, text: s.text, ...fileMeta.get(s.name),
+      }))
+      await saveIngestion(session.userId, ingestSources, bundle.careerAlpha).catch((e) =>
+        console.error('Ingestion save failed:', e),
+      )
+    }
 
     return NextResponse.json({
       ...bundle.careerAlpha,

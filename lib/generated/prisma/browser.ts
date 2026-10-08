@@ -327,3 +327,8 @@ export type Feedback = Prisma.FeedbackModel
  * 
  */
 export type UsageLedger = Prisma.UsageLedgerModel
+/**
+ * Model BlueprintSnapshot
+ * 
+ */
+export type BlueprintSnapshot = Prisma.BlueprintSnapshotModel

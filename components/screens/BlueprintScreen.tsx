@@ -9,6 +9,7 @@ import { CareerIntelligence } from '@/components/blueprint/CareerIntelligence'
 import { PathSelection } from '@/components/blueprint/PathSelection'
 import { GapAnalysis } from '@/components/blueprint/GapAnalysis'
 import { GrowthRoadmap } from '@/components/blueprint/GrowthRoadmap'
+import { BlueprintVersions } from '@/components/blueprint/BlueprintVersions'
 import { Resources } from '@/components/blueprint/Resources'
 import { Blueprint, BlueprintStep, ExtractedCareerData } from '@/types/wingspan'
 
@@ -99,9 +100,12 @@ export function BlueprintScreen() {
             >
               Future Self Blueprint™
             </span>
-            <span className="text-[10px] text-[var(--text-muted)]">
-              {currentStepIdx + 1} / {STEPS.length}
-            </span>
+            <div className="flex items-center gap-3">
+              <BlueprintVersions />
+              <span className="text-[10px] text-[var(--text-muted)]">
+                {currentStepIdx + 1} / {STEPS.length}
+              </span>
+            </div>
           </div>
           <StepNav
             currentStep={currentStep}

@@ -313,6 +313,7 @@ export type UserWhereInput = {
   auditEvents?: Prisma.AuditEventListRelationFilter
   feedback?: Prisma.FeedbackListRelationFilter
   usage?: Prisma.UsageLedgerListRelationFilter
+  blueprintSnapshots?: Prisma.BlueprintSnapshotListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -351,6 +352,7 @@ export type UserOrderByWithRelationInput = {
   auditEvents?: Prisma.AuditEventOrderByRelationAggregateInput
   feedback?: Prisma.FeedbackOrderByRelationAggregateInput
   usage?: Prisma.UsageLedgerOrderByRelationAggregateInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -392,6 +394,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   auditEvents?: Prisma.AuditEventListRelationFilter
   feedback?: Prisma.FeedbackListRelationFilter
   usage?: Prisma.UsageLedgerListRelationFilter
+  blueprintSnapshots?: Prisma.BlueprintSnapshotListRelationFilter
 }, "id" | "email" | "phone">
 
 export type UserOrderByWithAggregationInput = {
@@ -471,6 +474,7 @@ export type UserCreateInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -508,6 +512,7 @@ export type UserUncheckedCreateInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -545,6 +550,7 @@ export type UserUpdateInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -582,6 +588,7 @@ export type UserUncheckedUpdateInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -1045,6 +1052,20 @@ export type UserUpdateOneRequiredWithoutUsageNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUsageInput, Prisma.UserUpdateWithoutUsageInput>, Prisma.UserUncheckedUpdateWithoutUsageInput>
 }
 
+export type UserCreateNestedOneWithoutBlueprintSnapshotsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBlueprintSnapshotsInput, Prisma.UserUncheckedCreateWithoutBlueprintSnapshotsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBlueprintSnapshotsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutBlueprintSnapshotsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBlueprintSnapshotsInput, Prisma.UserUncheckedCreateWithoutBlueprintSnapshotsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBlueprintSnapshotsInput
+  upsert?: Prisma.UserUpsertWithoutBlueprintSnapshotsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBlueprintSnapshotsInput, Prisma.UserUpdateWithoutBlueprintSnapshotsInput>, Prisma.UserUncheckedUpdateWithoutBlueprintSnapshotsInput>
+}
+
 export type UserCreateWithoutCareerLevelInput = {
   id?: string
   email: string
@@ -1079,6 +1100,7 @@ export type UserCreateWithoutCareerLevelInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCareerLevelInput = {
@@ -1115,6 +1137,7 @@ export type UserUncheckedCreateWithoutCareerLevelInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCareerLevelInput = {
@@ -1197,6 +1220,7 @@ export type UserCreateWithoutMagicLinkTokensInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMagicLinkTokensInput = {
@@ -1233,6 +1257,7 @@ export type UserUncheckedCreateWithoutMagicLinkTokensInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMagicLinkTokensInput = {
@@ -1285,6 +1310,7 @@ export type UserUpdateWithoutMagicLinkTokensInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMagicLinkTokensInput = {
@@ -1321,6 +1347,7 @@ export type UserUncheckedUpdateWithoutMagicLinkTokensInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCompetenciesInput = {
@@ -1357,6 +1384,7 @@ export type UserCreateWithoutCompetenciesInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCompetenciesInput = {
@@ -1393,6 +1421,7 @@ export type UserUncheckedCreateWithoutCompetenciesInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCompetenciesInput = {
@@ -1445,6 +1474,7 @@ export type UserUpdateWithoutCompetenciesInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCompetenciesInput = {
@@ -1481,6 +1511,7 @@ export type UserUncheckedUpdateWithoutCompetenciesInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSkillsInput = {
@@ -1517,6 +1548,7 @@ export type UserCreateWithoutSkillsInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSkillsInput = {
@@ -1553,6 +1585,7 @@ export type UserUncheckedCreateWithoutSkillsInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSkillsInput = {
@@ -1605,6 +1638,7 @@ export type UserUpdateWithoutSkillsInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSkillsInput = {
@@ -1641,6 +1675,7 @@ export type UserUncheckedUpdateWithoutSkillsInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutConceptMasteriesInput = {
@@ -1677,6 +1712,7 @@ export type UserCreateWithoutConceptMasteriesInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutConceptMasteriesInput = {
@@ -1713,6 +1749,7 @@ export type UserUncheckedCreateWithoutConceptMasteriesInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutConceptMasteriesInput = {
@@ -1765,6 +1802,7 @@ export type UserUpdateWithoutConceptMasteriesInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConceptMasteriesInput = {
@@ -1801,6 +1839,7 @@ export type UserUncheckedUpdateWithoutConceptMasteriesInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLearningSessionsInput = {
@@ -1837,6 +1876,7 @@ export type UserCreateWithoutLearningSessionsInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLearningSessionsInput = {
@@ -1873,6 +1913,7 @@ export type UserUncheckedCreateWithoutLearningSessionsInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLearningSessionsInput = {
@@ -1925,6 +1966,7 @@ export type UserUpdateWithoutLearningSessionsInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLearningSessionsInput = {
@@ -1961,6 +2003,7 @@ export type UserUncheckedUpdateWithoutLearningSessionsInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLearningPathsInput = {
@@ -1997,6 +2040,7 @@ export type UserCreateWithoutLearningPathsInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLearningPathsInput = {
@@ -2033,6 +2077,7 @@ export type UserUncheckedCreateWithoutLearningPathsInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLearningPathsInput = {
@@ -2085,6 +2130,7 @@ export type UserUpdateWithoutLearningPathsInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLearningPathsInput = {
@@ -2121,6 +2167,7 @@ export type UserUncheckedUpdateWithoutLearningPathsInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAiMentorContextInput = {
@@ -2157,6 +2204,7 @@ export type UserCreateWithoutAiMentorContextInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAiMentorContextInput = {
@@ -2193,6 +2241,7 @@ export type UserUncheckedCreateWithoutAiMentorContextInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAiMentorContextInput = {
@@ -2245,6 +2294,7 @@ export type UserUpdateWithoutAiMentorContextInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAiMentorContextInput = {
@@ -2281,6 +2331,7 @@ export type UserUncheckedUpdateWithoutAiMentorContextInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSubmissionsInput = {
@@ -2317,6 +2368,7 @@ export type UserCreateWithoutSubmissionsInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -2353,6 +2405,7 @@ export type UserUncheckedCreateWithoutSubmissionsInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -2405,6 +2458,7 @@ export type UserUpdateWithoutSubmissionsInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -2441,6 +2495,7 @@ export type UserUncheckedUpdateWithoutSubmissionsInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSourceDocumentsInput = {
@@ -2477,6 +2532,7 @@ export type UserCreateWithoutSourceDocumentsInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSourceDocumentsInput = {
@@ -2513,6 +2569,7 @@ export type UserUncheckedCreateWithoutSourceDocumentsInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSourceDocumentsInput = {
@@ -2565,6 +2622,7 @@ export type UserUpdateWithoutSourceDocumentsInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSourceDocumentsInput = {
@@ -2601,6 +2659,7 @@ export type UserUncheckedUpdateWithoutSourceDocumentsInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRolesInput = {
@@ -2637,6 +2696,7 @@ export type UserCreateWithoutRolesInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRolesInput = {
@@ -2673,6 +2733,7 @@ export type UserUncheckedCreateWithoutRolesInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRolesInput = {
@@ -2725,6 +2786,7 @@ export type UserUpdateWithoutRolesInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRolesInput = {
@@ -2761,6 +2823,7 @@ export type UserUncheckedUpdateWithoutRolesInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutProjectsInput = {
@@ -2797,6 +2860,7 @@ export type UserCreateWithoutProjectsInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProjectsInput = {
@@ -2833,6 +2897,7 @@ export type UserUncheckedCreateWithoutProjectsInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProjectsInput = {
@@ -2885,6 +2950,7 @@ export type UserUpdateWithoutProjectsInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProjectsInput = {
@@ -2921,6 +2987,7 @@ export type UserUncheckedUpdateWithoutProjectsInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutEducationsInput = {
@@ -2957,6 +3024,7 @@ export type UserCreateWithoutEducationsInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEducationsInput = {
@@ -2993,6 +3061,7 @@ export type UserUncheckedCreateWithoutEducationsInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEducationsInput = {
@@ -3045,6 +3114,7 @@ export type UserUpdateWithoutEducationsInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEducationsInput = {
@@ -3081,6 +3151,7 @@ export type UserUncheckedUpdateWithoutEducationsInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSkillClaimsInput = {
@@ -3117,6 +3188,7 @@ export type UserCreateWithoutSkillClaimsInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSkillClaimsInput = {
@@ -3153,6 +3225,7 @@ export type UserUncheckedCreateWithoutSkillClaimsInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSkillClaimsInput = {
@@ -3205,6 +3278,7 @@ export type UserUpdateWithoutSkillClaimsInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSkillClaimsInput = {
@@ -3241,6 +3315,7 @@ export type UserUncheckedUpdateWithoutSkillClaimsInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAnalysisRunsInput = {
@@ -3277,6 +3352,7 @@ export type UserCreateWithoutAnalysisRunsInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAnalysisRunsInput = {
@@ -3313,6 +3389,7 @@ export type UserUncheckedCreateWithoutAnalysisRunsInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAnalysisRunsInput = {
@@ -3365,6 +3442,7 @@ export type UserUpdateWithoutAnalysisRunsInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAnalysisRunsInput = {
@@ -3401,6 +3479,7 @@ export type UserUncheckedUpdateWithoutAnalysisRunsInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutChosenBetsInput = {
@@ -3437,6 +3516,7 @@ export type UserCreateWithoutChosenBetsInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutChosenBetsInput = {
@@ -3473,6 +3553,7 @@ export type UserUncheckedCreateWithoutChosenBetsInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutChosenBetsInput = {
@@ -3525,6 +3606,7 @@ export type UserUpdateWithoutChosenBetsInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutChosenBetsInput = {
@@ -3561,6 +3643,7 @@ export type UserUncheckedUpdateWithoutChosenBetsInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRoadmapsInput = {
@@ -3597,6 +3680,7 @@ export type UserCreateWithoutRoadmapsInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRoadmapsInput = {
@@ -3633,6 +3717,7 @@ export type UserUncheckedCreateWithoutRoadmapsInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRoadmapsInput = {
@@ -3685,6 +3770,7 @@ export type UserUpdateWithoutRoadmapsInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRoadmapsInput = {
@@ -3721,6 +3807,7 @@ export type UserUncheckedUpdateWithoutRoadmapsInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCapabilityProgressInput = {
@@ -3757,6 +3844,7 @@ export type UserCreateWithoutCapabilityProgressInput = {
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCapabilityProgressInput = {
@@ -3793,6 +3881,7 @@ export type UserUncheckedCreateWithoutCapabilityProgressInput = {
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCapabilityProgressInput = {
@@ -3845,6 +3934,7 @@ export type UserUpdateWithoutCapabilityProgressInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCapabilityProgressInput = {
@@ -3881,6 +3971,7 @@ export type UserUncheckedUpdateWithoutCapabilityProgressInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAuditEventsInput = {
@@ -3917,6 +4008,7 @@ export type UserCreateWithoutAuditEventsInput = {
   capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuditEventsInput = {
@@ -3953,6 +4045,7 @@ export type UserUncheckedCreateWithoutAuditEventsInput = {
   capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuditEventsInput = {
@@ -4005,6 +4098,7 @@ export type UserUpdateWithoutAuditEventsInput = {
   capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditEventsInput = {
@@ -4041,6 +4135,7 @@ export type UserUncheckedUpdateWithoutAuditEventsInput = {
   capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutFeedbackInput = {
@@ -4077,6 +4172,7 @@ export type UserCreateWithoutFeedbackInput = {
   capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutFeedbackInput = {
@@ -4113,6 +4209,7 @@ export type UserUncheckedCreateWithoutFeedbackInput = {
   capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutFeedbackInput = {
@@ -4165,6 +4262,7 @@ export type UserUpdateWithoutFeedbackInput = {
   capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFeedbackInput = {
@@ -4201,6 +4299,7 @@ export type UserUncheckedUpdateWithoutFeedbackInput = {
   capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutUsageInput = {
@@ -4237,6 +4336,7 @@ export type UserCreateWithoutUsageInput = {
   capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutUsageInput = {
@@ -4273,6 +4373,7 @@ export type UserUncheckedCreateWithoutUsageInput = {
   capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
   auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
   feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutUsageInput = {
@@ -4325,6 +4426,7 @@ export type UserUpdateWithoutUsageInput = {
   capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUsageInput = {
@@ -4361,6 +4463,171 @@ export type UserUncheckedUpdateWithoutUsageInput = {
   capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutBlueprintSnapshotsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
+  magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutBlueprintSnapshotsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  careerLevelId?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutBlueprintSnapshotsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBlueprintSnapshotsInput, Prisma.UserUncheckedCreateWithoutBlueprintSnapshotsInput>
+}
+
+export type UserUpsertWithoutBlueprintSnapshotsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBlueprintSnapshotsInput, Prisma.UserUncheckedUpdateWithoutBlueprintSnapshotsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBlueprintSnapshotsInput, Prisma.UserUncheckedCreateWithoutBlueprintSnapshotsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBlueprintSnapshotsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBlueprintSnapshotsInput, Prisma.UserUncheckedUpdateWithoutBlueprintSnapshotsInput>
+}
+
+export type UserUpdateWithoutBlueprintSnapshotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
+  magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBlueprintSnapshotsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyCareerLevelInput = {
@@ -4413,6 +4680,7 @@ export type UserUpdateWithoutCareerLevelInput = {
   auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCareerLevelInput = {
@@ -4449,6 +4717,7 @@ export type UserUncheckedUpdateWithoutCareerLevelInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutCareerLevelInput = {
@@ -4492,6 +4761,7 @@ export type UserCountOutputType = {
   auditEvents: number
   feedback: number
   usage: number
+  blueprintSnapshots: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4514,6 +4784,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   auditEvents?: boolean | UserCountOutputTypeCountAuditEventsArgs
   feedback?: boolean | UserCountOutputTypeCountFeedbackArgs
   usage?: boolean | UserCountOutputTypeCountUsageArgs
+  blueprintSnapshots?: boolean | UserCountOutputTypeCountBlueprintSnapshotsArgs
 }
 
 /**
@@ -4659,6 +4930,13 @@ export type UserCountOutputTypeCountUsageArgs<ExtArgs extends runtime.Types.Exte
   where?: Prisma.UsageLedgerWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountBlueprintSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BlueprintSnapshotWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -4696,6 +4974,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   auditEvents?: boolean | Prisma.User$auditEventsArgs<ExtArgs>
   feedback?: boolean | Prisma.User$feedbackArgs<ExtArgs>
   usage?: boolean | Prisma.User$usageArgs<ExtArgs>
+  blueprintSnapshots?: boolean | Prisma.User$blueprintSnapshotsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -4775,6 +5054,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   auditEvents?: boolean | Prisma.User$auditEventsArgs<ExtArgs>
   feedback?: boolean | Prisma.User$feedbackArgs<ExtArgs>
   usage?: boolean | Prisma.User$usageArgs<ExtArgs>
+  blueprintSnapshots?: boolean | Prisma.User$blueprintSnapshotsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -4808,6 +5088,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
     feedback: Prisma.$FeedbackPayload<ExtArgs>[]
     usage: Prisma.$UsageLedgerPayload<ExtArgs>[]
+    blueprintSnapshots: Prisma.$BlueprintSnapshotPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -5239,6 +5520,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   auditEvents<T extends Prisma.User$auditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   feedback<T extends Prisma.User$feedbackArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$feedbackArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   usage<T extends Prisma.User$usageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$usageArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UsageLedgerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  blueprintSnapshots<T extends Prisma.User$blueprintSnapshotsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blueprintSnapshotsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BlueprintSnapshotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6174,6 +6456,30 @@ export type User$usageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   distinct?: Prisma.UsageLedgerScalarFieldEnum | Prisma.UsageLedgerScalarFieldEnum[]
+}
+
+/**
+ * User.blueprintSnapshots
+ */
+export type User$blueprintSnapshotsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BlueprintSnapshot
+   */
+  select?: Prisma.BlueprintSnapshotSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BlueprintSnapshot
+   */
+  omit?: Prisma.BlueprintSnapshotOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BlueprintSnapshotInclude<ExtArgs> | null
+  where?: Prisma.BlueprintSnapshotWhereInput
+  orderBy?: Prisma.BlueprintSnapshotOrderByWithRelationInput | Prisma.BlueprintSnapshotOrderByWithRelationInput[]
+  cursor?: Prisma.BlueprintSnapshotWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BlueprintSnapshotScalarFieldEnum | Prisma.BlueprintSnapshotScalarFieldEnum[]
 }
 
 /**

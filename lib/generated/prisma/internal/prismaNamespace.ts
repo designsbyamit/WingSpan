@@ -458,7 +458,8 @@ export const ModelName = {
   UserCapabilityProgress: 'UserCapabilityProgress',
   AuditEvent: 'AuditEvent',
   Feedback: 'Feedback',
-  UsageLedger: 'UsageLedger'
+  UsageLedger: 'UsageLedger',
+  BlueprintSnapshot: 'BlueprintSnapshot'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -474,7 +475,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "domain" | "humanPattern" | "competency" | "skill" | "concept" | "conceptPrerequisite" | "principle" | "experience" | "challenge" | "asset" | "careerLevel" | "learningPath" | "learningPathEntry" | "conceptOnSkill" | "conceptOnHumanPattern" | "conceptOnPrinciple" | "conceptOnExperience" | "skillOnCompetency" | "skillOnCareerLevel" | "experienceOnCompetency" | "experienceOnHumanPattern" | "experienceOnPrinciple" | "challengeOnSkill" | "challengeOnCompetency" | "user" | "magicLinkToken" | "userCompetency" | "userSkill" | "userConceptMastery" | "learningSession" | "mentorMessage" | "userLearningPath" | "aIMentorContext" | "challengeSubmission" | "sourceDocument" | "extractionRun" | "role" | "project" | "education" | "skillClaim" | "analysisRun" | "agentOutput" | "evidence" | "evidenceLink" | "capability" | "capabilityEvidence" | "careerDnaSnapshot" | "dnaDimension" | "dnaDimensionEvidence" | "marketDirection" | "marketSignal" | "capabilityRequirement" | "careerCandidate" | "candidateEvidence" | "chosenBet" | "roadmap" | "roadmapMilestone" | "milestoneLink" | "userCapabilityProgress" | "auditEvent" | "feedback" | "usageLedger"
+    modelProps: "domain" | "humanPattern" | "competency" | "skill" | "concept" | "conceptPrerequisite" | "principle" | "experience" | "challenge" | "asset" | "careerLevel" | "learningPath" | "learningPathEntry" | "conceptOnSkill" | "conceptOnHumanPattern" | "conceptOnPrinciple" | "conceptOnExperience" | "skillOnCompetency" | "skillOnCareerLevel" | "experienceOnCompetency" | "experienceOnHumanPattern" | "experienceOnPrinciple" | "challengeOnSkill" | "challengeOnCompetency" | "user" | "magicLinkToken" | "userCompetency" | "userSkill" | "userConceptMastery" | "learningSession" | "mentorMessage" | "userLearningPath" | "aIMentorContext" | "challengeSubmission" | "sourceDocument" | "extractionRun" | "role" | "project" | "education" | "skillClaim" | "analysisRun" | "agentOutput" | "evidence" | "evidenceLink" | "capability" | "capabilityEvidence" | "careerDnaSnapshot" | "dnaDimension" | "dnaDimensionEvidence" | "marketDirection" | "marketSignal" | "capabilityRequirement" | "careerCandidate" | "candidateEvidence" | "chosenBet" | "roadmap" | "roadmapMilestone" | "milestoneLink" | "userCapabilityProgress" | "auditEvent" | "feedback" | "usageLedger" | "blueprintSnapshot"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -5066,6 +5067,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    BlueprintSnapshot: {
+      payload: Prisma.$BlueprintSnapshotPayload<ExtArgs>
+      fields: Prisma.BlueprintSnapshotFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BlueprintSnapshotFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlueprintSnapshotPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BlueprintSnapshotFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlueprintSnapshotPayload>
+        }
+        findFirst: {
+          args: Prisma.BlueprintSnapshotFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlueprintSnapshotPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BlueprintSnapshotFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlueprintSnapshotPayload>
+        }
+        findMany: {
+          args: Prisma.BlueprintSnapshotFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlueprintSnapshotPayload>[]
+        }
+        create: {
+          args: Prisma.BlueprintSnapshotCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlueprintSnapshotPayload>
+        }
+        createMany: {
+          args: Prisma.BlueprintSnapshotCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BlueprintSnapshotCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlueprintSnapshotPayload>[]
+        }
+        delete: {
+          args: Prisma.BlueprintSnapshotDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlueprintSnapshotPayload>
+        }
+        update: {
+          args: Prisma.BlueprintSnapshotUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlueprintSnapshotPayload>
+        }
+        deleteMany: {
+          args: Prisma.BlueprintSnapshotDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BlueprintSnapshotUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BlueprintSnapshotUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlueprintSnapshotPayload>[]
+        }
+        upsert: {
+          args: Prisma.BlueprintSnapshotUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BlueprintSnapshotPayload>
+        }
+        aggregate: {
+          args: Prisma.BlueprintSnapshotAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBlueprintSnapshot>
+        }
+        groupBy: {
+          args: Prisma.BlueprintSnapshotGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlueprintSnapshotGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BlueprintSnapshotCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BlueprintSnapshotCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -5916,6 +5991,23 @@ export const UsageLedgerScalarFieldEnum = {
 export type UsageLedgerScalarFieldEnum = (typeof UsageLedgerScalarFieldEnum)[keyof typeof UsageLedgerScalarFieldEnum]
 
 
+export const BlueprintSnapshotScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  isWorking: 'isWorking',
+  label: 'label',
+  savedAt: 'savedAt',
+  blueprint: 'blueprint',
+  extractedData: 'extractedData',
+  selectedPath: 'selectedPath',
+  analysisRunId: 'analysisRunId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BlueprintSnapshotScalarFieldEnum = (typeof BlueprintSnapshotScalarFieldEnum)[keyof typeof BlueprintSnapshotScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -6539,6 +6631,7 @@ export type GlobalOmitConfig = {
   auditEvent?: Prisma.AuditEventOmit
   feedback?: Prisma.FeedbackOmit
   usageLedger?: Prisma.UsageLedgerOmit
+  blueprintSnapshot?: Prisma.BlueprintSnapshotOmit
 }
 
 /* Types for Logging */

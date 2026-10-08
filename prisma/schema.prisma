@@ -361,6 +361,7 @@ model User {
   auditEvents        AuditEvent[]
   feedback           Feedback[]
   usage              UsageLedger[]
+  blueprintSnapshots BlueprintSnapshot[]
 
   @@index([careerLevelId])
 }
@@ -801,6 +802,7 @@ model AnalysisRun {
   capabilityRequirements CapabilityRequirement[]
   candidates             CareerCandidate[]
   usage                  UsageLedger[]
+  blueprintSnapshots     BlueprintSnapshot[]
 
   @@index([userId, createdAt])
   @@index([userId, savedAt])
@@ -1166,4 +1168,30 @@ model UsageLedger {
 
   @@index([userId, createdAt])
   @@index([runId])
+}
+
+// ──────────────────────────────────────────────
+// E. BLUEPRINT VERSIONS
+//
+// What the user sees on the Blueprint screen. The working snapshot is autosaved and replaced as they go;
+// "Save version" keeps a labelled copy. One working snapshot per user is a partial unique index in the migration.
+// ──────────────────────────────────────────────
+
+model BlueprintSnapshot {
+  id            String       @id @default(cuid())
+  userId        String
+  isWorking     Boolean      @default(true)
+  label         String?
+  savedAt       DateTime?
+  blueprint     Json
+  extractedData Json?
+  selectedPath  String?
+  analysisRunId String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  analysisRun   AnalysisRun? @relation(fields: [analysisRunId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([analysisRunId])
 }

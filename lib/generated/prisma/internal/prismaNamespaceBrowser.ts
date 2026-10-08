@@ -112,7 +112,8 @@ export const ModelName = {
   UserCapabilityProgress: 'UserCapabilityProgress',
   AuditEvent: 'AuditEvent',
   Feedback: 'Feedback',
-  UsageLedger: 'UsageLedger'
+  UsageLedger: 'UsageLedger',
+  BlueprintSnapshot: 'BlueprintSnapshot'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -940,6 +941,23 @@ export const UsageLedgerScalarFieldEnum = {
 } as const
 
 export type UsageLedgerScalarFieldEnum = (typeof UsageLedgerScalarFieldEnum)[keyof typeof UsageLedgerScalarFieldEnum]
+
+
+export const BlueprintSnapshotScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  isWorking: 'isWorking',
+  label: 'label',
+  savedAt: 'savedAt',
+  blueprint: 'blueprint',
+  extractedData: 'extractedData',
+  selectedPath: 'selectedPath',
+  analysisRunId: 'analysisRunId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BlueprintSnapshotScalarFieldEnum = (typeof BlueprintSnapshotScalarFieldEnum)[keyof typeof BlueprintSnapshotScalarFieldEnum]
 
 
 export const SortOrder = {
