@@ -41,6 +41,7 @@ export async function runCareerPipeline(
     if (!reader) throw new Error('No response body')
 
     let buffer = ''
+    let completed = false
     while (true) {
       const { done, value } = await reader.read()
       if (done) break
@@ -64,7 +65,9 @@ export async function runCareerPipeline(
           } else if (event.type === 'complete') {
             dispatch({ type: 'SET_VALIDATED_DATA', data: validatedData })
             dispatch({ type: 'SET_BLUEPRINT_BACKGROUND', blueprint: { ...(event.blueprint as object), careerAlpha } as Blueprint })
+            completed = true
             dispatch({ type: 'SET_SCREEN', screen: 'blueprint' })
+            return
           } else if (event.type === 'error') {
             throw new Error(event.error as string)
           }
@@ -72,15 +75,17 @@ export async function runCareerPipeline(
       }
     }
 
-    throw new Error('Blueprint generation ended before a complete result was received.')
+    if (!completed) {
+      throw new Error('Blueprint generation ended before a complete result was received.')
+    }
   } catch (err) {
     console.error('Background pipeline error:', err)
+    dispatch({ type: 'SET_BLUEPRINT_LOADING', loading: false })
+    dispatch({ type: 'SET_PIPELINE_STAGE', stage: null })
+    dispatch({ type: 'SET_SCREEN', screen: 'footprint' })
     dispatch({
       type: 'SET_ERROR',
       error: err instanceof Error ? err.message : 'Something went wrong while building your Blueprint.',
     })
-    dispatch({ type: 'SET_BLUEPRINT_LOADING', loading: false })
-    dispatch({ type: 'SET_PIPELINE_STAGE', stage: null })
-    dispatch({ type: 'SET_SCREEN', screen: 'footprint' })
   }
 }
