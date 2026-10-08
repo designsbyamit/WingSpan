@@ -53,7 +53,7 @@ export async function routeCall(
   // Extraction always uses Groq (fast, cheap)
   if (task === 'extraction') {
     const response = await getGroq().chat.completions.create({
-      model: process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile',
+      model: process.env.GROQ_MODEL ?? 'openai/gpt-oss-120b',
       max_tokens: maxTokens,
       messages: [
         { role: 'system', content: systemPrompt },
@@ -87,7 +87,7 @@ export async function routeCall(
 
   // Final fallback: Groq
   const response = await getGroq().chat.completions.create({
-    model: process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile',
+    model: process.env.GROQ_MODEL ?? 'openai/gpt-oss-120b',
     max_tokens: maxTokens,
     messages: [
       { role: 'system', content: systemPrompt },
@@ -169,7 +169,7 @@ export async function* routeStream(
 
   // Groq fallback streaming
   const stream = await getGroq().chat.completions.create({
-    model: process.env.GROQ_MODEL ?? 'llama-3.3-70b-versatile',
+    model: process.env.GROQ_MODEL ?? 'openai/gpt-oss-120b',
     max_tokens: 8000,
     stream: true,
     messages: [
