@@ -202,12 +202,7 @@ export async function inspectPortfolioUrl(input: string, companionUrls: Record<s
     canonicalUrl: pages[0].url, pages, confidence: acceptedConfidence,
     signals: []
   }
-  return {
-    valid: true, reason: 'valid',
-    message: 'Portfolio link accepted. We will analyse the work we can read from it.',
-    canonicalUrl: pages[0].url, pages, confidence: acceptedConfidence,
-    signals: [...(aiDecision.evidence ?? []), ...(aiDecision.identitySignals ?? [])]
-  }
+
 }
 
 export function portfolioToText(inspection: PortfolioInspection) {
