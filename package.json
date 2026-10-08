@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "tsx --test lib/career-scoring.test.ts lib/agent-contracts.test.ts"
+    "test": "tsx --test lib/career-scoring.test.ts lib/agent-contracts.test.ts lib/analysis-mapping.test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",

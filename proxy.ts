@@ -15,6 +15,7 @@ const PUBLIC_PATHS = [
   '/api/auth/signup',
   '/api/auth/login',
   '/api/health',
+  '/api/cron', // enforces its own bearer secret (CRON_SECRET)
   '/privacy',
   '/terms',
   '/wingspan',

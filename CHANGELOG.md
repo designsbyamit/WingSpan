@@ -17,8 +17,17 @@ Blueprint areas 7, 15 and 19: deterministic scoring and schema contracts. Career
 - Missing numbers are rejected rather than turned into 0. Unknown enum labels fall back to the lowest-claim value (`core`, `weak_signal`, `current`, `uncertain`). A bare capability name keeps its name with score 0 and confidence 0.
 - `zod` is now a direct dependency (it was only installed as a peer of other packages).
 
+### Database (career intelligence)
+- 28 new tables: ingestion (`SourceDocument`, `ExtractionRun`, `Role`, `Project`, `Education`, `SkillClaim`), analysis runs (`AnalysisRun`, `AgentOutput`, `Evidence`, `Capability`, `CareerDnaSnapshot`, `DnaDimension`, `MarketDirection`, `MarketSignal`, `CapabilityRequirement`, `CareerCandidate`, join tables), decisions and roadmap (`ChosenBet`, `Roadmap`, `RoadmapMilestone`, `MilestoneLink`, `UserCapabilityProgress`) and hygiene (`AuditEvent`, `Feedback`, `UsageLedger`).
+- Re-analysis replaces the user's working run by default. "Save as version" (`POST /api/v02/runs/[id]/save`) keeps it, up to 20 versions. Raw agent output is purged after 90 days (daily cron, `CRON_SECRET` required); the structured tables are kept.
+- Every candidate links to the evidence behind it. Evidence ids invented by a model are dropped rather than stored.
+- A user's choices (`ChosenBet`) live outside the run so a re-run never overwrites them.
+- Integrity fixes (backfilled, no rows dropped): enums for experience, challenge and asset types; `LearningPathEntry` and `LearningSession` use typed `experienceId` / `conceptId` / `challengeId` instead of `entityType` / `entityId` (CHECK: exactly one target); `(learningPathId, order)` unique; asset tags `TEXT[]`; mentor context JSONB; mentor chat moved to `MentorMessage`; duplicate `lastSeen` removed; `User.deletedAt`; indexes on every foreign key; cascade delete from `User`.
+- `scripts/prisma_ddl.py` generates DDL and a schema fingerprint where the Prisma schema engine cannot be downloaded.
+- Staging builds only migrate when the database endpoint equals `STAGING_DB_HOST_ALLOW`.
+
 ### Tooling and deployment
-- `npm test` runs 26 unit tests for scoring and contracts.
+- `npm test` runs 38 unit tests for scoring, contracts and database row mapping.
 - Staging: `scripts/vercel-build.sh` runs `prisma migrate deploy` only for production builds. See `docs/STAGING.md`.
 - `package-lock.json` now includes `@sparticuz/chromium` and `playwright-core`, which were already in `package.json`.
 

@@ -20,3 +20,14 @@ The branch alias `wing-span-git-staging-<team>.vercel.app` is created automatica
 
 ## Workflow
 patch on `staging` > commit > push > wait for the Preview deployment to be READY > check build logs if it fails > verify the flow > only then consider promoting.
+
+## Database migrations on staging
+
+Preview builds skip `prisma migrate deploy` by default. To let the `staging` branch migrate its own database, set these Preview-scoped variables for branch `staging` in Vercel:
+
+- `STAGING_ALLOW_MIGRATE=1`
+- `STAGING_DB_HOST_ALLOW=<endpoint id of the preview/staging Neon branch>` (for example `ep-restless-poetry-azm9akje`; not a secret)
+
+The build prints the database endpoint it was given and refuses to migrate unless it matches `STAGING_DB_HOST_ALLOW`, so a preview can never migrate the live database. Production builds (`VERCEL_ENV=production`) always run `prisma migrate deploy`.
+
+Production also needs `CRON_SECRET` set for the daily purge of raw agent output (`/api/cron/purge-agent-output`).
