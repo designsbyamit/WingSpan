@@ -38,24 +38,27 @@ export type LearningPathEntryMinAggregateOutputType = {
   id: string | null
   learningPathId: string | null
   order: number | null
-  entityType: string | null
-  entityId: string | null
+  conceptId: string | null
+  experienceId: string | null
+  challengeId: string | null
 }
 
 export type LearningPathEntryMaxAggregateOutputType = {
   id: string | null
   learningPathId: string | null
   order: number | null
-  entityType: string | null
-  entityId: string | null
+  conceptId: string | null
+  experienceId: string | null
+  challengeId: string | null
 }
 
 export type LearningPathEntryCountAggregateOutputType = {
   id: number
   learningPathId: number
   order: number
-  entityType: number
-  entityId: number
+  conceptId: number
+  experienceId: number
+  challengeId: number
   _all: number
 }
 
@@ -72,24 +75,27 @@ export type LearningPathEntryMinAggregateInputType = {
   id?: true
   learningPathId?: true
   order?: true
-  entityType?: true
-  entityId?: true
+  conceptId?: true
+  experienceId?: true
+  challengeId?: true
 }
 
 export type LearningPathEntryMaxAggregateInputType = {
   id?: true
   learningPathId?: true
   order?: true
-  entityType?: true
-  entityId?: true
+  conceptId?: true
+  experienceId?: true
+  challengeId?: true
 }
 
 export type LearningPathEntryCountAggregateInputType = {
   id?: true
   learningPathId?: true
   order?: true
-  entityType?: true
-  entityId?: true
+  conceptId?: true
+  experienceId?: true
+  challengeId?: true
   _all?: true
 }
 
@@ -183,8 +189,9 @@ export type LearningPathEntryGroupByOutputType = {
   id: string
   learningPathId: string
   order: number
-  entityType: string
-  entityId: string
+  conceptId: string | null
+  experienceId: string | null
+  challengeId: string | null
   _count: LearningPathEntryCountAggregateOutputType | null
   _avg: LearningPathEntryAvgAggregateOutputType | null
   _sum: LearningPathEntrySumAggregateOutputType | null
@@ -214,38 +221,52 @@ export type LearningPathEntryWhereInput = {
   id?: Prisma.StringFilter<"LearningPathEntry"> | string
   learningPathId?: Prisma.StringFilter<"LearningPathEntry"> | string
   order?: Prisma.IntFilter<"LearningPathEntry"> | number
-  entityType?: Prisma.StringFilter<"LearningPathEntry"> | string
-  entityId?: Prisma.StringFilter<"LearningPathEntry"> | string
+  conceptId?: Prisma.StringNullableFilter<"LearningPathEntry"> | string | null
+  experienceId?: Prisma.StringNullableFilter<"LearningPathEntry"> | string | null
+  challengeId?: Prisma.StringNullableFilter<"LearningPathEntry"> | string | null
   learningPath?: Prisma.XOR<Prisma.LearningPathScalarRelationFilter, Prisma.LearningPathWhereInput>
+  concept?: Prisma.XOR<Prisma.ConceptNullableScalarRelationFilter, Prisma.ConceptWhereInput> | null
+  experience?: Prisma.XOR<Prisma.ExperienceNullableScalarRelationFilter, Prisma.ExperienceWhereInput> | null
+  challenge?: Prisma.XOR<Prisma.ChallengeNullableScalarRelationFilter, Prisma.ChallengeWhereInput> | null
 }
 
 export type LearningPathEntryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   learningPathId?: Prisma.SortOrder
   order?: Prisma.SortOrder
-  entityType?: Prisma.SortOrder
-  entityId?: Prisma.SortOrder
+  conceptId?: Prisma.SortOrderInput | Prisma.SortOrder
+  experienceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  challengeId?: Prisma.SortOrderInput | Prisma.SortOrder
   learningPath?: Prisma.LearningPathOrderByWithRelationInput
+  concept?: Prisma.ConceptOrderByWithRelationInput
+  experience?: Prisma.ExperienceOrderByWithRelationInput
+  challenge?: Prisma.ChallengeOrderByWithRelationInput
 }
 
 export type LearningPathEntryWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  learningPathId_order?: Prisma.LearningPathEntryLearningPathIdOrderCompoundUniqueInput
   AND?: Prisma.LearningPathEntryWhereInput | Prisma.LearningPathEntryWhereInput[]
   OR?: Prisma.LearningPathEntryWhereInput[]
   NOT?: Prisma.LearningPathEntryWhereInput | Prisma.LearningPathEntryWhereInput[]
   learningPathId?: Prisma.StringFilter<"LearningPathEntry"> | string
   order?: Prisma.IntFilter<"LearningPathEntry"> | number
-  entityType?: Prisma.StringFilter<"LearningPathEntry"> | string
-  entityId?: Prisma.StringFilter<"LearningPathEntry"> | string
+  conceptId?: Prisma.StringNullableFilter<"LearningPathEntry"> | string | null
+  experienceId?: Prisma.StringNullableFilter<"LearningPathEntry"> | string | null
+  challengeId?: Prisma.StringNullableFilter<"LearningPathEntry"> | string | null
   learningPath?: Prisma.XOR<Prisma.LearningPathScalarRelationFilter, Prisma.LearningPathWhereInput>
-}, "id">
+  concept?: Prisma.XOR<Prisma.ConceptNullableScalarRelationFilter, Prisma.ConceptWhereInput> | null
+  experience?: Prisma.XOR<Prisma.ExperienceNullableScalarRelationFilter, Prisma.ExperienceWhereInput> | null
+  challenge?: Prisma.XOR<Prisma.ChallengeNullableScalarRelationFilter, Prisma.ChallengeWhereInput> | null
+}, "id" | "learningPathId_order">
 
 export type LearningPathEntryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   learningPathId?: Prisma.SortOrder
   order?: Prisma.SortOrder
-  entityType?: Prisma.SortOrder
-  entityId?: Prisma.SortOrder
+  conceptId?: Prisma.SortOrderInput | Prisma.SortOrder
+  experienceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  challengeId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.LearningPathEntryCountOrderByAggregateInput
   _avg?: Prisma.LearningPathEntryAvgOrderByAggregateInput
   _max?: Prisma.LearningPathEntryMaxOrderByAggregateInput
@@ -260,63 +281,68 @@ export type LearningPathEntryScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"LearningPathEntry"> | string
   learningPathId?: Prisma.StringWithAggregatesFilter<"LearningPathEntry"> | string
   order?: Prisma.IntWithAggregatesFilter<"LearningPathEntry"> | number
-  entityType?: Prisma.StringWithAggregatesFilter<"LearningPathEntry"> | string
-  entityId?: Prisma.StringWithAggregatesFilter<"LearningPathEntry"> | string
+  conceptId?: Prisma.StringNullableWithAggregatesFilter<"LearningPathEntry"> | string | null
+  experienceId?: Prisma.StringNullableWithAggregatesFilter<"LearningPathEntry"> | string | null
+  challengeId?: Prisma.StringNullableWithAggregatesFilter<"LearningPathEntry"> | string | null
 }
 
 export type LearningPathEntryCreateInput = {
   id?: string
   order: number
-  entityType: string
-  entityId: string
   learningPath: Prisma.LearningPathCreateNestedOneWithoutEntriesInput
+  concept?: Prisma.ConceptCreateNestedOneWithoutPathEntriesInput
+  experience?: Prisma.ExperienceCreateNestedOneWithoutPathEntriesInput
+  challenge?: Prisma.ChallengeCreateNestedOneWithoutPathEntriesInput
 }
 
 export type LearningPathEntryUncheckedCreateInput = {
   id?: string
   learningPathId: string
   order: number
-  entityType: string
-  entityId: string
+  conceptId?: string | null
+  experienceId?: string | null
+  challengeId?: string | null
 }
 
 export type LearningPathEntryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
   learningPath?: Prisma.LearningPathUpdateOneRequiredWithoutEntriesNestedInput
+  concept?: Prisma.ConceptUpdateOneWithoutPathEntriesNestedInput
+  experience?: Prisma.ExperienceUpdateOneWithoutPathEntriesNestedInput
+  challenge?: Prisma.ChallengeUpdateOneWithoutPathEntriesNestedInput
 }
 
 export type LearningPathEntryUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   learningPathId?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type LearningPathEntryCreateManyInput = {
   id?: string
   learningPathId: string
   order: number
-  entityType: string
-  entityId: string
+  conceptId?: string | null
+  experienceId?: string | null
+  challengeId?: string | null
 }
 
 export type LearningPathEntryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type LearningPathEntryUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   learningPathId?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type LearningPathEntryListRelationFilter = {
@@ -329,12 +355,18 @@ export type LearningPathEntryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type LearningPathEntryLearningPathIdOrderCompoundUniqueInput = {
+  learningPathId: string
+  order: number
+}
+
 export type LearningPathEntryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   learningPathId?: Prisma.SortOrder
   order?: Prisma.SortOrder
-  entityType?: Prisma.SortOrder
-  entityId?: Prisma.SortOrder
+  conceptId?: Prisma.SortOrder
+  experienceId?: Prisma.SortOrder
+  challengeId?: Prisma.SortOrder
 }
 
 export type LearningPathEntryAvgOrderByAggregateInput = {
@@ -345,20 +377,148 @@ export type LearningPathEntryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   learningPathId?: Prisma.SortOrder
   order?: Prisma.SortOrder
-  entityType?: Prisma.SortOrder
-  entityId?: Prisma.SortOrder
+  conceptId?: Prisma.SortOrder
+  experienceId?: Prisma.SortOrder
+  challengeId?: Prisma.SortOrder
 }
 
 export type LearningPathEntryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   learningPathId?: Prisma.SortOrder
   order?: Prisma.SortOrder
-  entityType?: Prisma.SortOrder
-  entityId?: Prisma.SortOrder
+  conceptId?: Prisma.SortOrder
+  experienceId?: Prisma.SortOrder
+  challengeId?: Prisma.SortOrder
 }
 
 export type LearningPathEntrySumOrderByAggregateInput = {
   order?: Prisma.SortOrder
+}
+
+export type LearningPathEntryCreateNestedManyWithoutConceptInput = {
+  create?: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutConceptInput, Prisma.LearningPathEntryUncheckedCreateWithoutConceptInput> | Prisma.LearningPathEntryCreateWithoutConceptInput[] | Prisma.LearningPathEntryUncheckedCreateWithoutConceptInput[]
+  connectOrCreate?: Prisma.LearningPathEntryCreateOrConnectWithoutConceptInput | Prisma.LearningPathEntryCreateOrConnectWithoutConceptInput[]
+  createMany?: Prisma.LearningPathEntryCreateManyConceptInputEnvelope
+  connect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+}
+
+export type LearningPathEntryUncheckedCreateNestedManyWithoutConceptInput = {
+  create?: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutConceptInput, Prisma.LearningPathEntryUncheckedCreateWithoutConceptInput> | Prisma.LearningPathEntryCreateWithoutConceptInput[] | Prisma.LearningPathEntryUncheckedCreateWithoutConceptInput[]
+  connectOrCreate?: Prisma.LearningPathEntryCreateOrConnectWithoutConceptInput | Prisma.LearningPathEntryCreateOrConnectWithoutConceptInput[]
+  createMany?: Prisma.LearningPathEntryCreateManyConceptInputEnvelope
+  connect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+}
+
+export type LearningPathEntryUpdateManyWithoutConceptNestedInput = {
+  create?: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutConceptInput, Prisma.LearningPathEntryUncheckedCreateWithoutConceptInput> | Prisma.LearningPathEntryCreateWithoutConceptInput[] | Prisma.LearningPathEntryUncheckedCreateWithoutConceptInput[]
+  connectOrCreate?: Prisma.LearningPathEntryCreateOrConnectWithoutConceptInput | Prisma.LearningPathEntryCreateOrConnectWithoutConceptInput[]
+  upsert?: Prisma.LearningPathEntryUpsertWithWhereUniqueWithoutConceptInput | Prisma.LearningPathEntryUpsertWithWhereUniqueWithoutConceptInput[]
+  createMany?: Prisma.LearningPathEntryCreateManyConceptInputEnvelope
+  set?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  disconnect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  delete?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  connect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  update?: Prisma.LearningPathEntryUpdateWithWhereUniqueWithoutConceptInput | Prisma.LearningPathEntryUpdateWithWhereUniqueWithoutConceptInput[]
+  updateMany?: Prisma.LearningPathEntryUpdateManyWithWhereWithoutConceptInput | Prisma.LearningPathEntryUpdateManyWithWhereWithoutConceptInput[]
+  deleteMany?: Prisma.LearningPathEntryScalarWhereInput | Prisma.LearningPathEntryScalarWhereInput[]
+}
+
+export type LearningPathEntryUncheckedUpdateManyWithoutConceptNestedInput = {
+  create?: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutConceptInput, Prisma.LearningPathEntryUncheckedCreateWithoutConceptInput> | Prisma.LearningPathEntryCreateWithoutConceptInput[] | Prisma.LearningPathEntryUncheckedCreateWithoutConceptInput[]
+  connectOrCreate?: Prisma.LearningPathEntryCreateOrConnectWithoutConceptInput | Prisma.LearningPathEntryCreateOrConnectWithoutConceptInput[]
+  upsert?: Prisma.LearningPathEntryUpsertWithWhereUniqueWithoutConceptInput | Prisma.LearningPathEntryUpsertWithWhereUniqueWithoutConceptInput[]
+  createMany?: Prisma.LearningPathEntryCreateManyConceptInputEnvelope
+  set?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  disconnect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  delete?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  connect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  update?: Prisma.LearningPathEntryUpdateWithWhereUniqueWithoutConceptInput | Prisma.LearningPathEntryUpdateWithWhereUniqueWithoutConceptInput[]
+  updateMany?: Prisma.LearningPathEntryUpdateManyWithWhereWithoutConceptInput | Prisma.LearningPathEntryUpdateManyWithWhereWithoutConceptInput[]
+  deleteMany?: Prisma.LearningPathEntryScalarWhereInput | Prisma.LearningPathEntryScalarWhereInput[]
+}
+
+export type LearningPathEntryCreateNestedManyWithoutExperienceInput = {
+  create?: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutExperienceInput, Prisma.LearningPathEntryUncheckedCreateWithoutExperienceInput> | Prisma.LearningPathEntryCreateWithoutExperienceInput[] | Prisma.LearningPathEntryUncheckedCreateWithoutExperienceInput[]
+  connectOrCreate?: Prisma.LearningPathEntryCreateOrConnectWithoutExperienceInput | Prisma.LearningPathEntryCreateOrConnectWithoutExperienceInput[]
+  createMany?: Prisma.LearningPathEntryCreateManyExperienceInputEnvelope
+  connect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+}
+
+export type LearningPathEntryUncheckedCreateNestedManyWithoutExperienceInput = {
+  create?: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutExperienceInput, Prisma.LearningPathEntryUncheckedCreateWithoutExperienceInput> | Prisma.LearningPathEntryCreateWithoutExperienceInput[] | Prisma.LearningPathEntryUncheckedCreateWithoutExperienceInput[]
+  connectOrCreate?: Prisma.LearningPathEntryCreateOrConnectWithoutExperienceInput | Prisma.LearningPathEntryCreateOrConnectWithoutExperienceInput[]
+  createMany?: Prisma.LearningPathEntryCreateManyExperienceInputEnvelope
+  connect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+}
+
+export type LearningPathEntryUpdateManyWithoutExperienceNestedInput = {
+  create?: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutExperienceInput, Prisma.LearningPathEntryUncheckedCreateWithoutExperienceInput> | Prisma.LearningPathEntryCreateWithoutExperienceInput[] | Prisma.LearningPathEntryUncheckedCreateWithoutExperienceInput[]
+  connectOrCreate?: Prisma.LearningPathEntryCreateOrConnectWithoutExperienceInput | Prisma.LearningPathEntryCreateOrConnectWithoutExperienceInput[]
+  upsert?: Prisma.LearningPathEntryUpsertWithWhereUniqueWithoutExperienceInput | Prisma.LearningPathEntryUpsertWithWhereUniqueWithoutExperienceInput[]
+  createMany?: Prisma.LearningPathEntryCreateManyExperienceInputEnvelope
+  set?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  disconnect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  delete?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  connect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  update?: Prisma.LearningPathEntryUpdateWithWhereUniqueWithoutExperienceInput | Prisma.LearningPathEntryUpdateWithWhereUniqueWithoutExperienceInput[]
+  updateMany?: Prisma.LearningPathEntryUpdateManyWithWhereWithoutExperienceInput | Prisma.LearningPathEntryUpdateManyWithWhereWithoutExperienceInput[]
+  deleteMany?: Prisma.LearningPathEntryScalarWhereInput | Prisma.LearningPathEntryScalarWhereInput[]
+}
+
+export type LearningPathEntryUncheckedUpdateManyWithoutExperienceNestedInput = {
+  create?: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutExperienceInput, Prisma.LearningPathEntryUncheckedCreateWithoutExperienceInput> | Prisma.LearningPathEntryCreateWithoutExperienceInput[] | Prisma.LearningPathEntryUncheckedCreateWithoutExperienceInput[]
+  connectOrCreate?: Prisma.LearningPathEntryCreateOrConnectWithoutExperienceInput | Prisma.LearningPathEntryCreateOrConnectWithoutExperienceInput[]
+  upsert?: Prisma.LearningPathEntryUpsertWithWhereUniqueWithoutExperienceInput | Prisma.LearningPathEntryUpsertWithWhereUniqueWithoutExperienceInput[]
+  createMany?: Prisma.LearningPathEntryCreateManyExperienceInputEnvelope
+  set?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  disconnect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  delete?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  connect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  update?: Prisma.LearningPathEntryUpdateWithWhereUniqueWithoutExperienceInput | Prisma.LearningPathEntryUpdateWithWhereUniqueWithoutExperienceInput[]
+  updateMany?: Prisma.LearningPathEntryUpdateManyWithWhereWithoutExperienceInput | Prisma.LearningPathEntryUpdateManyWithWhereWithoutExperienceInput[]
+  deleteMany?: Prisma.LearningPathEntryScalarWhereInput | Prisma.LearningPathEntryScalarWhereInput[]
+}
+
+export type LearningPathEntryCreateNestedManyWithoutChallengeInput = {
+  create?: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutChallengeInput, Prisma.LearningPathEntryUncheckedCreateWithoutChallengeInput> | Prisma.LearningPathEntryCreateWithoutChallengeInput[] | Prisma.LearningPathEntryUncheckedCreateWithoutChallengeInput[]
+  connectOrCreate?: Prisma.LearningPathEntryCreateOrConnectWithoutChallengeInput | Prisma.LearningPathEntryCreateOrConnectWithoutChallengeInput[]
+  createMany?: Prisma.LearningPathEntryCreateManyChallengeInputEnvelope
+  connect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+}
+
+export type LearningPathEntryUncheckedCreateNestedManyWithoutChallengeInput = {
+  create?: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutChallengeInput, Prisma.LearningPathEntryUncheckedCreateWithoutChallengeInput> | Prisma.LearningPathEntryCreateWithoutChallengeInput[] | Prisma.LearningPathEntryUncheckedCreateWithoutChallengeInput[]
+  connectOrCreate?: Prisma.LearningPathEntryCreateOrConnectWithoutChallengeInput | Prisma.LearningPathEntryCreateOrConnectWithoutChallengeInput[]
+  createMany?: Prisma.LearningPathEntryCreateManyChallengeInputEnvelope
+  connect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+}
+
+export type LearningPathEntryUpdateManyWithoutChallengeNestedInput = {
+  create?: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutChallengeInput, Prisma.LearningPathEntryUncheckedCreateWithoutChallengeInput> | Prisma.LearningPathEntryCreateWithoutChallengeInput[] | Prisma.LearningPathEntryUncheckedCreateWithoutChallengeInput[]
+  connectOrCreate?: Prisma.LearningPathEntryCreateOrConnectWithoutChallengeInput | Prisma.LearningPathEntryCreateOrConnectWithoutChallengeInput[]
+  upsert?: Prisma.LearningPathEntryUpsertWithWhereUniqueWithoutChallengeInput | Prisma.LearningPathEntryUpsertWithWhereUniqueWithoutChallengeInput[]
+  createMany?: Prisma.LearningPathEntryCreateManyChallengeInputEnvelope
+  set?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  disconnect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  delete?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  connect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  update?: Prisma.LearningPathEntryUpdateWithWhereUniqueWithoutChallengeInput | Prisma.LearningPathEntryUpdateWithWhereUniqueWithoutChallengeInput[]
+  updateMany?: Prisma.LearningPathEntryUpdateManyWithWhereWithoutChallengeInput | Prisma.LearningPathEntryUpdateManyWithWhereWithoutChallengeInput[]
+  deleteMany?: Prisma.LearningPathEntryScalarWhereInput | Prisma.LearningPathEntryScalarWhereInput[]
+}
+
+export type LearningPathEntryUncheckedUpdateManyWithoutChallengeNestedInput = {
+  create?: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutChallengeInput, Prisma.LearningPathEntryUncheckedCreateWithoutChallengeInput> | Prisma.LearningPathEntryCreateWithoutChallengeInput[] | Prisma.LearningPathEntryUncheckedCreateWithoutChallengeInput[]
+  connectOrCreate?: Prisma.LearningPathEntryCreateOrConnectWithoutChallengeInput | Prisma.LearningPathEntryCreateOrConnectWithoutChallengeInput[]
+  upsert?: Prisma.LearningPathEntryUpsertWithWhereUniqueWithoutChallengeInput | Prisma.LearningPathEntryUpsertWithWhereUniqueWithoutChallengeInput[]
+  createMany?: Prisma.LearningPathEntryCreateManyChallengeInputEnvelope
+  set?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  disconnect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  delete?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  connect?: Prisma.LearningPathEntryWhereUniqueInput | Prisma.LearningPathEntryWhereUniqueInput[]
+  update?: Prisma.LearningPathEntryUpdateWithWhereUniqueWithoutChallengeInput | Prisma.LearningPathEntryUpdateWithWhereUniqueWithoutChallengeInput[]
+  updateMany?: Prisma.LearningPathEntryUpdateManyWithWhereWithoutChallengeInput | Prisma.LearningPathEntryUpdateManyWithWhereWithoutChallengeInput[]
+  deleteMany?: Prisma.LearningPathEntryScalarWhereInput | Prisma.LearningPathEntryScalarWhereInput[]
 }
 
 export type LearningPathEntryCreateNestedManyWithoutLearningPathInput = {
@@ -403,18 +563,158 @@ export type LearningPathEntryUncheckedUpdateManyWithoutLearningPathNestedInput =
   deleteMany?: Prisma.LearningPathEntryScalarWhereInput | Prisma.LearningPathEntryScalarWhereInput[]
 }
 
+export type LearningPathEntryCreateWithoutConceptInput = {
+  id?: string
+  order: number
+  learningPath: Prisma.LearningPathCreateNestedOneWithoutEntriesInput
+  experience?: Prisma.ExperienceCreateNestedOneWithoutPathEntriesInput
+  challenge?: Prisma.ChallengeCreateNestedOneWithoutPathEntriesInput
+}
+
+export type LearningPathEntryUncheckedCreateWithoutConceptInput = {
+  id?: string
+  learningPathId: string
+  order: number
+  experienceId?: string | null
+  challengeId?: string | null
+}
+
+export type LearningPathEntryCreateOrConnectWithoutConceptInput = {
+  where: Prisma.LearningPathEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutConceptInput, Prisma.LearningPathEntryUncheckedCreateWithoutConceptInput>
+}
+
+export type LearningPathEntryCreateManyConceptInputEnvelope = {
+  data: Prisma.LearningPathEntryCreateManyConceptInput | Prisma.LearningPathEntryCreateManyConceptInput[]
+  skipDuplicates?: boolean
+}
+
+export type LearningPathEntryUpsertWithWhereUniqueWithoutConceptInput = {
+  where: Prisma.LearningPathEntryWhereUniqueInput
+  update: Prisma.XOR<Prisma.LearningPathEntryUpdateWithoutConceptInput, Prisma.LearningPathEntryUncheckedUpdateWithoutConceptInput>
+  create: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutConceptInput, Prisma.LearningPathEntryUncheckedCreateWithoutConceptInput>
+}
+
+export type LearningPathEntryUpdateWithWhereUniqueWithoutConceptInput = {
+  where: Prisma.LearningPathEntryWhereUniqueInput
+  data: Prisma.XOR<Prisma.LearningPathEntryUpdateWithoutConceptInput, Prisma.LearningPathEntryUncheckedUpdateWithoutConceptInput>
+}
+
+export type LearningPathEntryUpdateManyWithWhereWithoutConceptInput = {
+  where: Prisma.LearningPathEntryScalarWhereInput
+  data: Prisma.XOR<Prisma.LearningPathEntryUpdateManyMutationInput, Prisma.LearningPathEntryUncheckedUpdateManyWithoutConceptInput>
+}
+
+export type LearningPathEntryScalarWhereInput = {
+  AND?: Prisma.LearningPathEntryScalarWhereInput | Prisma.LearningPathEntryScalarWhereInput[]
+  OR?: Prisma.LearningPathEntryScalarWhereInput[]
+  NOT?: Prisma.LearningPathEntryScalarWhereInput | Prisma.LearningPathEntryScalarWhereInput[]
+  id?: Prisma.StringFilter<"LearningPathEntry"> | string
+  learningPathId?: Prisma.StringFilter<"LearningPathEntry"> | string
+  order?: Prisma.IntFilter<"LearningPathEntry"> | number
+  conceptId?: Prisma.StringNullableFilter<"LearningPathEntry"> | string | null
+  experienceId?: Prisma.StringNullableFilter<"LearningPathEntry"> | string | null
+  challengeId?: Prisma.StringNullableFilter<"LearningPathEntry"> | string | null
+}
+
+export type LearningPathEntryCreateWithoutExperienceInput = {
+  id?: string
+  order: number
+  learningPath: Prisma.LearningPathCreateNestedOneWithoutEntriesInput
+  concept?: Prisma.ConceptCreateNestedOneWithoutPathEntriesInput
+  challenge?: Prisma.ChallengeCreateNestedOneWithoutPathEntriesInput
+}
+
+export type LearningPathEntryUncheckedCreateWithoutExperienceInput = {
+  id?: string
+  learningPathId: string
+  order: number
+  conceptId?: string | null
+  challengeId?: string | null
+}
+
+export type LearningPathEntryCreateOrConnectWithoutExperienceInput = {
+  where: Prisma.LearningPathEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutExperienceInput, Prisma.LearningPathEntryUncheckedCreateWithoutExperienceInput>
+}
+
+export type LearningPathEntryCreateManyExperienceInputEnvelope = {
+  data: Prisma.LearningPathEntryCreateManyExperienceInput | Prisma.LearningPathEntryCreateManyExperienceInput[]
+  skipDuplicates?: boolean
+}
+
+export type LearningPathEntryUpsertWithWhereUniqueWithoutExperienceInput = {
+  where: Prisma.LearningPathEntryWhereUniqueInput
+  update: Prisma.XOR<Prisma.LearningPathEntryUpdateWithoutExperienceInput, Prisma.LearningPathEntryUncheckedUpdateWithoutExperienceInput>
+  create: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutExperienceInput, Prisma.LearningPathEntryUncheckedCreateWithoutExperienceInput>
+}
+
+export type LearningPathEntryUpdateWithWhereUniqueWithoutExperienceInput = {
+  where: Prisma.LearningPathEntryWhereUniqueInput
+  data: Prisma.XOR<Prisma.LearningPathEntryUpdateWithoutExperienceInput, Prisma.LearningPathEntryUncheckedUpdateWithoutExperienceInput>
+}
+
+export type LearningPathEntryUpdateManyWithWhereWithoutExperienceInput = {
+  where: Prisma.LearningPathEntryScalarWhereInput
+  data: Prisma.XOR<Prisma.LearningPathEntryUpdateManyMutationInput, Prisma.LearningPathEntryUncheckedUpdateManyWithoutExperienceInput>
+}
+
+export type LearningPathEntryCreateWithoutChallengeInput = {
+  id?: string
+  order: number
+  learningPath: Prisma.LearningPathCreateNestedOneWithoutEntriesInput
+  concept?: Prisma.ConceptCreateNestedOneWithoutPathEntriesInput
+  experience?: Prisma.ExperienceCreateNestedOneWithoutPathEntriesInput
+}
+
+export type LearningPathEntryUncheckedCreateWithoutChallengeInput = {
+  id?: string
+  learningPathId: string
+  order: number
+  conceptId?: string | null
+  experienceId?: string | null
+}
+
+export type LearningPathEntryCreateOrConnectWithoutChallengeInput = {
+  where: Prisma.LearningPathEntryWhereUniqueInput
+  create: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutChallengeInput, Prisma.LearningPathEntryUncheckedCreateWithoutChallengeInput>
+}
+
+export type LearningPathEntryCreateManyChallengeInputEnvelope = {
+  data: Prisma.LearningPathEntryCreateManyChallengeInput | Prisma.LearningPathEntryCreateManyChallengeInput[]
+  skipDuplicates?: boolean
+}
+
+export type LearningPathEntryUpsertWithWhereUniqueWithoutChallengeInput = {
+  where: Prisma.LearningPathEntryWhereUniqueInput
+  update: Prisma.XOR<Prisma.LearningPathEntryUpdateWithoutChallengeInput, Prisma.LearningPathEntryUncheckedUpdateWithoutChallengeInput>
+  create: Prisma.XOR<Prisma.LearningPathEntryCreateWithoutChallengeInput, Prisma.LearningPathEntryUncheckedCreateWithoutChallengeInput>
+}
+
+export type LearningPathEntryUpdateWithWhereUniqueWithoutChallengeInput = {
+  where: Prisma.LearningPathEntryWhereUniqueInput
+  data: Prisma.XOR<Prisma.LearningPathEntryUpdateWithoutChallengeInput, Prisma.LearningPathEntryUncheckedUpdateWithoutChallengeInput>
+}
+
+export type LearningPathEntryUpdateManyWithWhereWithoutChallengeInput = {
+  where: Prisma.LearningPathEntryScalarWhereInput
+  data: Prisma.XOR<Prisma.LearningPathEntryUpdateManyMutationInput, Prisma.LearningPathEntryUncheckedUpdateManyWithoutChallengeInput>
+}
+
 export type LearningPathEntryCreateWithoutLearningPathInput = {
   id?: string
   order: number
-  entityType: string
-  entityId: string
+  concept?: Prisma.ConceptCreateNestedOneWithoutPathEntriesInput
+  experience?: Prisma.ExperienceCreateNestedOneWithoutPathEntriesInput
+  challenge?: Prisma.ChallengeCreateNestedOneWithoutPathEntriesInput
 }
 
 export type LearningPathEntryUncheckedCreateWithoutLearningPathInput = {
   id?: string
   order: number
-  entityType: string
-  entityId: string
+  conceptId?: string | null
+  experienceId?: string | null
+  challengeId?: string | null
 }
 
 export type LearningPathEntryCreateOrConnectWithoutLearningPathInput = {
@@ -443,43 +743,132 @@ export type LearningPathEntryUpdateManyWithWhereWithoutLearningPathInput = {
   data: Prisma.XOR<Prisma.LearningPathEntryUpdateManyMutationInput, Prisma.LearningPathEntryUncheckedUpdateManyWithoutLearningPathInput>
 }
 
-export type LearningPathEntryScalarWhereInput = {
-  AND?: Prisma.LearningPathEntryScalarWhereInput | Prisma.LearningPathEntryScalarWhereInput[]
-  OR?: Prisma.LearningPathEntryScalarWhereInput[]
-  NOT?: Prisma.LearningPathEntryScalarWhereInput | Prisma.LearningPathEntryScalarWhereInput[]
-  id?: Prisma.StringFilter<"LearningPathEntry"> | string
-  learningPathId?: Prisma.StringFilter<"LearningPathEntry"> | string
-  order?: Prisma.IntFilter<"LearningPathEntry"> | number
-  entityType?: Prisma.StringFilter<"LearningPathEntry"> | string
-  entityId?: Prisma.StringFilter<"LearningPathEntry"> | string
+export type LearningPathEntryCreateManyConceptInput = {
+  id?: string
+  learningPathId: string
+  order: number
+  experienceId?: string | null
+  challengeId?: string | null
+}
+
+export type LearningPathEntryUpdateWithoutConceptInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  learningPath?: Prisma.LearningPathUpdateOneRequiredWithoutEntriesNestedInput
+  experience?: Prisma.ExperienceUpdateOneWithoutPathEntriesNestedInput
+  challenge?: Prisma.ChallengeUpdateOneWithoutPathEntriesNestedInput
+}
+
+export type LearningPathEntryUncheckedUpdateWithoutConceptInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  learningPathId?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type LearningPathEntryUncheckedUpdateManyWithoutConceptInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  learningPathId?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type LearningPathEntryCreateManyExperienceInput = {
+  id?: string
+  learningPathId: string
+  order: number
+  conceptId?: string | null
+  challengeId?: string | null
+}
+
+export type LearningPathEntryUpdateWithoutExperienceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  learningPath?: Prisma.LearningPathUpdateOneRequiredWithoutEntriesNestedInput
+  concept?: Prisma.ConceptUpdateOneWithoutPathEntriesNestedInput
+  challenge?: Prisma.ChallengeUpdateOneWithoutPathEntriesNestedInput
+}
+
+export type LearningPathEntryUncheckedUpdateWithoutExperienceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  learningPathId?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type LearningPathEntryUncheckedUpdateManyWithoutExperienceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  learningPathId?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type LearningPathEntryCreateManyChallengeInput = {
+  id?: string
+  learningPathId: string
+  order: number
+  conceptId?: string | null
+  experienceId?: string | null
+}
+
+export type LearningPathEntryUpdateWithoutChallengeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  learningPath?: Prisma.LearningPathUpdateOneRequiredWithoutEntriesNestedInput
+  concept?: Prisma.ConceptUpdateOneWithoutPathEntriesNestedInput
+  experience?: Prisma.ExperienceUpdateOneWithoutPathEntriesNestedInput
+}
+
+export type LearningPathEntryUncheckedUpdateWithoutChallengeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  learningPathId?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type LearningPathEntryUncheckedUpdateManyWithoutChallengeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  learningPathId?: Prisma.StringFieldUpdateOperationsInput | string
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type LearningPathEntryCreateManyLearningPathInput = {
   id?: string
   order: number
-  entityType: string
-  entityId: string
+  conceptId?: string | null
+  experienceId?: string | null
+  challengeId?: string | null
 }
 
 export type LearningPathEntryUpdateWithoutLearningPathInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  concept?: Prisma.ConceptUpdateOneWithoutPathEntriesNestedInput
+  experience?: Prisma.ExperienceUpdateOneWithoutPathEntriesNestedInput
+  challenge?: Prisma.ChallengeUpdateOneWithoutPathEntriesNestedInput
 }
 
 export type LearningPathEntryUncheckedUpdateWithoutLearningPathInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type LearningPathEntryUncheckedUpdateManyWithoutLearningPathInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   order?: Prisma.IntFieldUpdateOperationsInput | number
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -488,59 +877,85 @@ export type LearningPathEntrySelect<ExtArgs extends runtime.Types.Extensions.Int
   id?: boolean
   learningPathId?: boolean
   order?: boolean
-  entityType?: boolean
-  entityId?: boolean
+  conceptId?: boolean
+  experienceId?: boolean
+  challengeId?: boolean
   learningPath?: boolean | Prisma.LearningPathDefaultArgs<ExtArgs>
+  concept?: boolean | Prisma.LearningPathEntry$conceptArgs<ExtArgs>
+  experience?: boolean | Prisma.LearningPathEntry$experienceArgs<ExtArgs>
+  challenge?: boolean | Prisma.LearningPathEntry$challengeArgs<ExtArgs>
 }, ExtArgs["result"]["learningPathEntry"]>
 
 export type LearningPathEntrySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   learningPathId?: boolean
   order?: boolean
-  entityType?: boolean
-  entityId?: boolean
+  conceptId?: boolean
+  experienceId?: boolean
+  challengeId?: boolean
   learningPath?: boolean | Prisma.LearningPathDefaultArgs<ExtArgs>
+  concept?: boolean | Prisma.LearningPathEntry$conceptArgs<ExtArgs>
+  experience?: boolean | Prisma.LearningPathEntry$experienceArgs<ExtArgs>
+  challenge?: boolean | Prisma.LearningPathEntry$challengeArgs<ExtArgs>
 }, ExtArgs["result"]["learningPathEntry"]>
 
 export type LearningPathEntrySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   learningPathId?: boolean
   order?: boolean
-  entityType?: boolean
-  entityId?: boolean
+  conceptId?: boolean
+  experienceId?: boolean
+  challengeId?: boolean
   learningPath?: boolean | Prisma.LearningPathDefaultArgs<ExtArgs>
+  concept?: boolean | Prisma.LearningPathEntry$conceptArgs<ExtArgs>
+  experience?: boolean | Prisma.LearningPathEntry$experienceArgs<ExtArgs>
+  challenge?: boolean | Prisma.LearningPathEntry$challengeArgs<ExtArgs>
 }, ExtArgs["result"]["learningPathEntry"]>
 
 export type LearningPathEntrySelectScalar = {
   id?: boolean
   learningPathId?: boolean
   order?: boolean
-  entityType?: boolean
-  entityId?: boolean
+  conceptId?: boolean
+  experienceId?: boolean
+  challengeId?: boolean
 }
 
-export type LearningPathEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "learningPathId" | "order" | "entityType" | "entityId", ExtArgs["result"]["learningPathEntry"]>
+export type LearningPathEntryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "learningPathId" | "order" | "conceptId" | "experienceId" | "challengeId", ExtArgs["result"]["learningPathEntry"]>
 export type LearningPathEntryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   learningPath?: boolean | Prisma.LearningPathDefaultArgs<ExtArgs>
+  concept?: boolean | Prisma.LearningPathEntry$conceptArgs<ExtArgs>
+  experience?: boolean | Prisma.LearningPathEntry$experienceArgs<ExtArgs>
+  challenge?: boolean | Prisma.LearningPathEntry$challengeArgs<ExtArgs>
 }
 export type LearningPathEntryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   learningPath?: boolean | Prisma.LearningPathDefaultArgs<ExtArgs>
+  concept?: boolean | Prisma.LearningPathEntry$conceptArgs<ExtArgs>
+  experience?: boolean | Prisma.LearningPathEntry$experienceArgs<ExtArgs>
+  challenge?: boolean | Prisma.LearningPathEntry$challengeArgs<ExtArgs>
 }
 export type LearningPathEntryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   learningPath?: boolean | Prisma.LearningPathDefaultArgs<ExtArgs>
+  concept?: boolean | Prisma.LearningPathEntry$conceptArgs<ExtArgs>
+  experience?: boolean | Prisma.LearningPathEntry$experienceArgs<ExtArgs>
+  challenge?: boolean | Prisma.LearningPathEntry$challengeArgs<ExtArgs>
 }
 
 export type $LearningPathEntryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "LearningPathEntry"
   objects: {
     learningPath: Prisma.$LearningPathPayload<ExtArgs>
+    concept: Prisma.$ConceptPayload<ExtArgs> | null
+    experience: Prisma.$ExperiencePayload<ExtArgs> | null
+    challenge: Prisma.$ChallengePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     learningPathId: string
     order: number
-    entityType: string
-    entityId: string
+    conceptId: string | null
+    experienceId: string | null
+    challengeId: string | null
   }, ExtArgs["result"]["learningPathEntry"]>
   composites: {}
 }
@@ -936,6 +1351,9 @@ readonly fields: LearningPathEntryFieldRefs;
 export interface Prisma__LearningPathEntryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   learningPath<T extends Prisma.LearningPathDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningPathDefaultArgs<ExtArgs>>): Prisma.Prisma__LearningPathClient<runtime.Types.Result.GetResult<Prisma.$LearningPathPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  concept<T extends Prisma.LearningPathEntry$conceptArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningPathEntry$conceptArgs<ExtArgs>>): Prisma.Prisma__ConceptClient<runtime.Types.Result.GetResult<Prisma.$ConceptPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  experience<T extends Prisma.LearningPathEntry$experienceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningPathEntry$experienceArgs<ExtArgs>>): Prisma.Prisma__ExperienceClient<runtime.Types.Result.GetResult<Prisma.$ExperiencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  challenge<T extends Prisma.LearningPathEntry$challengeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningPathEntry$challengeArgs<ExtArgs>>): Prisma.Prisma__ChallengeClient<runtime.Types.Result.GetResult<Prisma.$ChallengePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -968,8 +1386,9 @@ export interface LearningPathEntryFieldRefs {
   readonly id: Prisma.FieldRef<"LearningPathEntry", 'String'>
   readonly learningPathId: Prisma.FieldRef<"LearningPathEntry", 'String'>
   readonly order: Prisma.FieldRef<"LearningPathEntry", 'Int'>
-  readonly entityType: Prisma.FieldRef<"LearningPathEntry", 'String'>
-  readonly entityId: Prisma.FieldRef<"LearningPathEntry", 'String'>
+  readonly conceptId: Prisma.FieldRef<"LearningPathEntry", 'String'>
+  readonly experienceId: Prisma.FieldRef<"LearningPathEntry", 'String'>
+  readonly challengeId: Prisma.FieldRef<"LearningPathEntry", 'String'>
 }
     
 
@@ -1368,6 +1787,63 @@ export type LearningPathEntryDeleteManyArgs<ExtArgs extends runtime.Types.Extens
    * Limit how many LearningPathEntries to delete.
    */
   limit?: number
+}
+
+/**
+ * LearningPathEntry.concept
+ */
+export type LearningPathEntry$conceptArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Concept
+   */
+  select?: Prisma.ConceptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Concept
+   */
+  omit?: Prisma.ConceptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConceptInclude<ExtArgs> | null
+  where?: Prisma.ConceptWhereInput
+}
+
+/**
+ * LearningPathEntry.experience
+ */
+export type LearningPathEntry$experienceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Experience
+   */
+  select?: Prisma.ExperienceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Experience
+   */
+  omit?: Prisma.ExperienceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExperienceInclude<ExtArgs> | null
+  where?: Prisma.ExperienceWhereInput
+}
+
+/**
+ * LearningPathEntry.challenge
+ */
+export type LearningPathEntry$challengeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Challenge
+   */
+  select?: Prisma.ChallengeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Challenge
+   */
+  omit?: Prisma.ChallengeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChallengeInclude<ExtArgs> | null
+  where?: Prisma.ChallengeWhereInput
 }
 
 /**

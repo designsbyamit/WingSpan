@@ -41,7 +41,7 @@ export type ChallengeMinAggregateOutputType = {
   description: string | null
   prompt: string | null
   rubric: string | null
-  type: string | null
+  type: $Enums.ChallengeType | null
   durationMins: number | null
   createdAt: Date | null
 }
@@ -53,7 +53,7 @@ export type ChallengeMaxAggregateOutputType = {
   description: string | null
   prompt: string | null
   rubric: string | null
-  type: string | null
+  type: $Enums.ChallengeType | null
   durationMins: number | null
   createdAt: Date | null
 }
@@ -210,7 +210,7 @@ export type ChallengeGroupByOutputType = {
   description: string | null
   prompt: string
   rubric: string | null
-  type: string
+  type: $Enums.ChallengeType
   durationMins: number
   createdAt: Date
   _count: ChallengeCountAggregateOutputType | null
@@ -245,12 +245,15 @@ export type ChallengeWhereInput = {
   description?: Prisma.StringNullableFilter<"Challenge"> | string | null
   prompt?: Prisma.StringFilter<"Challenge"> | string
   rubric?: Prisma.StringNullableFilter<"Challenge"> | string | null
-  type?: Prisma.StringFilter<"Challenge"> | string
+  type?: Prisma.EnumChallengeTypeFilter<"Challenge"> | $Enums.ChallengeType
   durationMins?: Prisma.IntFilter<"Challenge"> | number
   createdAt?: Prisma.DateTimeFilter<"Challenge"> | Date | string
   skills?: Prisma.ChallengeOnSkillListRelationFilter
   competencies?: Prisma.ChallengeOnCompetencyListRelationFilter
   submissions?: Prisma.ChallengeSubmissionListRelationFilter
+  milestoneLinks?: Prisma.MilestoneLinkListRelationFilter
+  pathEntries?: Prisma.LearningPathEntryListRelationFilter
+  sessions?: Prisma.LearningSessionListRelationFilter
 }
 
 export type ChallengeOrderByWithRelationInput = {
@@ -266,6 +269,9 @@ export type ChallengeOrderByWithRelationInput = {
   skills?: Prisma.ChallengeOnSkillOrderByRelationAggregateInput
   competencies?: Prisma.ChallengeOnCompetencyOrderByRelationAggregateInput
   submissions?: Prisma.ChallengeSubmissionOrderByRelationAggregateInput
+  milestoneLinks?: Prisma.MilestoneLinkOrderByRelationAggregateInput
+  pathEntries?: Prisma.LearningPathEntryOrderByRelationAggregateInput
+  sessions?: Prisma.LearningSessionOrderByRelationAggregateInput
 }
 
 export type ChallengeWhereUniqueInput = Prisma.AtLeast<{
@@ -278,12 +284,15 @@ export type ChallengeWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Challenge"> | string | null
   prompt?: Prisma.StringFilter<"Challenge"> | string
   rubric?: Prisma.StringNullableFilter<"Challenge"> | string | null
-  type?: Prisma.StringFilter<"Challenge"> | string
+  type?: Prisma.EnumChallengeTypeFilter<"Challenge"> | $Enums.ChallengeType
   durationMins?: Prisma.IntFilter<"Challenge"> | number
   createdAt?: Prisma.DateTimeFilter<"Challenge"> | Date | string
   skills?: Prisma.ChallengeOnSkillListRelationFilter
   competencies?: Prisma.ChallengeOnCompetencyListRelationFilter
   submissions?: Prisma.ChallengeSubmissionListRelationFilter
+  milestoneLinks?: Prisma.MilestoneLinkListRelationFilter
+  pathEntries?: Prisma.LearningPathEntryListRelationFilter
+  sessions?: Prisma.LearningSessionListRelationFilter
 }, "id" | "slug">
 
 export type ChallengeOrderByWithAggregationInput = {
@@ -313,7 +322,7 @@ export type ChallengeScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"Challenge"> | string | null
   prompt?: Prisma.StringWithAggregatesFilter<"Challenge"> | string
   rubric?: Prisma.StringNullableWithAggregatesFilter<"Challenge"> | string | null
-  type?: Prisma.StringWithAggregatesFilter<"Challenge"> | string
+  type?: Prisma.EnumChallengeTypeWithAggregatesFilter<"Challenge"> | $Enums.ChallengeType
   durationMins?: Prisma.IntWithAggregatesFilter<"Challenge"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Challenge"> | Date | string
 }
@@ -325,12 +334,15 @@ export type ChallengeCreateInput = {
   description?: string | null
   prompt: string
   rubric?: string | null
-  type: string
+  type?: $Enums.ChallengeType
   durationMins?: number
   createdAt?: Date | string
   skills?: Prisma.ChallengeOnSkillCreateNestedManyWithoutChallengeInput
   competencies?: Prisma.ChallengeOnCompetencyCreateNestedManyWithoutChallengeInput
   submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutChallengeInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutChallengeInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutChallengeInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutChallengeInput
 }
 
 export type ChallengeUncheckedCreateInput = {
@@ -340,12 +352,15 @@ export type ChallengeUncheckedCreateInput = {
   description?: string | null
   prompt: string
   rubric?: string | null
-  type: string
+  type?: $Enums.ChallengeType
   durationMins?: number
   createdAt?: Date | string
   skills?: Prisma.ChallengeOnSkillUncheckedCreateNestedManyWithoutChallengeInput
   competencies?: Prisma.ChallengeOnCompetencyUncheckedCreateNestedManyWithoutChallengeInput
   submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutChallengeInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutChallengeInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutChallengeInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutChallengeInput
 }
 
 export type ChallengeUpdateInput = {
@@ -355,12 +370,15 @@ export type ChallengeUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   skills?: Prisma.ChallengeOnSkillUpdateManyWithoutChallengeNestedInput
   competencies?: Prisma.ChallengeOnCompetencyUpdateManyWithoutChallengeNestedInput
   submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutChallengeNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutChallengeNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutChallengeNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutChallengeNestedInput
 }
 
 export type ChallengeUncheckedUpdateInput = {
@@ -370,12 +388,15 @@ export type ChallengeUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   skills?: Prisma.ChallengeOnSkillUncheckedUpdateManyWithoutChallengeNestedInput
   competencies?: Prisma.ChallengeOnCompetencyUncheckedUpdateManyWithoutChallengeNestedInput
   submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutChallengeNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutChallengeNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutChallengeNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutChallengeNestedInput
 }
 
 export type ChallengeCreateManyInput = {
@@ -385,7 +406,7 @@ export type ChallengeCreateManyInput = {
   description?: string | null
   prompt: string
   rubric?: string | null
-  type: string
+  type?: $Enums.ChallengeType
   durationMins?: number
   createdAt?: Date | string
 }
@@ -397,7 +418,7 @@ export type ChallengeUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -409,7 +430,7 @@ export type ChallengeUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -458,9 +479,34 @@ export type ChallengeSumOrderByAggregateInput = {
   durationMins?: Prisma.SortOrder
 }
 
+export type ChallengeNullableScalarRelationFilter = {
+  is?: Prisma.ChallengeWhereInput | null
+  isNot?: Prisma.ChallengeWhereInput | null
+}
+
 export type ChallengeScalarRelationFilter = {
   is?: Prisma.ChallengeWhereInput
   isNot?: Prisma.ChallengeWhereInput
+}
+
+export type EnumChallengeTypeFieldUpdateOperationsInput = {
+  set?: $Enums.ChallengeType
+}
+
+export type ChallengeCreateNestedOneWithoutPathEntriesInput = {
+  create?: Prisma.XOR<Prisma.ChallengeCreateWithoutPathEntriesInput, Prisma.ChallengeUncheckedCreateWithoutPathEntriesInput>
+  connectOrCreate?: Prisma.ChallengeCreateOrConnectWithoutPathEntriesInput
+  connect?: Prisma.ChallengeWhereUniqueInput
+}
+
+export type ChallengeUpdateOneWithoutPathEntriesNestedInput = {
+  create?: Prisma.XOR<Prisma.ChallengeCreateWithoutPathEntriesInput, Prisma.ChallengeUncheckedCreateWithoutPathEntriesInput>
+  connectOrCreate?: Prisma.ChallengeCreateOrConnectWithoutPathEntriesInput
+  upsert?: Prisma.ChallengeUpsertWithoutPathEntriesInput
+  disconnect?: Prisma.ChallengeWhereInput | boolean
+  delete?: Prisma.ChallengeWhereInput | boolean
+  connect?: Prisma.ChallengeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ChallengeUpdateToOneWithWhereWithoutPathEntriesInput, Prisma.ChallengeUpdateWithoutPathEntriesInput>, Prisma.ChallengeUncheckedUpdateWithoutPathEntriesInput>
 }
 
 export type ChallengeCreateNestedOneWithoutSkillsInput = {
@@ -491,6 +537,22 @@ export type ChallengeUpdateOneRequiredWithoutCompetenciesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ChallengeUpdateToOneWithWhereWithoutCompetenciesInput, Prisma.ChallengeUpdateWithoutCompetenciesInput>, Prisma.ChallengeUncheckedUpdateWithoutCompetenciesInput>
 }
 
+export type ChallengeCreateNestedOneWithoutSessionsInput = {
+  create?: Prisma.XOR<Prisma.ChallengeCreateWithoutSessionsInput, Prisma.ChallengeUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.ChallengeCreateOrConnectWithoutSessionsInput
+  connect?: Prisma.ChallengeWhereUniqueInput
+}
+
+export type ChallengeUpdateOneWithoutSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.ChallengeCreateWithoutSessionsInput, Prisma.ChallengeUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.ChallengeCreateOrConnectWithoutSessionsInput
+  upsert?: Prisma.ChallengeUpsertWithoutSessionsInput
+  disconnect?: Prisma.ChallengeWhereInput | boolean
+  delete?: Prisma.ChallengeWhereInput | boolean
+  connect?: Prisma.ChallengeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ChallengeUpdateToOneWithWhereWithoutSessionsInput, Prisma.ChallengeUpdateWithoutSessionsInput>, Prisma.ChallengeUncheckedUpdateWithoutSessionsInput>
+}
+
 export type ChallengeCreateNestedOneWithoutSubmissionsInput = {
   create?: Prisma.XOR<Prisma.ChallengeCreateWithoutSubmissionsInput, Prisma.ChallengeUncheckedCreateWithoutSubmissionsInput>
   connectOrCreate?: Prisma.ChallengeCreateOrConnectWithoutSubmissionsInput
@@ -505,6 +567,106 @@ export type ChallengeUpdateOneRequiredWithoutSubmissionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ChallengeUpdateToOneWithWhereWithoutSubmissionsInput, Prisma.ChallengeUpdateWithoutSubmissionsInput>, Prisma.ChallengeUncheckedUpdateWithoutSubmissionsInput>
 }
 
+export type ChallengeCreateNestedOneWithoutMilestoneLinksInput = {
+  create?: Prisma.XOR<Prisma.ChallengeCreateWithoutMilestoneLinksInput, Prisma.ChallengeUncheckedCreateWithoutMilestoneLinksInput>
+  connectOrCreate?: Prisma.ChallengeCreateOrConnectWithoutMilestoneLinksInput
+  connect?: Prisma.ChallengeWhereUniqueInput
+}
+
+export type ChallengeUpdateOneWithoutMilestoneLinksNestedInput = {
+  create?: Prisma.XOR<Prisma.ChallengeCreateWithoutMilestoneLinksInput, Prisma.ChallengeUncheckedCreateWithoutMilestoneLinksInput>
+  connectOrCreate?: Prisma.ChallengeCreateOrConnectWithoutMilestoneLinksInput
+  upsert?: Prisma.ChallengeUpsertWithoutMilestoneLinksInput
+  disconnect?: Prisma.ChallengeWhereInput | boolean
+  delete?: Prisma.ChallengeWhereInput | boolean
+  connect?: Prisma.ChallengeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ChallengeUpdateToOneWithWhereWithoutMilestoneLinksInput, Prisma.ChallengeUpdateWithoutMilestoneLinksInput>, Prisma.ChallengeUncheckedUpdateWithoutMilestoneLinksInput>
+}
+
+export type ChallengeCreateWithoutPathEntriesInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  prompt: string
+  rubric?: string | null
+  type?: $Enums.ChallengeType
+  durationMins?: number
+  createdAt?: Date | string
+  skills?: Prisma.ChallengeOnSkillCreateNestedManyWithoutChallengeInput
+  competencies?: Prisma.ChallengeOnCompetencyCreateNestedManyWithoutChallengeInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutChallengeInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutChallengeInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutChallengeInput
+}
+
+export type ChallengeUncheckedCreateWithoutPathEntriesInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  prompt: string
+  rubric?: string | null
+  type?: $Enums.ChallengeType
+  durationMins?: number
+  createdAt?: Date | string
+  skills?: Prisma.ChallengeOnSkillUncheckedCreateNestedManyWithoutChallengeInput
+  competencies?: Prisma.ChallengeOnCompetencyUncheckedCreateNestedManyWithoutChallengeInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutChallengeInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutChallengeInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutChallengeInput
+}
+
+export type ChallengeCreateOrConnectWithoutPathEntriesInput = {
+  where: Prisma.ChallengeWhereUniqueInput
+  create: Prisma.XOR<Prisma.ChallengeCreateWithoutPathEntriesInput, Prisma.ChallengeUncheckedCreateWithoutPathEntriesInput>
+}
+
+export type ChallengeUpsertWithoutPathEntriesInput = {
+  update: Prisma.XOR<Prisma.ChallengeUpdateWithoutPathEntriesInput, Prisma.ChallengeUncheckedUpdateWithoutPathEntriesInput>
+  create: Prisma.XOR<Prisma.ChallengeCreateWithoutPathEntriesInput, Prisma.ChallengeUncheckedCreateWithoutPathEntriesInput>
+  where?: Prisma.ChallengeWhereInput
+}
+
+export type ChallengeUpdateToOneWithWhereWithoutPathEntriesInput = {
+  where?: Prisma.ChallengeWhereInput
+  data: Prisma.XOR<Prisma.ChallengeUpdateWithoutPathEntriesInput, Prisma.ChallengeUncheckedUpdateWithoutPathEntriesInput>
+}
+
+export type ChallengeUpdateWithoutPathEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
+  durationMins?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.ChallengeOnSkillUpdateManyWithoutChallengeNestedInput
+  competencies?: Prisma.ChallengeOnCompetencyUpdateManyWithoutChallengeNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutChallengeNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutChallengeNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutChallengeNestedInput
+}
+
+export type ChallengeUncheckedUpdateWithoutPathEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
+  durationMins?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.ChallengeOnSkillUncheckedUpdateManyWithoutChallengeNestedInput
+  competencies?: Prisma.ChallengeOnCompetencyUncheckedUpdateManyWithoutChallengeNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutChallengeNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutChallengeNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutChallengeNestedInput
+}
+
 export type ChallengeCreateWithoutSkillsInput = {
   id?: string
   slug: string
@@ -512,11 +674,14 @@ export type ChallengeCreateWithoutSkillsInput = {
   description?: string | null
   prompt: string
   rubric?: string | null
-  type: string
+  type?: $Enums.ChallengeType
   durationMins?: number
   createdAt?: Date | string
   competencies?: Prisma.ChallengeOnCompetencyCreateNestedManyWithoutChallengeInput
   submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutChallengeInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutChallengeInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutChallengeInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutChallengeInput
 }
 
 export type ChallengeUncheckedCreateWithoutSkillsInput = {
@@ -526,11 +691,14 @@ export type ChallengeUncheckedCreateWithoutSkillsInput = {
   description?: string | null
   prompt: string
   rubric?: string | null
-  type: string
+  type?: $Enums.ChallengeType
   durationMins?: number
   createdAt?: Date | string
   competencies?: Prisma.ChallengeOnCompetencyUncheckedCreateNestedManyWithoutChallengeInput
   submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutChallengeInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutChallengeInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutChallengeInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutChallengeInput
 }
 
 export type ChallengeCreateOrConnectWithoutSkillsInput = {
@@ -556,11 +724,14 @@ export type ChallengeUpdateWithoutSkillsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   competencies?: Prisma.ChallengeOnCompetencyUpdateManyWithoutChallengeNestedInput
   submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutChallengeNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutChallengeNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutChallengeNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutChallengeNestedInput
 }
 
 export type ChallengeUncheckedUpdateWithoutSkillsInput = {
@@ -570,11 +741,14 @@ export type ChallengeUncheckedUpdateWithoutSkillsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   competencies?: Prisma.ChallengeOnCompetencyUncheckedUpdateManyWithoutChallengeNestedInput
   submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutChallengeNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutChallengeNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutChallengeNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutChallengeNestedInput
 }
 
 export type ChallengeCreateWithoutCompetenciesInput = {
@@ -584,11 +758,14 @@ export type ChallengeCreateWithoutCompetenciesInput = {
   description?: string | null
   prompt: string
   rubric?: string | null
-  type: string
+  type?: $Enums.ChallengeType
   durationMins?: number
   createdAt?: Date | string
   skills?: Prisma.ChallengeOnSkillCreateNestedManyWithoutChallengeInput
   submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutChallengeInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutChallengeInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutChallengeInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutChallengeInput
 }
 
 export type ChallengeUncheckedCreateWithoutCompetenciesInput = {
@@ -598,11 +775,14 @@ export type ChallengeUncheckedCreateWithoutCompetenciesInput = {
   description?: string | null
   prompt: string
   rubric?: string | null
-  type: string
+  type?: $Enums.ChallengeType
   durationMins?: number
   createdAt?: Date | string
   skills?: Prisma.ChallengeOnSkillUncheckedCreateNestedManyWithoutChallengeInput
   submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutChallengeInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutChallengeInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutChallengeInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutChallengeInput
 }
 
 export type ChallengeCreateOrConnectWithoutCompetenciesInput = {
@@ -628,11 +808,14 @@ export type ChallengeUpdateWithoutCompetenciesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   skills?: Prisma.ChallengeOnSkillUpdateManyWithoutChallengeNestedInput
   submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutChallengeNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutChallengeNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutChallengeNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutChallengeNestedInput
 }
 
 export type ChallengeUncheckedUpdateWithoutCompetenciesInput = {
@@ -642,11 +825,98 @@ export type ChallengeUncheckedUpdateWithoutCompetenciesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   skills?: Prisma.ChallengeOnSkillUncheckedUpdateManyWithoutChallengeNestedInput
   submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutChallengeNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutChallengeNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutChallengeNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutChallengeNestedInput
+}
+
+export type ChallengeCreateWithoutSessionsInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  prompt: string
+  rubric?: string | null
+  type?: $Enums.ChallengeType
+  durationMins?: number
+  createdAt?: Date | string
+  skills?: Prisma.ChallengeOnSkillCreateNestedManyWithoutChallengeInput
+  competencies?: Prisma.ChallengeOnCompetencyCreateNestedManyWithoutChallengeInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutChallengeInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutChallengeInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutChallengeInput
+}
+
+export type ChallengeUncheckedCreateWithoutSessionsInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  prompt: string
+  rubric?: string | null
+  type?: $Enums.ChallengeType
+  durationMins?: number
+  createdAt?: Date | string
+  skills?: Prisma.ChallengeOnSkillUncheckedCreateNestedManyWithoutChallengeInput
+  competencies?: Prisma.ChallengeOnCompetencyUncheckedCreateNestedManyWithoutChallengeInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutChallengeInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutChallengeInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutChallengeInput
+}
+
+export type ChallengeCreateOrConnectWithoutSessionsInput = {
+  where: Prisma.ChallengeWhereUniqueInput
+  create: Prisma.XOR<Prisma.ChallengeCreateWithoutSessionsInput, Prisma.ChallengeUncheckedCreateWithoutSessionsInput>
+}
+
+export type ChallengeUpsertWithoutSessionsInput = {
+  update: Prisma.XOR<Prisma.ChallengeUpdateWithoutSessionsInput, Prisma.ChallengeUncheckedUpdateWithoutSessionsInput>
+  create: Prisma.XOR<Prisma.ChallengeCreateWithoutSessionsInput, Prisma.ChallengeUncheckedCreateWithoutSessionsInput>
+  where?: Prisma.ChallengeWhereInput
+}
+
+export type ChallengeUpdateToOneWithWhereWithoutSessionsInput = {
+  where?: Prisma.ChallengeWhereInput
+  data: Prisma.XOR<Prisma.ChallengeUpdateWithoutSessionsInput, Prisma.ChallengeUncheckedUpdateWithoutSessionsInput>
+}
+
+export type ChallengeUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
+  durationMins?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.ChallengeOnSkillUpdateManyWithoutChallengeNestedInput
+  competencies?: Prisma.ChallengeOnCompetencyUpdateManyWithoutChallengeNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutChallengeNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutChallengeNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutChallengeNestedInput
+}
+
+export type ChallengeUncheckedUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
+  durationMins?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.ChallengeOnSkillUncheckedUpdateManyWithoutChallengeNestedInput
+  competencies?: Prisma.ChallengeOnCompetencyUncheckedUpdateManyWithoutChallengeNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutChallengeNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutChallengeNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutChallengeNestedInput
 }
 
 export type ChallengeCreateWithoutSubmissionsInput = {
@@ -656,11 +926,14 @@ export type ChallengeCreateWithoutSubmissionsInput = {
   description?: string | null
   prompt: string
   rubric?: string | null
-  type: string
+  type?: $Enums.ChallengeType
   durationMins?: number
   createdAt?: Date | string
   skills?: Prisma.ChallengeOnSkillCreateNestedManyWithoutChallengeInput
   competencies?: Prisma.ChallengeOnCompetencyCreateNestedManyWithoutChallengeInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutChallengeInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutChallengeInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutChallengeInput
 }
 
 export type ChallengeUncheckedCreateWithoutSubmissionsInput = {
@@ -670,11 +943,14 @@ export type ChallengeUncheckedCreateWithoutSubmissionsInput = {
   description?: string | null
   prompt: string
   rubric?: string | null
-  type: string
+  type?: $Enums.ChallengeType
   durationMins?: number
   createdAt?: Date | string
   skills?: Prisma.ChallengeOnSkillUncheckedCreateNestedManyWithoutChallengeInput
   competencies?: Prisma.ChallengeOnCompetencyUncheckedCreateNestedManyWithoutChallengeInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutChallengeInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutChallengeInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutChallengeInput
 }
 
 export type ChallengeCreateOrConnectWithoutSubmissionsInput = {
@@ -700,11 +976,14 @@ export type ChallengeUpdateWithoutSubmissionsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   skills?: Prisma.ChallengeOnSkillUpdateManyWithoutChallengeNestedInput
   competencies?: Prisma.ChallengeOnCompetencyUpdateManyWithoutChallengeNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutChallengeNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutChallengeNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutChallengeNestedInput
 }
 
 export type ChallengeUncheckedUpdateWithoutSubmissionsInput = {
@@ -714,11 +993,98 @@ export type ChallengeUncheckedUpdateWithoutSubmissionsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prompt?: Prisma.StringFieldUpdateOperationsInput | string
   rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   skills?: Prisma.ChallengeOnSkillUncheckedUpdateManyWithoutChallengeNestedInput
   competencies?: Prisma.ChallengeOnCompetencyUncheckedUpdateManyWithoutChallengeNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutChallengeNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutChallengeNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutChallengeNestedInput
+}
+
+export type ChallengeCreateWithoutMilestoneLinksInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  prompt: string
+  rubric?: string | null
+  type?: $Enums.ChallengeType
+  durationMins?: number
+  createdAt?: Date | string
+  skills?: Prisma.ChallengeOnSkillCreateNestedManyWithoutChallengeInput
+  competencies?: Prisma.ChallengeOnCompetencyCreateNestedManyWithoutChallengeInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutChallengeInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutChallengeInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutChallengeInput
+}
+
+export type ChallengeUncheckedCreateWithoutMilestoneLinksInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  prompt: string
+  rubric?: string | null
+  type?: $Enums.ChallengeType
+  durationMins?: number
+  createdAt?: Date | string
+  skills?: Prisma.ChallengeOnSkillUncheckedCreateNestedManyWithoutChallengeInput
+  competencies?: Prisma.ChallengeOnCompetencyUncheckedCreateNestedManyWithoutChallengeInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutChallengeInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutChallengeInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutChallengeInput
+}
+
+export type ChallengeCreateOrConnectWithoutMilestoneLinksInput = {
+  where: Prisma.ChallengeWhereUniqueInput
+  create: Prisma.XOR<Prisma.ChallengeCreateWithoutMilestoneLinksInput, Prisma.ChallengeUncheckedCreateWithoutMilestoneLinksInput>
+}
+
+export type ChallengeUpsertWithoutMilestoneLinksInput = {
+  update: Prisma.XOR<Prisma.ChallengeUpdateWithoutMilestoneLinksInput, Prisma.ChallengeUncheckedUpdateWithoutMilestoneLinksInput>
+  create: Prisma.XOR<Prisma.ChallengeCreateWithoutMilestoneLinksInput, Prisma.ChallengeUncheckedCreateWithoutMilestoneLinksInput>
+  where?: Prisma.ChallengeWhereInput
+}
+
+export type ChallengeUpdateToOneWithWhereWithoutMilestoneLinksInput = {
+  where?: Prisma.ChallengeWhereInput
+  data: Prisma.XOR<Prisma.ChallengeUpdateWithoutMilestoneLinksInput, Prisma.ChallengeUncheckedUpdateWithoutMilestoneLinksInput>
+}
+
+export type ChallengeUpdateWithoutMilestoneLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
+  durationMins?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.ChallengeOnSkillUpdateManyWithoutChallengeNestedInput
+  competencies?: Prisma.ChallengeOnCompetencyUpdateManyWithoutChallengeNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutChallengeNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutChallengeNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutChallengeNestedInput
+}
+
+export type ChallengeUncheckedUpdateWithoutMilestoneLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prompt?: Prisma.StringFieldUpdateOperationsInput | string
+  rubric?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.EnumChallengeTypeFieldUpdateOperationsInput | $Enums.ChallengeType
+  durationMins?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.ChallengeOnSkillUncheckedUpdateManyWithoutChallengeNestedInput
+  competencies?: Prisma.ChallengeOnCompetencyUncheckedUpdateManyWithoutChallengeNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutChallengeNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutChallengeNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutChallengeNestedInput
 }
 
 
@@ -730,12 +1096,18 @@ export type ChallengeCountOutputType = {
   skills: number
   competencies: number
   submissions: number
+  milestoneLinks: number
+  pathEntries: number
+  sessions: number
 }
 
 export type ChallengeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   skills?: boolean | ChallengeCountOutputTypeCountSkillsArgs
   competencies?: boolean | ChallengeCountOutputTypeCountCompetenciesArgs
   submissions?: boolean | ChallengeCountOutputTypeCountSubmissionsArgs
+  milestoneLinks?: boolean | ChallengeCountOutputTypeCountMilestoneLinksArgs
+  pathEntries?: boolean | ChallengeCountOutputTypeCountPathEntriesArgs
+  sessions?: boolean | ChallengeCountOutputTypeCountSessionsArgs
 }
 
 /**
@@ -769,6 +1141,27 @@ export type ChallengeCountOutputTypeCountSubmissionsArgs<ExtArgs extends runtime
   where?: Prisma.ChallengeSubmissionWhereInput
 }
 
+/**
+ * ChallengeCountOutputType without action
+ */
+export type ChallengeCountOutputTypeCountMilestoneLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MilestoneLinkWhereInput
+}
+
+/**
+ * ChallengeCountOutputType without action
+ */
+export type ChallengeCountOutputTypeCountPathEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LearningPathEntryWhereInput
+}
+
+/**
+ * ChallengeCountOutputType without action
+ */
+export type ChallengeCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LearningSessionWhereInput
+}
+
 
 export type ChallengeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -783,6 +1176,9 @@ export type ChallengeSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   skills?: boolean | Prisma.Challenge$skillsArgs<ExtArgs>
   competencies?: boolean | Prisma.Challenge$competenciesArgs<ExtArgs>
   submissions?: boolean | Prisma.Challenge$submissionsArgs<ExtArgs>
+  milestoneLinks?: boolean | Prisma.Challenge$milestoneLinksArgs<ExtArgs>
+  pathEntries?: boolean | Prisma.Challenge$pathEntriesArgs<ExtArgs>
+  sessions?: boolean | Prisma.Challenge$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.ChallengeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["challenge"]>
 
@@ -827,6 +1223,9 @@ export type ChallengeInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   skills?: boolean | Prisma.Challenge$skillsArgs<ExtArgs>
   competencies?: boolean | Prisma.Challenge$competenciesArgs<ExtArgs>
   submissions?: boolean | Prisma.Challenge$submissionsArgs<ExtArgs>
+  milestoneLinks?: boolean | Prisma.Challenge$milestoneLinksArgs<ExtArgs>
+  pathEntries?: boolean | Prisma.Challenge$pathEntriesArgs<ExtArgs>
+  sessions?: boolean | Prisma.Challenge$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.ChallengeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ChallengeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -838,6 +1237,9 @@ export type $ChallengePayload<ExtArgs extends runtime.Types.Extensions.InternalA
     skills: Prisma.$ChallengeOnSkillPayload<ExtArgs>[]
     competencies: Prisma.$ChallengeOnCompetencyPayload<ExtArgs>[]
     submissions: Prisma.$ChallengeSubmissionPayload<ExtArgs>[]
+    milestoneLinks: Prisma.$MilestoneLinkPayload<ExtArgs>[]
+    pathEntries: Prisma.$LearningPathEntryPayload<ExtArgs>[]
+    sessions: Prisma.$LearningSessionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -846,7 +1248,7 @@ export type $ChallengePayload<ExtArgs extends runtime.Types.Extensions.InternalA
     description: string | null
     prompt: string
     rubric: string | null
-    type: string
+    type: $Enums.ChallengeType
     durationMins: number
     createdAt: Date
   }, ExtArgs["result"]["challenge"]>
@@ -1246,6 +1648,9 @@ export interface Prisma__ChallengeClient<T, Null = never, ExtArgs extends runtim
   skills<T extends Prisma.Challenge$skillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Challenge$skillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChallengeOnSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   competencies<T extends Prisma.Challenge$competenciesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Challenge$competenciesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChallengeOnCompetencyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   submissions<T extends Prisma.Challenge$submissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Challenge$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChallengeSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  milestoneLinks<T extends Prisma.Challenge$milestoneLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Challenge$milestoneLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MilestoneLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pathEntries<T extends Prisma.Challenge$pathEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Challenge$pathEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearningPathEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sessions<T extends Prisma.Challenge$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Challenge$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearningSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1281,7 +1686,7 @@ export interface ChallengeFieldRefs {
   readonly description: Prisma.FieldRef<"Challenge", 'String'>
   readonly prompt: Prisma.FieldRef<"Challenge", 'String'>
   readonly rubric: Prisma.FieldRef<"Challenge", 'String'>
-  readonly type: Prisma.FieldRef<"Challenge", 'String'>
+  readonly type: Prisma.FieldRef<"Challenge", 'ChallengeType'>
   readonly durationMins: Prisma.FieldRef<"Challenge", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Challenge", 'DateTime'>
 }
@@ -1746,6 +2151,78 @@ export type Challenge$submissionsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.ChallengeSubmissionScalarFieldEnum | Prisma.ChallengeSubmissionScalarFieldEnum[]
+}
+
+/**
+ * Challenge.milestoneLinks
+ */
+export type Challenge$milestoneLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MilestoneLink
+   */
+  select?: Prisma.MilestoneLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MilestoneLink
+   */
+  omit?: Prisma.MilestoneLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MilestoneLinkInclude<ExtArgs> | null
+  where?: Prisma.MilestoneLinkWhereInput
+  orderBy?: Prisma.MilestoneLinkOrderByWithRelationInput | Prisma.MilestoneLinkOrderByWithRelationInput[]
+  cursor?: Prisma.MilestoneLinkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MilestoneLinkScalarFieldEnum | Prisma.MilestoneLinkScalarFieldEnum[]
+}
+
+/**
+ * Challenge.pathEntries
+ */
+export type Challenge$pathEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LearningPathEntry
+   */
+  select?: Prisma.LearningPathEntrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LearningPathEntry
+   */
+  omit?: Prisma.LearningPathEntryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LearningPathEntryInclude<ExtArgs> | null
+  where?: Prisma.LearningPathEntryWhereInput
+  orderBy?: Prisma.LearningPathEntryOrderByWithRelationInput | Prisma.LearningPathEntryOrderByWithRelationInput[]
+  cursor?: Prisma.LearningPathEntryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LearningPathEntryScalarFieldEnum | Prisma.LearningPathEntryScalarFieldEnum[]
+}
+
+/**
+ * Challenge.sessions
+ */
+export type Challenge$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LearningSession
+   */
+  select?: Prisma.LearningSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LearningSession
+   */
+  omit?: Prisma.LearningSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LearningSessionInclude<ExtArgs> | null
+  where?: Prisma.LearningSessionWhereInput
+  orderBy?: Prisma.LearningSessionOrderByWithRelationInput | Prisma.LearningSessionOrderByWithRelationInput[]
+  cursor?: Prisma.LearningSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LearningSessionScalarFieldEnum | Prisma.LearningSessionScalarFieldEnum[]
 }
 
 /**

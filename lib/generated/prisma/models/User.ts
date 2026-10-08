@@ -48,6 +48,7 @@ export type UserMinAggregateOutputType = {
   streak: number | null
   lastActiveAt: Date | null
   activeLearningPathId: string | null
+  deletedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -64,6 +65,7 @@ export type UserMaxAggregateOutputType = {
   streak: number | null
   lastActiveAt: Date | null
   activeLearningPathId: string | null
+  deletedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -80,6 +82,7 @@ export type UserCountAggregateOutputType = {
   streak: number
   lastActiveAt: number
   activeLearningPathId: number
+  deletedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -108,6 +111,7 @@ export type UserMinAggregateInputType = {
   streak?: true
   lastActiveAt?: true
   activeLearningPathId?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -124,6 +128,7 @@ export type UserMaxAggregateInputType = {
   streak?: true
   lastActiveAt?: true
   activeLearningPathId?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -140,6 +145,7 @@ export type UserCountAggregateInputType = {
   streak?: true
   lastActiveAt?: true
   activeLearningPathId?: true
+  deletedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -243,6 +249,7 @@ export type UserGroupByOutputType = {
   streak: number
   lastActiveAt: Date | null
   activeLearningPathId: string | null
+  deletedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
@@ -282,6 +289,7 @@ export type UserWhereInput = {
   streak?: Prisma.IntFilter<"User"> | number
   lastActiveAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   activeLearningPathId?: Prisma.StringNullableFilter<"User"> | string | null
+  deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   careerLevel?: Prisma.XOR<Prisma.CareerLevelNullableScalarRelationFilter, Prisma.CareerLevelWhereInput> | null
@@ -293,6 +301,18 @@ export type UserWhereInput = {
   learningPaths?: Prisma.UserLearningPathListRelationFilter
   aiMentorContext?: Prisma.XOR<Prisma.AIMentorContextNullableScalarRelationFilter, Prisma.AIMentorContextWhereInput> | null
   submissions?: Prisma.ChallengeSubmissionListRelationFilter
+  sourceDocuments?: Prisma.SourceDocumentListRelationFilter
+  roles?: Prisma.RoleListRelationFilter
+  projects?: Prisma.ProjectListRelationFilter
+  educations?: Prisma.EducationListRelationFilter
+  skillClaims?: Prisma.SkillClaimListRelationFilter
+  analysisRuns?: Prisma.AnalysisRunListRelationFilter
+  chosenBets?: Prisma.ChosenBetListRelationFilter
+  roadmaps?: Prisma.RoadmapListRelationFilter
+  capabilityProgress?: Prisma.UserCapabilityProgressListRelationFilter
+  auditEvents?: Prisma.AuditEventListRelationFilter
+  feedback?: Prisma.FeedbackListRelationFilter
+  usage?: Prisma.UsageLedgerListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -307,6 +327,7 @@ export type UserOrderByWithRelationInput = {
   streak?: Prisma.SortOrder
   lastActiveAt?: Prisma.SortOrderInput | Prisma.SortOrder
   activeLearningPathId?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   careerLevel?: Prisma.CareerLevelOrderByWithRelationInput
@@ -318,6 +339,18 @@ export type UserOrderByWithRelationInput = {
   learningPaths?: Prisma.UserLearningPathOrderByRelationAggregateInput
   aiMentorContext?: Prisma.AIMentorContextOrderByWithRelationInput
   submissions?: Prisma.ChallengeSubmissionOrderByRelationAggregateInput
+  sourceDocuments?: Prisma.SourceDocumentOrderByRelationAggregateInput
+  roles?: Prisma.RoleOrderByRelationAggregateInput
+  projects?: Prisma.ProjectOrderByRelationAggregateInput
+  educations?: Prisma.EducationOrderByRelationAggregateInput
+  skillClaims?: Prisma.SkillClaimOrderByRelationAggregateInput
+  analysisRuns?: Prisma.AnalysisRunOrderByRelationAggregateInput
+  chosenBets?: Prisma.ChosenBetOrderByRelationAggregateInput
+  roadmaps?: Prisma.RoadmapOrderByRelationAggregateInput
+  capabilityProgress?: Prisma.UserCapabilityProgressOrderByRelationAggregateInput
+  auditEvents?: Prisma.AuditEventOrderByRelationAggregateInput
+  feedback?: Prisma.FeedbackOrderByRelationAggregateInput
+  usage?: Prisma.UsageLedgerOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -335,6 +368,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   streak?: Prisma.IntFilter<"User"> | number
   lastActiveAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   activeLearningPathId?: Prisma.StringNullableFilter<"User"> | string | null
+  deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   careerLevel?: Prisma.XOR<Prisma.CareerLevelNullableScalarRelationFilter, Prisma.CareerLevelWhereInput> | null
@@ -346,6 +380,18 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   learningPaths?: Prisma.UserLearningPathListRelationFilter
   aiMentorContext?: Prisma.XOR<Prisma.AIMentorContextNullableScalarRelationFilter, Prisma.AIMentorContextWhereInput> | null
   submissions?: Prisma.ChallengeSubmissionListRelationFilter
+  sourceDocuments?: Prisma.SourceDocumentListRelationFilter
+  roles?: Prisma.RoleListRelationFilter
+  projects?: Prisma.ProjectListRelationFilter
+  educations?: Prisma.EducationListRelationFilter
+  skillClaims?: Prisma.SkillClaimListRelationFilter
+  analysisRuns?: Prisma.AnalysisRunListRelationFilter
+  chosenBets?: Prisma.ChosenBetListRelationFilter
+  roadmaps?: Prisma.RoadmapListRelationFilter
+  capabilityProgress?: Prisma.UserCapabilityProgressListRelationFilter
+  auditEvents?: Prisma.AuditEventListRelationFilter
+  feedback?: Prisma.FeedbackListRelationFilter
+  usage?: Prisma.UsageLedgerListRelationFilter
 }, "id" | "email" | "phone">
 
 export type UserOrderByWithAggregationInput = {
@@ -360,6 +406,7 @@ export type UserOrderByWithAggregationInput = {
   streak?: Prisma.SortOrder
   lastActiveAt?: Prisma.SortOrderInput | Prisma.SortOrder
   activeLearningPathId?: Prisma.SortOrderInput | Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
@@ -384,6 +431,7 @@ export type UserScalarWhereWithAggregatesInput = {
   streak?: Prisma.IntWithAggregatesFilter<"User"> | number
   lastActiveAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   activeLearningPathId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -399,6 +447,7 @@ export type UserCreateInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
@@ -410,6 +459,18 @@ export type UserCreateInput = {
   learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -424,6 +485,7 @@ export type UserUncheckedCreateInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
@@ -434,6 +496,18 @@ export type UserUncheckedCreateInput = {
   learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -447,6 +521,7 @@ export type UserUpdateInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
@@ -458,6 +533,18 @@ export type UserUpdateInput = {
   learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -472,6 +559,7 @@ export type UserUncheckedUpdateInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -482,6 +570,18 @@ export type UserUncheckedUpdateInput = {
   learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -496,6 +596,7 @@ export type UserCreateManyInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -511,6 +612,7 @@ export type UserUpdateManyMutationInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -527,6 +629,7 @@ export type UserUncheckedUpdateManyInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -553,6 +656,7 @@ export type UserCountOrderByAggregateInput = {
   streak?: Prisma.SortOrder
   lastActiveAt?: Prisma.SortOrder
   activeLearningPathId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -574,6 +678,7 @@ export type UserMaxOrderByAggregateInput = {
   streak?: Prisma.SortOrder
   lastActiveAt?: Prisma.SortOrder
   activeLearningPathId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -590,6 +695,7 @@ export type UserMinOrderByAggregateInput = {
   streak?: Prisma.SortOrder
   lastActiveAt?: Prisma.SortOrder
   activeLearningPathId?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -769,6 +875,176 @@ export type UserUpdateOneRequiredWithoutSubmissionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSubmissionsInput, Prisma.UserUpdateWithoutSubmissionsInput>, Prisma.UserUncheckedUpdateWithoutSubmissionsInput>
 }
 
+export type UserCreateNestedOneWithoutSourceDocumentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSourceDocumentsInput, Prisma.UserUncheckedCreateWithoutSourceDocumentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSourceDocumentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSourceDocumentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSourceDocumentsInput, Prisma.UserUncheckedCreateWithoutSourceDocumentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSourceDocumentsInput
+  upsert?: Prisma.UserUpsertWithoutSourceDocumentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSourceDocumentsInput, Prisma.UserUpdateWithoutSourceDocumentsInput>, Prisma.UserUncheckedUpdateWithoutSourceDocumentsInput>
+}
+
+export type UserCreateNestedOneWithoutRolesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRolesInput, Prisma.UserUncheckedCreateWithoutRolesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRolesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutRolesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRolesInput, Prisma.UserUncheckedCreateWithoutRolesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRolesInput
+  upsert?: Prisma.UserUpsertWithoutRolesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRolesInput, Prisma.UserUpdateWithoutRolesInput>, Prisma.UserUncheckedUpdateWithoutRolesInput>
+}
+
+export type UserCreateNestedOneWithoutProjectsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsInput, Prisma.UserUncheckedCreateWithoutProjectsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutProjectsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsInput, Prisma.UserUncheckedCreateWithoutProjectsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsInput
+  upsert?: Prisma.UserUpsertWithoutProjectsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProjectsInput, Prisma.UserUpdateWithoutProjectsInput>, Prisma.UserUncheckedUpdateWithoutProjectsInput>
+}
+
+export type UserCreateNestedOneWithoutEducationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEducationsInput, Prisma.UserUncheckedCreateWithoutEducationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEducationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutEducationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEducationsInput, Prisma.UserUncheckedCreateWithoutEducationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEducationsInput
+  upsert?: Prisma.UserUpsertWithoutEducationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEducationsInput, Prisma.UserUpdateWithoutEducationsInput>, Prisma.UserUncheckedUpdateWithoutEducationsInput>
+}
+
+export type UserCreateNestedOneWithoutSkillClaimsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSkillClaimsInput, Prisma.UserUncheckedCreateWithoutSkillClaimsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSkillClaimsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSkillClaimsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSkillClaimsInput, Prisma.UserUncheckedCreateWithoutSkillClaimsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSkillClaimsInput
+  upsert?: Prisma.UserUpsertWithoutSkillClaimsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSkillClaimsInput, Prisma.UserUpdateWithoutSkillClaimsInput>, Prisma.UserUncheckedUpdateWithoutSkillClaimsInput>
+}
+
+export type UserCreateNestedOneWithoutAnalysisRunsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAnalysisRunsInput, Prisma.UserUncheckedCreateWithoutAnalysisRunsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAnalysisRunsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutAnalysisRunsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAnalysisRunsInput, Prisma.UserUncheckedCreateWithoutAnalysisRunsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAnalysisRunsInput
+  upsert?: Prisma.UserUpsertWithoutAnalysisRunsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAnalysisRunsInput, Prisma.UserUpdateWithoutAnalysisRunsInput>, Prisma.UserUncheckedUpdateWithoutAnalysisRunsInput>
+}
+
+export type UserCreateNestedOneWithoutChosenBetsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutChosenBetsInput, Prisma.UserUncheckedCreateWithoutChosenBetsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutChosenBetsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutChosenBetsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutChosenBetsInput, Prisma.UserUncheckedCreateWithoutChosenBetsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutChosenBetsInput
+  upsert?: Prisma.UserUpsertWithoutChosenBetsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutChosenBetsInput, Prisma.UserUpdateWithoutChosenBetsInput>, Prisma.UserUncheckedUpdateWithoutChosenBetsInput>
+}
+
+export type UserCreateNestedOneWithoutRoadmapsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRoadmapsInput, Prisma.UserUncheckedCreateWithoutRoadmapsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRoadmapsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutRoadmapsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRoadmapsInput, Prisma.UserUncheckedCreateWithoutRoadmapsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRoadmapsInput
+  upsert?: Prisma.UserUpsertWithoutRoadmapsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRoadmapsInput, Prisma.UserUpdateWithoutRoadmapsInput>, Prisma.UserUncheckedUpdateWithoutRoadmapsInput>
+}
+
+export type UserCreateNestedOneWithoutCapabilityProgressInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCapabilityProgressInput, Prisma.UserUncheckedCreateWithoutCapabilityProgressInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCapabilityProgressInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutCapabilityProgressNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCapabilityProgressInput, Prisma.UserUncheckedCreateWithoutCapabilityProgressInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCapabilityProgressInput
+  upsert?: Prisma.UserUpsertWithoutCapabilityProgressInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCapabilityProgressInput, Prisma.UserUpdateWithoutCapabilityProgressInput>, Prisma.UserUncheckedUpdateWithoutCapabilityProgressInput>
+}
+
+export type UserCreateNestedOneWithoutAuditEventsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditEventsInput, Prisma.UserUncheckedCreateWithoutAuditEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditEventsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutAuditEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditEventsInput, Prisma.UserUncheckedCreateWithoutAuditEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditEventsInput
+  upsert?: Prisma.UserUpsertWithoutAuditEventsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditEventsInput, Prisma.UserUpdateWithoutAuditEventsInput>, Prisma.UserUncheckedUpdateWithoutAuditEventsInput>
+}
+
+export type UserCreateNestedOneWithoutFeedbackInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeedbackInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutFeedbackNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFeedbackInput
+  upsert?: Prisma.UserUpsertWithoutFeedbackInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFeedbackInput, Prisma.UserUpdateWithoutFeedbackInput>, Prisma.UserUncheckedUpdateWithoutFeedbackInput>
+}
+
+export type UserCreateNestedOneWithoutUsageInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUsageInput, Prisma.UserUncheckedCreateWithoutUsageInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUsageInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutUsageNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutUsageInput, Prisma.UserUncheckedCreateWithoutUsageInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutUsageInput
+  upsert?: Prisma.UserUpsertWithoutUsageInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutUsageInput, Prisma.UserUpdateWithoutUsageInput>, Prisma.UserUncheckedUpdateWithoutUsageInput>
+}
+
 export type UserCreateWithoutCareerLevelInput = {
   id?: string
   email: string
@@ -780,6 +1056,7 @@ export type UserCreateWithoutCareerLevelInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
@@ -790,6 +1067,18 @@ export type UserCreateWithoutCareerLevelInput = {
   learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCareerLevelInput = {
@@ -803,6 +1092,7 @@ export type UserUncheckedCreateWithoutCareerLevelInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
@@ -813,6 +1103,18 @@ export type UserUncheckedCreateWithoutCareerLevelInput = {
   learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCareerLevelInput = {
@@ -856,6 +1158,7 @@ export type UserScalarWhereInput = {
   streak?: Prisma.IntFilter<"User"> | number
   lastActiveAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   activeLearningPathId?: Prisma.StringNullableFilter<"User"> | string | null
+  deletedAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
@@ -871,6 +1174,7 @@ export type UserCreateWithoutMagicLinkTokensInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
@@ -881,6 +1185,18 @@ export type UserCreateWithoutMagicLinkTokensInput = {
   learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutMagicLinkTokensInput = {
@@ -895,6 +1211,7 @@ export type UserUncheckedCreateWithoutMagicLinkTokensInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
@@ -904,6 +1221,18 @@ export type UserUncheckedCreateWithoutMagicLinkTokensInput = {
   learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutMagicLinkTokensInput = {
@@ -933,6 +1262,7 @@ export type UserUpdateWithoutMagicLinkTokensInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
@@ -943,6 +1273,18 @@ export type UserUpdateWithoutMagicLinkTokensInput = {
   learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutMagicLinkTokensInput = {
@@ -957,6 +1299,7 @@ export type UserUncheckedUpdateWithoutMagicLinkTokensInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
@@ -966,6 +1309,18 @@ export type UserUncheckedUpdateWithoutMagicLinkTokensInput = {
   learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCompetenciesInput = {
@@ -979,6 +1334,7 @@ export type UserCreateWithoutCompetenciesInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
@@ -989,6 +1345,18 @@ export type UserCreateWithoutCompetenciesInput = {
   learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCompetenciesInput = {
@@ -1003,6 +1371,7 @@ export type UserUncheckedCreateWithoutCompetenciesInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
@@ -1012,6 +1381,18 @@ export type UserUncheckedCreateWithoutCompetenciesInput = {
   learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCompetenciesInput = {
@@ -1041,6 +1422,7 @@ export type UserUpdateWithoutCompetenciesInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
@@ -1051,6 +1433,18 @@ export type UserUpdateWithoutCompetenciesInput = {
   learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCompetenciesInput = {
@@ -1065,6 +1459,7 @@ export type UserUncheckedUpdateWithoutCompetenciesInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -1074,6 +1469,18 @@ export type UserUncheckedUpdateWithoutCompetenciesInput = {
   learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSkillsInput = {
@@ -1087,6 +1494,7 @@ export type UserCreateWithoutSkillsInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
@@ -1097,6 +1505,18 @@ export type UserCreateWithoutSkillsInput = {
   learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSkillsInput = {
@@ -1111,6 +1531,7 @@ export type UserUncheckedCreateWithoutSkillsInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
@@ -1120,6 +1541,18 @@ export type UserUncheckedCreateWithoutSkillsInput = {
   learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSkillsInput = {
@@ -1149,6 +1582,7 @@ export type UserUpdateWithoutSkillsInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
@@ -1159,6 +1593,18 @@ export type UserUpdateWithoutSkillsInput = {
   learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSkillsInput = {
@@ -1173,6 +1619,7 @@ export type UserUncheckedUpdateWithoutSkillsInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -1182,6 +1629,18 @@ export type UserUncheckedUpdateWithoutSkillsInput = {
   learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutConceptMasteriesInput = {
@@ -1195,6 +1654,7 @@ export type UserCreateWithoutConceptMasteriesInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
@@ -1205,6 +1665,18 @@ export type UserCreateWithoutConceptMasteriesInput = {
   learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutConceptMasteriesInput = {
@@ -1219,6 +1691,7 @@ export type UserUncheckedCreateWithoutConceptMasteriesInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
@@ -1228,6 +1701,18 @@ export type UserUncheckedCreateWithoutConceptMasteriesInput = {
   learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutConceptMasteriesInput = {
@@ -1257,6 +1742,7 @@ export type UserUpdateWithoutConceptMasteriesInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
@@ -1267,6 +1753,18 @@ export type UserUpdateWithoutConceptMasteriesInput = {
   learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutConceptMasteriesInput = {
@@ -1281,6 +1779,7 @@ export type UserUncheckedUpdateWithoutConceptMasteriesInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -1290,6 +1789,18 @@ export type UserUncheckedUpdateWithoutConceptMasteriesInput = {
   learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLearningSessionsInput = {
@@ -1303,6 +1814,7 @@ export type UserCreateWithoutLearningSessionsInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
@@ -1313,6 +1825,18 @@ export type UserCreateWithoutLearningSessionsInput = {
   learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLearningSessionsInput = {
@@ -1327,6 +1851,7 @@ export type UserUncheckedCreateWithoutLearningSessionsInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
@@ -1336,6 +1861,18 @@ export type UserUncheckedCreateWithoutLearningSessionsInput = {
   learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLearningSessionsInput = {
@@ -1365,6 +1902,7 @@ export type UserUpdateWithoutLearningSessionsInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
@@ -1375,6 +1913,18 @@ export type UserUpdateWithoutLearningSessionsInput = {
   learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLearningSessionsInput = {
@@ -1389,6 +1939,7 @@ export type UserUncheckedUpdateWithoutLearningSessionsInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -1398,6 +1949,18 @@ export type UserUncheckedUpdateWithoutLearningSessionsInput = {
   learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLearningPathsInput = {
@@ -1411,6 +1974,7 @@ export type UserCreateWithoutLearningPathsInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
@@ -1421,6 +1985,18 @@ export type UserCreateWithoutLearningPathsInput = {
   learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLearningPathsInput = {
@@ -1435,6 +2011,7 @@ export type UserUncheckedCreateWithoutLearningPathsInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
@@ -1444,6 +2021,18 @@ export type UserUncheckedCreateWithoutLearningPathsInput = {
   learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLearningPathsInput = {
@@ -1473,6 +2062,7 @@ export type UserUpdateWithoutLearningPathsInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
@@ -1483,6 +2073,18 @@ export type UserUpdateWithoutLearningPathsInput = {
   learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLearningPathsInput = {
@@ -1497,6 +2099,7 @@ export type UserUncheckedUpdateWithoutLearningPathsInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -1506,6 +2109,18 @@ export type UserUncheckedUpdateWithoutLearningPathsInput = {
   learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAiMentorContextInput = {
@@ -1519,6 +2134,7 @@ export type UserCreateWithoutAiMentorContextInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
@@ -1529,6 +2145,18 @@ export type UserCreateWithoutAiMentorContextInput = {
   learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
   learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAiMentorContextInput = {
@@ -1543,6 +2171,7 @@ export type UserUncheckedCreateWithoutAiMentorContextInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
@@ -1552,6 +2181,18 @@ export type UserUncheckedCreateWithoutAiMentorContextInput = {
   learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
   learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
   submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAiMentorContextInput = {
@@ -1581,6 +2222,7 @@ export type UserUpdateWithoutAiMentorContextInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
@@ -1591,6 +2233,18 @@ export type UserUpdateWithoutAiMentorContextInput = {
   learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
   learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAiMentorContextInput = {
@@ -1605,6 +2259,7 @@ export type UserUncheckedUpdateWithoutAiMentorContextInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -1614,6 +2269,18 @@ export type UserUncheckedUpdateWithoutAiMentorContextInput = {
   learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
   learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSubmissionsInput = {
@@ -1627,6 +2294,7 @@ export type UserCreateWithoutSubmissionsInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
@@ -1637,6 +2305,18 @@ export type UserCreateWithoutSubmissionsInput = {
   learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
   learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSubmissionsInput = {
@@ -1651,6 +2331,7 @@ export type UserUncheckedCreateWithoutSubmissionsInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
@@ -1660,6 +2341,18 @@ export type UserUncheckedCreateWithoutSubmissionsInput = {
   learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
   learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSubmissionsInput = {
@@ -1689,6 +2382,7 @@ export type UserUpdateWithoutSubmissionsInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
@@ -1699,6 +2393,18 @@ export type UserUpdateWithoutSubmissionsInput = {
   learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
   learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSubmissionsInput = {
@@ -1713,6 +2419,7 @@ export type UserUncheckedUpdateWithoutSubmissionsInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -1722,6 +2429,1938 @@ export type UserUncheckedUpdateWithoutSubmissionsInput = {
   learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
   learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSourceDocumentsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
+  magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSourceDocumentsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  careerLevelId?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSourceDocumentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSourceDocumentsInput, Prisma.UserUncheckedCreateWithoutSourceDocumentsInput>
+}
+
+export type UserUpsertWithoutSourceDocumentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSourceDocumentsInput, Prisma.UserUncheckedUpdateWithoutSourceDocumentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSourceDocumentsInput, Prisma.UserUncheckedCreateWithoutSourceDocumentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSourceDocumentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSourceDocumentsInput, Prisma.UserUncheckedUpdateWithoutSourceDocumentsInput>
+}
+
+export type UserUpdateWithoutSourceDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
+  magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSourceDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutRolesInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
+  magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutRolesInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  careerLevelId?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutRolesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRolesInput, Prisma.UserUncheckedCreateWithoutRolesInput>
+}
+
+export type UserUpsertWithoutRolesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRolesInput, Prisma.UserUncheckedUpdateWithoutRolesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRolesInput, Prisma.UserUncheckedCreateWithoutRolesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRolesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRolesInput, Prisma.UserUncheckedUpdateWithoutRolesInput>
+}
+
+export type UserUpdateWithoutRolesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
+  magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRolesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutProjectsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
+  magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutProjectsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  careerLevelId?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutProjectsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutProjectsInput, Prisma.UserUncheckedCreateWithoutProjectsInput>
+}
+
+export type UserUpsertWithoutProjectsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutProjectsInput, Prisma.UserUncheckedUpdateWithoutProjectsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutProjectsInput, Prisma.UserUncheckedCreateWithoutProjectsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutProjectsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutProjectsInput, Prisma.UserUncheckedUpdateWithoutProjectsInput>
+}
+
+export type UserUpdateWithoutProjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
+  magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutProjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutEducationsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
+  magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutEducationsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  careerLevelId?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutEducationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutEducationsInput, Prisma.UserUncheckedCreateWithoutEducationsInput>
+}
+
+export type UserUpsertWithoutEducationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutEducationsInput, Prisma.UserUncheckedUpdateWithoutEducationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutEducationsInput, Prisma.UserUncheckedCreateWithoutEducationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutEducationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutEducationsInput, Prisma.UserUncheckedUpdateWithoutEducationsInput>
+}
+
+export type UserUpdateWithoutEducationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
+  magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutEducationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSkillClaimsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
+  magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSkillClaimsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  careerLevelId?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSkillClaimsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSkillClaimsInput, Prisma.UserUncheckedCreateWithoutSkillClaimsInput>
+}
+
+export type UserUpsertWithoutSkillClaimsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSkillClaimsInput, Prisma.UserUncheckedUpdateWithoutSkillClaimsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSkillClaimsInput, Prisma.UserUncheckedCreateWithoutSkillClaimsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSkillClaimsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSkillClaimsInput, Prisma.UserUncheckedUpdateWithoutSkillClaimsInput>
+}
+
+export type UserUpdateWithoutSkillClaimsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
+  magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSkillClaimsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutAnalysisRunsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
+  magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAnalysisRunsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  careerLevelId?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAnalysisRunsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAnalysisRunsInput, Prisma.UserUncheckedCreateWithoutAnalysisRunsInput>
+}
+
+export type UserUpsertWithoutAnalysisRunsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAnalysisRunsInput, Prisma.UserUncheckedUpdateWithoutAnalysisRunsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAnalysisRunsInput, Prisma.UserUncheckedCreateWithoutAnalysisRunsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAnalysisRunsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAnalysisRunsInput, Prisma.UserUncheckedUpdateWithoutAnalysisRunsInput>
+}
+
+export type UserUpdateWithoutAnalysisRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
+  magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAnalysisRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutChosenBetsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
+  magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutChosenBetsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  careerLevelId?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutChosenBetsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutChosenBetsInput, Prisma.UserUncheckedCreateWithoutChosenBetsInput>
+}
+
+export type UserUpsertWithoutChosenBetsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutChosenBetsInput, Prisma.UserUncheckedUpdateWithoutChosenBetsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutChosenBetsInput, Prisma.UserUncheckedCreateWithoutChosenBetsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutChosenBetsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutChosenBetsInput, Prisma.UserUncheckedUpdateWithoutChosenBetsInput>
+}
+
+export type UserUpdateWithoutChosenBetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
+  magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutChosenBetsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutRoadmapsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
+  magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutRoadmapsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  careerLevelId?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutRoadmapsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRoadmapsInput, Prisma.UserUncheckedCreateWithoutRoadmapsInput>
+}
+
+export type UserUpsertWithoutRoadmapsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRoadmapsInput, Prisma.UserUncheckedUpdateWithoutRoadmapsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRoadmapsInput, Prisma.UserUncheckedCreateWithoutRoadmapsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRoadmapsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRoadmapsInput, Prisma.UserUncheckedUpdateWithoutRoadmapsInput>
+}
+
+export type UserUpdateWithoutRoadmapsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
+  magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRoadmapsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCapabilityProgressInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
+  magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutCapabilityProgressInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  careerLevelId?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutCapabilityProgressInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCapabilityProgressInput, Prisma.UserUncheckedCreateWithoutCapabilityProgressInput>
+}
+
+export type UserUpsertWithoutCapabilityProgressInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCapabilityProgressInput, Prisma.UserUncheckedUpdateWithoutCapabilityProgressInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCapabilityProgressInput, Prisma.UserUncheckedCreateWithoutCapabilityProgressInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCapabilityProgressInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCapabilityProgressInput, Prisma.UserUncheckedUpdateWithoutCapabilityProgressInput>
+}
+
+export type UserUpdateWithoutCapabilityProgressInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
+  magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCapabilityProgressInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutAuditEventsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
+  magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutAuditEventsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  careerLevelId?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAuditEventsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuditEventsInput, Prisma.UserUncheckedCreateWithoutAuditEventsInput>
+}
+
+export type UserUpsertWithoutAuditEventsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAuditEventsInput, Prisma.UserUncheckedUpdateWithoutAuditEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuditEventsInput, Prisma.UserUncheckedCreateWithoutAuditEventsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAuditEventsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAuditEventsInput, Prisma.UserUncheckedUpdateWithoutAuditEventsInput>
+}
+
+export type UserUpdateWithoutAuditEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
+  magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAuditEventsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutFeedbackInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
+  magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutFeedbackInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  careerLevelId?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutFeedbackInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
+}
+
+export type UserUpsertWithoutFeedbackInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFeedbackInput, Prisma.UserUncheckedUpdateWithoutFeedbackInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFeedbackInput, Prisma.UserUncheckedCreateWithoutFeedbackInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFeedbackInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFeedbackInput, Prisma.UserUncheckedUpdateWithoutFeedbackInput>
+}
+
+export type UserUpdateWithoutFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
+  magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutUsageInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
+  magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutUsageInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  careerLevelId?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutUsageInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutUsageInput, Prisma.UserUncheckedCreateWithoutUsageInput>
+}
+
+export type UserUpsertWithoutUsageInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutUsageInput, Prisma.UserUncheckedUpdateWithoutUsageInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutUsageInput, Prisma.UserUncheckedCreateWithoutUsageInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutUsageInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutUsageInput, Prisma.UserUncheckedUpdateWithoutUsageInput>
+}
+
+export type UserUpdateWithoutUsageInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
+  magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutUsageInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyCareerLevelInput = {
@@ -1735,6 +4374,7 @@ export type UserCreateManyCareerLevelInput = {
   streak?: number
   lastActiveAt?: Date | string | null
   activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1750,6 +4390,7 @@ export type UserUpdateWithoutCareerLevelInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
@@ -1760,6 +4401,18 @@ export type UserUpdateWithoutCareerLevelInput = {
   learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCareerLevelInput = {
@@ -1773,6 +4426,7 @@ export type UserUncheckedUpdateWithoutCareerLevelInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -1783,6 +4437,18 @@ export type UserUncheckedUpdateWithoutCareerLevelInput = {
   learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
   aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
   submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutCareerLevelInput = {
@@ -1796,6 +4462,7 @@ export type UserUncheckedUpdateManyWithoutCareerLevelInput = {
   streak?: Prisma.IntFieldUpdateOperationsInput | number
   lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1813,6 +4480,18 @@ export type UserCountOutputType = {
   learningSessions: number
   learningPaths: number
   submissions: number
+  sourceDocuments: number
+  roles: number
+  projects: number
+  educations: number
+  skillClaims: number
+  analysisRuns: number
+  chosenBets: number
+  roadmaps: number
+  capabilityProgress: number
+  auditEvents: number
+  feedback: number
+  usage: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1823,6 +4502,18 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   learningSessions?: boolean | UserCountOutputTypeCountLearningSessionsArgs
   learningPaths?: boolean | UserCountOutputTypeCountLearningPathsArgs
   submissions?: boolean | UserCountOutputTypeCountSubmissionsArgs
+  sourceDocuments?: boolean | UserCountOutputTypeCountSourceDocumentsArgs
+  roles?: boolean | UserCountOutputTypeCountRolesArgs
+  projects?: boolean | UserCountOutputTypeCountProjectsArgs
+  educations?: boolean | UserCountOutputTypeCountEducationsArgs
+  skillClaims?: boolean | UserCountOutputTypeCountSkillClaimsArgs
+  analysisRuns?: boolean | UserCountOutputTypeCountAnalysisRunsArgs
+  chosenBets?: boolean | UserCountOutputTypeCountChosenBetsArgs
+  roadmaps?: boolean | UserCountOutputTypeCountRoadmapsArgs
+  capabilityProgress?: boolean | UserCountOutputTypeCountCapabilityProgressArgs
+  auditEvents?: boolean | UserCountOutputTypeCountAuditEventsArgs
+  feedback?: boolean | UserCountOutputTypeCountFeedbackArgs
+  usage?: boolean | UserCountOutputTypeCountUsageArgs
 }
 
 /**
@@ -1884,6 +4575,90 @@ export type UserCountOutputTypeCountSubmissionsArgs<ExtArgs extends runtime.Type
   where?: Prisma.ChallengeSubmissionWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSourceDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SourceDocumentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountRolesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoleWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountProjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProjectWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountEducationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EducationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSkillClaimsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SkillClaimWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAnalysisRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AnalysisRunWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountChosenBetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ChosenBetWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountRoadmapsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RoadmapWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCapabilityProgressArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserCapabilityProgressWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAuditEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AuditEventWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFeedbackArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FeedbackWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountUsageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UsageLedgerWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1897,6 +4672,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   streak?: boolean
   lastActiveAt?: boolean
   activeLearningPathId?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   careerLevel?: boolean | Prisma.User$careerLevelArgs<ExtArgs>
@@ -1908,6 +4684,18 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   learningPaths?: boolean | Prisma.User$learningPathsArgs<ExtArgs>
   aiMentorContext?: boolean | Prisma.User$aiMentorContextArgs<ExtArgs>
   submissions?: boolean | Prisma.User$submissionsArgs<ExtArgs>
+  sourceDocuments?: boolean | Prisma.User$sourceDocumentsArgs<ExtArgs>
+  roles?: boolean | Prisma.User$rolesArgs<ExtArgs>
+  projects?: boolean | Prisma.User$projectsArgs<ExtArgs>
+  educations?: boolean | Prisma.User$educationsArgs<ExtArgs>
+  skillClaims?: boolean | Prisma.User$skillClaimsArgs<ExtArgs>
+  analysisRuns?: boolean | Prisma.User$analysisRunsArgs<ExtArgs>
+  chosenBets?: boolean | Prisma.User$chosenBetsArgs<ExtArgs>
+  roadmaps?: boolean | Prisma.User$roadmapsArgs<ExtArgs>
+  capabilityProgress?: boolean | Prisma.User$capabilityProgressArgs<ExtArgs>
+  auditEvents?: boolean | Prisma.User$auditEventsArgs<ExtArgs>
+  feedback?: boolean | Prisma.User$feedbackArgs<ExtArgs>
+  usage?: boolean | Prisma.User$usageArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1923,6 +4711,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   streak?: boolean
   lastActiveAt?: boolean
   activeLearningPathId?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   careerLevel?: boolean | Prisma.User$careerLevelArgs<ExtArgs>
@@ -1940,6 +4729,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   streak?: boolean
   lastActiveAt?: boolean
   activeLearningPathId?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   careerLevel?: boolean | Prisma.User$careerLevelArgs<ExtArgs>
@@ -1957,11 +4747,12 @@ export type UserSelectScalar = {
   streak?: boolean
   lastActiveAt?: boolean
   activeLearningPathId?: boolean
+  deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "phone" | "name" | "passwordHash" | "avatarUrl" | "careerLevelId" | "xp" | "streak" | "lastActiveAt" | "activeLearningPathId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "phone" | "name" | "passwordHash" | "avatarUrl" | "careerLevelId" | "xp" | "streak" | "lastActiveAt" | "activeLearningPathId" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   careerLevel?: boolean | Prisma.User$careerLevelArgs<ExtArgs>
   magicLinkTokens?: boolean | Prisma.User$magicLinkTokensArgs<ExtArgs>
@@ -1972,6 +4763,18 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   learningPaths?: boolean | Prisma.User$learningPathsArgs<ExtArgs>
   aiMentorContext?: boolean | Prisma.User$aiMentorContextArgs<ExtArgs>
   submissions?: boolean | Prisma.User$submissionsArgs<ExtArgs>
+  sourceDocuments?: boolean | Prisma.User$sourceDocumentsArgs<ExtArgs>
+  roles?: boolean | Prisma.User$rolesArgs<ExtArgs>
+  projects?: boolean | Prisma.User$projectsArgs<ExtArgs>
+  educations?: boolean | Prisma.User$educationsArgs<ExtArgs>
+  skillClaims?: boolean | Prisma.User$skillClaimsArgs<ExtArgs>
+  analysisRuns?: boolean | Prisma.User$analysisRunsArgs<ExtArgs>
+  chosenBets?: boolean | Prisma.User$chosenBetsArgs<ExtArgs>
+  roadmaps?: boolean | Prisma.User$roadmapsArgs<ExtArgs>
+  capabilityProgress?: boolean | Prisma.User$capabilityProgressArgs<ExtArgs>
+  auditEvents?: boolean | Prisma.User$auditEventsArgs<ExtArgs>
+  feedback?: boolean | Prisma.User$feedbackArgs<ExtArgs>
+  usage?: boolean | Prisma.User$usageArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1993,6 +4796,18 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     learningPaths: Prisma.$UserLearningPathPayload<ExtArgs>[]
     aiMentorContext: Prisma.$AIMentorContextPayload<ExtArgs> | null
     submissions: Prisma.$ChallengeSubmissionPayload<ExtArgs>[]
+    sourceDocuments: Prisma.$SourceDocumentPayload<ExtArgs>[]
+    roles: Prisma.$RolePayload<ExtArgs>[]
+    projects: Prisma.$ProjectPayload<ExtArgs>[]
+    educations: Prisma.$EducationPayload<ExtArgs>[]
+    skillClaims: Prisma.$SkillClaimPayload<ExtArgs>[]
+    analysisRuns: Prisma.$AnalysisRunPayload<ExtArgs>[]
+    chosenBets: Prisma.$ChosenBetPayload<ExtArgs>[]
+    roadmaps: Prisma.$RoadmapPayload<ExtArgs>[]
+    capabilityProgress: Prisma.$UserCapabilityProgressPayload<ExtArgs>[]
+    auditEvents: Prisma.$AuditEventPayload<ExtArgs>[]
+    feedback: Prisma.$FeedbackPayload<ExtArgs>[]
+    usage: Prisma.$UsageLedgerPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2006,6 +4821,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     streak: number
     lastActiveAt: Date | null
     activeLearningPathId: string | null
+    deletedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -2411,6 +5227,18 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   learningPaths<T extends Prisma.User$learningPathsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$learningPathsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserLearningPathPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   aiMentorContext<T extends Prisma.User$aiMentorContextArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$aiMentorContextArgs<ExtArgs>>): Prisma.Prisma__AIMentorContextClient<runtime.Types.Result.GetResult<Prisma.$AIMentorContextPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   submissions<T extends Prisma.User$submissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChallengeSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sourceDocuments<T extends Prisma.User$sourceDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sourceDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SourceDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  roles<T extends Prisma.User$rolesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$rolesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  projects<T extends Prisma.User$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  educations<T extends Prisma.User$educationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$educationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EducationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  skillClaims<T extends Prisma.User$skillClaimsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$skillClaimsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SkillClaimPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  analysisRuns<T extends Prisma.User$analysisRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$analysisRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AnalysisRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  chosenBets<T extends Prisma.User$chosenBetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$chosenBetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChosenBetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  roadmaps<T extends Prisma.User$roadmapsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$roadmapsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RoadmapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  capabilityProgress<T extends Prisma.User$capabilityProgressArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$capabilityProgressArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserCapabilityProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  auditEvents<T extends Prisma.User$auditEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  feedback<T extends Prisma.User$feedbackArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$feedbackArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  usage<T extends Prisma.User$usageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$usageArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UsageLedgerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2451,6 +5279,7 @@ export interface UserFieldRefs {
   readonly streak: Prisma.FieldRef<"User", 'Int'>
   readonly lastActiveAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly activeLearningPathId: Prisma.FieldRef<"User", 'String'>
+  readonly deletedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
@@ -3057,6 +5886,294 @@ export type User$submissionsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.ChallengeSubmissionScalarFieldEnum | Prisma.ChallengeSubmissionScalarFieldEnum[]
+}
+
+/**
+ * User.sourceDocuments
+ */
+export type User$sourceDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SourceDocument
+   */
+  select?: Prisma.SourceDocumentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SourceDocument
+   */
+  omit?: Prisma.SourceDocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SourceDocumentInclude<ExtArgs> | null
+  where?: Prisma.SourceDocumentWhereInput
+  orderBy?: Prisma.SourceDocumentOrderByWithRelationInput | Prisma.SourceDocumentOrderByWithRelationInput[]
+  cursor?: Prisma.SourceDocumentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SourceDocumentScalarFieldEnum | Prisma.SourceDocumentScalarFieldEnum[]
+}
+
+/**
+ * User.roles
+ */
+export type User$rolesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Role
+   */
+  select?: Prisma.RoleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Role
+   */
+  omit?: Prisma.RoleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoleInclude<ExtArgs> | null
+  where?: Prisma.RoleWhereInput
+  orderBy?: Prisma.RoleOrderByWithRelationInput | Prisma.RoleOrderByWithRelationInput[]
+  cursor?: Prisma.RoleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RoleScalarFieldEnum | Prisma.RoleScalarFieldEnum[]
+}
+
+/**
+ * User.projects
+ */
+export type User$projectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Project
+   */
+  select?: Prisma.ProjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Project
+   */
+  omit?: Prisma.ProjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectInclude<ExtArgs> | null
+  where?: Prisma.ProjectWhereInput
+  orderBy?: Prisma.ProjectOrderByWithRelationInput | Prisma.ProjectOrderByWithRelationInput[]
+  cursor?: Prisma.ProjectWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProjectScalarFieldEnum | Prisma.ProjectScalarFieldEnum[]
+}
+
+/**
+ * User.educations
+ */
+export type User$educationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Education
+   */
+  select?: Prisma.EducationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Education
+   */
+  omit?: Prisma.EducationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EducationInclude<ExtArgs> | null
+  where?: Prisma.EducationWhereInput
+  orderBy?: Prisma.EducationOrderByWithRelationInput | Prisma.EducationOrderByWithRelationInput[]
+  cursor?: Prisma.EducationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EducationScalarFieldEnum | Prisma.EducationScalarFieldEnum[]
+}
+
+/**
+ * User.skillClaims
+ */
+export type User$skillClaimsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SkillClaim
+   */
+  select?: Prisma.SkillClaimSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SkillClaim
+   */
+  omit?: Prisma.SkillClaimOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SkillClaimInclude<ExtArgs> | null
+  where?: Prisma.SkillClaimWhereInput
+  orderBy?: Prisma.SkillClaimOrderByWithRelationInput | Prisma.SkillClaimOrderByWithRelationInput[]
+  cursor?: Prisma.SkillClaimWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SkillClaimScalarFieldEnum | Prisma.SkillClaimScalarFieldEnum[]
+}
+
+/**
+ * User.analysisRuns
+ */
+export type User$analysisRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AnalysisRun
+   */
+  select?: Prisma.AnalysisRunSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AnalysisRun
+   */
+  omit?: Prisma.AnalysisRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AnalysisRunInclude<ExtArgs> | null
+  where?: Prisma.AnalysisRunWhereInput
+  orderBy?: Prisma.AnalysisRunOrderByWithRelationInput | Prisma.AnalysisRunOrderByWithRelationInput[]
+  cursor?: Prisma.AnalysisRunWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AnalysisRunScalarFieldEnum | Prisma.AnalysisRunScalarFieldEnum[]
+}
+
+/**
+ * User.chosenBets
+ */
+export type User$chosenBetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ChosenBet
+   */
+  select?: Prisma.ChosenBetSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ChosenBet
+   */
+  omit?: Prisma.ChosenBetOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChosenBetInclude<ExtArgs> | null
+  where?: Prisma.ChosenBetWhereInput
+  orderBy?: Prisma.ChosenBetOrderByWithRelationInput | Prisma.ChosenBetOrderByWithRelationInput[]
+  cursor?: Prisma.ChosenBetWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ChosenBetScalarFieldEnum | Prisma.ChosenBetScalarFieldEnum[]
+}
+
+/**
+ * User.roadmaps
+ */
+export type User$roadmapsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Roadmap
+   */
+  select?: Prisma.RoadmapSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Roadmap
+   */
+  omit?: Prisma.RoadmapOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RoadmapInclude<ExtArgs> | null
+  where?: Prisma.RoadmapWhereInput
+  orderBy?: Prisma.RoadmapOrderByWithRelationInput | Prisma.RoadmapOrderByWithRelationInput[]
+  cursor?: Prisma.RoadmapWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RoadmapScalarFieldEnum | Prisma.RoadmapScalarFieldEnum[]
+}
+
+/**
+ * User.capabilityProgress
+ */
+export type User$capabilityProgressArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserCapabilityProgress
+   */
+  select?: Prisma.UserCapabilityProgressSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserCapabilityProgress
+   */
+  omit?: Prisma.UserCapabilityProgressOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserCapabilityProgressInclude<ExtArgs> | null
+  where?: Prisma.UserCapabilityProgressWhereInput
+  orderBy?: Prisma.UserCapabilityProgressOrderByWithRelationInput | Prisma.UserCapabilityProgressOrderByWithRelationInput[]
+  cursor?: Prisma.UserCapabilityProgressWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UserCapabilityProgressScalarFieldEnum | Prisma.UserCapabilityProgressScalarFieldEnum[]
+}
+
+/**
+ * User.auditEvents
+ */
+export type User$auditEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AuditEvent
+   */
+  select?: Prisma.AuditEventSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AuditEvent
+   */
+  omit?: Prisma.AuditEventOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AuditEventInclude<ExtArgs> | null
+  where?: Prisma.AuditEventWhereInput
+  orderBy?: Prisma.AuditEventOrderByWithRelationInput | Prisma.AuditEventOrderByWithRelationInput[]
+  cursor?: Prisma.AuditEventWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AuditEventScalarFieldEnum | Prisma.AuditEventScalarFieldEnum[]
+}
+
+/**
+ * User.feedback
+ */
+export type User$feedbackArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Feedback
+   */
+  select?: Prisma.FeedbackSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Feedback
+   */
+  omit?: Prisma.FeedbackOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FeedbackInclude<ExtArgs> | null
+  where?: Prisma.FeedbackWhereInput
+  orderBy?: Prisma.FeedbackOrderByWithRelationInput | Prisma.FeedbackOrderByWithRelationInput[]
+  cursor?: Prisma.FeedbackWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FeedbackScalarFieldEnum | Prisma.FeedbackScalarFieldEnum[]
+}
+
+/**
+ * User.usage
+ */
+export type User$usageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UsageLedger
+   */
+  select?: Prisma.UsageLedgerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UsageLedger
+   */
+  omit?: Prisma.UsageLedgerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UsageLedgerInclude<ExtArgs> | null
+  where?: Prisma.UsageLedgerWhereInput
+  orderBy?: Prisma.UsageLedgerOrderByWithRelationInput | Prisma.UsageLedgerOrderByWithRelationInput[]
+  cursor?: Prisma.UsageLedgerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.UsageLedgerScalarFieldEnum | Prisma.UsageLedgerScalarFieldEnum[]
 }
 
 /**

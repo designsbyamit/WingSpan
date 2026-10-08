@@ -28,8 +28,6 @@ export type AIMentorContextMinAggregateOutputType = {
   id: string | null
   userId: string | null
   context: string | null
-  weaknesses: string | null
-  reflectionHistory: string | null
   updatedAt: Date | null
 }
 
@@ -37,8 +35,6 @@ export type AIMentorContextMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   context: string | null
-  weaknesses: string | null
-  reflectionHistory: string | null
   updatedAt: Date | null
 }
 
@@ -57,8 +53,6 @@ export type AIMentorContextMinAggregateInputType = {
   id?: true
   userId?: true
   context?: true
-  weaknesses?: true
-  reflectionHistory?: true
   updatedAt?: true
 }
 
@@ -66,8 +60,6 @@ export type AIMentorContextMaxAggregateInputType = {
   id?: true
   userId?: true
   context?: true
-  weaknesses?: true
-  reflectionHistory?: true
   updatedAt?: true
 }
 
@@ -157,8 +149,8 @@ export type AIMentorContextGroupByOutputType = {
   id: string
   userId: string
   context: string
-  weaknesses: string
-  reflectionHistory: string
+  weaknesses: runtime.JsonValue
+  reflectionHistory: runtime.JsonValue
   updatedAt: Date
   _count: AIMentorContextCountAggregateOutputType | null
   _min: AIMentorContextMinAggregateOutputType | null
@@ -187,8 +179,8 @@ export type AIMentorContextWhereInput = {
   id?: Prisma.StringFilter<"AIMentorContext"> | string
   userId?: Prisma.StringFilter<"AIMentorContext"> | string
   context?: Prisma.StringFilter<"AIMentorContext"> | string
-  weaknesses?: Prisma.StringFilter<"AIMentorContext"> | string
-  reflectionHistory?: Prisma.StringFilter<"AIMentorContext"> | string
+  weaknesses?: Prisma.JsonFilter<"AIMentorContext">
+  reflectionHistory?: Prisma.JsonFilter<"AIMentorContext">
   updatedAt?: Prisma.DateTimeFilter<"AIMentorContext"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -210,8 +202,8 @@ export type AIMentorContextWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.AIMentorContextWhereInput[]
   NOT?: Prisma.AIMentorContextWhereInput | Prisma.AIMentorContextWhereInput[]
   context?: Prisma.StringFilter<"AIMentorContext"> | string
-  weaknesses?: Prisma.StringFilter<"AIMentorContext"> | string
-  reflectionHistory?: Prisma.StringFilter<"AIMentorContext"> | string
+  weaknesses?: Prisma.JsonFilter<"AIMentorContext">
+  reflectionHistory?: Prisma.JsonFilter<"AIMentorContext">
   updatedAt?: Prisma.DateTimeFilter<"AIMentorContext"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "userId">
@@ -235,16 +227,16 @@ export type AIMentorContextScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"AIMentorContext"> | string
   userId?: Prisma.StringWithAggregatesFilter<"AIMentorContext"> | string
   context?: Prisma.StringWithAggregatesFilter<"AIMentorContext"> | string
-  weaknesses?: Prisma.StringWithAggregatesFilter<"AIMentorContext"> | string
-  reflectionHistory?: Prisma.StringWithAggregatesFilter<"AIMentorContext"> | string
+  weaknesses?: Prisma.JsonWithAggregatesFilter<"AIMentorContext">
+  reflectionHistory?: Prisma.JsonWithAggregatesFilter<"AIMentorContext">
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AIMentorContext"> | Date | string
 }
 
 export type AIMentorContextCreateInput = {
   id?: string
   context?: string
-  weaknesses?: string
-  reflectionHistory?: string
+  weaknesses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  reflectionHistory?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutAiMentorContextInput
 }
@@ -253,16 +245,16 @@ export type AIMentorContextUncheckedCreateInput = {
   id?: string
   userId: string
   context?: string
-  weaknesses?: string
-  reflectionHistory?: string
+  weaknesses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  reflectionHistory?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Date | string
 }
 
 export type AIMentorContextUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.StringFieldUpdateOperationsInput | string
-  weaknesses?: Prisma.StringFieldUpdateOperationsInput | string
-  reflectionHistory?: Prisma.StringFieldUpdateOperationsInput | string
+  weaknesses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  reflectionHistory?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutAiMentorContextNestedInput
 }
@@ -271,8 +263,8 @@ export type AIMentorContextUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.StringFieldUpdateOperationsInput | string
-  weaknesses?: Prisma.StringFieldUpdateOperationsInput | string
-  reflectionHistory?: Prisma.StringFieldUpdateOperationsInput | string
+  weaknesses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  reflectionHistory?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -280,16 +272,16 @@ export type AIMentorContextCreateManyInput = {
   id?: string
   userId: string
   context?: string
-  weaknesses?: string
-  reflectionHistory?: string
+  weaknesses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  reflectionHistory?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Date | string
 }
 
 export type AIMentorContextUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.StringFieldUpdateOperationsInput | string
-  weaknesses?: Prisma.StringFieldUpdateOperationsInput | string
-  reflectionHistory?: Prisma.StringFieldUpdateOperationsInput | string
+  weaknesses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  reflectionHistory?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -297,8 +289,8 @@ export type AIMentorContextUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.StringFieldUpdateOperationsInput | string
-  weaknesses?: Prisma.StringFieldUpdateOperationsInput | string
-  reflectionHistory?: Prisma.StringFieldUpdateOperationsInput | string
+  weaknesses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  reflectionHistory?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -320,8 +312,6 @@ export type AIMentorContextMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   context?: Prisma.SortOrder
-  weaknesses?: Prisma.SortOrder
-  reflectionHistory?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -329,8 +319,6 @@ export type AIMentorContextMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   context?: Prisma.SortOrder
-  weaknesses?: Prisma.SortOrder
-  reflectionHistory?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
@@ -369,16 +357,16 @@ export type AIMentorContextUncheckedUpdateOneWithoutUserNestedInput = {
 export type AIMentorContextCreateWithoutUserInput = {
   id?: string
   context?: string
-  weaknesses?: string
-  reflectionHistory?: string
+  weaknesses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  reflectionHistory?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Date | string
 }
 
 export type AIMentorContextUncheckedCreateWithoutUserInput = {
   id?: string
   context?: string
-  weaknesses?: string
-  reflectionHistory?: string
+  weaknesses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  reflectionHistory?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Date | string
 }
 
@@ -401,16 +389,16 @@ export type AIMentorContextUpdateToOneWithWhereWithoutUserInput = {
 export type AIMentorContextUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.StringFieldUpdateOperationsInput | string
-  weaknesses?: Prisma.StringFieldUpdateOperationsInput | string
-  reflectionHistory?: Prisma.StringFieldUpdateOperationsInput | string
+  weaknesses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  reflectionHistory?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type AIMentorContextUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.StringFieldUpdateOperationsInput | string
-  weaknesses?: Prisma.StringFieldUpdateOperationsInput | string
-  reflectionHistory?: Prisma.StringFieldUpdateOperationsInput | string
+  weaknesses?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  reflectionHistory?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -475,8 +463,8 @@ export type $AIMentorContextPayload<ExtArgs extends runtime.Types.Extensions.Int
     id: string
     userId: string
     context: string
-    weaknesses: string
-    reflectionHistory: string
+    weaknesses: runtime.JsonValue
+    reflectionHistory: runtime.JsonValue
     updatedAt: Date
   }, ExtArgs["result"]["aIMentorContext"]>
   composites: {}
@@ -905,8 +893,8 @@ export interface AIMentorContextFieldRefs {
   readonly id: Prisma.FieldRef<"AIMentorContext", 'String'>
   readonly userId: Prisma.FieldRef<"AIMentorContext", 'String'>
   readonly context: Prisma.FieldRef<"AIMentorContext", 'String'>
-  readonly weaknesses: Prisma.FieldRef<"AIMentorContext", 'String'>
-  readonly reflectionHistory: Prisma.FieldRef<"AIMentorContext", 'String'>
+  readonly weaknesses: Prisma.FieldRef<"AIMentorContext", 'Json'>
+  readonly reflectionHistory: Prisma.FieldRef<"AIMentorContext", 'Json'>
   readonly updatedAt: Prisma.FieldRef<"AIMentorContext", 'DateTime'>
 }
     

@@ -19,11 +19,11 @@ export default async function PathsPage() {
   const allExpEntries = await db.learningPathEntry.findMany({
     where: {
       learningPathId: { in: paths.map((p) => p.id) },
-      entityType: 'experience',
+      experienceId: { not: null },
     },
-    select: { learningPathId: true, entityId: true },
+    select: { learningPathId: true, experienceId: true },
   })
-  const uniqueExpIds = [...new Set(allExpEntries.map((e) => e.entityId))]
+  const uniqueExpIds = [...new Set(allExpEntries.flatMap((e) => (e.experienceId ? [e.experienceId] : [])))]
   const experiences =
     uniqueExpIds.length > 0
       ? await db.experience.findMany({
@@ -35,7 +35,7 @@ export default async function PathsPage() {
   const estimatedHoursByPath: Record<string, number> = {}
   for (const path of paths) {
     const entries = allExpEntries.filter((e) => e.learningPathId === path.id)
-    const totalMins = entries.reduce((sum, e) => sum + (expDurationMap.get(e.entityId) ?? 20), 0)
+    const totalMins = entries.reduce((sum, e) => sum + (expDurationMap.get(e.experienceId as string) ?? 20), 0)
     estimatedHoursByPath[path.id] = Math.round((totalMins / 60) * 10) / 10
   }
 
@@ -67,7 +67,7 @@ export default async function PathsPage() {
     if (completedExpIds.size > 0) {
       for (const path of paths) {
         const entries = allExpEntries.filter((e) => e.learningPathId === path.id)
-        const count = entries.filter((e) => completedExpIds.has(e.entityId)).length
+        const count = entries.filter((e) => completedExpIds.has(e.experienceId as string)).length
         if (count > 0) completedByPath[path.id] = count
       }
     }

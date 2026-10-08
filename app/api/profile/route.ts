@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { db } from '@/lib/db'
 import type { ProfileResponse } from './types'
+import { entityOf } from '@/lib/learning-entity'
 
 export async function GET(): Promise<NextResponse> {
   const session = await getSession()
@@ -71,8 +72,8 @@ export async function GET(): Promise<NextResponse> {
     recentSessions: user.learningSessions.map(s => ({
       id: s.id,
       completedAt: s.completedAt!.toISOString(),
-      entityType: s.entityType,
-      entityId: s.entityId,
+      entityType: entityOf(s)?.entityType ?? 'experience',
+      entityId: entityOf(s)?.entityId ?? '',
       durationSec: s.durationSec,
     })),
     masteredConcepts: user.conceptMasteries.map(m => ({

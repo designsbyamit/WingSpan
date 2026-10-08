@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { PrismaClient } from '../lib/generated/prisma/client'
+import { ExperienceType } from '../lib/generated/prisma/enums'
 import { parseModuleFile } from './seed-parser'
 
 const MODULES_DIR =
@@ -23,12 +24,12 @@ const LEVEL_COMPETENCIES: Record<number, string[]> = {
 }
 
 /** Experience type by level */
-const LEVEL_TYPE: Record<number, string> = {
-  1: 'module',
-  2: 'module',
-  3: 'module',
-  4: 'module',
-  5: 'module',
+const LEVEL_TYPE: Record<number, ExperienceType> = {
+  1: ExperienceType.MODULE,
+  2: ExperienceType.MODULE,
+  3: ExperienceType.MODULE,
+  4: ExperienceType.MODULE,
+  5: ExperienceType.MODULE,
 }
 
 export async function seedExperiences(prisma: PrismaClient): Promise<void> {
@@ -62,7 +63,7 @@ export async function seedExperiences(prisma: PrismaClient): Promise<void> {
         description: parsed.story || "",
         narrativeText: parsed.story || "",
         scenarioText: parsed.scenario || "",
-        type: LEVEL_TYPE[parsed.sourceLevel] ?? 'module',
+        type: LEVEL_TYPE[parsed.sourceLevel] ?? ExperienceType.MODULE,
         durationMins: parsed.estimatedMins,
       },
       create: {
@@ -71,7 +72,7 @@ export async function seedExperiences(prisma: PrismaClient): Promise<void> {
         description: parsed.story || "",
         narrativeText: parsed.story || "",
         scenarioText: parsed.scenario || "",
-        type: LEVEL_TYPE[parsed.sourceLevel] ?? 'module',
+        type: LEVEL_TYPE[parsed.sourceLevel] ?? ExperienceType.MODULE,
         durationMins: parsed.estimatedMins,
       },
     })

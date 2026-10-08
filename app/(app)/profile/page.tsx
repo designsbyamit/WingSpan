@@ -7,6 +7,7 @@ import type { CompetencyRadarData } from '@/components/profile/CompetencyRadar'
 import { ActivityTimeline } from '@/components/profile/ActivityTimeline'
 import type { TimelineSession } from '@/components/profile/ActivityTimeline'
 import { SkillBar } from '@/components/profile/SkillBar'
+import { entityOf } from '@/lib/learning-entity'
 
 // ─── Career level badge colours ──────────────────────────────────────────────
 const LEVEL_STYLES: Record<string, { bg: string; text: string }> = {
@@ -87,12 +88,12 @@ export default async function ProfilePage() {
     target: 60,
   }))
 
-  // Timeline: LearningSession is generic (entityType/entityId)
+  // Timeline: a LearningSession points at one of experience / concept / challenge
   const timelineSessions: TimelineSession[] = user.learningSessions.map(s => ({
     id: s.id,
     completedAt: s.completedAt!.toISOString(),
-    entityType: s.entityType,
-    entityId: s.entityId,
+    entityType: entityOf(s)?.entityType ?? 'experience',
+    entityId: entityOf(s)?.entityId ?? '',
     durationSec: s.durationSec,
   }))
 

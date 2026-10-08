@@ -13,74 +13,81 @@ datasource db {
 // ──────────────────────────────────────────────
 
 model Domain {
-  id          String       @id @default(cuid())
-  slug        String       @unique
-  name        String
-  description String?
-  order       Int          @default(0)
-  createdAt   DateTime     @default(now())
+  id           String       @id @default(cuid())
+  slug         String       @unique
+  name         String
+  description  String?
+  order        Int          @default(0)
+  createdAt    DateTime     @default(now())
   competencies Competency[]
-  skills      Skill[]
+  skills       Skill[]
 }
 
 model HumanPattern {
-  id          String      @id @default(cuid())
-  slug        String      @unique
+  id          String                     @id @default(cuid())
+  slug        String                     @unique
   name        String
   description String?
-  createdAt   DateTime    @default(now())
+  createdAt   DateTime                   @default(now())
   concepts    ConceptOnHumanPattern[]
   experiences ExperienceOnHumanPattern[]
 }
 
 model Competency {
-  id          String      @id @default(cuid())
-  slug        String      @unique
-  name        String
-  description String?
-  domainId    String
-  domain      Domain      @relation(fields: [domainId], references: [id])
-  level       Int         @default(1)
-  weight      Float       @default(1.0)
-  createdAt   DateTime    @default(now())
-  skills      SkillOnCompetency[]
-  experiences ExperienceOnCompetency[]
-  challenges  ChallengeOnCompetency[]
+  id               String                   @id @default(cuid())
+  slug             String                   @unique
+  name             String
+  description      String?
+  domainId         String
+  domain           Domain                   @relation(fields: [domainId], references: [id])
+  level            Int                      @default(1)
+  weight           Float                    @default(1.0)
+  createdAt        DateTime                 @default(now())
+  skills           SkillOnCompetency[]
+  experiences      ExperienceOnCompetency[]
+  challenges       ChallengeOnCompetency[]
   userCompetencies UserCompetency[]
+
+  @@index([domainId])
 }
 
 model Skill {
-  id          String      @id @default(cuid())
-  slug        String      @unique
-  name        String
-  description String?
-  domainId    String
-  domain      Domain      @relation(fields: [domainId], references: [id])
-  createdAt   DateTime    @default(now())
-  concepts    ConceptOnSkill[]
+  id           String               @id @default(cuid())
+  slug         String               @unique
+  name         String
+  description  String?
+  domainId     String
+  domain       Domain               @relation(fields: [domainId], references: [id])
+  createdAt    DateTime             @default(now())
+  concepts     ConceptOnSkill[]
   competencies SkillOnCompetency[]
-  challenges  ChallengeOnSkill[]
+  challenges   ChallengeOnSkill[]
   careerLevels SkillOnCareerLevel[]
-  userSkills  UserSkill[]
+  userSkills   UserSkill[]
+
+  @@index([domainId])
 }
 
 model Concept {
-  id            String      @id @default(cuid())
-  slug          String      @unique
-  title         String
-  body          String
-  summary       String?
-  mediaUrl      String?
-  estimatedMins Int         @default(5)
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  skills        ConceptOnSkill[]
-  humanPatterns ConceptOnHumanPattern[]
-  principles    ConceptOnPrinciple[]
-  experiences   ConceptOnExperience[]
-  prerequisites ConceptPrerequisite[] @relation("Concept")
-  requiredBy    ConceptPrerequisite[] @relation("Prerequisite")
-  masteries     UserConceptMastery[]
+  id             String                  @id @default(cuid())
+  slug           String                  @unique
+  title          String
+  body           String
+  summary        String?
+  mediaUrl       String?
+  estimatedMins  Int                     @default(5)
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+  skills         ConceptOnSkill[]
+  humanPatterns  ConceptOnHumanPattern[]
+  principles     ConceptOnPrinciple[]
+  experiences    ConceptOnExperience[]
+  prerequisites  ConceptPrerequisite[]   @relation("Concept")
+  requiredBy     ConceptPrerequisite[]   @relation("Prerequisite")
+  masteries      UserConceptMastery[]
+  milestoneLinks MilestoneLink[]
+  pathEntries    LearningPathEntry[]
+  sessions       LearningSession[]
 }
 
 model ConceptPrerequisite {
@@ -90,93 +97,111 @@ model ConceptPrerequisite {
   prerequisite   Concept @relation("Prerequisite", fields: [prerequisiteId], references: [id])
 
   @@id([conceptId, prerequisiteId])
+  @@index([prerequisiteId])
 }
 
 model Principle {
-  id          String      @id @default(cuid())
-  slug        String      @unique
+  id          String                  @id @default(cuid())
+  slug        String                  @unique
   name        String
   description String?
-  createdAt   DateTime    @default(now())
+  createdAt   DateTime                @default(now())
   concepts    ConceptOnPrinciple[]
   experiences ExperienceOnPrinciple[]
 }
 
 model Experience {
-  id           String      @id @default(cuid())
-  slug         String      @unique
-  title        String
-  description  String?
-  narrativeText String     @default("")
-  scenarioText  String     @default("")
-  type         String      // e.g. "project", "exercise", "case-study"
-  durationMins Int         @default(30)
-  xpReward     Int         @default(50)
-  imageUrl     String?
+  id               String                     @id @default(cuid())
+  slug             String                     @unique
+  title            String
+  description      String?
+  narrativeText    String                     @default("")
+  scenarioText     String                     @default("")
+  type             ExperienceType             @default(MODULE)
+  durationMins     Int                        @default(30)
+  xpReward         Int                        @default(50)
+  imageUrl         String?
   imageAttribution String?
-  createdAt    DateTime    @default(now())
-  competencies ExperienceOnCompetency[]
-  humanPatterns ExperienceOnHumanPattern[]
-  principles   ExperienceOnPrinciple[]
-  concepts     ConceptOnExperience[]
+  createdAt        DateTime                   @default(now())
+  competencies     ExperienceOnCompetency[]
+  humanPatterns    ExperienceOnHumanPattern[]
+  principles       ExperienceOnPrinciple[]
+  concepts         ConceptOnExperience[]
   learningSessions LearningSession[]
+  milestoneLinks   MilestoneLink[]
+  pathEntries      LearningPathEntry[]
 }
 
 model Challenge {
-  id          String      @id @default(cuid())
-  slug        String      @unique
-  title       String
-  description String?
-  prompt      String
-  rubric      String?
-  type        String      // e.g. "brief", "critique", "redesign"
-  durationMins Int        @default(60)
-  createdAt   DateTime    @default(now())
-  skills      ChallengeOnSkill[]
-  competencies ChallengeOnCompetency[]
-  submissions ChallengeSubmission[]
+  id             String                  @id @default(cuid())
+  slug           String                  @unique
+  title          String
+  description    String?
+  prompt         String
+  rubric         String?
+  type           ChallengeType           @default(OTHER)
+  durationMins   Int                     @default(60)
+  createdAt      DateTime                @default(now())
+  skills         ChallengeOnSkill[]
+  competencies   ChallengeOnCompetency[]
+  submissions    ChallengeSubmission[]
+  milestoneLinks MilestoneLink[]
+  pathEntries    LearningPathEntry[]
+  sessions       LearningSession[]
 }
 
 model Asset {
-  id        String   @id @default(cuid())
-  slug      String   @unique
+  id        String    @id @default(cuid())
+  slug      String    @unique
   title     String
   url       String
-  type      String   // e.g. "image", "pdf", "video", "figma"
-  tags      String   @default("") // comma-separated
-  createdAt DateTime @default(now())
+  type      AssetType @default(OTHER)
+  tags      String[]  @default([])
+  createdAt DateTime  @default(now())
 }
 
 model CareerLevel {
-  id          String      @id @default(cuid())
-  slug        String      @unique
-  name        String
-  order       Int         @default(0)
-  description String?
-  skills      SkillOnCareerLevel[]
+  id            String               @id @default(cuid())
+  slug          String               @unique
+  name          String
+  order         Int                  @default(0)
+  description   String?
+  skills        SkillOnCareerLevel[]
   learningPaths LearningPath[]
-  users       User[]
+  users         User[]
 }
 
 model LearningPath {
-  id           String      @id @default(cuid())
-  slug         String      @unique
-  title        String
-  description  String?
+  id            String              @id @default(cuid())
+  slug          String              @unique
+  title         String
+  description   String?
   careerLevelId String?
-  careerLevel  CareerLevel? @relation(fields: [careerLevelId], references: [id])
-  createdAt    DateTime    @default(now())
-  entries      LearningPathEntry[]
-  userPaths    UserLearningPath[]
+  careerLevel   CareerLevel?        @relation(fields: [careerLevelId], references: [id])
+  createdAt     DateTime            @default(now())
+  entries       LearningPathEntry[]
+  userPaths     UserLearningPath[]
+
+  @@index([careerLevelId])
 }
 
 model LearningPathEntry {
-  id             String      @id @default(cuid())
+  id             String       @id @default(cuid())
   learningPathId String
-  learningPath   LearningPath @relation(fields: [learningPathId], references: [id])
+  learningPath   LearningPath @relation(fields: [learningPathId], references: [id], onDelete: Cascade)
   order          Int
-  entityType     String      // "concept" | "challenge" | "experience"
-  entityId       String
+  // Exactly one of the three is set (enforced by a CHECK constraint in the migration).
+  conceptId      String?
+  concept        Concept?     @relation(fields: [conceptId], references: [id])
+  experienceId   String?
+  experience     Experience?  @relation(fields: [experienceId], references: [id])
+  challengeId    String?
+  challenge      Challenge?   @relation(fields: [challengeId], references: [id])
+
+  @@unique([learningPathId, order])
+  @@index([conceptId])
+  @@index([experienceId])
+  @@index([challengeId])
 }
 
 // ──────────────────────────────────────────────
@@ -190,6 +215,7 @@ model ConceptOnSkill {
   skill     Skill   @relation(fields: [skillId], references: [id])
 
   @@id([conceptId, skillId])
+  @@index([skillId])
 }
 
 model ConceptOnHumanPattern {
@@ -199,6 +225,7 @@ model ConceptOnHumanPattern {
   humanPattern   HumanPattern @relation(fields: [humanPatternId], references: [id])
 
   @@id([conceptId, humanPatternId])
+  @@index([humanPatternId])
 }
 
 model ConceptOnPrinciple {
@@ -208,6 +235,7 @@ model ConceptOnPrinciple {
   principle   Principle @relation(fields: [principleId], references: [id])
 
   @@id([conceptId, principleId])
+  @@index([principleId])
 }
 
 model ConceptOnExperience {
@@ -217,6 +245,7 @@ model ConceptOnExperience {
   experience   Experience @relation(fields: [experienceId], references: [id])
 
   @@id([conceptId, experienceId])
+  @@index([experienceId])
 }
 
 model SkillOnCompetency {
@@ -226,6 +255,7 @@ model SkillOnCompetency {
   competency   Competency @relation(fields: [competencyId], references: [id])
 
   @@id([skillId, competencyId])
+  @@index([competencyId])
 }
 
 model SkillOnCareerLevel {
@@ -235,6 +265,7 @@ model SkillOnCareerLevel {
   careerLevel   CareerLevel @relation(fields: [careerLevelId], references: [id])
 
   @@id([skillId, careerLevelId])
+  @@index([careerLevelId])
 }
 
 model ExperienceOnCompetency {
@@ -244,6 +275,7 @@ model ExperienceOnCompetency {
   competency   Competency @relation(fields: [competencyId], references: [id])
 
   @@id([experienceId, competencyId])
+  @@index([competencyId])
 }
 
 model ExperienceOnHumanPattern {
@@ -253,6 +285,7 @@ model ExperienceOnHumanPattern {
   humanPattern   HumanPattern @relation(fields: [humanPatternId], references: [id])
 
   @@id([experienceId, humanPatternId])
+  @@index([humanPatternId])
 }
 
 model ExperienceOnPrinciple {
@@ -262,6 +295,7 @@ model ExperienceOnPrinciple {
   principle    Principle  @relation(fields: [principleId], references: [id])
 
   @@id([experienceId, principleId])
+  @@index([principleId])
 }
 
 model ChallengeOnSkill {
@@ -271,6 +305,7 @@ model ChallengeOnSkill {
   skill       Skill     @relation(fields: [skillId], references: [id])
 
   @@id([challengeId, skillId])
+  @@index([skillId])
 }
 
 model ChallengeOnCompetency {
@@ -280,6 +315,7 @@ model ChallengeOnCompetency {
   competency   Competency @relation(fields: [competencyId], references: [id])
 
   @@id([challengeId, competencyId])
+  @@index([competencyId])
 }
 
 // ──────────────────────────────────────────────
@@ -287,20 +323,21 @@ model ChallengeOnCompetency {
 // ──────────────────────────────────────────────
 
 model User {
-  id            String      @id @default(cuid())
-  email         String      @unique
-  phone         String?     @unique
-  name          String?
-  passwordHash  String?
-  avatarUrl     String?
-  careerLevelId String?
-  careerLevel   CareerLevel? @relation(fields: [careerLevelId], references: [id])
-  xp            Int         @default(0)
-  streak        Int         @default(0)
-  lastActiveAt  DateTime?
+  id                   String       @id @default(cuid())
+  email                String       @unique
+  phone                String?      @unique
+  name                 String?
+  passwordHash         String?
+  avatarUrl            String?
+  careerLevelId        String?
+  careerLevel          CareerLevel? @relation(fields: [careerLevelId], references: [id])
+  xp                   Int          @default(0)
+  streak               Int          @default(0)
+  lastActiveAt         DateTime?
   activeLearningPathId String?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  deletedAt            DateTime?
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
 
   magicLinkTokens  MagicLinkToken[]
   competencies     UserCompetency[]
@@ -310,6 +347,22 @@ model User {
   learningPaths    UserLearningPath[]
   aiMentorContext  AIMentorContext?
   submissions      ChallengeSubmission[]
+
+  // Career intelligence
+  sourceDocuments    SourceDocument[]
+  roles              Role[]
+  projects           Project[]
+  educations         Education[]
+  skillClaims        SkillClaim[]
+  analysisRuns       AnalysisRun[]
+  chosenBets         ChosenBet[]
+  roadmaps           Roadmap[]
+  capabilityProgress UserCapabilityProgress[]
+  auditEvents        AuditEvent[]
+  feedback           Feedback[]
+  usage              UsageLedger[]
+
+  @@index([careerLevelId])
 }
 
 model MagicLinkToken {
@@ -320,7 +373,10 @@ model MagicLinkToken {
   usedAt    DateTime?
   createdAt DateTime  @default(now())
   userId    String?
-  user      User?     @relation(fields: [userId], references: [id])
+  user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([email])
 }
 
 model UserCompetency {
@@ -331,10 +387,11 @@ model UserCompetency {
   score        Int        @default(0)
   assessedAt   DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
-  user         User       @relation(fields: [userId], references: [id])
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   competency   Competency @relation(fields: [competencyId], references: [id])
 
   @@unique([userId, competencyId])
+  @@index([competencyId])
 }
 
 model UserSkill {
@@ -343,10 +400,11 @@ model UserSkill {
   skillId   String
   level     Int      @default(0)
   updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   skill     Skill    @relation(fields: [skillId], references: [id])
 
   @@unique([userId, skillId])
+  @@index([skillId])
 }
 
 model UserConceptMastery {
@@ -357,27 +415,46 @@ model UserConceptMastery {
   score      Int?
   seenCount  Int       @default(0)
   lastSeenAt DateTime  @default(now())
-  lastSeen   DateTime?
   masteredAt DateTime?
-  user       User      @relation(fields: [userId], references: [id])
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   concept    Concept   @relation(fields: [conceptId], references: [id])
 
   @@unique([userId, conceptId])
+  @@index([conceptId])
 }
 
 model LearningSession {
-  id            String    @id @default(cuid())
-  userId        String
-  entityType    String
-  entityId      String
-  experienceId  String?
-  experience    Experience? @relation(fields: [experienceId], references: [id])
-  startedAt     DateTime  @default(now())
-  completedAt   DateTime?
-  durationSec   Int?
+  id             String          @id @default(cuid())
+  userId         String
+  // Exactly one of the three is set (enforced by a CHECK constraint in the migration).
+  experienceId   String?
+  experience     Experience?     @relation(fields: [experienceId], references: [id])
+  conceptId      String?
+  concept        Concept?        @relation(fields: [conceptId], references: [id])
+  challengeId    String?
+  challenge      Challenge?      @relation(fields: [challengeId], references: [id])
+  startedAt      DateTime        @default(now())
+  completedAt    DateTime?
+  durationSec    Int?
   reflectionText String?
-  aiMessages    String    @default("[]")  // JSON array of {role,content}
-  user          User      @relation(fields: [userId], references: [id])
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages       MentorMessage[]
+
+  @@index([userId, startedAt])
+  @@index([experienceId])
+  @@index([conceptId])
+  @@index([challengeId])
+}
+
+model MentorMessage {
+  id        String          @id @default(cuid())
+  sessionId String
+  role      MessageRole
+  content   String
+  createdAt DateTime        @default(now())
+  session   LearningSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, createdAt])
 }
 
 model UserLearningPath {
@@ -387,20 +464,21 @@ model UserLearningPath {
   enrolledAt     DateTime     @default(now())
   completedAt    DateTime?
   currentEntryId String?
-  user           User         @relation(fields: [userId], references: [id])
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   learningPath   LearningPath @relation(fields: [learningPathId], references: [id])
 
   @@unique([userId, learningPathId])
+  @@index([learningPathId])
 }
 
 model AIMentorContext {
   id                String   @id @default(cuid())
   userId            String   @unique
   context           String   @default("")
-  weaknesses        String   @default("[]")   // JSON string[]
-  reflectionHistory String   @default("[]")   // JSON string[]
+  weaknesses        Json     @default("[]") // string[]
+  reflectionHistory Json     @default("[]") // string[]
   updatedAt         DateTime @updatedAt
-  user              User     @relation(fields: [userId], references: [id])
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model ChallengeSubmission {
@@ -412,6 +490,680 @@ model ChallengeSubmission {
   score       Int?
   submittedAt DateTime  @default(now())
   gradedAt    DateTime?
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   challenge   Challenge @relation(fields: [challengeId], references: [id])
+
+  @@index([userId, submittedAt])
+  @@index([challengeId])
+}
+
+// ──────────────────────────────────────────────
+// ENUMS
+// ──────────────────────────────────────────────
+
+enum ExperienceType {
+  MODULE     @map("module")
+  PROJECT    @map("project")
+  EXERCISE   @map("exercise")
+  CASE_STUDY @map("case-study")
+  OTHER      @map("other")
+}
+
+enum ChallengeType {
+  BRIEF    @map("brief")
+  CRITIQUE @map("critique")
+  REDESIGN @map("redesign")
+  OTHER    @map("other")
+}
+
+enum AssetType {
+  IMAGE @map("image")
+  PDF   @map("pdf")
+  VIDEO @map("video")
+  FIGMA @map("figma")
+  OTHER @map("other")
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+enum RunStatus {
+  QUEUED
+  RUNNING
+  PARTIAL
+  COMPLETE
+  FAILED
+}
+
+enum AgentName {
+  AGGREGATOR
+  CAREER_ALPHA
+  MARKET_INTELLIGENCE
+  DIRECTION_GENERATOR
+}
+
+enum EvidenceSourceType {
+  RESUME
+  PORTFOLIO
+  PROJECT
+  EDUCATION
+  INTEREST
+  BEHAVIOUR
+  CONVERSATION
+}
+
+enum EvidenceCategory {
+  ROLE
+  RESPONSIBILITY
+  SKILL
+  CAPABILITY
+  ACHIEVEMENT
+  IMPACT
+  INTEREST
+  BEHAVIOUR
+  TRAJECTORY
+  CONSTRAINT
+}
+
+enum EvidenceRelation {
+  SUPPORTS
+  CONTRADICTS
+}
+
+enum CapabilityType {
+  CORE
+  TRANSFERABLE
+  DISTINCTIVE
+  DOMAIN
+  LEADERSHIP
+  STRATEGIC
+  CREATIVE
+  COLLABORATION
+}
+
+enum DnaDimensionKind {
+  STRONGEST
+  TRANSFERABLE
+  DISTINCTIVE
+}
+
+enum MarketSourceType {
+  GOVERNMENT
+  LABOUR_MARKET
+  EMPLOYER
+  RESEARCH
+  INDUSTRY
+  INVESTMENT
+  EXPERT
+  WEAK_SIGNAL
+}
+
+enum MarketHorizon {
+  CURRENT
+  ONE_TO_THREE_YEARS
+  THREE_TO_FIVE_YEARS
+  FIVE_TO_TEN_YEARS
+}
+
+enum Directionality {
+  POSITIVE
+  NEGATIVE
+  UNCERTAIN
+}
+
+enum BetArchetype {
+  SAFE
+  GROWTH
+  BOLD
+  RESERVE
+}
+
+enum SourceKind {
+  RESUME
+  PORTFOLIO
+  PROJECT
+  LINK
+  OTHER
+}
+
+enum SourceStatus {
+  PENDING
+  PARSED
+  FAILED
+}
+
+enum RoadmapStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ARCHIVED
+}
+
+enum MilestoneStatus {
+  PLANNED
+  IN_PROGRESS
+  DONE
+  SKIPPED
+}
+
+enum FeedbackTarget {
+  CANDIDATE
+  MILESTONE
+}
+
+// ──────────────────────────────────────────────
+// A. INPUT AND INGESTION
+// ──────────────────────────────────────────────
+
+model SourceDocument {
+  id            String          @id @default(cuid())
+  userId        String
+  kind          SourceKind
+  filename      String?
+  url           String?
+  mimeType      String?
+  sizeBytes     Int?
+  contentHash   String // sha256 of the content; dedupes re-uploads
+  extractedText String?
+  status        SourceStatus    @default(PENDING)
+  error         String?
+  deletedAt     DateTime?
+  createdAt     DateTime        @default(now())
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  extractions   ExtractionRun[]
+  roles         Role[]
+  projects      Project[]
+  educations    Education[]
+  skillClaims   SkillClaim[]
+
+  @@unique([userId, contentHash])
+  @@index([userId, createdAt])
+}
+
+model ExtractionRun {
+  id               String         @id @default(cuid())
+  sourceDocumentId String
+  model            String?
+  promptVersion    String?
+  raw              Json?
+  status           SourceStatus   @default(PENDING)
+  error            String?
+  expiresAt        DateTime? // raw output retention
+  createdAt        DateTime       @default(now())
+  sourceDocument   SourceDocument @relation(fields: [sourceDocumentId], references: [id], onDelete: Cascade)
+
+  @@index([sourceDocumentId])
+  @@index([expiresAt])
+}
+
+model Role {
+  id               String          @id @default(cuid())
+  userId           String
+  sourceDocumentId String?
+  company          String?
+  title            String
+  startDate        String? // kept as written ("2019", "Mar 2021"): resumes are vague
+  endDate          String?
+  summary          String?
+  createdAt        DateTime        @default(now())
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceDocument   SourceDocument? @relation(fields: [sourceDocumentId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([sourceDocumentId])
+}
+
+model Project {
+  id               String          @id @default(cuid())
+  userId           String
+  sourceDocumentId String?
+  name             String
+  summary          String?
+  role             String?
+  outcomes         String[]        @default([])
+  url              String?
+  createdAt        DateTime        @default(now())
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceDocument   SourceDocument? @relation(fields: [sourceDocumentId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([sourceDocumentId])
+}
+
+model Education {
+  id               String          @id @default(cuid())
+  userId           String
+  sourceDocumentId String?
+  institution      String
+  credential       String?
+  field            String?
+  startYear        Int?
+  endYear          Int?
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceDocument   SourceDocument? @relation(fields: [sourceDocumentId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([sourceDocumentId])
+}
+
+model SkillClaim {
+  id               String          @id @default(cuid())
+  userId           String
+  sourceDocumentId String?
+  name             String
+  claimedLevel     String?
+  user             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sourceDocument   SourceDocument? @relation(fields: [sourceDocumentId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, name])
+  @@index([sourceDocumentId])
+}
+
+// ──────────────────────────────────────────────
+// B. CAREER INTELLIGENCE (one analysis = one run)
+//
+// Re-runs overwrite the user's working run by default. A run the user
+// saves becomes a named version (savedAt set, isWorking false) and is kept.
+// The one-working-run-per-user rule is a partial unique index in the migration.
+// ──────────────────────────────────────────────
+
+model AnalysisRun {
+  id              String     @id @default(cuid())
+  userId          String
+  status          RunStatus  @default(QUEUED)
+  isWorking       Boolean    @default(true)
+  versionLabel    String?
+  savedAt         DateTime?
+  pipelineVersion String
+  formulaVersion  String
+  weights         Json
+  models          Json? // model used per agent
+  tokensIn        Int?
+  tokensOut       Int?
+  costMicros      Int?
+  durationMs      Int?
+  confidence      Float?
+  failedStage     AgentName?
+  error           String?
+  validationNotes String[]   @default([])
+  createdAt       DateTime   @default(now())
+  completedAt     DateTime?
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  agentOutputs           AgentOutput[]
+  evidence               Evidence[]
+  capabilities           Capability[]
+  dna                    CareerDnaSnapshot?
+  marketDirections       MarketDirection[]
+  capabilityRequirements CapabilityRequirement[]
+  candidates             CareerCandidate[]
+  usage                  UsageLedger[]
+
+  @@index([userId, createdAt])
+  @@index([userId, savedAt])
+}
+
+model AgentOutput {
+  id              String      @id @default(cuid())
+  runId           String
+  agent           AgentName
+  raw             Json
+  valid           Boolean
+  validationError String?
+  model           String?
+  promptVersion   String?
+  tokensIn        Int?
+  tokensOut       Int?
+  durationMs      Int?
+  expiresAt       DateTime // raw output is purged after this (90 days)
+  createdAt       DateTime    @default(now())
+  run             AnalysisRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@unique([runId, agent])
+  @@index([expiresAt])
+}
+
+model Evidence {
+  id           String                 @id @default(cuid())
+  runId        String
+  key          String // the id the agent assigned ("e1"); unique within a run
+  sourceType   EvidenceSourceType
+  sourceRef    String?
+  category     EvidenceCategory
+  statement    String
+  strength     Float
+  recency      Float
+  specificity  Float
+  reliability  Float
+  confidence   Float
+  startDate    String?
+  endDate      String?
+  entities     String[]               @default([])
+  run          AnalysisRun            @relation(fields: [runId], references: [id], onDelete: Cascade)
+  linksFrom    EvidenceLink[]         @relation("EvidenceFrom")
+  linksTo      EvidenceLink[]         @relation("EvidenceTo")
+  capabilities CapabilityEvidence[]
+  dimensions   DnaDimensionEvidence[]
+  candidates   CandidateEvidence[]
+
+  @@unique([runId, key])
+}
+
+model EvidenceLink {
+  fromId   String
+  toId     String
+  relation EvidenceRelation
+  from     Evidence         @relation("EvidenceFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  to       Evidence         @relation("EvidenceTo", fields: [toId], references: [id], onDelete: Cascade)
+
+  @@id([fromId, toId, relation])
+  @@index([toId])
+}
+
+model Capability {
+  id             String               @id @default(cuid())
+  runId          String
+  key            String
+  name           String
+  capabilityType CapabilityType
+  level          Float
+  recurrence     Int
+  confidence     Float
+  rationale      String?
+  run            AnalysisRun          @relation(fields: [runId], references: [id], onDelete: Cascade)
+  evidence       CapabilityEvidence[]
+
+  @@unique([runId, key])
+}
+
+model CapabilityEvidence {
+  capabilityId String
+  evidenceId   String
+  capability   Capability @relation(fields: [capabilityId], references: [id], onDelete: Cascade)
+  evidence     Evidence   @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
+
+  @@id([capabilityId, evidenceId])
+  @@index([evidenceId])
+}
+
+model CareerDnaSnapshot {
+  id                     String         @id @default(cuid())
+  runId                  String         @unique
+  currentIdentity        String
+  emergingIdentity       String[]       @default([])
+  underlyingCapabilities String[]       @default([])
+  workingPatterns        String[]       @default([])
+  problemSolvingPatterns String[]       @default([])
+  leadershipPatterns     String[]       @default([])
+  domainExpertise        String[]       @default([])
+  strategicMaturity      String
+  creativePatterns       String[]       @default([])
+  collaborationPatterns  String[]       @default([])
+  careerTrajectory       String
+  capabilityMaturity     String
+  deepInterestSignals    String[]       @default([])
+  constraints            String[]       @default([])
+  confidence             Float
+  run                    AnalysisRun    @relation(fields: [runId], references: [id], onDelete: Cascade)
+  dimensions             DnaDimension[]
+}
+
+model DnaDimension {
+  id         String                 @id @default(cuid())
+  snapshotId String
+  kind       DnaDimensionKind
+  name       String
+  score      Float
+  confidence Float
+  rationale  String?
+  snapshot   CareerDnaSnapshot      @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+  evidence   DnaDimensionEvidence[]
+
+  @@index([snapshotId, kind])
+}
+
+model DnaDimensionEvidence {
+  dimensionId String
+  evidenceId  String
+  dimension   DnaDimension @relation(fields: [dimensionId], references: [id], onDelete: Cascade)
+  evidence    Evidence     @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
+
+  @@id([dimensionId, evidenceId])
+  @@index([evidenceId])
+}
+
+model MarketDirection {
+  id                    String         @id @default(cuid())
+  runId                 String
+  name                  String
+  currentDemand         Float
+  momentum              Float
+  futurePotential       Float
+  resilience            Float
+  adjacency             String[]       @default([])
+  currentCapabilities   String[]       @default([])
+  growingCapabilities   String[]       @default([])
+  decliningCapabilities String[]       @default([])
+  futureThesis          String?
+  invalidationRisks     String[]       @default([])
+  geography             String[]       @default([])
+  horizon               String?
+  confidence            Float
+  run                   AnalysisRun    @relation(fields: [runId], references: [id], onDelete: Cascade)
+  signals               MarketSignal[]
+
+  @@unique([runId, name])
+}
+
+model MarketSignal {
+  id                 String           @id @default(cuid())
+  directionId        String
+  key                String
+  signal             String
+  source             String?
+  sourceType         MarketSourceType
+  geography          String?
+  observedAt         DateTime? // null when the agent gave no parseable date
+  horizon            MarketHorizon
+  directionality     Directionality
+  magnitude          Float
+  reliability        Float
+  supportingEvidence String[]         @default([])
+  direction          MarketDirection  @relation(fields: [directionId], references: [id], onDelete: Cascade)
+
+  @@index([directionId])
+  @@index([observedAt])
+}
+
+model CapabilityRequirement {
+  id               String      @id @default(cuid())
+  runId            String
+  capability       String
+  importance       Float
+  levelRequired    Float
+  futureImportance Float
+  marketDemand     Float
+  run              AnalysisRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([runId])
+}
+
+model CareerCandidate {
+  id                 String              @id @default(cuid())
+  runId              String
+  rank               Int
+  direction          String
+  archetype          BetArchetype
+  experienceScore    Float
+  marketScore        Float
+  interestScore      Float
+  confidence         Float
+  careerScore        Float
+  capabilityDistance Float
+  whyThisPerson      String?
+  whyNow             String?
+  rationale          String?
+  breakdown          Json? // sub-scores, base score, confidence multiplier
+  run                AnalysisRun         @relation(fields: [runId], references: [id], onDelete: Cascade)
+  evidence           CandidateEvidence[]
+  chosenBets         ChosenBet[]
+
+  @@unique([runId, direction])
+  @@index([runId, rank])
+}
+
+model CandidateEvidence {
+  candidateId String
+  evidenceId  String
+  candidate   CareerCandidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  evidence    Evidence        @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
+
+  @@id([candidateId, evidenceId])
+  @@index([evidenceId])
+}
+
+// The user's own decision. Lives outside the run so re-running never overwrites it.
+model ChosenBet {
+  id          String           @id @default(cuid())
+  userId      String
+  candidateId String? // nulled if the run is later overwritten
+  direction   String // snapshot, survives the run
+  archetype   BetArchetype
+  careerScore Float
+  rationale   String?
+  active      Boolean          @default(true)
+  note        String?
+  pinnedAt    DateTime         @default(now())
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  candidate   CareerCandidate? @relation(fields: [candidateId], references: [id], onDelete: SetNull)
+  roadmaps    Roadmap[]
+
+  @@index([userId, pinnedAt])
+  @@index([candidateId])
+}
+
+// ──────────────────────────────────────────────
+// C. GROWTH ROADMAP
+// ──────────────────────────────────────────────
+
+model Roadmap {
+  id          String             @id @default(cuid())
+  userId      String
+  chosenBetId String?
+  title       String
+  status      RoadmapStatus      @default(ACTIVE)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chosenBet   ChosenBet?         @relation(fields: [chosenBetId], references: [id], onDelete: SetNull)
+  milestones  RoadmapMilestone[]
+
+  @@index([userId, status])
+  @@index([chosenBetId])
+}
+
+model RoadmapMilestone {
+  id               String          @id @default(cuid())
+  roadmapId        String
+  order            Int
+  title            String
+  description      String?
+  targetCapability String?
+  gap              Float?
+  status           MilestoneStatus @default(PLANNED)
+  dueDate          DateTime?
+  completedAt      DateTime?
+  roadmap          Roadmap         @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+  links            MilestoneLink[]
+  feedback         Feedback[]
+
+  @@unique([roadmapId, order])
+}
+
+// Exactly one of the three is set (CHECK constraint in the migration).
+model MilestoneLink {
+  id           String           @id @default(cuid())
+  milestoneId  String
+  conceptId    String?
+  experienceId String?
+  challengeId  String?
+  milestone    RoadmapMilestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  concept      Concept?         @relation(fields: [conceptId], references: [id])
+  experience   Experience?      @relation(fields: [experienceId], references: [id])
+  challenge    Challenge?       @relation(fields: [challengeId], references: [id])
+
+  @@index([milestoneId])
+  @@index([conceptId])
+  @@index([experienceId])
+  @@index([challengeId])
+}
+
+// Connects an inferred capability to the learning platform's competencies and skills,
+// so learning moves the Blueprint.
+model UserCapabilityProgress {
+  id             String   @id @default(cuid())
+  userId         String
+  capabilityName String
+  competencyId   String?
+  skillId        String?
+  level          Float    @default(0)
+  updatedAt      DateTime @updatedAt
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, capabilityName])
+  @@index([competencyId])
+  @@index([skillId])
+}
+
+// ──────────────────────────────────────────────
+// D. PLATFORM HYGIENE
+// ──────────────────────────────────────────────
+
+model AuditEvent {
+  id         String   @id @default(cuid())
+  userId     String?
+  action     String
+  entityType String?
+  entityId   String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([action, createdAt])
+}
+
+model Feedback {
+  id           String            @id @default(cuid())
+  userId       String
+  target       FeedbackTarget
+  candidateKey String? // direction name, for target=CANDIDATE (the run may be overwritten)
+  milestoneId  String?
+  rating       Int // -1 or 1
+  comment      String?
+  createdAt    DateTime          @default(now())
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  milestone    RoadmapMilestone? @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([milestoneId])
+}
+
+model UsageLedger {
+  id         String       @id @default(cuid())
+  userId     String
+  runId      String?
+  kind       String // e.g. "analysis", "mentor"
+  tokensIn   Int          @default(0)
+  tokensOut  Int          @default(0)
+  costMicros Int          @default(0)
+  createdAt  DateTime     @default(now())
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  run        AnalysisRun? @relation(fields: [runId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([runId])
 }

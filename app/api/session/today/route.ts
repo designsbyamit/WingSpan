@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { db } from '@/lib/db'
 import type { TodaySessionResponse } from '@/types/design-evolution'
+import { getMessages } from '@/lib/mentor-messages'
 
 export const maxDuration = 60
 
@@ -40,8 +41,7 @@ export async function GET() {
     const nextEntry = await db.learningPathEntry.findFirst({
       where: {
         learningPathId: user.activeLearningPathId,
-        entityType: 'experience',
-        entityId: { notIn: completedIds },
+        experienceId: { not: null, notIn: completedIds },
       },
       orderBy: { order: 'asc' },
     })
@@ -52,7 +52,7 @@ export async function GET() {
 
     // 4. Load the full experience
     const experience = await db.experience.findUnique({
-      where: { id: nextEntry.entityId },
+      where: { id: nextEntry.experienceId as string },
       include: {
         concepts: {
           include: {
@@ -93,13 +93,10 @@ export async function GET() {
       learningSession = await db.learningSession.create({
         data: {
           userId: session.userId,
-          entityType: 'experience',
-          entityId: experience.id,
           experienceId: experience.id,
           startedAt: new Date(),
           completedAt: null,
           reflectionText: null,
-          aiMessages: '[]',
         },
       })
     }
@@ -132,7 +129,7 @@ export async function GET() {
         startedAt: learningSession.startedAt.toISOString(),
         completedAt: learningSession.completedAt?.toISOString() ?? null,
         reflectionText: learningSession.reflectionText ?? null,
-        aiMessages: JSON.parse(learningSession.aiMessages ?? '[]'),
+        aiMessages: await getMessages(learningSession.id),
       },
     }
 

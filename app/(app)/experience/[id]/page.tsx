@@ -7,6 +7,7 @@ import { ChallengeResponse } from '@/components/experience/ChallengeResponse'
 import { MentorFloating } from '@/components/experience/MentorFloating'
 import { ExperienceImage } from '@/components/experience/ExperienceImage'
 import type { ExperienceData, LearningSessionData } from '@/types/design-evolution'
+import { getMessages } from '@/lib/mentor-messages'
 
 /** Renders a markdown string as styled JSX — handles **bold**, numbered lists, and --- dividers. */
 function MarkdownText({ text }: { text: string }) {
@@ -84,13 +85,10 @@ async function getOrCreateSession(
     session = await db.learningSession.create({
       data: {
         userId,
-        entityType: 'experience',
-        entityId: experienceId,
         experienceId,
         startedAt: new Date(),
         completedAt: null,
         reflectionText: null,
-        aiMessages: '[]',
       },
     })
   }
@@ -101,7 +99,7 @@ async function getOrCreateSession(
     startedAt: session.startedAt.toISOString(),
     completedAt: session.completedAt?.toISOString() ?? null,
     reflectionText: session.reflectionText ?? null,
-    aiMessages: JSON.parse(session.aiMessages ?? '[]'),
+    aiMessages: await getMessages(session.id),
   }
 }
 

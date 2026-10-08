@@ -5,6 +5,7 @@ import { db } from '@/lib/db'
 import { ExperienceCard } from '@/components/home/ExperienceCard'
 import { CompetencyBar } from '@/components/home/CompetencyBar'
 import type { TodaySessionResponse, CompetencyBarData } from '@/types/design-evolution'
+import { getMessages } from '@/lib/mentor-messages'
 
 function getGreeting(name: string): string {
   const hour = new Date().getHours()
@@ -50,8 +51,7 @@ export default async function HomePage() {
     const nextEntry = await db.learningPathEntry.findFirst({
       where: {
         learningPathId: user.activeLearningPathId,
-        entityType: 'experience',
-        entityId: { notIn: completedIds },
+        experienceId: { not: null, notIn: completedIds },
       },
       orderBy: { order: 'asc' },
     })
@@ -59,7 +59,7 @@ export default async function HomePage() {
     if (nextEntry) {
       // Load the full experience with concepts and competencies
       const experience = await db.experience.findUnique({
-        where: { id: nextEntry.entityId },
+        where: { id: nextEntry.experienceId as string },
         include: {
           concepts: {
             include: {
@@ -97,13 +97,10 @@ export default async function HomePage() {
           learningSession = await db.learningSession.create({
             data: {
               userId: session.userId,
-              entityType: 'experience',
-              entityId: experience.id,
               experienceId: experience.id,
               startedAt: new Date(),
               completedAt: null,
               reflectionText: null,
-              aiMessages: '[]',
             },
           })
         }
@@ -136,7 +133,7 @@ export default async function HomePage() {
             startedAt: learningSession.startedAt.toISOString(),
             completedAt: learningSession.completedAt?.toISOString() ?? null,
             reflectionText: learningSession.reflectionText ?? null,
-            aiMessages: JSON.parse(learningSession.aiMessages ?? '[]'),
+            aiMessages: await getMessages(learningSession.id),
           },
         }
       }

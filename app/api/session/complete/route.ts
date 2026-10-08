@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getSession } from '@/lib/auth'
 import { db } from '@/lib/db'
 import type { CompleteSessionRequest, CompleteSessionResponse } from '@/types/design-evolution'
+import { asStringArray } from '@/lib/learning-entity'
 
 export const maxDuration = 60
 
@@ -50,7 +51,10 @@ export async function POST(req: NextRequest) {
       data: { completedAt: now, reflectionText },
     })
 
-    const experienceId = learningSession.experienceId ?? learningSession.entityId
+    const experienceId = learningSession.experienceId
+    if (!experienceId) {
+      return NextResponse.json({ error: 'Session is not an experience session' }, { status: 400 })
+    }
 
     // 2. Load experience with competencies and concepts
     const experience = await db.experience.findUnique({
@@ -145,12 +149,12 @@ export async function POST(req: NextRequest) {
           userId: session.userId,
           conceptId: concept.id,
           seenCount: newSeenCount,
-          lastSeen: now,
+          lastSeenAt: now,
           mastered: newSeenCount >= 3,
         },
         update: {
           seenCount: newSeenCount,
-          lastSeen: now,
+          lastSeenAt: now,
           mastered: newSeenCount >= 3,
         },
       })
@@ -165,8 +169,7 @@ export async function POST(req: NextRequest) {
       const currentEntry = await db.learningPathEntry.findFirst({
         where: {
           learningPathId: user2.activeLearningPathId,
-          entityType: 'experience',
-          entityId: experienceId,
+          experienceId,
         },
         select: { id: true, order: true },
       })
@@ -197,7 +200,7 @@ export async function POST(req: NextRequest) {
       select: { reflectionHistory: true },
     })
     const reflectionHistory = [
-      ...JSON.parse(existingCtx?.reflectionHistory ?? '[]'),
+      ...asStringArray(existingCtx?.reflectionHistory),
       reflectionText,
     ]
     await db.aIMentorContext.upsert({
@@ -205,10 +208,10 @@ export async function POST(req: NextRequest) {
       create: {
         userId: session.userId,
         context: '',
-        weaknesses: '[]',
-        reflectionHistory: JSON.stringify(reflectionHistory),
+        weaknesses: [],
+        reflectionHistory,
       },
-      update: { reflectionHistory: JSON.stringify(reflectionHistory) },
+      update: { reflectionHistory },
     })
 
     const result: CompleteSessionResponse = {

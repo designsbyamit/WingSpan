@@ -42,9 +42,7 @@ export default async function PathDetailPage({ params }: Props) {
     })
     isActive = user?.activeLearningPathId === id
 
-    const expEntryIds = path.entries
-      .filter((e) => e.entityType === 'experience')
-      .map((e) => e.entityId)
+    const expEntryIds = path.entries.flatMap((e) => (e.experienceId ? [e.experienceId] : []))
 
     if (expEntryIds.length > 0) {
       const sessions = await db.learningSession.findMany({
@@ -62,12 +60,12 @@ export default async function PathDetailPage({ params }: Props) {
   }
 
   // Load experience details for each entry
-  const expEntries = path.entries.filter((e) => e.entityType === 'experience')
+  const expEntries = path.entries.filter((e) => e.experienceId !== null)
 
   const entriesWithDetail = await Promise.all(
     expEntries.map(async (entry, index) => {
       const exp = await db.experience.findUnique({
-        where: { id: entry.entityId },
+        where: { id: entry.experienceId as string },
         select: {
           id: true,
           title: true,
@@ -79,14 +77,14 @@ export default async function PathDetailPage({ params }: Props) {
 
       // Unlock logic: first entry always unlocked; subsequent entries require previous completed
       const isUnlocked =
-        index === 0 || completedIds.has(expEntries[index - 1].entityId)
+        index === 0 || completedIds.has(expEntries[index - 1].experienceId as string)
 
       return {
         id: entry.id,
         order: entry.order,
-        entityId: entry.entityId,
+        entityId: entry.experienceId as string,
         exp,
-        completedByUser: completedIds.has(entry.entityId),
+        completedByUser: completedIds.has(entry.experienceId as string),
         isUnlocked,
       }
     })

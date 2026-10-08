@@ -4,6 +4,8 @@ import { getSession } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { streamMentorResponse } from '@/lib/mentor'
 import type { MentorRequest } from '@/types/design-evolution'
+import { appendMessages, type ChatMessage } from '@/lib/mentor-messages'
+import { asStringArray } from '@/lib/learning-entity'
 
 export const maxDuration = 120
 
@@ -58,7 +60,7 @@ export async function POST(req: NextRequest) {
     where: { userId: session.userId },
     select: { weaknesses: true },
   })
-  const weaknesses: string[] = JSON.parse(mentorCtx?.weaknesses ?? '[]')
+  const weaknesses: string[] = asStringArray(mentorCtx?.weaknesses)
 
   const readableStream = streamMentorResponse({
     messages,
@@ -66,25 +68,11 @@ export async function POST(req: NextRequest) {
     conceptNames: experience.concepts.map((c) => c.concept.title),
     weaknesses,
     onComplete: async (fullText) => {
-      // Persist the assistant's final message back to the session
-      const existing = await db.learningSession.findUnique({
-        where: { id: sessionId },
-        select: { aiMessages: true },
-      })
-      const existingMessages: Array<{ role: string; content: string }> = JSON.parse(
-        existing?.aiMessages ?? '[]'
-      )
-      const updatedMessages = [
-        ...existingMessages,
-        ...messages.slice(-1).map((m) => ({ role: m.role, content: m.content })),
+      // Persist the latest user message and the assistant's reply
+      await appendMessages(sessionId, [
+        ...messages.slice(-1).map((m) => ({ role: m.role as ChatMessage['role'], content: m.content })),
         { role: 'assistant', content: fullText },
-      ]
-      await db.learningSession
-        .update({
-          where: { id: sessionId, userId: session.userId },
-          data: { aiMessages: JSON.stringify(updatedMessages) },
-        })
-        .catch((err) => console.error('Failed to persist aiMessages:', err))
+      ]).catch((err) => console.error('Failed to persist mentor messages:', err))
     },
   })
 

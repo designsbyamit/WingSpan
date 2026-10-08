@@ -255,6 +255,9 @@ export type ConceptWhereInput = {
   prerequisites?: Prisma.ConceptPrerequisiteListRelationFilter
   requiredBy?: Prisma.ConceptPrerequisiteListRelationFilter
   masteries?: Prisma.UserConceptMasteryListRelationFilter
+  milestoneLinks?: Prisma.MilestoneLinkListRelationFilter
+  pathEntries?: Prisma.LearningPathEntryListRelationFilter
+  sessions?: Prisma.LearningSessionListRelationFilter
 }
 
 export type ConceptOrderByWithRelationInput = {
@@ -274,6 +277,9 @@ export type ConceptOrderByWithRelationInput = {
   prerequisites?: Prisma.ConceptPrerequisiteOrderByRelationAggregateInput
   requiredBy?: Prisma.ConceptPrerequisiteOrderByRelationAggregateInput
   masteries?: Prisma.UserConceptMasteryOrderByRelationAggregateInput
+  milestoneLinks?: Prisma.MilestoneLinkOrderByRelationAggregateInput
+  pathEntries?: Prisma.LearningPathEntryOrderByRelationAggregateInput
+  sessions?: Prisma.LearningSessionOrderByRelationAggregateInput
 }
 
 export type ConceptWhereUniqueInput = Prisma.AtLeast<{
@@ -296,6 +302,9 @@ export type ConceptWhereUniqueInput = Prisma.AtLeast<{
   prerequisites?: Prisma.ConceptPrerequisiteListRelationFilter
   requiredBy?: Prisma.ConceptPrerequisiteListRelationFilter
   masteries?: Prisma.UserConceptMasteryListRelationFilter
+  milestoneLinks?: Prisma.MilestoneLinkListRelationFilter
+  pathEntries?: Prisma.LearningPathEntryListRelationFilter
+  sessions?: Prisma.LearningSessionListRelationFilter
 }, "id" | "slug">
 
 export type ConceptOrderByWithAggregationInput = {
@@ -347,6 +356,9 @@ export type ConceptCreateInput = {
   prerequisites?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutConceptInput
   requiredBy?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutPrerequisiteInput
   masteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptUncheckedCreateInput = {
@@ -366,6 +378,9 @@ export type ConceptUncheckedCreateInput = {
   prerequisites?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutConceptInput
   requiredBy?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteInput
   masteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptUpdateInput = {
@@ -385,6 +400,9 @@ export type ConceptUpdateInput = {
   prerequisites?: Prisma.ConceptPrerequisiteUpdateManyWithoutConceptNestedInput
   requiredBy?: Prisma.ConceptPrerequisiteUpdateManyWithoutPrerequisiteNestedInput
   masteries?: Prisma.UserConceptMasteryUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutConceptNestedInput
 }
 
 export type ConceptUncheckedUpdateInput = {
@@ -404,6 +422,9 @@ export type ConceptUncheckedUpdateInput = {
   prerequisites?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutConceptNestedInput
   requiredBy?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutPrerequisiteNestedInput
   masteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutConceptNestedInput
 }
 
 export type ConceptCreateManyInput = {
@@ -491,6 +512,11 @@ export type ConceptScalarRelationFilter = {
   isNot?: Prisma.ConceptWhereInput
 }
 
+export type ConceptNullableScalarRelationFilter = {
+  is?: Prisma.ConceptWhereInput | null
+  isNot?: Prisma.ConceptWhereInput | null
+}
+
 export type ConceptCreateNestedOneWithoutPrerequisitesInput = {
   create?: Prisma.XOR<Prisma.ConceptCreateWithoutPrerequisitesInput, Prisma.ConceptUncheckedCreateWithoutPrerequisitesInput>
   connectOrCreate?: Prisma.ConceptCreateOrConnectWithoutPrerequisitesInput
@@ -517,6 +543,22 @@ export type ConceptUpdateOneRequiredWithoutRequiredByNestedInput = {
   upsert?: Prisma.ConceptUpsertWithoutRequiredByInput
   connect?: Prisma.ConceptWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.ConceptUpdateToOneWithWhereWithoutRequiredByInput, Prisma.ConceptUpdateWithoutRequiredByInput>, Prisma.ConceptUncheckedUpdateWithoutRequiredByInput>
+}
+
+export type ConceptCreateNestedOneWithoutPathEntriesInput = {
+  create?: Prisma.XOR<Prisma.ConceptCreateWithoutPathEntriesInput, Prisma.ConceptUncheckedCreateWithoutPathEntriesInput>
+  connectOrCreate?: Prisma.ConceptCreateOrConnectWithoutPathEntriesInput
+  connect?: Prisma.ConceptWhereUniqueInput
+}
+
+export type ConceptUpdateOneWithoutPathEntriesNestedInput = {
+  create?: Prisma.XOR<Prisma.ConceptCreateWithoutPathEntriesInput, Prisma.ConceptUncheckedCreateWithoutPathEntriesInput>
+  connectOrCreate?: Prisma.ConceptCreateOrConnectWithoutPathEntriesInput
+  upsert?: Prisma.ConceptUpsertWithoutPathEntriesInput
+  disconnect?: Prisma.ConceptWhereInput | boolean
+  delete?: Prisma.ConceptWhereInput | boolean
+  connect?: Prisma.ConceptWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ConceptUpdateToOneWithWhereWithoutPathEntriesInput, Prisma.ConceptUpdateWithoutPathEntriesInput>, Prisma.ConceptUncheckedUpdateWithoutPathEntriesInput>
 }
 
 export type ConceptCreateNestedOneWithoutSkillsInput = {
@@ -589,6 +631,38 @@ export type ConceptUpdateOneRequiredWithoutMasteriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ConceptUpdateToOneWithWhereWithoutMasteriesInput, Prisma.ConceptUpdateWithoutMasteriesInput>, Prisma.ConceptUncheckedUpdateWithoutMasteriesInput>
 }
 
+export type ConceptCreateNestedOneWithoutSessionsInput = {
+  create?: Prisma.XOR<Prisma.ConceptCreateWithoutSessionsInput, Prisma.ConceptUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.ConceptCreateOrConnectWithoutSessionsInput
+  connect?: Prisma.ConceptWhereUniqueInput
+}
+
+export type ConceptUpdateOneWithoutSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.ConceptCreateWithoutSessionsInput, Prisma.ConceptUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.ConceptCreateOrConnectWithoutSessionsInput
+  upsert?: Prisma.ConceptUpsertWithoutSessionsInput
+  disconnect?: Prisma.ConceptWhereInput | boolean
+  delete?: Prisma.ConceptWhereInput | boolean
+  connect?: Prisma.ConceptWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ConceptUpdateToOneWithWhereWithoutSessionsInput, Prisma.ConceptUpdateWithoutSessionsInput>, Prisma.ConceptUncheckedUpdateWithoutSessionsInput>
+}
+
+export type ConceptCreateNestedOneWithoutMilestoneLinksInput = {
+  create?: Prisma.XOR<Prisma.ConceptCreateWithoutMilestoneLinksInput, Prisma.ConceptUncheckedCreateWithoutMilestoneLinksInput>
+  connectOrCreate?: Prisma.ConceptCreateOrConnectWithoutMilestoneLinksInput
+  connect?: Prisma.ConceptWhereUniqueInput
+}
+
+export type ConceptUpdateOneWithoutMilestoneLinksNestedInput = {
+  create?: Prisma.XOR<Prisma.ConceptCreateWithoutMilestoneLinksInput, Prisma.ConceptUncheckedCreateWithoutMilestoneLinksInput>
+  connectOrCreate?: Prisma.ConceptCreateOrConnectWithoutMilestoneLinksInput
+  upsert?: Prisma.ConceptUpsertWithoutMilestoneLinksInput
+  disconnect?: Prisma.ConceptWhereInput | boolean
+  delete?: Prisma.ConceptWhereInput | boolean
+  connect?: Prisma.ConceptWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ConceptUpdateToOneWithWhereWithoutMilestoneLinksInput, Prisma.ConceptUpdateWithoutMilestoneLinksInput>, Prisma.ConceptUncheckedUpdateWithoutMilestoneLinksInput>
+}
+
 export type ConceptCreateWithoutPrerequisitesInput = {
   id?: string
   slug: string
@@ -605,6 +679,9 @@ export type ConceptCreateWithoutPrerequisitesInput = {
   experiences?: Prisma.ConceptOnExperienceCreateNestedManyWithoutConceptInput
   requiredBy?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutPrerequisiteInput
   masteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptUncheckedCreateWithoutPrerequisitesInput = {
@@ -623,6 +700,9 @@ export type ConceptUncheckedCreateWithoutPrerequisitesInput = {
   experiences?: Prisma.ConceptOnExperienceUncheckedCreateNestedManyWithoutConceptInput
   requiredBy?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteInput
   masteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptCreateOrConnectWithoutPrerequisitesInput = {
@@ -646,6 +726,9 @@ export type ConceptCreateWithoutRequiredByInput = {
   experiences?: Prisma.ConceptOnExperienceCreateNestedManyWithoutConceptInput
   prerequisites?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutConceptInput
   masteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptUncheckedCreateWithoutRequiredByInput = {
@@ -664,6 +747,9 @@ export type ConceptUncheckedCreateWithoutRequiredByInput = {
   experiences?: Prisma.ConceptOnExperienceUncheckedCreateNestedManyWithoutConceptInput
   prerequisites?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutConceptInput
   masteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptCreateOrConnectWithoutRequiredByInput = {
@@ -698,6 +784,9 @@ export type ConceptUpdateWithoutPrerequisitesInput = {
   experiences?: Prisma.ConceptOnExperienceUpdateManyWithoutConceptNestedInput
   requiredBy?: Prisma.ConceptPrerequisiteUpdateManyWithoutPrerequisiteNestedInput
   masteries?: Prisma.UserConceptMasteryUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutConceptNestedInput
 }
 
 export type ConceptUncheckedUpdateWithoutPrerequisitesInput = {
@@ -716,6 +805,9 @@ export type ConceptUncheckedUpdateWithoutPrerequisitesInput = {
   experiences?: Prisma.ConceptOnExperienceUncheckedUpdateManyWithoutConceptNestedInput
   requiredBy?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutPrerequisiteNestedInput
   masteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutConceptNestedInput
 }
 
 export type ConceptUpsertWithoutRequiredByInput = {
@@ -745,6 +837,9 @@ export type ConceptUpdateWithoutRequiredByInput = {
   experiences?: Prisma.ConceptOnExperienceUpdateManyWithoutConceptNestedInput
   prerequisites?: Prisma.ConceptPrerequisiteUpdateManyWithoutConceptNestedInput
   masteries?: Prisma.UserConceptMasteryUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutConceptNestedInput
 }
 
 export type ConceptUncheckedUpdateWithoutRequiredByInput = {
@@ -763,6 +858,109 @@ export type ConceptUncheckedUpdateWithoutRequiredByInput = {
   experiences?: Prisma.ConceptOnExperienceUncheckedUpdateManyWithoutConceptNestedInput
   prerequisites?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutConceptNestedInput
   masteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutConceptNestedInput
+}
+
+export type ConceptCreateWithoutPathEntriesInput = {
+  id?: string
+  slug: string
+  title: string
+  body: string
+  summary?: string | null
+  mediaUrl?: string | null
+  estimatedMins?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.ConceptOnSkillCreateNestedManyWithoutConceptInput
+  humanPatterns?: Prisma.ConceptOnHumanPatternCreateNestedManyWithoutConceptInput
+  principles?: Prisma.ConceptOnPrincipleCreateNestedManyWithoutConceptInput
+  experiences?: Prisma.ConceptOnExperienceCreateNestedManyWithoutConceptInput
+  prerequisites?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutConceptInput
+  requiredBy?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutPrerequisiteInput
+  masteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutConceptInput
+}
+
+export type ConceptUncheckedCreateWithoutPathEntriesInput = {
+  id?: string
+  slug: string
+  title: string
+  body: string
+  summary?: string | null
+  mediaUrl?: string | null
+  estimatedMins?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.ConceptOnSkillUncheckedCreateNestedManyWithoutConceptInput
+  humanPatterns?: Prisma.ConceptOnHumanPatternUncheckedCreateNestedManyWithoutConceptInput
+  principles?: Prisma.ConceptOnPrincipleUncheckedCreateNestedManyWithoutConceptInput
+  experiences?: Prisma.ConceptOnExperienceUncheckedCreateNestedManyWithoutConceptInput
+  prerequisites?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutConceptInput
+  requiredBy?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteInput
+  masteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutConceptInput
+}
+
+export type ConceptCreateOrConnectWithoutPathEntriesInput = {
+  where: Prisma.ConceptWhereUniqueInput
+  create: Prisma.XOR<Prisma.ConceptCreateWithoutPathEntriesInput, Prisma.ConceptUncheckedCreateWithoutPathEntriesInput>
+}
+
+export type ConceptUpsertWithoutPathEntriesInput = {
+  update: Prisma.XOR<Prisma.ConceptUpdateWithoutPathEntriesInput, Prisma.ConceptUncheckedUpdateWithoutPathEntriesInput>
+  create: Prisma.XOR<Prisma.ConceptCreateWithoutPathEntriesInput, Prisma.ConceptUncheckedCreateWithoutPathEntriesInput>
+  where?: Prisma.ConceptWhereInput
+}
+
+export type ConceptUpdateToOneWithWhereWithoutPathEntriesInput = {
+  where?: Prisma.ConceptWhereInput
+  data: Prisma.XOR<Prisma.ConceptUpdateWithoutPathEntriesInput, Prisma.ConceptUncheckedUpdateWithoutPathEntriesInput>
+}
+
+export type ConceptUpdateWithoutPathEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedMins?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.ConceptOnSkillUpdateManyWithoutConceptNestedInput
+  humanPatterns?: Prisma.ConceptOnHumanPatternUpdateManyWithoutConceptNestedInput
+  principles?: Prisma.ConceptOnPrincipleUpdateManyWithoutConceptNestedInput
+  experiences?: Prisma.ConceptOnExperienceUpdateManyWithoutConceptNestedInput
+  prerequisites?: Prisma.ConceptPrerequisiteUpdateManyWithoutConceptNestedInput
+  requiredBy?: Prisma.ConceptPrerequisiteUpdateManyWithoutPrerequisiteNestedInput
+  masteries?: Prisma.UserConceptMasteryUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutConceptNestedInput
+}
+
+export type ConceptUncheckedUpdateWithoutPathEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedMins?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.ConceptOnSkillUncheckedUpdateManyWithoutConceptNestedInput
+  humanPatterns?: Prisma.ConceptOnHumanPatternUncheckedUpdateManyWithoutConceptNestedInput
+  principles?: Prisma.ConceptOnPrincipleUncheckedUpdateManyWithoutConceptNestedInput
+  experiences?: Prisma.ConceptOnExperienceUncheckedUpdateManyWithoutConceptNestedInput
+  prerequisites?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutConceptNestedInput
+  requiredBy?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutPrerequisiteNestedInput
+  masteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutConceptNestedInput
 }
 
 export type ConceptCreateWithoutSkillsInput = {
@@ -781,6 +979,9 @@ export type ConceptCreateWithoutSkillsInput = {
   prerequisites?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutConceptInput
   requiredBy?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutPrerequisiteInput
   masteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptUncheckedCreateWithoutSkillsInput = {
@@ -799,6 +1000,9 @@ export type ConceptUncheckedCreateWithoutSkillsInput = {
   prerequisites?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutConceptInput
   requiredBy?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteInput
   masteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptCreateOrConnectWithoutSkillsInput = {
@@ -833,6 +1037,9 @@ export type ConceptUpdateWithoutSkillsInput = {
   prerequisites?: Prisma.ConceptPrerequisiteUpdateManyWithoutConceptNestedInput
   requiredBy?: Prisma.ConceptPrerequisiteUpdateManyWithoutPrerequisiteNestedInput
   masteries?: Prisma.UserConceptMasteryUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutConceptNestedInput
 }
 
 export type ConceptUncheckedUpdateWithoutSkillsInput = {
@@ -851,6 +1058,9 @@ export type ConceptUncheckedUpdateWithoutSkillsInput = {
   prerequisites?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutConceptNestedInput
   requiredBy?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutPrerequisiteNestedInput
   masteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutConceptNestedInput
 }
 
 export type ConceptCreateWithoutHumanPatternsInput = {
@@ -869,6 +1079,9 @@ export type ConceptCreateWithoutHumanPatternsInput = {
   prerequisites?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutConceptInput
   requiredBy?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutPrerequisiteInput
   masteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptUncheckedCreateWithoutHumanPatternsInput = {
@@ -887,6 +1100,9 @@ export type ConceptUncheckedCreateWithoutHumanPatternsInput = {
   prerequisites?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutConceptInput
   requiredBy?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteInput
   masteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptCreateOrConnectWithoutHumanPatternsInput = {
@@ -921,6 +1137,9 @@ export type ConceptUpdateWithoutHumanPatternsInput = {
   prerequisites?: Prisma.ConceptPrerequisiteUpdateManyWithoutConceptNestedInput
   requiredBy?: Prisma.ConceptPrerequisiteUpdateManyWithoutPrerequisiteNestedInput
   masteries?: Prisma.UserConceptMasteryUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutConceptNestedInput
 }
 
 export type ConceptUncheckedUpdateWithoutHumanPatternsInput = {
@@ -939,6 +1158,9 @@ export type ConceptUncheckedUpdateWithoutHumanPatternsInput = {
   prerequisites?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutConceptNestedInput
   requiredBy?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutPrerequisiteNestedInput
   masteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutConceptNestedInput
 }
 
 export type ConceptCreateWithoutPrinciplesInput = {
@@ -957,6 +1179,9 @@ export type ConceptCreateWithoutPrinciplesInput = {
   prerequisites?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutConceptInput
   requiredBy?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutPrerequisiteInput
   masteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptUncheckedCreateWithoutPrinciplesInput = {
@@ -975,6 +1200,9 @@ export type ConceptUncheckedCreateWithoutPrinciplesInput = {
   prerequisites?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutConceptInput
   requiredBy?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteInput
   masteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptCreateOrConnectWithoutPrinciplesInput = {
@@ -1009,6 +1237,9 @@ export type ConceptUpdateWithoutPrinciplesInput = {
   prerequisites?: Prisma.ConceptPrerequisiteUpdateManyWithoutConceptNestedInput
   requiredBy?: Prisma.ConceptPrerequisiteUpdateManyWithoutPrerequisiteNestedInput
   masteries?: Prisma.UserConceptMasteryUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutConceptNestedInput
 }
 
 export type ConceptUncheckedUpdateWithoutPrinciplesInput = {
@@ -1027,6 +1258,9 @@ export type ConceptUncheckedUpdateWithoutPrinciplesInput = {
   prerequisites?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutConceptNestedInput
   requiredBy?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutPrerequisiteNestedInput
   masteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutConceptNestedInput
 }
 
 export type ConceptCreateWithoutExperiencesInput = {
@@ -1045,6 +1279,9 @@ export type ConceptCreateWithoutExperiencesInput = {
   prerequisites?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutConceptInput
   requiredBy?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutPrerequisiteInput
   masteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptUncheckedCreateWithoutExperiencesInput = {
@@ -1063,6 +1300,9 @@ export type ConceptUncheckedCreateWithoutExperiencesInput = {
   prerequisites?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutConceptInput
   requiredBy?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteInput
   masteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptCreateOrConnectWithoutExperiencesInput = {
@@ -1097,6 +1337,9 @@ export type ConceptUpdateWithoutExperiencesInput = {
   prerequisites?: Prisma.ConceptPrerequisiteUpdateManyWithoutConceptNestedInput
   requiredBy?: Prisma.ConceptPrerequisiteUpdateManyWithoutPrerequisiteNestedInput
   masteries?: Prisma.UserConceptMasteryUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutConceptNestedInput
 }
 
 export type ConceptUncheckedUpdateWithoutExperiencesInput = {
@@ -1115,6 +1358,9 @@ export type ConceptUncheckedUpdateWithoutExperiencesInput = {
   prerequisites?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutConceptNestedInput
   requiredBy?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutPrerequisiteNestedInput
   masteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutConceptNestedInput
 }
 
 export type ConceptCreateWithoutMasteriesInput = {
@@ -1133,6 +1379,9 @@ export type ConceptCreateWithoutMasteriesInput = {
   experiences?: Prisma.ConceptOnExperienceCreateNestedManyWithoutConceptInput
   prerequisites?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutConceptInput
   requiredBy?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutPrerequisiteInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptUncheckedCreateWithoutMasteriesInput = {
@@ -1151,6 +1400,9 @@ export type ConceptUncheckedCreateWithoutMasteriesInput = {
   experiences?: Prisma.ConceptOnExperienceUncheckedCreateNestedManyWithoutConceptInput
   prerequisites?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutConceptInput
   requiredBy?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutConceptInput
 }
 
 export type ConceptCreateOrConnectWithoutMasteriesInput = {
@@ -1185,6 +1437,9 @@ export type ConceptUpdateWithoutMasteriesInput = {
   experiences?: Prisma.ConceptOnExperienceUpdateManyWithoutConceptNestedInput
   prerequisites?: Prisma.ConceptPrerequisiteUpdateManyWithoutConceptNestedInput
   requiredBy?: Prisma.ConceptPrerequisiteUpdateManyWithoutPrerequisiteNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutConceptNestedInput
 }
 
 export type ConceptUncheckedUpdateWithoutMasteriesInput = {
@@ -1203,6 +1458,209 @@ export type ConceptUncheckedUpdateWithoutMasteriesInput = {
   experiences?: Prisma.ConceptOnExperienceUncheckedUpdateManyWithoutConceptNestedInput
   prerequisites?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutConceptNestedInput
   requiredBy?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutPrerequisiteNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutConceptNestedInput
+}
+
+export type ConceptCreateWithoutSessionsInput = {
+  id?: string
+  slug: string
+  title: string
+  body: string
+  summary?: string | null
+  mediaUrl?: string | null
+  estimatedMins?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.ConceptOnSkillCreateNestedManyWithoutConceptInput
+  humanPatterns?: Prisma.ConceptOnHumanPatternCreateNestedManyWithoutConceptInput
+  principles?: Prisma.ConceptOnPrincipleCreateNestedManyWithoutConceptInput
+  experiences?: Prisma.ConceptOnExperienceCreateNestedManyWithoutConceptInput
+  prerequisites?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutConceptInput
+  requiredBy?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutPrerequisiteInput
+  masteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutConceptInput
+}
+
+export type ConceptUncheckedCreateWithoutSessionsInput = {
+  id?: string
+  slug: string
+  title: string
+  body: string
+  summary?: string | null
+  mediaUrl?: string | null
+  estimatedMins?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.ConceptOnSkillUncheckedCreateNestedManyWithoutConceptInput
+  humanPatterns?: Prisma.ConceptOnHumanPatternUncheckedCreateNestedManyWithoutConceptInput
+  principles?: Prisma.ConceptOnPrincipleUncheckedCreateNestedManyWithoutConceptInput
+  experiences?: Prisma.ConceptOnExperienceUncheckedCreateNestedManyWithoutConceptInput
+  prerequisites?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutConceptInput
+  requiredBy?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteInput
+  masteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutConceptInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutConceptInput
+}
+
+export type ConceptCreateOrConnectWithoutSessionsInput = {
+  where: Prisma.ConceptWhereUniqueInput
+  create: Prisma.XOR<Prisma.ConceptCreateWithoutSessionsInput, Prisma.ConceptUncheckedCreateWithoutSessionsInput>
+}
+
+export type ConceptUpsertWithoutSessionsInput = {
+  update: Prisma.XOR<Prisma.ConceptUpdateWithoutSessionsInput, Prisma.ConceptUncheckedUpdateWithoutSessionsInput>
+  create: Prisma.XOR<Prisma.ConceptCreateWithoutSessionsInput, Prisma.ConceptUncheckedCreateWithoutSessionsInput>
+  where?: Prisma.ConceptWhereInput
+}
+
+export type ConceptUpdateToOneWithWhereWithoutSessionsInput = {
+  where?: Prisma.ConceptWhereInput
+  data: Prisma.XOR<Prisma.ConceptUpdateWithoutSessionsInput, Prisma.ConceptUncheckedUpdateWithoutSessionsInput>
+}
+
+export type ConceptUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedMins?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.ConceptOnSkillUpdateManyWithoutConceptNestedInput
+  humanPatterns?: Prisma.ConceptOnHumanPatternUpdateManyWithoutConceptNestedInput
+  principles?: Prisma.ConceptOnPrincipleUpdateManyWithoutConceptNestedInput
+  experiences?: Prisma.ConceptOnExperienceUpdateManyWithoutConceptNestedInput
+  prerequisites?: Prisma.ConceptPrerequisiteUpdateManyWithoutConceptNestedInput
+  requiredBy?: Prisma.ConceptPrerequisiteUpdateManyWithoutPrerequisiteNestedInput
+  masteries?: Prisma.UserConceptMasteryUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutConceptNestedInput
+}
+
+export type ConceptUncheckedUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedMins?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.ConceptOnSkillUncheckedUpdateManyWithoutConceptNestedInput
+  humanPatterns?: Prisma.ConceptOnHumanPatternUncheckedUpdateManyWithoutConceptNestedInput
+  principles?: Prisma.ConceptOnPrincipleUncheckedUpdateManyWithoutConceptNestedInput
+  experiences?: Prisma.ConceptOnExperienceUncheckedUpdateManyWithoutConceptNestedInput
+  prerequisites?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutConceptNestedInput
+  requiredBy?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutPrerequisiteNestedInput
+  masteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutConceptNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutConceptNestedInput
+}
+
+export type ConceptCreateWithoutMilestoneLinksInput = {
+  id?: string
+  slug: string
+  title: string
+  body: string
+  summary?: string | null
+  mediaUrl?: string | null
+  estimatedMins?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.ConceptOnSkillCreateNestedManyWithoutConceptInput
+  humanPatterns?: Prisma.ConceptOnHumanPatternCreateNestedManyWithoutConceptInput
+  principles?: Prisma.ConceptOnPrincipleCreateNestedManyWithoutConceptInput
+  experiences?: Prisma.ConceptOnExperienceCreateNestedManyWithoutConceptInput
+  prerequisites?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutConceptInput
+  requiredBy?: Prisma.ConceptPrerequisiteCreateNestedManyWithoutPrerequisiteInput
+  masteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutConceptInput
+}
+
+export type ConceptUncheckedCreateWithoutMilestoneLinksInput = {
+  id?: string
+  slug: string
+  title: string
+  body: string
+  summary?: string | null
+  mediaUrl?: string | null
+  estimatedMins?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  skills?: Prisma.ConceptOnSkillUncheckedCreateNestedManyWithoutConceptInput
+  humanPatterns?: Prisma.ConceptOnHumanPatternUncheckedCreateNestedManyWithoutConceptInput
+  principles?: Prisma.ConceptOnPrincipleUncheckedCreateNestedManyWithoutConceptInput
+  experiences?: Prisma.ConceptOnExperienceUncheckedCreateNestedManyWithoutConceptInput
+  prerequisites?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutConceptInput
+  requiredBy?: Prisma.ConceptPrerequisiteUncheckedCreateNestedManyWithoutPrerequisiteInput
+  masteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutConceptInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutConceptInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutConceptInput
+}
+
+export type ConceptCreateOrConnectWithoutMilestoneLinksInput = {
+  where: Prisma.ConceptWhereUniqueInput
+  create: Prisma.XOR<Prisma.ConceptCreateWithoutMilestoneLinksInput, Prisma.ConceptUncheckedCreateWithoutMilestoneLinksInput>
+}
+
+export type ConceptUpsertWithoutMilestoneLinksInput = {
+  update: Prisma.XOR<Prisma.ConceptUpdateWithoutMilestoneLinksInput, Prisma.ConceptUncheckedUpdateWithoutMilestoneLinksInput>
+  create: Prisma.XOR<Prisma.ConceptCreateWithoutMilestoneLinksInput, Prisma.ConceptUncheckedCreateWithoutMilestoneLinksInput>
+  where?: Prisma.ConceptWhereInput
+}
+
+export type ConceptUpdateToOneWithWhereWithoutMilestoneLinksInput = {
+  where?: Prisma.ConceptWhereInput
+  data: Prisma.XOR<Prisma.ConceptUpdateWithoutMilestoneLinksInput, Prisma.ConceptUncheckedUpdateWithoutMilestoneLinksInput>
+}
+
+export type ConceptUpdateWithoutMilestoneLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedMins?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.ConceptOnSkillUpdateManyWithoutConceptNestedInput
+  humanPatterns?: Prisma.ConceptOnHumanPatternUpdateManyWithoutConceptNestedInput
+  principles?: Prisma.ConceptOnPrincipleUpdateManyWithoutConceptNestedInput
+  experiences?: Prisma.ConceptOnExperienceUpdateManyWithoutConceptNestedInput
+  prerequisites?: Prisma.ConceptPrerequisiteUpdateManyWithoutConceptNestedInput
+  requiredBy?: Prisma.ConceptPrerequisiteUpdateManyWithoutPrerequisiteNestedInput
+  masteries?: Prisma.UserConceptMasteryUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutConceptNestedInput
+}
+
+export type ConceptUncheckedUpdateWithoutMilestoneLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  body?: Prisma.StringFieldUpdateOperationsInput | string
+  summary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  estimatedMins?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  skills?: Prisma.ConceptOnSkillUncheckedUpdateManyWithoutConceptNestedInput
+  humanPatterns?: Prisma.ConceptOnHumanPatternUncheckedUpdateManyWithoutConceptNestedInput
+  principles?: Prisma.ConceptOnPrincipleUncheckedUpdateManyWithoutConceptNestedInput
+  experiences?: Prisma.ConceptOnExperienceUncheckedUpdateManyWithoutConceptNestedInput
+  prerequisites?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutConceptNestedInput
+  requiredBy?: Prisma.ConceptPrerequisiteUncheckedUpdateManyWithoutPrerequisiteNestedInput
+  masteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutConceptNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutConceptNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutConceptNestedInput
 }
 
 
@@ -1218,6 +1676,9 @@ export type ConceptCountOutputType = {
   prerequisites: number
   requiredBy: number
   masteries: number
+  milestoneLinks: number
+  pathEntries: number
+  sessions: number
 }
 
 export type ConceptCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1228,6 +1689,9 @@ export type ConceptCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   prerequisites?: boolean | ConceptCountOutputTypeCountPrerequisitesArgs
   requiredBy?: boolean | ConceptCountOutputTypeCountRequiredByArgs
   masteries?: boolean | ConceptCountOutputTypeCountMasteriesArgs
+  milestoneLinks?: boolean | ConceptCountOutputTypeCountMilestoneLinksArgs
+  pathEntries?: boolean | ConceptCountOutputTypeCountPathEntriesArgs
+  sessions?: boolean | ConceptCountOutputTypeCountSessionsArgs
 }
 
 /**
@@ -1289,6 +1753,27 @@ export type ConceptCountOutputTypeCountMasteriesArgs<ExtArgs extends runtime.Typ
   where?: Prisma.UserConceptMasteryWhereInput
 }
 
+/**
+ * ConceptCountOutputType without action
+ */
+export type ConceptCountOutputTypeCountMilestoneLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MilestoneLinkWhereInput
+}
+
+/**
+ * ConceptCountOutputType without action
+ */
+export type ConceptCountOutputTypeCountPathEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LearningPathEntryWhereInput
+}
+
+/**
+ * ConceptCountOutputType without action
+ */
+export type ConceptCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LearningSessionWhereInput
+}
+
 
 export type ConceptSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1307,6 +1792,9 @@ export type ConceptSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   prerequisites?: boolean | Prisma.Concept$prerequisitesArgs<ExtArgs>
   requiredBy?: boolean | Prisma.Concept$requiredByArgs<ExtArgs>
   masteries?: boolean | Prisma.Concept$masteriesArgs<ExtArgs>
+  milestoneLinks?: boolean | Prisma.Concept$milestoneLinksArgs<ExtArgs>
+  pathEntries?: boolean | Prisma.Concept$pathEntriesArgs<ExtArgs>
+  sessions?: boolean | Prisma.Concept$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.ConceptCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["concept"]>
 
@@ -1355,6 +1843,9 @@ export type ConceptInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   prerequisites?: boolean | Prisma.Concept$prerequisitesArgs<ExtArgs>
   requiredBy?: boolean | Prisma.Concept$requiredByArgs<ExtArgs>
   masteries?: boolean | Prisma.Concept$masteriesArgs<ExtArgs>
+  milestoneLinks?: boolean | Prisma.Concept$milestoneLinksArgs<ExtArgs>
+  pathEntries?: boolean | Prisma.Concept$pathEntriesArgs<ExtArgs>
+  sessions?: boolean | Prisma.Concept$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.ConceptCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ConceptIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1370,6 +1861,9 @@ export type $ConceptPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     prerequisites: Prisma.$ConceptPrerequisitePayload<ExtArgs>[]
     requiredBy: Prisma.$ConceptPrerequisitePayload<ExtArgs>[]
     masteries: Prisma.$UserConceptMasteryPayload<ExtArgs>[]
+    milestoneLinks: Prisma.$MilestoneLinkPayload<ExtArgs>[]
+    pathEntries: Prisma.$LearningPathEntryPayload<ExtArgs>[]
+    sessions: Prisma.$LearningSessionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1782,6 +2276,9 @@ export interface Prisma__ConceptClient<T, Null = never, ExtArgs extends runtime.
   prerequisites<T extends Prisma.Concept$prerequisitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Concept$prerequisitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConceptPrerequisitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   requiredBy<T extends Prisma.Concept$requiredByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Concept$requiredByArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConceptPrerequisitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   masteries<T extends Prisma.Concept$masteriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Concept$masteriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserConceptMasteryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  milestoneLinks<T extends Prisma.Concept$milestoneLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Concept$milestoneLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MilestoneLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pathEntries<T extends Prisma.Concept$pathEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Concept$pathEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearningPathEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  sessions<T extends Prisma.Concept$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Concept$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearningSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2378,6 +2875,78 @@ export type Concept$masteriesArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.UserConceptMasteryScalarFieldEnum | Prisma.UserConceptMasteryScalarFieldEnum[]
+}
+
+/**
+ * Concept.milestoneLinks
+ */
+export type Concept$milestoneLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MilestoneLink
+   */
+  select?: Prisma.MilestoneLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MilestoneLink
+   */
+  omit?: Prisma.MilestoneLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MilestoneLinkInclude<ExtArgs> | null
+  where?: Prisma.MilestoneLinkWhereInput
+  orderBy?: Prisma.MilestoneLinkOrderByWithRelationInput | Prisma.MilestoneLinkOrderByWithRelationInput[]
+  cursor?: Prisma.MilestoneLinkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MilestoneLinkScalarFieldEnum | Prisma.MilestoneLinkScalarFieldEnum[]
+}
+
+/**
+ * Concept.pathEntries
+ */
+export type Concept$pathEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LearningPathEntry
+   */
+  select?: Prisma.LearningPathEntrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LearningPathEntry
+   */
+  omit?: Prisma.LearningPathEntryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LearningPathEntryInclude<ExtArgs> | null
+  where?: Prisma.LearningPathEntryWhereInput
+  orderBy?: Prisma.LearningPathEntryOrderByWithRelationInput | Prisma.LearningPathEntryOrderByWithRelationInput[]
+  cursor?: Prisma.LearningPathEntryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LearningPathEntryScalarFieldEnum | Prisma.LearningPathEntryScalarFieldEnum[]
+}
+
+/**
+ * Concept.sessions
+ */
+export type Concept$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LearningSession
+   */
+  select?: Prisma.LearningSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LearningSession
+   */
+  omit?: Prisma.LearningSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LearningSessionInclude<ExtArgs> | null
+  where?: Prisma.LearningSessionWhereInput
+  orderBy?: Prisma.LearningSessionOrderByWithRelationInput | Prisma.LearningSessionOrderByWithRelationInput[]
+  cursor?: Prisma.LearningSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LearningSessionScalarFieldEnum | Prisma.LearningSessionScalarFieldEnum[]
 }
 
 /**

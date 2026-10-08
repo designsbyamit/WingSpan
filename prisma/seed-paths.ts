@@ -99,8 +99,7 @@ export async function seedPaths(prisma: PrismaClient): Promise<void> {
         data: {
           learningPathId: learningPath.id,
           order: i + 1,
-          entityType: 'experience',
-          entityId: filtered[i].id,
+          experienceId: filtered[i].id,
         },
       })
     }

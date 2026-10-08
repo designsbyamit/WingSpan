@@ -29,8 +29,7 @@ export type AssetMinAggregateOutputType = {
   slug: string | null
   title: string | null
   url: string | null
-  type: string | null
-  tags: string | null
+  type: $Enums.AssetType | null
   createdAt: Date | null
 }
 
@@ -39,8 +38,7 @@ export type AssetMaxAggregateOutputType = {
   slug: string | null
   title: string | null
   url: string | null
-  type: string | null
-  tags: string | null
+  type: $Enums.AssetType | null
   createdAt: Date | null
 }
 
@@ -62,7 +60,6 @@ export type AssetMinAggregateInputType = {
   title?: true
   url?: true
   type?: true
-  tags?: true
   createdAt?: true
 }
 
@@ -72,7 +69,6 @@ export type AssetMaxAggregateInputType = {
   title?: true
   url?: true
   type?: true
-  tags?: true
   createdAt?: true
 }
 
@@ -164,8 +160,8 @@ export type AssetGroupByOutputType = {
   slug: string
   title: string
   url: string
-  type: string
-  tags: string
+  type: $Enums.AssetType
+  tags: string[]
   createdAt: Date
   _count: AssetCountAggregateOutputType | null
   _min: AssetMinAggregateOutputType | null
@@ -195,8 +191,8 @@ export type AssetWhereInput = {
   slug?: Prisma.StringFilter<"Asset"> | string
   title?: Prisma.StringFilter<"Asset"> | string
   url?: Prisma.StringFilter<"Asset"> | string
-  type?: Prisma.StringFilter<"Asset"> | string
-  tags?: Prisma.StringFilter<"Asset"> | string
+  type?: Prisma.EnumAssetTypeFilter<"Asset"> | $Enums.AssetType
+  tags?: Prisma.StringNullableListFilter<"Asset">
   createdAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
 }
 
@@ -218,8 +214,8 @@ export type AssetWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.AssetWhereInput | Prisma.AssetWhereInput[]
   title?: Prisma.StringFilter<"Asset"> | string
   url?: Prisma.StringFilter<"Asset"> | string
-  type?: Prisma.StringFilter<"Asset"> | string
-  tags?: Prisma.StringFilter<"Asset"> | string
+  type?: Prisma.EnumAssetTypeFilter<"Asset"> | $Enums.AssetType
+  tags?: Prisma.StringNullableListFilter<"Asset">
   createdAt?: Prisma.DateTimeFilter<"Asset"> | Date | string
 }, "id" | "slug">
 
@@ -244,8 +240,8 @@ export type AssetScalarWhereWithAggregatesInput = {
   slug?: Prisma.StringWithAggregatesFilter<"Asset"> | string
   title?: Prisma.StringWithAggregatesFilter<"Asset"> | string
   url?: Prisma.StringWithAggregatesFilter<"Asset"> | string
-  type?: Prisma.StringWithAggregatesFilter<"Asset"> | string
-  tags?: Prisma.StringWithAggregatesFilter<"Asset"> | string
+  type?: Prisma.EnumAssetTypeWithAggregatesFilter<"Asset"> | $Enums.AssetType
+  tags?: Prisma.StringNullableListFilter<"Asset">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Asset"> | Date | string
 }
 
@@ -254,8 +250,8 @@ export type AssetCreateInput = {
   slug: string
   title: string
   url: string
-  type: string
-  tags?: string
+  type?: $Enums.AssetType
+  tags?: Prisma.AssetCreatetagsInput | string[]
   createdAt?: Date | string
 }
 
@@ -264,8 +260,8 @@ export type AssetUncheckedCreateInput = {
   slug: string
   title: string
   url: string
-  type: string
-  tags?: string
+  type?: $Enums.AssetType
+  tags?: Prisma.AssetCreatetagsInput | string[]
   createdAt?: Date | string
 }
 
@@ -274,8 +270,8 @@ export type AssetUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  tags?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
+  tags?: Prisma.AssetUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -284,8 +280,8 @@ export type AssetUncheckedUpdateInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  tags?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
+  tags?: Prisma.AssetUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -294,8 +290,8 @@ export type AssetCreateManyInput = {
   slug: string
   title: string
   url: string
-  type: string
-  tags?: string
+  type?: $Enums.AssetType
+  tags?: Prisma.AssetCreatetagsInput | string[]
   createdAt?: Date | string
 }
 
@@ -304,8 +300,8 @@ export type AssetUpdateManyMutationInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  tags?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
+  tags?: Prisma.AssetUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -314,9 +310,17 @@ export type AssetUncheckedUpdateManyInput = {
   slug?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  tags?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumAssetTypeFieldUpdateOperationsInput | $Enums.AssetType
+  tags?: Prisma.AssetUpdatetagsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
 }
 
 export type AssetCountOrderByAggregateInput = {
@@ -335,7 +339,6 @@ export type AssetMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  tags?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -345,8 +348,20 @@ export type AssetMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   url?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  tags?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+}
+
+export type AssetCreatetagsInput = {
+  set: string[]
+}
+
+export type EnumAssetTypeFieldUpdateOperationsInput = {
+  set?: $Enums.AssetType
+}
+
+export type AssetUpdatetagsInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 
@@ -401,8 +416,8 @@ export type $AssetPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     slug: string
     title: string
     url: string
-    type: string
-    tags: string
+    type: $Enums.AssetType
+    tags: string[]
     createdAt: Date
   }, ExtArgs["result"]["asset"]>
   composites: {}
@@ -831,8 +846,8 @@ export interface AssetFieldRefs {
   readonly slug: Prisma.FieldRef<"Asset", 'String'>
   readonly title: Prisma.FieldRef<"Asset", 'String'>
   readonly url: Prisma.FieldRef<"Asset", 'String'>
-  readonly type: Prisma.FieldRef<"Asset", 'String'>
-  readonly tags: Prisma.FieldRef<"Asset", 'String'>
+  readonly type: Prisma.FieldRef<"Asset", 'AssetType'>
+  readonly tags: Prisma.FieldRef<"Asset", 'String[]'>
   readonly createdAt: Prisma.FieldRef<"Asset", 'DateTime'>
 }
     

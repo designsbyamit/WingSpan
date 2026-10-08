@@ -168,6 +168,11 @@ export type UserConceptMastery = Prisma.UserConceptMasteryModel
  */
 export type LearningSession = Prisma.LearningSessionModel
 /**
+ * Model MentorMessage
+ * 
+ */
+export type MentorMessage = Prisma.MentorMessageModel
+/**
  * Model UserLearningPath
  * 
  */
@@ -182,3 +187,143 @@ export type AIMentorContext = Prisma.AIMentorContextModel
  * 
  */
 export type ChallengeSubmission = Prisma.ChallengeSubmissionModel
+/**
+ * Model SourceDocument
+ * 
+ */
+export type SourceDocument = Prisma.SourceDocumentModel
+/**
+ * Model ExtractionRun
+ * 
+ */
+export type ExtractionRun = Prisma.ExtractionRunModel
+/**
+ * Model Role
+ * 
+ */
+export type Role = Prisma.RoleModel
+/**
+ * Model Project
+ * 
+ */
+export type Project = Prisma.ProjectModel
+/**
+ * Model Education
+ * 
+ */
+export type Education = Prisma.EducationModel
+/**
+ * Model SkillClaim
+ * 
+ */
+export type SkillClaim = Prisma.SkillClaimModel
+/**
+ * Model AnalysisRun
+ * 
+ */
+export type AnalysisRun = Prisma.AnalysisRunModel
+/**
+ * Model AgentOutput
+ * 
+ */
+export type AgentOutput = Prisma.AgentOutputModel
+/**
+ * Model Evidence
+ * 
+ */
+export type Evidence = Prisma.EvidenceModel
+/**
+ * Model EvidenceLink
+ * 
+ */
+export type EvidenceLink = Prisma.EvidenceLinkModel
+/**
+ * Model Capability
+ * 
+ */
+export type Capability = Prisma.CapabilityModel
+/**
+ * Model CapabilityEvidence
+ * 
+ */
+export type CapabilityEvidence = Prisma.CapabilityEvidenceModel
+/**
+ * Model CareerDnaSnapshot
+ * 
+ */
+export type CareerDnaSnapshot = Prisma.CareerDnaSnapshotModel
+/**
+ * Model DnaDimension
+ * 
+ */
+export type DnaDimension = Prisma.DnaDimensionModel
+/**
+ * Model DnaDimensionEvidence
+ * 
+ */
+export type DnaDimensionEvidence = Prisma.DnaDimensionEvidenceModel
+/**
+ * Model MarketDirection
+ * 
+ */
+export type MarketDirection = Prisma.MarketDirectionModel
+/**
+ * Model MarketSignal
+ * 
+ */
+export type MarketSignal = Prisma.MarketSignalModel
+/**
+ * Model CapabilityRequirement
+ * 
+ */
+export type CapabilityRequirement = Prisma.CapabilityRequirementModel
+/**
+ * Model CareerCandidate
+ * 
+ */
+export type CareerCandidate = Prisma.CareerCandidateModel
+/**
+ * Model CandidateEvidence
+ * 
+ */
+export type CandidateEvidence = Prisma.CandidateEvidenceModel
+/**
+ * Model ChosenBet
+ * 
+ */
+export type ChosenBet = Prisma.ChosenBetModel
+/**
+ * Model Roadmap
+ * 
+ */
+export type Roadmap = Prisma.RoadmapModel
+/**
+ * Model RoadmapMilestone
+ * 
+ */
+export type RoadmapMilestone = Prisma.RoadmapMilestoneModel
+/**
+ * Model MilestoneLink
+ * 
+ */
+export type MilestoneLink = Prisma.MilestoneLinkModel
+/**
+ * Model UserCapabilityProgress
+ * 
+ */
+export type UserCapabilityProgress = Prisma.UserCapabilityProgressModel
+/**
+ * Model AuditEvent
+ * 
+ */
+export type AuditEvent = Prisma.AuditEventModel
+/**
+ * Model Feedback
+ * 
+ */
+export type Feedback = Prisma.FeedbackModel
+/**
+ * Model UsageLedger
+ * 
+ */
+export type UsageLedger = Prisma.UsageLedgerModel

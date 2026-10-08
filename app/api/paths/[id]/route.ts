@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { getSession } from '@/lib/auth'
+import { entityOf, experienceTypeValue } from '@/lib/learning-entity'
 
 export async function GET(
   _req: NextRequest,
@@ -35,9 +36,7 @@ export async function GET(
     isActive = user?.activeLearningPathId === id
 
     // Only look at 'experience' entries
-    const expEntryIds = path.entries
-      .filter((e) => e.entityType === 'experience')
-      .map((e) => e.entityId)
+    const expEntryIds = path.entries.flatMap((e) => (e.experienceId ? [e.experienceId] : []))
 
     if (expEntryIds.length > 0) {
       const sessions = await db.learningSession.findMany({
@@ -66,9 +65,9 @@ export async function GET(
         type: string
       } | null = null
 
-      if (entry.entityType === 'experience') {
+      if (entry.experienceId) {
         const exp = await db.experience.findUnique({
-          where: { id: entry.entityId },
+          where: { id: entry.experienceId },
           select: {
             id: true,
             title: true,
@@ -81,6 +80,7 @@ export async function GET(
         if (exp) {
           experienceDetail = {
             ...exp,
+            type: experienceTypeValue(exp.type),
             description: exp.description ?? '',
           }
         }
@@ -89,13 +89,10 @@ export async function GET(
       return {
         id: entry.id,
         order: entry.order,
-        entityType: entry.entityType,
-        entityId: entry.entityId,
+        entityType: entityOf(entry)?.entityType ?? null,
+        entityId: entityOf(entry)?.entityId ?? null,
         experience: experienceDetail,
-        completedByUser:
-          entry.entityType === 'experience'
-            ? completedExperienceIds.has(entry.entityId)
-            : false,
+        completedByUser: entry.experienceId ? completedExperienceIds.has(entry.experienceId) : false,
       }
     })
   )

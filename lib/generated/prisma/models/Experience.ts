@@ -43,7 +43,7 @@ export type ExperienceMinAggregateOutputType = {
   description: string | null
   narrativeText: string | null
   scenarioText: string | null
-  type: string | null
+  type: $Enums.ExperienceType | null
   durationMins: number | null
   xpReward: number | null
   imageUrl: string | null
@@ -58,7 +58,7 @@ export type ExperienceMaxAggregateOutputType = {
   description: string | null
   narrativeText: string | null
   scenarioText: string | null
-  type: string | null
+  type: $Enums.ExperienceType | null
   durationMins: number | null
   xpReward: number | null
   imageUrl: string | null
@@ -232,7 +232,7 @@ export type ExperienceGroupByOutputType = {
   description: string | null
   narrativeText: string
   scenarioText: string
-  type: string
+  type: $Enums.ExperienceType
   durationMins: number
   xpReward: number
   imageUrl: string | null
@@ -270,7 +270,7 @@ export type ExperienceWhereInput = {
   description?: Prisma.StringNullableFilter<"Experience"> | string | null
   narrativeText?: Prisma.StringFilter<"Experience"> | string
   scenarioText?: Prisma.StringFilter<"Experience"> | string
-  type?: Prisma.StringFilter<"Experience"> | string
+  type?: Prisma.EnumExperienceTypeFilter<"Experience"> | $Enums.ExperienceType
   durationMins?: Prisma.IntFilter<"Experience"> | number
   xpReward?: Prisma.IntFilter<"Experience"> | number
   imageUrl?: Prisma.StringNullableFilter<"Experience"> | string | null
@@ -281,6 +281,8 @@ export type ExperienceWhereInput = {
   principles?: Prisma.ExperienceOnPrincipleListRelationFilter
   concepts?: Prisma.ConceptOnExperienceListRelationFilter
   learningSessions?: Prisma.LearningSessionListRelationFilter
+  milestoneLinks?: Prisma.MilestoneLinkListRelationFilter
+  pathEntries?: Prisma.LearningPathEntryListRelationFilter
 }
 
 export type ExperienceOrderByWithRelationInput = {
@@ -301,6 +303,8 @@ export type ExperienceOrderByWithRelationInput = {
   principles?: Prisma.ExperienceOnPrincipleOrderByRelationAggregateInput
   concepts?: Prisma.ConceptOnExperienceOrderByRelationAggregateInput
   learningSessions?: Prisma.LearningSessionOrderByRelationAggregateInput
+  milestoneLinks?: Prisma.MilestoneLinkOrderByRelationAggregateInput
+  pathEntries?: Prisma.LearningPathEntryOrderByRelationAggregateInput
 }
 
 export type ExperienceWhereUniqueInput = Prisma.AtLeast<{
@@ -313,7 +317,7 @@ export type ExperienceWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Experience"> | string | null
   narrativeText?: Prisma.StringFilter<"Experience"> | string
   scenarioText?: Prisma.StringFilter<"Experience"> | string
-  type?: Prisma.StringFilter<"Experience"> | string
+  type?: Prisma.EnumExperienceTypeFilter<"Experience"> | $Enums.ExperienceType
   durationMins?: Prisma.IntFilter<"Experience"> | number
   xpReward?: Prisma.IntFilter<"Experience"> | number
   imageUrl?: Prisma.StringNullableFilter<"Experience"> | string | null
@@ -324,6 +328,8 @@ export type ExperienceWhereUniqueInput = Prisma.AtLeast<{
   principles?: Prisma.ExperienceOnPrincipleListRelationFilter
   concepts?: Prisma.ConceptOnExperienceListRelationFilter
   learningSessions?: Prisma.LearningSessionListRelationFilter
+  milestoneLinks?: Prisma.MilestoneLinkListRelationFilter
+  pathEntries?: Prisma.LearningPathEntryListRelationFilter
 }, "id" | "slug">
 
 export type ExperienceOrderByWithAggregationInput = {
@@ -356,7 +362,7 @@ export type ExperienceScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"Experience"> | string | null
   narrativeText?: Prisma.StringWithAggregatesFilter<"Experience"> | string
   scenarioText?: Prisma.StringWithAggregatesFilter<"Experience"> | string
-  type?: Prisma.StringWithAggregatesFilter<"Experience"> | string
+  type?: Prisma.EnumExperienceTypeWithAggregatesFilter<"Experience"> | $Enums.ExperienceType
   durationMins?: Prisma.IntWithAggregatesFilter<"Experience"> | number
   xpReward?: Prisma.IntWithAggregatesFilter<"Experience"> | number
   imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Experience"> | string | null
@@ -371,7 +377,7 @@ export type ExperienceCreateInput = {
   description?: string | null
   narrativeText?: string
   scenarioText?: string
-  type: string
+  type?: $Enums.ExperienceType
   durationMins?: number
   xpReward?: number
   imageUrl?: string | null
@@ -382,6 +388,8 @@ export type ExperienceCreateInput = {
   principles?: Prisma.ExperienceOnPrincipleCreateNestedManyWithoutExperienceInput
   concepts?: Prisma.ConceptOnExperienceCreateNestedManyWithoutExperienceInput
   learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutExperienceInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutExperienceInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutExperienceInput
 }
 
 export type ExperienceUncheckedCreateInput = {
@@ -391,7 +399,7 @@ export type ExperienceUncheckedCreateInput = {
   description?: string | null
   narrativeText?: string
   scenarioText?: string
-  type: string
+  type?: $Enums.ExperienceType
   durationMins?: number
   xpReward?: number
   imageUrl?: string | null
@@ -402,6 +410,8 @@ export type ExperienceUncheckedCreateInput = {
   principles?: Prisma.ExperienceOnPrincipleUncheckedCreateNestedManyWithoutExperienceInput
   concepts?: Prisma.ConceptOnExperienceUncheckedCreateNestedManyWithoutExperienceInput
   learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutExperienceInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutExperienceInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutExperienceInput
 }
 
 export type ExperienceUpdateInput = {
@@ -411,7 +421,7 @@ export type ExperienceUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
   scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   xpReward?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -422,6 +432,8 @@ export type ExperienceUpdateInput = {
   principles?: Prisma.ExperienceOnPrincipleUpdateManyWithoutExperienceNestedInput
   concepts?: Prisma.ConceptOnExperienceUpdateManyWithoutExperienceNestedInput
   learningSessions?: Prisma.LearningSessionUpdateManyWithoutExperienceNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutExperienceNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutExperienceNestedInput
 }
 
 export type ExperienceUncheckedUpdateInput = {
@@ -431,7 +443,7 @@ export type ExperienceUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
   scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   xpReward?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -442,6 +454,8 @@ export type ExperienceUncheckedUpdateInput = {
   principles?: Prisma.ExperienceOnPrincipleUncheckedUpdateManyWithoutExperienceNestedInput
   concepts?: Prisma.ConceptOnExperienceUncheckedUpdateManyWithoutExperienceNestedInput
   learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutExperienceNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutExperienceNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutExperienceNestedInput
 }
 
 export type ExperienceCreateManyInput = {
@@ -451,7 +465,7 @@ export type ExperienceCreateManyInput = {
   description?: string | null
   narrativeText?: string
   scenarioText?: string
-  type: string
+  type?: $Enums.ExperienceType
   durationMins?: number
   xpReward?: number
   imageUrl?: string | null
@@ -466,7 +480,7 @@ export type ExperienceUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
   scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   xpReward?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -481,7 +495,7 @@ export type ExperienceUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
   scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   xpReward?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -544,14 +558,34 @@ export type ExperienceSumOrderByAggregateInput = {
   xpReward?: Prisma.SortOrder
 }
 
+export type ExperienceNullableScalarRelationFilter = {
+  is?: Prisma.ExperienceWhereInput | null
+  isNot?: Prisma.ExperienceWhereInput | null
+}
+
 export type ExperienceScalarRelationFilter = {
   is?: Prisma.ExperienceWhereInput
   isNot?: Prisma.ExperienceWhereInput
 }
 
-export type ExperienceNullableScalarRelationFilter = {
-  is?: Prisma.ExperienceWhereInput | null
-  isNot?: Prisma.ExperienceWhereInput | null
+export type EnumExperienceTypeFieldUpdateOperationsInput = {
+  set?: $Enums.ExperienceType
+}
+
+export type ExperienceCreateNestedOneWithoutPathEntriesInput = {
+  create?: Prisma.XOR<Prisma.ExperienceCreateWithoutPathEntriesInput, Prisma.ExperienceUncheckedCreateWithoutPathEntriesInput>
+  connectOrCreate?: Prisma.ExperienceCreateOrConnectWithoutPathEntriesInput
+  connect?: Prisma.ExperienceWhereUniqueInput
+}
+
+export type ExperienceUpdateOneWithoutPathEntriesNestedInput = {
+  create?: Prisma.XOR<Prisma.ExperienceCreateWithoutPathEntriesInput, Prisma.ExperienceUncheckedCreateWithoutPathEntriesInput>
+  connectOrCreate?: Prisma.ExperienceCreateOrConnectWithoutPathEntriesInput
+  upsert?: Prisma.ExperienceUpsertWithoutPathEntriesInput
+  disconnect?: Prisma.ExperienceWhereInput | boolean
+  delete?: Prisma.ExperienceWhereInput | boolean
+  connect?: Prisma.ExperienceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ExperienceUpdateToOneWithWhereWithoutPathEntriesInput, Prisma.ExperienceUpdateWithoutPathEntriesInput>, Prisma.ExperienceUncheckedUpdateWithoutPathEntriesInput>
 }
 
 export type ExperienceCreateNestedOneWithoutConceptsInput = {
@@ -626,6 +660,122 @@ export type ExperienceUpdateOneWithoutLearningSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ExperienceUpdateToOneWithWhereWithoutLearningSessionsInput, Prisma.ExperienceUpdateWithoutLearningSessionsInput>, Prisma.ExperienceUncheckedUpdateWithoutLearningSessionsInput>
 }
 
+export type ExperienceCreateNestedOneWithoutMilestoneLinksInput = {
+  create?: Prisma.XOR<Prisma.ExperienceCreateWithoutMilestoneLinksInput, Prisma.ExperienceUncheckedCreateWithoutMilestoneLinksInput>
+  connectOrCreate?: Prisma.ExperienceCreateOrConnectWithoutMilestoneLinksInput
+  connect?: Prisma.ExperienceWhereUniqueInput
+}
+
+export type ExperienceUpdateOneWithoutMilestoneLinksNestedInput = {
+  create?: Prisma.XOR<Prisma.ExperienceCreateWithoutMilestoneLinksInput, Prisma.ExperienceUncheckedCreateWithoutMilestoneLinksInput>
+  connectOrCreate?: Prisma.ExperienceCreateOrConnectWithoutMilestoneLinksInput
+  upsert?: Prisma.ExperienceUpsertWithoutMilestoneLinksInput
+  disconnect?: Prisma.ExperienceWhereInput | boolean
+  delete?: Prisma.ExperienceWhereInput | boolean
+  connect?: Prisma.ExperienceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ExperienceUpdateToOneWithWhereWithoutMilestoneLinksInput, Prisma.ExperienceUpdateWithoutMilestoneLinksInput>, Prisma.ExperienceUncheckedUpdateWithoutMilestoneLinksInput>
+}
+
+export type ExperienceCreateWithoutPathEntriesInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  narrativeText?: string
+  scenarioText?: string
+  type?: $Enums.ExperienceType
+  durationMins?: number
+  xpReward?: number
+  imageUrl?: string | null
+  imageAttribution?: string | null
+  createdAt?: Date | string
+  competencies?: Prisma.ExperienceOnCompetencyCreateNestedManyWithoutExperienceInput
+  humanPatterns?: Prisma.ExperienceOnHumanPatternCreateNestedManyWithoutExperienceInput
+  principles?: Prisma.ExperienceOnPrincipleCreateNestedManyWithoutExperienceInput
+  concepts?: Prisma.ConceptOnExperienceCreateNestedManyWithoutExperienceInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutExperienceInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutExperienceInput
+}
+
+export type ExperienceUncheckedCreateWithoutPathEntriesInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  narrativeText?: string
+  scenarioText?: string
+  type?: $Enums.ExperienceType
+  durationMins?: number
+  xpReward?: number
+  imageUrl?: string | null
+  imageAttribution?: string | null
+  createdAt?: Date | string
+  competencies?: Prisma.ExperienceOnCompetencyUncheckedCreateNestedManyWithoutExperienceInput
+  humanPatterns?: Prisma.ExperienceOnHumanPatternUncheckedCreateNestedManyWithoutExperienceInput
+  principles?: Prisma.ExperienceOnPrincipleUncheckedCreateNestedManyWithoutExperienceInput
+  concepts?: Prisma.ConceptOnExperienceUncheckedCreateNestedManyWithoutExperienceInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutExperienceInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutExperienceInput
+}
+
+export type ExperienceCreateOrConnectWithoutPathEntriesInput = {
+  where: Prisma.ExperienceWhereUniqueInput
+  create: Prisma.XOR<Prisma.ExperienceCreateWithoutPathEntriesInput, Prisma.ExperienceUncheckedCreateWithoutPathEntriesInput>
+}
+
+export type ExperienceUpsertWithoutPathEntriesInput = {
+  update: Prisma.XOR<Prisma.ExperienceUpdateWithoutPathEntriesInput, Prisma.ExperienceUncheckedUpdateWithoutPathEntriesInput>
+  create: Prisma.XOR<Prisma.ExperienceCreateWithoutPathEntriesInput, Prisma.ExperienceUncheckedCreateWithoutPathEntriesInput>
+  where?: Prisma.ExperienceWhereInput
+}
+
+export type ExperienceUpdateToOneWithWhereWithoutPathEntriesInput = {
+  where?: Prisma.ExperienceWhereInput
+  data: Prisma.XOR<Prisma.ExperienceUpdateWithoutPathEntriesInput, Prisma.ExperienceUncheckedUpdateWithoutPathEntriesInput>
+}
+
+export type ExperienceUpdateWithoutPathEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
+  scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
+  durationMins?: Prisma.IntFieldUpdateOperationsInput | number
+  xpReward?: Prisma.IntFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageAttribution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  competencies?: Prisma.ExperienceOnCompetencyUpdateManyWithoutExperienceNestedInput
+  humanPatterns?: Prisma.ExperienceOnHumanPatternUpdateManyWithoutExperienceNestedInput
+  principles?: Prisma.ExperienceOnPrincipleUpdateManyWithoutExperienceNestedInput
+  concepts?: Prisma.ConceptOnExperienceUpdateManyWithoutExperienceNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutExperienceNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutExperienceNestedInput
+}
+
+export type ExperienceUncheckedUpdateWithoutPathEntriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
+  scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
+  durationMins?: Prisma.IntFieldUpdateOperationsInput | number
+  xpReward?: Prisma.IntFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageAttribution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  competencies?: Prisma.ExperienceOnCompetencyUncheckedUpdateManyWithoutExperienceNestedInput
+  humanPatterns?: Prisma.ExperienceOnHumanPatternUncheckedUpdateManyWithoutExperienceNestedInput
+  principles?: Prisma.ExperienceOnPrincipleUncheckedUpdateManyWithoutExperienceNestedInput
+  concepts?: Prisma.ConceptOnExperienceUncheckedUpdateManyWithoutExperienceNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutExperienceNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutExperienceNestedInput
+}
+
 export type ExperienceCreateWithoutConceptsInput = {
   id?: string
   slug: string
@@ -633,7 +783,7 @@ export type ExperienceCreateWithoutConceptsInput = {
   description?: string | null
   narrativeText?: string
   scenarioText?: string
-  type: string
+  type?: $Enums.ExperienceType
   durationMins?: number
   xpReward?: number
   imageUrl?: string | null
@@ -643,6 +793,8 @@ export type ExperienceCreateWithoutConceptsInput = {
   humanPatterns?: Prisma.ExperienceOnHumanPatternCreateNestedManyWithoutExperienceInput
   principles?: Prisma.ExperienceOnPrincipleCreateNestedManyWithoutExperienceInput
   learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutExperienceInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutExperienceInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutExperienceInput
 }
 
 export type ExperienceUncheckedCreateWithoutConceptsInput = {
@@ -652,7 +804,7 @@ export type ExperienceUncheckedCreateWithoutConceptsInput = {
   description?: string | null
   narrativeText?: string
   scenarioText?: string
-  type: string
+  type?: $Enums.ExperienceType
   durationMins?: number
   xpReward?: number
   imageUrl?: string | null
@@ -662,6 +814,8 @@ export type ExperienceUncheckedCreateWithoutConceptsInput = {
   humanPatterns?: Prisma.ExperienceOnHumanPatternUncheckedCreateNestedManyWithoutExperienceInput
   principles?: Prisma.ExperienceOnPrincipleUncheckedCreateNestedManyWithoutExperienceInput
   learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutExperienceInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutExperienceInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutExperienceInput
 }
 
 export type ExperienceCreateOrConnectWithoutConceptsInput = {
@@ -687,7 +841,7 @@ export type ExperienceUpdateWithoutConceptsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
   scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   xpReward?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -697,6 +851,8 @@ export type ExperienceUpdateWithoutConceptsInput = {
   humanPatterns?: Prisma.ExperienceOnHumanPatternUpdateManyWithoutExperienceNestedInput
   principles?: Prisma.ExperienceOnPrincipleUpdateManyWithoutExperienceNestedInput
   learningSessions?: Prisma.LearningSessionUpdateManyWithoutExperienceNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutExperienceNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutExperienceNestedInput
 }
 
 export type ExperienceUncheckedUpdateWithoutConceptsInput = {
@@ -706,7 +862,7 @@ export type ExperienceUncheckedUpdateWithoutConceptsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
   scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   xpReward?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -716,6 +872,8 @@ export type ExperienceUncheckedUpdateWithoutConceptsInput = {
   humanPatterns?: Prisma.ExperienceOnHumanPatternUncheckedUpdateManyWithoutExperienceNestedInput
   principles?: Prisma.ExperienceOnPrincipleUncheckedUpdateManyWithoutExperienceNestedInput
   learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutExperienceNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutExperienceNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutExperienceNestedInput
 }
 
 export type ExperienceCreateWithoutCompetenciesInput = {
@@ -725,7 +883,7 @@ export type ExperienceCreateWithoutCompetenciesInput = {
   description?: string | null
   narrativeText?: string
   scenarioText?: string
-  type: string
+  type?: $Enums.ExperienceType
   durationMins?: number
   xpReward?: number
   imageUrl?: string | null
@@ -735,6 +893,8 @@ export type ExperienceCreateWithoutCompetenciesInput = {
   principles?: Prisma.ExperienceOnPrincipleCreateNestedManyWithoutExperienceInput
   concepts?: Prisma.ConceptOnExperienceCreateNestedManyWithoutExperienceInput
   learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutExperienceInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutExperienceInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutExperienceInput
 }
 
 export type ExperienceUncheckedCreateWithoutCompetenciesInput = {
@@ -744,7 +904,7 @@ export type ExperienceUncheckedCreateWithoutCompetenciesInput = {
   description?: string | null
   narrativeText?: string
   scenarioText?: string
-  type: string
+  type?: $Enums.ExperienceType
   durationMins?: number
   xpReward?: number
   imageUrl?: string | null
@@ -754,6 +914,8 @@ export type ExperienceUncheckedCreateWithoutCompetenciesInput = {
   principles?: Prisma.ExperienceOnPrincipleUncheckedCreateNestedManyWithoutExperienceInput
   concepts?: Prisma.ConceptOnExperienceUncheckedCreateNestedManyWithoutExperienceInput
   learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutExperienceInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutExperienceInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutExperienceInput
 }
 
 export type ExperienceCreateOrConnectWithoutCompetenciesInput = {
@@ -779,7 +941,7 @@ export type ExperienceUpdateWithoutCompetenciesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
   scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   xpReward?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -789,6 +951,8 @@ export type ExperienceUpdateWithoutCompetenciesInput = {
   principles?: Prisma.ExperienceOnPrincipleUpdateManyWithoutExperienceNestedInput
   concepts?: Prisma.ConceptOnExperienceUpdateManyWithoutExperienceNestedInput
   learningSessions?: Prisma.LearningSessionUpdateManyWithoutExperienceNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutExperienceNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutExperienceNestedInput
 }
 
 export type ExperienceUncheckedUpdateWithoutCompetenciesInput = {
@@ -798,7 +962,7 @@ export type ExperienceUncheckedUpdateWithoutCompetenciesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
   scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   xpReward?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -808,6 +972,8 @@ export type ExperienceUncheckedUpdateWithoutCompetenciesInput = {
   principles?: Prisma.ExperienceOnPrincipleUncheckedUpdateManyWithoutExperienceNestedInput
   concepts?: Prisma.ConceptOnExperienceUncheckedUpdateManyWithoutExperienceNestedInput
   learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutExperienceNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutExperienceNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutExperienceNestedInput
 }
 
 export type ExperienceCreateWithoutHumanPatternsInput = {
@@ -817,7 +983,7 @@ export type ExperienceCreateWithoutHumanPatternsInput = {
   description?: string | null
   narrativeText?: string
   scenarioText?: string
-  type: string
+  type?: $Enums.ExperienceType
   durationMins?: number
   xpReward?: number
   imageUrl?: string | null
@@ -827,6 +993,8 @@ export type ExperienceCreateWithoutHumanPatternsInput = {
   principles?: Prisma.ExperienceOnPrincipleCreateNestedManyWithoutExperienceInput
   concepts?: Prisma.ConceptOnExperienceCreateNestedManyWithoutExperienceInput
   learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutExperienceInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutExperienceInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutExperienceInput
 }
 
 export type ExperienceUncheckedCreateWithoutHumanPatternsInput = {
@@ -836,7 +1004,7 @@ export type ExperienceUncheckedCreateWithoutHumanPatternsInput = {
   description?: string | null
   narrativeText?: string
   scenarioText?: string
-  type: string
+  type?: $Enums.ExperienceType
   durationMins?: number
   xpReward?: number
   imageUrl?: string | null
@@ -846,6 +1014,8 @@ export type ExperienceUncheckedCreateWithoutHumanPatternsInput = {
   principles?: Prisma.ExperienceOnPrincipleUncheckedCreateNestedManyWithoutExperienceInput
   concepts?: Prisma.ConceptOnExperienceUncheckedCreateNestedManyWithoutExperienceInput
   learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutExperienceInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutExperienceInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutExperienceInput
 }
 
 export type ExperienceCreateOrConnectWithoutHumanPatternsInput = {
@@ -871,7 +1041,7 @@ export type ExperienceUpdateWithoutHumanPatternsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
   scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   xpReward?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -881,6 +1051,8 @@ export type ExperienceUpdateWithoutHumanPatternsInput = {
   principles?: Prisma.ExperienceOnPrincipleUpdateManyWithoutExperienceNestedInput
   concepts?: Prisma.ConceptOnExperienceUpdateManyWithoutExperienceNestedInput
   learningSessions?: Prisma.LearningSessionUpdateManyWithoutExperienceNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutExperienceNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutExperienceNestedInput
 }
 
 export type ExperienceUncheckedUpdateWithoutHumanPatternsInput = {
@@ -890,7 +1062,7 @@ export type ExperienceUncheckedUpdateWithoutHumanPatternsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
   scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   xpReward?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -900,6 +1072,8 @@ export type ExperienceUncheckedUpdateWithoutHumanPatternsInput = {
   principles?: Prisma.ExperienceOnPrincipleUncheckedUpdateManyWithoutExperienceNestedInput
   concepts?: Prisma.ConceptOnExperienceUncheckedUpdateManyWithoutExperienceNestedInput
   learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutExperienceNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutExperienceNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutExperienceNestedInput
 }
 
 export type ExperienceCreateWithoutPrinciplesInput = {
@@ -909,7 +1083,7 @@ export type ExperienceCreateWithoutPrinciplesInput = {
   description?: string | null
   narrativeText?: string
   scenarioText?: string
-  type: string
+  type?: $Enums.ExperienceType
   durationMins?: number
   xpReward?: number
   imageUrl?: string | null
@@ -919,6 +1093,8 @@ export type ExperienceCreateWithoutPrinciplesInput = {
   humanPatterns?: Prisma.ExperienceOnHumanPatternCreateNestedManyWithoutExperienceInput
   concepts?: Prisma.ConceptOnExperienceCreateNestedManyWithoutExperienceInput
   learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutExperienceInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutExperienceInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutExperienceInput
 }
 
 export type ExperienceUncheckedCreateWithoutPrinciplesInput = {
@@ -928,7 +1104,7 @@ export type ExperienceUncheckedCreateWithoutPrinciplesInput = {
   description?: string | null
   narrativeText?: string
   scenarioText?: string
-  type: string
+  type?: $Enums.ExperienceType
   durationMins?: number
   xpReward?: number
   imageUrl?: string | null
@@ -938,6 +1114,8 @@ export type ExperienceUncheckedCreateWithoutPrinciplesInput = {
   humanPatterns?: Prisma.ExperienceOnHumanPatternUncheckedCreateNestedManyWithoutExperienceInput
   concepts?: Prisma.ConceptOnExperienceUncheckedCreateNestedManyWithoutExperienceInput
   learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutExperienceInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutExperienceInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutExperienceInput
 }
 
 export type ExperienceCreateOrConnectWithoutPrinciplesInput = {
@@ -963,7 +1141,7 @@ export type ExperienceUpdateWithoutPrinciplesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
   scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   xpReward?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -973,6 +1151,8 @@ export type ExperienceUpdateWithoutPrinciplesInput = {
   humanPatterns?: Prisma.ExperienceOnHumanPatternUpdateManyWithoutExperienceNestedInput
   concepts?: Prisma.ConceptOnExperienceUpdateManyWithoutExperienceNestedInput
   learningSessions?: Prisma.LearningSessionUpdateManyWithoutExperienceNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutExperienceNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutExperienceNestedInput
 }
 
 export type ExperienceUncheckedUpdateWithoutPrinciplesInput = {
@@ -982,7 +1162,7 @@ export type ExperienceUncheckedUpdateWithoutPrinciplesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
   scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   xpReward?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -992,6 +1172,8 @@ export type ExperienceUncheckedUpdateWithoutPrinciplesInput = {
   humanPatterns?: Prisma.ExperienceOnHumanPatternUncheckedUpdateManyWithoutExperienceNestedInput
   concepts?: Prisma.ConceptOnExperienceUncheckedUpdateManyWithoutExperienceNestedInput
   learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutExperienceNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutExperienceNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutExperienceNestedInput
 }
 
 export type ExperienceCreateWithoutLearningSessionsInput = {
@@ -1001,7 +1183,7 @@ export type ExperienceCreateWithoutLearningSessionsInput = {
   description?: string | null
   narrativeText?: string
   scenarioText?: string
-  type: string
+  type?: $Enums.ExperienceType
   durationMins?: number
   xpReward?: number
   imageUrl?: string | null
@@ -1011,6 +1193,8 @@ export type ExperienceCreateWithoutLearningSessionsInput = {
   humanPatterns?: Prisma.ExperienceOnHumanPatternCreateNestedManyWithoutExperienceInput
   principles?: Prisma.ExperienceOnPrincipleCreateNestedManyWithoutExperienceInput
   concepts?: Prisma.ConceptOnExperienceCreateNestedManyWithoutExperienceInput
+  milestoneLinks?: Prisma.MilestoneLinkCreateNestedManyWithoutExperienceInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutExperienceInput
 }
 
 export type ExperienceUncheckedCreateWithoutLearningSessionsInput = {
@@ -1020,7 +1204,7 @@ export type ExperienceUncheckedCreateWithoutLearningSessionsInput = {
   description?: string | null
   narrativeText?: string
   scenarioText?: string
-  type: string
+  type?: $Enums.ExperienceType
   durationMins?: number
   xpReward?: number
   imageUrl?: string | null
@@ -1030,6 +1214,8 @@ export type ExperienceUncheckedCreateWithoutLearningSessionsInput = {
   humanPatterns?: Prisma.ExperienceOnHumanPatternUncheckedCreateNestedManyWithoutExperienceInput
   principles?: Prisma.ExperienceOnPrincipleUncheckedCreateNestedManyWithoutExperienceInput
   concepts?: Prisma.ConceptOnExperienceUncheckedCreateNestedManyWithoutExperienceInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedCreateNestedManyWithoutExperienceInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutExperienceInput
 }
 
 export type ExperienceCreateOrConnectWithoutLearningSessionsInput = {
@@ -1055,7 +1241,7 @@ export type ExperienceUpdateWithoutLearningSessionsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
   scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   xpReward?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1065,6 +1251,8 @@ export type ExperienceUpdateWithoutLearningSessionsInput = {
   humanPatterns?: Prisma.ExperienceOnHumanPatternUpdateManyWithoutExperienceNestedInput
   principles?: Prisma.ExperienceOnPrincipleUpdateManyWithoutExperienceNestedInput
   concepts?: Prisma.ConceptOnExperienceUpdateManyWithoutExperienceNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUpdateManyWithoutExperienceNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutExperienceNestedInput
 }
 
 export type ExperienceUncheckedUpdateWithoutLearningSessionsInput = {
@@ -1074,7 +1262,7 @@ export type ExperienceUncheckedUpdateWithoutLearningSessionsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
   scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
   durationMins?: Prisma.IntFieldUpdateOperationsInput | number
   xpReward?: Prisma.IntFieldUpdateOperationsInput | number
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1084,6 +1272,108 @@ export type ExperienceUncheckedUpdateWithoutLearningSessionsInput = {
   humanPatterns?: Prisma.ExperienceOnHumanPatternUncheckedUpdateManyWithoutExperienceNestedInput
   principles?: Prisma.ExperienceOnPrincipleUncheckedUpdateManyWithoutExperienceNestedInput
   concepts?: Prisma.ConceptOnExperienceUncheckedUpdateManyWithoutExperienceNestedInput
+  milestoneLinks?: Prisma.MilestoneLinkUncheckedUpdateManyWithoutExperienceNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutExperienceNestedInput
+}
+
+export type ExperienceCreateWithoutMilestoneLinksInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  narrativeText?: string
+  scenarioText?: string
+  type?: $Enums.ExperienceType
+  durationMins?: number
+  xpReward?: number
+  imageUrl?: string | null
+  imageAttribution?: string | null
+  createdAt?: Date | string
+  competencies?: Prisma.ExperienceOnCompetencyCreateNestedManyWithoutExperienceInput
+  humanPatterns?: Prisma.ExperienceOnHumanPatternCreateNestedManyWithoutExperienceInput
+  principles?: Prisma.ExperienceOnPrincipleCreateNestedManyWithoutExperienceInput
+  concepts?: Prisma.ConceptOnExperienceCreateNestedManyWithoutExperienceInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutExperienceInput
+  pathEntries?: Prisma.LearningPathEntryCreateNestedManyWithoutExperienceInput
+}
+
+export type ExperienceUncheckedCreateWithoutMilestoneLinksInput = {
+  id?: string
+  slug: string
+  title: string
+  description?: string | null
+  narrativeText?: string
+  scenarioText?: string
+  type?: $Enums.ExperienceType
+  durationMins?: number
+  xpReward?: number
+  imageUrl?: string | null
+  imageAttribution?: string | null
+  createdAt?: Date | string
+  competencies?: Prisma.ExperienceOnCompetencyUncheckedCreateNestedManyWithoutExperienceInput
+  humanPatterns?: Prisma.ExperienceOnHumanPatternUncheckedCreateNestedManyWithoutExperienceInput
+  principles?: Prisma.ExperienceOnPrincipleUncheckedCreateNestedManyWithoutExperienceInput
+  concepts?: Prisma.ConceptOnExperienceUncheckedCreateNestedManyWithoutExperienceInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutExperienceInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedCreateNestedManyWithoutExperienceInput
+}
+
+export type ExperienceCreateOrConnectWithoutMilestoneLinksInput = {
+  where: Prisma.ExperienceWhereUniqueInput
+  create: Prisma.XOR<Prisma.ExperienceCreateWithoutMilestoneLinksInput, Prisma.ExperienceUncheckedCreateWithoutMilestoneLinksInput>
+}
+
+export type ExperienceUpsertWithoutMilestoneLinksInput = {
+  update: Prisma.XOR<Prisma.ExperienceUpdateWithoutMilestoneLinksInput, Prisma.ExperienceUncheckedUpdateWithoutMilestoneLinksInput>
+  create: Prisma.XOR<Prisma.ExperienceCreateWithoutMilestoneLinksInput, Prisma.ExperienceUncheckedCreateWithoutMilestoneLinksInput>
+  where?: Prisma.ExperienceWhereInput
+}
+
+export type ExperienceUpdateToOneWithWhereWithoutMilestoneLinksInput = {
+  where?: Prisma.ExperienceWhereInput
+  data: Prisma.XOR<Prisma.ExperienceUpdateWithoutMilestoneLinksInput, Prisma.ExperienceUncheckedUpdateWithoutMilestoneLinksInput>
+}
+
+export type ExperienceUpdateWithoutMilestoneLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
+  scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
+  durationMins?: Prisma.IntFieldUpdateOperationsInput | number
+  xpReward?: Prisma.IntFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageAttribution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  competencies?: Prisma.ExperienceOnCompetencyUpdateManyWithoutExperienceNestedInput
+  humanPatterns?: Prisma.ExperienceOnHumanPatternUpdateManyWithoutExperienceNestedInput
+  principles?: Prisma.ExperienceOnPrincipleUpdateManyWithoutExperienceNestedInput
+  concepts?: Prisma.ConceptOnExperienceUpdateManyWithoutExperienceNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutExperienceNestedInput
+  pathEntries?: Prisma.LearningPathEntryUpdateManyWithoutExperienceNestedInput
+}
+
+export type ExperienceUncheckedUpdateWithoutMilestoneLinksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  narrativeText?: Prisma.StringFieldUpdateOperationsInput | string
+  scenarioText?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumExperienceTypeFieldUpdateOperationsInput | $Enums.ExperienceType
+  durationMins?: Prisma.IntFieldUpdateOperationsInput | number
+  xpReward?: Prisma.IntFieldUpdateOperationsInput | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageAttribution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  competencies?: Prisma.ExperienceOnCompetencyUncheckedUpdateManyWithoutExperienceNestedInput
+  humanPatterns?: Prisma.ExperienceOnHumanPatternUncheckedUpdateManyWithoutExperienceNestedInput
+  principles?: Prisma.ExperienceOnPrincipleUncheckedUpdateManyWithoutExperienceNestedInput
+  concepts?: Prisma.ConceptOnExperienceUncheckedUpdateManyWithoutExperienceNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutExperienceNestedInput
+  pathEntries?: Prisma.LearningPathEntryUncheckedUpdateManyWithoutExperienceNestedInput
 }
 
 
@@ -1097,6 +1387,8 @@ export type ExperienceCountOutputType = {
   principles: number
   concepts: number
   learningSessions: number
+  milestoneLinks: number
+  pathEntries: number
 }
 
 export type ExperienceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1105,6 +1397,8 @@ export type ExperienceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extens
   principles?: boolean | ExperienceCountOutputTypeCountPrinciplesArgs
   concepts?: boolean | ExperienceCountOutputTypeCountConceptsArgs
   learningSessions?: boolean | ExperienceCountOutputTypeCountLearningSessionsArgs
+  milestoneLinks?: boolean | ExperienceCountOutputTypeCountMilestoneLinksArgs
+  pathEntries?: boolean | ExperienceCountOutputTypeCountPathEntriesArgs
 }
 
 /**
@@ -1152,6 +1446,20 @@ export type ExperienceCountOutputTypeCountLearningSessionsArgs<ExtArgs extends r
   where?: Prisma.LearningSessionWhereInput
 }
 
+/**
+ * ExperienceCountOutputType without action
+ */
+export type ExperienceCountOutputTypeCountMilestoneLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MilestoneLinkWhereInput
+}
+
+/**
+ * ExperienceCountOutputType without action
+ */
+export type ExperienceCountOutputTypeCountPathEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LearningPathEntryWhereInput
+}
+
 
 export type ExperienceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1171,6 +1479,8 @@ export type ExperienceSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   principles?: boolean | Prisma.Experience$principlesArgs<ExtArgs>
   concepts?: boolean | Prisma.Experience$conceptsArgs<ExtArgs>
   learningSessions?: boolean | Prisma.Experience$learningSessionsArgs<ExtArgs>
+  milestoneLinks?: boolean | Prisma.Experience$milestoneLinksArgs<ExtArgs>
+  pathEntries?: boolean | Prisma.Experience$pathEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.ExperienceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["experience"]>
 
@@ -1226,6 +1536,8 @@ export type ExperienceInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   principles?: boolean | Prisma.Experience$principlesArgs<ExtArgs>
   concepts?: boolean | Prisma.Experience$conceptsArgs<ExtArgs>
   learningSessions?: boolean | Prisma.Experience$learningSessionsArgs<ExtArgs>
+  milestoneLinks?: boolean | Prisma.Experience$milestoneLinksArgs<ExtArgs>
+  pathEntries?: boolean | Prisma.Experience$pathEntriesArgs<ExtArgs>
   _count?: boolean | Prisma.ExperienceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ExperienceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1239,6 +1551,8 @@ export type $ExperiencePayload<ExtArgs extends runtime.Types.Extensions.Internal
     principles: Prisma.$ExperienceOnPrinciplePayload<ExtArgs>[]
     concepts: Prisma.$ConceptOnExperiencePayload<ExtArgs>[]
     learningSessions: Prisma.$LearningSessionPayload<ExtArgs>[]
+    milestoneLinks: Prisma.$MilestoneLinkPayload<ExtArgs>[]
+    pathEntries: Prisma.$LearningPathEntryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1247,7 +1561,7 @@ export type $ExperiencePayload<ExtArgs extends runtime.Types.Extensions.Internal
     description: string | null
     narrativeText: string
     scenarioText: string
-    type: string
+    type: $Enums.ExperienceType
     durationMins: number
     xpReward: number
     imageUrl: string | null
@@ -1652,6 +1966,8 @@ export interface Prisma__ExperienceClient<T, Null = never, ExtArgs extends runti
   principles<T extends Prisma.Experience$principlesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Experience$principlesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExperienceOnPrinciplePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   concepts<T extends Prisma.Experience$conceptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Experience$conceptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConceptOnExperiencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   learningSessions<T extends Prisma.Experience$learningSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Experience$learningSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearningSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  milestoneLinks<T extends Prisma.Experience$milestoneLinksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Experience$milestoneLinksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MilestoneLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pathEntries<T extends Prisma.Experience$pathEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Experience$pathEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearningPathEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1687,7 +2003,7 @@ export interface ExperienceFieldRefs {
   readonly description: Prisma.FieldRef<"Experience", 'String'>
   readonly narrativeText: Prisma.FieldRef<"Experience", 'String'>
   readonly scenarioText: Prisma.FieldRef<"Experience", 'String'>
-  readonly type: Prisma.FieldRef<"Experience", 'String'>
+  readonly type: Prisma.FieldRef<"Experience", 'ExperienceType'>
   readonly durationMins: Prisma.FieldRef<"Experience", 'Int'>
   readonly xpReward: Prisma.FieldRef<"Experience", 'Int'>
   readonly imageUrl: Prisma.FieldRef<"Experience", 'String'>
@@ -2203,6 +2519,54 @@ export type Experience$learningSessionsArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.LearningSessionScalarFieldEnum | Prisma.LearningSessionScalarFieldEnum[]
+}
+
+/**
+ * Experience.milestoneLinks
+ */
+export type Experience$milestoneLinksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MilestoneLink
+   */
+  select?: Prisma.MilestoneLinkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MilestoneLink
+   */
+  omit?: Prisma.MilestoneLinkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MilestoneLinkInclude<ExtArgs> | null
+  where?: Prisma.MilestoneLinkWhereInput
+  orderBy?: Prisma.MilestoneLinkOrderByWithRelationInput | Prisma.MilestoneLinkOrderByWithRelationInput[]
+  cursor?: Prisma.MilestoneLinkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MilestoneLinkScalarFieldEnum | Prisma.MilestoneLinkScalarFieldEnum[]
+}
+
+/**
+ * Experience.pathEntries
+ */
+export type Experience$pathEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LearningPathEntry
+   */
+  select?: Prisma.LearningPathEntrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LearningPathEntry
+   */
+  omit?: Prisma.LearningPathEntryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LearningPathEntryInclude<ExtArgs> | null
+  where?: Prisma.LearningPathEntryWhereInput
+  orderBy?: Prisma.LearningPathEntryOrderByWithRelationInput | Prisma.LearningPathEntryOrderByWithRelationInput[]
+  cursor?: Prisma.LearningPathEntryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LearningPathEntryScalarFieldEnum | Prisma.LearningPathEntryScalarFieldEnum[]
 }
 
 /**

@@ -44,7 +44,6 @@ export type UserConceptMasteryMinAggregateOutputType = {
   score: number | null
   seenCount: number | null
   lastSeenAt: Date | null
-  lastSeen: Date | null
   masteredAt: Date | null
 }
 
@@ -56,7 +55,6 @@ export type UserConceptMasteryMaxAggregateOutputType = {
   score: number | null
   seenCount: number | null
   lastSeenAt: Date | null
-  lastSeen: Date | null
   masteredAt: Date | null
 }
 
@@ -68,7 +66,6 @@ export type UserConceptMasteryCountAggregateOutputType = {
   score: number
   seenCount: number
   lastSeenAt: number
-  lastSeen: number
   masteredAt: number
   _all: number
 }
@@ -92,7 +89,6 @@ export type UserConceptMasteryMinAggregateInputType = {
   score?: true
   seenCount?: true
   lastSeenAt?: true
-  lastSeen?: true
   masteredAt?: true
 }
 
@@ -104,7 +100,6 @@ export type UserConceptMasteryMaxAggregateInputType = {
   score?: true
   seenCount?: true
   lastSeenAt?: true
-  lastSeen?: true
   masteredAt?: true
 }
 
@@ -116,7 +111,6 @@ export type UserConceptMasteryCountAggregateInputType = {
   score?: true
   seenCount?: true
   lastSeenAt?: true
-  lastSeen?: true
   masteredAt?: true
   _all?: true
 }
@@ -215,7 +209,6 @@ export type UserConceptMasteryGroupByOutputType = {
   score: number | null
   seenCount: number
   lastSeenAt: Date
-  lastSeen: Date | null
   masteredAt: Date | null
   _count: UserConceptMasteryCountAggregateOutputType | null
   _avg: UserConceptMasteryAvgAggregateOutputType | null
@@ -250,7 +243,6 @@ export type UserConceptMasteryWhereInput = {
   score?: Prisma.IntNullableFilter<"UserConceptMastery"> | number | null
   seenCount?: Prisma.IntFilter<"UserConceptMastery"> | number
   lastSeenAt?: Prisma.DateTimeFilter<"UserConceptMastery"> | Date | string
-  lastSeen?: Prisma.DateTimeNullableFilter<"UserConceptMastery"> | Date | string | null
   masteredAt?: Prisma.DateTimeNullableFilter<"UserConceptMastery"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   concept?: Prisma.XOR<Prisma.ConceptScalarRelationFilter, Prisma.ConceptWhereInput>
@@ -264,7 +256,6 @@ export type UserConceptMasteryOrderByWithRelationInput = {
   score?: Prisma.SortOrderInput | Prisma.SortOrder
   seenCount?: Prisma.SortOrder
   lastSeenAt?: Prisma.SortOrder
-  lastSeen?: Prisma.SortOrderInput | Prisma.SortOrder
   masteredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   concept?: Prisma.ConceptOrderByWithRelationInput
@@ -282,7 +273,6 @@ export type UserConceptMasteryWhereUniqueInput = Prisma.AtLeast<{
   score?: Prisma.IntNullableFilter<"UserConceptMastery"> | number | null
   seenCount?: Prisma.IntFilter<"UserConceptMastery"> | number
   lastSeenAt?: Prisma.DateTimeFilter<"UserConceptMastery"> | Date | string
-  lastSeen?: Prisma.DateTimeNullableFilter<"UserConceptMastery"> | Date | string | null
   masteredAt?: Prisma.DateTimeNullableFilter<"UserConceptMastery"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   concept?: Prisma.XOR<Prisma.ConceptScalarRelationFilter, Prisma.ConceptWhereInput>
@@ -296,7 +286,6 @@ export type UserConceptMasteryOrderByWithAggregationInput = {
   score?: Prisma.SortOrderInput | Prisma.SortOrder
   seenCount?: Prisma.SortOrder
   lastSeenAt?: Prisma.SortOrder
-  lastSeen?: Prisma.SortOrderInput | Prisma.SortOrder
   masteredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserConceptMasteryCountOrderByAggregateInput
   _avg?: Prisma.UserConceptMasteryAvgOrderByAggregateInput
@@ -316,7 +305,6 @@ export type UserConceptMasteryScalarWhereWithAggregatesInput = {
   score?: Prisma.IntNullableWithAggregatesFilter<"UserConceptMastery"> | number | null
   seenCount?: Prisma.IntWithAggregatesFilter<"UserConceptMastery"> | number
   lastSeenAt?: Prisma.DateTimeWithAggregatesFilter<"UserConceptMastery"> | Date | string
-  lastSeen?: Prisma.DateTimeNullableWithAggregatesFilter<"UserConceptMastery"> | Date | string | null
   masteredAt?: Prisma.DateTimeNullableWithAggregatesFilter<"UserConceptMastery"> | Date | string | null
 }
 
@@ -326,7 +314,6 @@ export type UserConceptMasteryCreateInput = {
   score?: number | null
   seenCount?: number
   lastSeenAt?: Date | string
-  lastSeen?: Date | string | null
   masteredAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutConceptMasteriesInput
   concept: Prisma.ConceptCreateNestedOneWithoutMasteriesInput
@@ -340,7 +327,6 @@ export type UserConceptMasteryUncheckedCreateInput = {
   score?: number | null
   seenCount?: number
   lastSeenAt?: Date | string
-  lastSeen?: Date | string | null
   masteredAt?: Date | string | null
 }
 
@@ -350,7 +336,6 @@ export type UserConceptMasteryUpdateInput = {
   score?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   seenCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masteredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutConceptMasteriesNestedInput
   concept?: Prisma.ConceptUpdateOneRequiredWithoutMasteriesNestedInput
@@ -364,7 +349,6 @@ export type UserConceptMasteryUncheckedUpdateInput = {
   score?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   seenCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masteredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -376,7 +360,6 @@ export type UserConceptMasteryCreateManyInput = {
   score?: number | null
   seenCount?: number
   lastSeenAt?: Date | string
-  lastSeen?: Date | string | null
   masteredAt?: Date | string | null
 }
 
@@ -386,7 +369,6 @@ export type UserConceptMasteryUpdateManyMutationInput = {
   score?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   seenCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masteredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -398,7 +380,6 @@ export type UserConceptMasteryUncheckedUpdateManyInput = {
   score?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   seenCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masteredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -425,7 +406,6 @@ export type UserConceptMasteryCountOrderByAggregateInput = {
   score?: Prisma.SortOrder
   seenCount?: Prisma.SortOrder
   lastSeenAt?: Prisma.SortOrder
-  lastSeen?: Prisma.SortOrder
   masteredAt?: Prisma.SortOrder
 }
 
@@ -442,7 +422,6 @@ export type UserConceptMasteryMaxOrderByAggregateInput = {
   score?: Prisma.SortOrder
   seenCount?: Prisma.SortOrder
   lastSeenAt?: Prisma.SortOrder
-  lastSeen?: Prisma.SortOrder
   masteredAt?: Prisma.SortOrder
 }
 
@@ -454,7 +433,6 @@ export type UserConceptMasteryMinOrderByAggregateInput = {
   score?: Prisma.SortOrder
   seenCount?: Prisma.SortOrder
   lastSeenAt?: Prisma.SortOrder
-  lastSeen?: Prisma.SortOrder
   masteredAt?: Prisma.SortOrder
 }
 
@@ -565,7 +543,6 @@ export type UserConceptMasteryCreateWithoutConceptInput = {
   score?: number | null
   seenCount?: number
   lastSeenAt?: Date | string
-  lastSeen?: Date | string | null
   masteredAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutConceptMasteriesInput
 }
@@ -577,7 +554,6 @@ export type UserConceptMasteryUncheckedCreateWithoutConceptInput = {
   score?: number | null
   seenCount?: number
   lastSeenAt?: Date | string
-  lastSeen?: Date | string | null
   masteredAt?: Date | string | null
 }
 
@@ -618,7 +594,6 @@ export type UserConceptMasteryScalarWhereInput = {
   score?: Prisma.IntNullableFilter<"UserConceptMastery"> | number | null
   seenCount?: Prisma.IntFilter<"UserConceptMastery"> | number
   lastSeenAt?: Prisma.DateTimeFilter<"UserConceptMastery"> | Date | string
-  lastSeen?: Prisma.DateTimeNullableFilter<"UserConceptMastery"> | Date | string | null
   masteredAt?: Prisma.DateTimeNullableFilter<"UserConceptMastery"> | Date | string | null
 }
 
@@ -628,7 +603,6 @@ export type UserConceptMasteryCreateWithoutUserInput = {
   score?: number | null
   seenCount?: number
   lastSeenAt?: Date | string
-  lastSeen?: Date | string | null
   masteredAt?: Date | string | null
   concept: Prisma.ConceptCreateNestedOneWithoutMasteriesInput
 }
@@ -640,7 +614,6 @@ export type UserConceptMasteryUncheckedCreateWithoutUserInput = {
   score?: number | null
   seenCount?: number
   lastSeenAt?: Date | string
-  lastSeen?: Date | string | null
   masteredAt?: Date | string | null
 }
 
@@ -677,7 +650,6 @@ export type UserConceptMasteryCreateManyConceptInput = {
   score?: number | null
   seenCount?: number
   lastSeenAt?: Date | string
-  lastSeen?: Date | string | null
   masteredAt?: Date | string | null
 }
 
@@ -687,7 +659,6 @@ export type UserConceptMasteryUpdateWithoutConceptInput = {
   score?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   seenCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masteredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutConceptMasteriesNestedInput
 }
@@ -699,7 +670,6 @@ export type UserConceptMasteryUncheckedUpdateWithoutConceptInput = {
   score?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   seenCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masteredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -710,7 +680,6 @@ export type UserConceptMasteryUncheckedUpdateManyWithoutConceptInput = {
   score?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   seenCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masteredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -721,7 +690,6 @@ export type UserConceptMasteryCreateManyUserInput = {
   score?: number | null
   seenCount?: number
   lastSeenAt?: Date | string
-  lastSeen?: Date | string | null
   masteredAt?: Date | string | null
 }
 
@@ -731,7 +699,6 @@ export type UserConceptMasteryUpdateWithoutUserInput = {
   score?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   seenCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masteredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   concept?: Prisma.ConceptUpdateOneRequiredWithoutMasteriesNestedInput
 }
@@ -743,7 +710,6 @@ export type UserConceptMasteryUncheckedUpdateWithoutUserInput = {
   score?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   seenCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masteredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -754,7 +720,6 @@ export type UserConceptMasteryUncheckedUpdateManyWithoutUserInput = {
   score?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   seenCount?: Prisma.IntFieldUpdateOperationsInput | number
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   masteredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
@@ -768,7 +733,6 @@ export type UserConceptMasterySelect<ExtArgs extends runtime.Types.Extensions.In
   score?: boolean
   seenCount?: boolean
   lastSeenAt?: boolean
-  lastSeen?: boolean
   masteredAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   concept?: boolean | Prisma.ConceptDefaultArgs<ExtArgs>
@@ -782,7 +746,6 @@ export type UserConceptMasterySelectCreateManyAndReturn<ExtArgs extends runtime.
   score?: boolean
   seenCount?: boolean
   lastSeenAt?: boolean
-  lastSeen?: boolean
   masteredAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   concept?: boolean | Prisma.ConceptDefaultArgs<ExtArgs>
@@ -796,7 +759,6 @@ export type UserConceptMasterySelectUpdateManyAndReturn<ExtArgs extends runtime.
   score?: boolean
   seenCount?: boolean
   lastSeenAt?: boolean
-  lastSeen?: boolean
   masteredAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   concept?: boolean | Prisma.ConceptDefaultArgs<ExtArgs>
@@ -810,11 +772,10 @@ export type UserConceptMasterySelectScalar = {
   score?: boolean
   seenCount?: boolean
   lastSeenAt?: boolean
-  lastSeen?: boolean
   masteredAt?: boolean
 }
 
-export type UserConceptMasteryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "conceptId" | "mastered" | "score" | "seenCount" | "lastSeenAt" | "lastSeen" | "masteredAt", ExtArgs["result"]["userConceptMastery"]>
+export type UserConceptMasteryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "conceptId" | "mastered" | "score" | "seenCount" | "lastSeenAt" | "masteredAt", ExtArgs["result"]["userConceptMastery"]>
 export type UserConceptMasteryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   concept?: boolean | Prisma.ConceptDefaultArgs<ExtArgs>
@@ -842,7 +803,6 @@ export type $UserConceptMasteryPayload<ExtArgs extends runtime.Types.Extensions.
     score: number | null
     seenCount: number
     lastSeenAt: Date
-    lastSeen: Date | null
     masteredAt: Date | null
   }, ExtArgs["result"]["userConceptMastery"]>
   composites: {}
@@ -1276,7 +1236,6 @@ export interface UserConceptMasteryFieldRefs {
   readonly score: Prisma.FieldRef<"UserConceptMastery", 'Int'>
   readonly seenCount: Prisma.FieldRef<"UserConceptMastery", 'Int'>
   readonly lastSeenAt: Prisma.FieldRef<"UserConceptMastery", 'DateTime'>
-  readonly lastSeen: Prisma.FieldRef<"UserConceptMastery", 'DateTime'>
   readonly masteredAt: Prisma.FieldRef<"UserConceptMastery", 'DateTime'>
 }
     

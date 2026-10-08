@@ -37,40 +37,37 @@ export type LearningSessionSumAggregateOutputType = {
 export type LearningSessionMinAggregateOutputType = {
   id: string | null
   userId: string | null
-  entityType: string | null
-  entityId: string | null
   experienceId: string | null
+  conceptId: string | null
+  challengeId: string | null
   startedAt: Date | null
   completedAt: Date | null
   durationSec: number | null
   reflectionText: string | null
-  aiMessages: string | null
 }
 
 export type LearningSessionMaxAggregateOutputType = {
   id: string | null
   userId: string | null
-  entityType: string | null
-  entityId: string | null
   experienceId: string | null
+  conceptId: string | null
+  challengeId: string | null
   startedAt: Date | null
   completedAt: Date | null
   durationSec: number | null
   reflectionText: string | null
-  aiMessages: string | null
 }
 
 export type LearningSessionCountAggregateOutputType = {
   id: number
   userId: number
-  entityType: number
-  entityId: number
   experienceId: number
+  conceptId: number
+  challengeId: number
   startedAt: number
   completedAt: number
   durationSec: number
   reflectionText: number
-  aiMessages: number
   _all: number
 }
 
@@ -86,40 +83,37 @@ export type LearningSessionSumAggregateInputType = {
 export type LearningSessionMinAggregateInputType = {
   id?: true
   userId?: true
-  entityType?: true
-  entityId?: true
   experienceId?: true
+  conceptId?: true
+  challengeId?: true
   startedAt?: true
   completedAt?: true
   durationSec?: true
   reflectionText?: true
-  aiMessages?: true
 }
 
 export type LearningSessionMaxAggregateInputType = {
   id?: true
   userId?: true
-  entityType?: true
-  entityId?: true
   experienceId?: true
+  conceptId?: true
+  challengeId?: true
   startedAt?: true
   completedAt?: true
   durationSec?: true
   reflectionText?: true
-  aiMessages?: true
 }
 
 export type LearningSessionCountAggregateInputType = {
   id?: true
   userId?: true
-  entityType?: true
-  entityId?: true
   experienceId?: true
+  conceptId?: true
+  challengeId?: true
   startedAt?: true
   completedAt?: true
   durationSec?: true
   reflectionText?: true
-  aiMessages?: true
   _all?: true
 }
 
@@ -212,14 +206,13 @@ export type LearningSessionGroupByArgs<ExtArgs extends runtime.Types.Extensions.
 export type LearningSessionGroupByOutputType = {
   id: string
   userId: string
-  entityType: string
-  entityId: string
   experienceId: string | null
+  conceptId: string | null
+  challengeId: string | null
   startedAt: Date
   completedAt: Date | null
   durationSec: number | null
   reflectionText: string | null
-  aiMessages: string
   _count: LearningSessionCountAggregateOutputType | null
   _avg: LearningSessionAvgAggregateOutputType | null
   _sum: LearningSessionSumAggregateOutputType | null
@@ -248,31 +241,35 @@ export type LearningSessionWhereInput = {
   NOT?: Prisma.LearningSessionWhereInput | Prisma.LearningSessionWhereInput[]
   id?: Prisma.StringFilter<"LearningSession"> | string
   userId?: Prisma.StringFilter<"LearningSession"> | string
-  entityType?: Prisma.StringFilter<"LearningSession"> | string
-  entityId?: Prisma.StringFilter<"LearningSession"> | string
   experienceId?: Prisma.StringNullableFilter<"LearningSession"> | string | null
+  conceptId?: Prisma.StringNullableFilter<"LearningSession"> | string | null
+  challengeId?: Prisma.StringNullableFilter<"LearningSession"> | string | null
   startedAt?: Prisma.DateTimeFilter<"LearningSession"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"LearningSession"> | Date | string | null
   durationSec?: Prisma.IntNullableFilter<"LearningSession"> | number | null
   reflectionText?: Prisma.StringNullableFilter<"LearningSession"> | string | null
-  aiMessages?: Prisma.StringFilter<"LearningSession"> | string
   experience?: Prisma.XOR<Prisma.ExperienceNullableScalarRelationFilter, Prisma.ExperienceWhereInput> | null
+  concept?: Prisma.XOR<Prisma.ConceptNullableScalarRelationFilter, Prisma.ConceptWhereInput> | null
+  challenge?: Prisma.XOR<Prisma.ChallengeNullableScalarRelationFilter, Prisma.ChallengeWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  messages?: Prisma.MentorMessageListRelationFilter
 }
 
 export type LearningSessionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  entityType?: Prisma.SortOrder
-  entityId?: Prisma.SortOrder
   experienceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  conceptId?: Prisma.SortOrderInput | Prisma.SortOrder
+  challengeId?: Prisma.SortOrderInput | Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   durationSec?: Prisma.SortOrderInput | Prisma.SortOrder
   reflectionText?: Prisma.SortOrderInput | Prisma.SortOrder
-  aiMessages?: Prisma.SortOrder
   experience?: Prisma.ExperienceOrderByWithRelationInput
+  concept?: Prisma.ConceptOrderByWithRelationInput
+  challenge?: Prisma.ChallengeOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
+  messages?: Prisma.MentorMessageOrderByRelationAggregateInput
 }
 
 export type LearningSessionWhereUniqueInput = Prisma.AtLeast<{
@@ -281,29 +278,30 @@ export type LearningSessionWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.LearningSessionWhereInput[]
   NOT?: Prisma.LearningSessionWhereInput | Prisma.LearningSessionWhereInput[]
   userId?: Prisma.StringFilter<"LearningSession"> | string
-  entityType?: Prisma.StringFilter<"LearningSession"> | string
-  entityId?: Prisma.StringFilter<"LearningSession"> | string
   experienceId?: Prisma.StringNullableFilter<"LearningSession"> | string | null
+  conceptId?: Prisma.StringNullableFilter<"LearningSession"> | string | null
+  challengeId?: Prisma.StringNullableFilter<"LearningSession"> | string | null
   startedAt?: Prisma.DateTimeFilter<"LearningSession"> | Date | string
   completedAt?: Prisma.DateTimeNullableFilter<"LearningSession"> | Date | string | null
   durationSec?: Prisma.IntNullableFilter<"LearningSession"> | number | null
   reflectionText?: Prisma.StringNullableFilter<"LearningSession"> | string | null
-  aiMessages?: Prisma.StringFilter<"LearningSession"> | string
   experience?: Prisma.XOR<Prisma.ExperienceNullableScalarRelationFilter, Prisma.ExperienceWhereInput> | null
+  concept?: Prisma.XOR<Prisma.ConceptNullableScalarRelationFilter, Prisma.ConceptWhereInput> | null
+  challenge?: Prisma.XOR<Prisma.ChallengeNullableScalarRelationFilter, Prisma.ChallengeWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  messages?: Prisma.MentorMessageListRelationFilter
 }, "id">
 
 export type LearningSessionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  entityType?: Prisma.SortOrder
-  entityId?: Prisma.SortOrder
   experienceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  conceptId?: Prisma.SortOrderInput | Prisma.SortOrder
+  challengeId?: Prisma.SortOrderInput | Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   durationSec?: Prisma.SortOrderInput | Prisma.SortOrder
   reflectionText?: Prisma.SortOrderInput | Prisma.SortOrder
-  aiMessages?: Prisma.SortOrder
   _count?: Prisma.LearningSessionCountOrderByAggregateInput
   _avg?: Prisma.LearningSessionAvgOrderByAggregateInput
   _max?: Prisma.LearningSessionMaxOrderByAggregateInput
@@ -317,103 +315,97 @@ export type LearningSessionScalarWhereWithAggregatesInput = {
   NOT?: Prisma.LearningSessionScalarWhereWithAggregatesInput | Prisma.LearningSessionScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"LearningSession"> | string
   userId?: Prisma.StringWithAggregatesFilter<"LearningSession"> | string
-  entityType?: Prisma.StringWithAggregatesFilter<"LearningSession"> | string
-  entityId?: Prisma.StringWithAggregatesFilter<"LearningSession"> | string
   experienceId?: Prisma.StringNullableWithAggregatesFilter<"LearningSession"> | string | null
+  conceptId?: Prisma.StringNullableWithAggregatesFilter<"LearningSession"> | string | null
+  challengeId?: Prisma.StringNullableWithAggregatesFilter<"LearningSession"> | string | null
   startedAt?: Prisma.DateTimeWithAggregatesFilter<"LearningSession"> | Date | string
   completedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"LearningSession"> | Date | string | null
   durationSec?: Prisma.IntNullableWithAggregatesFilter<"LearningSession"> | number | null
   reflectionText?: Prisma.StringNullableWithAggregatesFilter<"LearningSession"> | string | null
-  aiMessages?: Prisma.StringWithAggregatesFilter<"LearningSession"> | string
 }
 
 export type LearningSessionCreateInput = {
   id?: string
-  entityType: string
-  entityId: string
   startedAt?: Date | string
   completedAt?: Date | string | null
   durationSec?: number | null
   reflectionText?: string | null
-  aiMessages?: string
   experience?: Prisma.ExperienceCreateNestedOneWithoutLearningSessionsInput
+  concept?: Prisma.ConceptCreateNestedOneWithoutSessionsInput
+  challenge?: Prisma.ChallengeCreateNestedOneWithoutSessionsInput
   user: Prisma.UserCreateNestedOneWithoutLearningSessionsInput
+  messages?: Prisma.MentorMessageCreateNestedManyWithoutSessionInput
 }
 
 export type LearningSessionUncheckedCreateInput = {
   id?: string
   userId: string
-  entityType: string
-  entityId: string
   experienceId?: string | null
+  conceptId?: string | null
+  challengeId?: string | null
   startedAt?: Date | string
   completedAt?: Date | string | null
   durationSec?: number | null
   reflectionText?: string | null
-  aiMessages?: string
+  messages?: Prisma.MentorMessageUncheckedCreateNestedManyWithoutSessionInput
 }
 
 export type LearningSessionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aiMessages?: Prisma.StringFieldUpdateOperationsInput | string
   experience?: Prisma.ExperienceUpdateOneWithoutLearningSessionsNestedInput
+  concept?: Prisma.ConceptUpdateOneWithoutSessionsNestedInput
+  challenge?: Prisma.ChallengeUpdateOneWithoutSessionsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutLearningSessionsNestedInput
+  messages?: Prisma.MentorMessageUpdateManyWithoutSessionNestedInput
 }
 
 export type LearningSessionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
   experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aiMessages?: Prisma.StringFieldUpdateOperationsInput | string
+  messages?: Prisma.MentorMessageUncheckedUpdateManyWithoutSessionNestedInput
 }
 
 export type LearningSessionCreateManyInput = {
   id?: string
   userId: string
-  entityType: string
-  entityId: string
   experienceId?: string | null
+  conceptId?: string | null
+  challengeId?: string | null
   startedAt?: Date | string
   completedAt?: Date | string | null
   durationSec?: number | null
   reflectionText?: string | null
-  aiMessages?: string
 }
 
 export type LearningSessionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aiMessages?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type LearningSessionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
   experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aiMessages?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type LearningSessionListRelationFilter = {
@@ -429,14 +421,13 @@ export type LearningSessionOrderByRelationAggregateInput = {
 export type LearningSessionCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  entityType?: Prisma.SortOrder
-  entityId?: Prisma.SortOrder
   experienceId?: Prisma.SortOrder
+  conceptId?: Prisma.SortOrder
+  challengeId?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   durationSec?: Prisma.SortOrder
   reflectionText?: Prisma.SortOrder
-  aiMessages?: Prisma.SortOrder
 }
 
 export type LearningSessionAvgOrderByAggregateInput = {
@@ -446,31 +437,76 @@ export type LearningSessionAvgOrderByAggregateInput = {
 export type LearningSessionMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  entityType?: Prisma.SortOrder
-  entityId?: Prisma.SortOrder
   experienceId?: Prisma.SortOrder
+  conceptId?: Prisma.SortOrder
+  challengeId?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   durationSec?: Prisma.SortOrder
   reflectionText?: Prisma.SortOrder
-  aiMessages?: Prisma.SortOrder
 }
 
 export type LearningSessionMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  entityType?: Prisma.SortOrder
-  entityId?: Prisma.SortOrder
   experienceId?: Prisma.SortOrder
+  conceptId?: Prisma.SortOrder
+  challengeId?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   completedAt?: Prisma.SortOrder
   durationSec?: Prisma.SortOrder
   reflectionText?: Prisma.SortOrder
-  aiMessages?: Prisma.SortOrder
 }
 
 export type LearningSessionSumOrderByAggregateInput = {
   durationSec?: Prisma.SortOrder
+}
+
+export type LearningSessionScalarRelationFilter = {
+  is?: Prisma.LearningSessionWhereInput
+  isNot?: Prisma.LearningSessionWhereInput
+}
+
+export type LearningSessionCreateNestedManyWithoutConceptInput = {
+  create?: Prisma.XOR<Prisma.LearningSessionCreateWithoutConceptInput, Prisma.LearningSessionUncheckedCreateWithoutConceptInput> | Prisma.LearningSessionCreateWithoutConceptInput[] | Prisma.LearningSessionUncheckedCreateWithoutConceptInput[]
+  connectOrCreate?: Prisma.LearningSessionCreateOrConnectWithoutConceptInput | Prisma.LearningSessionCreateOrConnectWithoutConceptInput[]
+  createMany?: Prisma.LearningSessionCreateManyConceptInputEnvelope
+  connect?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+}
+
+export type LearningSessionUncheckedCreateNestedManyWithoutConceptInput = {
+  create?: Prisma.XOR<Prisma.LearningSessionCreateWithoutConceptInput, Prisma.LearningSessionUncheckedCreateWithoutConceptInput> | Prisma.LearningSessionCreateWithoutConceptInput[] | Prisma.LearningSessionUncheckedCreateWithoutConceptInput[]
+  connectOrCreate?: Prisma.LearningSessionCreateOrConnectWithoutConceptInput | Prisma.LearningSessionCreateOrConnectWithoutConceptInput[]
+  createMany?: Prisma.LearningSessionCreateManyConceptInputEnvelope
+  connect?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+}
+
+export type LearningSessionUpdateManyWithoutConceptNestedInput = {
+  create?: Prisma.XOR<Prisma.LearningSessionCreateWithoutConceptInput, Prisma.LearningSessionUncheckedCreateWithoutConceptInput> | Prisma.LearningSessionCreateWithoutConceptInput[] | Prisma.LearningSessionUncheckedCreateWithoutConceptInput[]
+  connectOrCreate?: Prisma.LearningSessionCreateOrConnectWithoutConceptInput | Prisma.LearningSessionCreateOrConnectWithoutConceptInput[]
+  upsert?: Prisma.LearningSessionUpsertWithWhereUniqueWithoutConceptInput | Prisma.LearningSessionUpsertWithWhereUniqueWithoutConceptInput[]
+  createMany?: Prisma.LearningSessionCreateManyConceptInputEnvelope
+  set?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  disconnect?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  delete?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  connect?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  update?: Prisma.LearningSessionUpdateWithWhereUniqueWithoutConceptInput | Prisma.LearningSessionUpdateWithWhereUniqueWithoutConceptInput[]
+  updateMany?: Prisma.LearningSessionUpdateManyWithWhereWithoutConceptInput | Prisma.LearningSessionUpdateManyWithWhereWithoutConceptInput[]
+  deleteMany?: Prisma.LearningSessionScalarWhereInput | Prisma.LearningSessionScalarWhereInput[]
+}
+
+export type LearningSessionUncheckedUpdateManyWithoutConceptNestedInput = {
+  create?: Prisma.XOR<Prisma.LearningSessionCreateWithoutConceptInput, Prisma.LearningSessionUncheckedCreateWithoutConceptInput> | Prisma.LearningSessionCreateWithoutConceptInput[] | Prisma.LearningSessionUncheckedCreateWithoutConceptInput[]
+  connectOrCreate?: Prisma.LearningSessionCreateOrConnectWithoutConceptInput | Prisma.LearningSessionCreateOrConnectWithoutConceptInput[]
+  upsert?: Prisma.LearningSessionUpsertWithWhereUniqueWithoutConceptInput | Prisma.LearningSessionUpsertWithWhereUniqueWithoutConceptInput[]
+  createMany?: Prisma.LearningSessionCreateManyConceptInputEnvelope
+  set?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  disconnect?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  delete?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  connect?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  update?: Prisma.LearningSessionUpdateWithWhereUniqueWithoutConceptInput | Prisma.LearningSessionUpdateWithWhereUniqueWithoutConceptInput[]
+  updateMany?: Prisma.LearningSessionUpdateManyWithWhereWithoutConceptInput | Prisma.LearningSessionUpdateManyWithWhereWithoutConceptInput[]
+  deleteMany?: Prisma.LearningSessionScalarWhereInput | Prisma.LearningSessionScalarWhereInput[]
 }
 
 export type LearningSessionCreateNestedManyWithoutExperienceInput = {
@@ -512,6 +548,48 @@ export type LearningSessionUncheckedUpdateManyWithoutExperienceNestedInput = {
   connect?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
   update?: Prisma.LearningSessionUpdateWithWhereUniqueWithoutExperienceInput | Prisma.LearningSessionUpdateWithWhereUniqueWithoutExperienceInput[]
   updateMany?: Prisma.LearningSessionUpdateManyWithWhereWithoutExperienceInput | Prisma.LearningSessionUpdateManyWithWhereWithoutExperienceInput[]
+  deleteMany?: Prisma.LearningSessionScalarWhereInput | Prisma.LearningSessionScalarWhereInput[]
+}
+
+export type LearningSessionCreateNestedManyWithoutChallengeInput = {
+  create?: Prisma.XOR<Prisma.LearningSessionCreateWithoutChallengeInput, Prisma.LearningSessionUncheckedCreateWithoutChallengeInput> | Prisma.LearningSessionCreateWithoutChallengeInput[] | Prisma.LearningSessionUncheckedCreateWithoutChallengeInput[]
+  connectOrCreate?: Prisma.LearningSessionCreateOrConnectWithoutChallengeInput | Prisma.LearningSessionCreateOrConnectWithoutChallengeInput[]
+  createMany?: Prisma.LearningSessionCreateManyChallengeInputEnvelope
+  connect?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+}
+
+export type LearningSessionUncheckedCreateNestedManyWithoutChallengeInput = {
+  create?: Prisma.XOR<Prisma.LearningSessionCreateWithoutChallengeInput, Prisma.LearningSessionUncheckedCreateWithoutChallengeInput> | Prisma.LearningSessionCreateWithoutChallengeInput[] | Prisma.LearningSessionUncheckedCreateWithoutChallengeInput[]
+  connectOrCreate?: Prisma.LearningSessionCreateOrConnectWithoutChallengeInput | Prisma.LearningSessionCreateOrConnectWithoutChallengeInput[]
+  createMany?: Prisma.LearningSessionCreateManyChallengeInputEnvelope
+  connect?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+}
+
+export type LearningSessionUpdateManyWithoutChallengeNestedInput = {
+  create?: Prisma.XOR<Prisma.LearningSessionCreateWithoutChallengeInput, Prisma.LearningSessionUncheckedCreateWithoutChallengeInput> | Prisma.LearningSessionCreateWithoutChallengeInput[] | Prisma.LearningSessionUncheckedCreateWithoutChallengeInput[]
+  connectOrCreate?: Prisma.LearningSessionCreateOrConnectWithoutChallengeInput | Prisma.LearningSessionCreateOrConnectWithoutChallengeInput[]
+  upsert?: Prisma.LearningSessionUpsertWithWhereUniqueWithoutChallengeInput | Prisma.LearningSessionUpsertWithWhereUniqueWithoutChallengeInput[]
+  createMany?: Prisma.LearningSessionCreateManyChallengeInputEnvelope
+  set?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  disconnect?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  delete?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  connect?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  update?: Prisma.LearningSessionUpdateWithWhereUniqueWithoutChallengeInput | Prisma.LearningSessionUpdateWithWhereUniqueWithoutChallengeInput[]
+  updateMany?: Prisma.LearningSessionUpdateManyWithWhereWithoutChallengeInput | Prisma.LearningSessionUpdateManyWithWhereWithoutChallengeInput[]
+  deleteMany?: Prisma.LearningSessionScalarWhereInput | Prisma.LearningSessionScalarWhereInput[]
+}
+
+export type LearningSessionUncheckedUpdateManyWithoutChallengeNestedInput = {
+  create?: Prisma.XOR<Prisma.LearningSessionCreateWithoutChallengeInput, Prisma.LearningSessionUncheckedCreateWithoutChallengeInput> | Prisma.LearningSessionCreateWithoutChallengeInput[] | Prisma.LearningSessionUncheckedCreateWithoutChallengeInput[]
+  connectOrCreate?: Prisma.LearningSessionCreateOrConnectWithoutChallengeInput | Prisma.LearningSessionCreateOrConnectWithoutChallengeInput[]
+  upsert?: Prisma.LearningSessionUpsertWithWhereUniqueWithoutChallengeInput | Prisma.LearningSessionUpsertWithWhereUniqueWithoutChallengeInput[]
+  createMany?: Prisma.LearningSessionCreateManyChallengeInputEnvelope
+  set?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  disconnect?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  delete?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  connect?: Prisma.LearningSessionWhereUniqueInput | Prisma.LearningSessionWhereUniqueInput[]
+  update?: Prisma.LearningSessionUpdateWithWhereUniqueWithoutChallengeInput | Prisma.LearningSessionUpdateWithWhereUniqueWithoutChallengeInput[]
+  updateMany?: Prisma.LearningSessionUpdateManyWithWhereWithoutChallengeInput | Prisma.LearningSessionUpdateManyWithWhereWithoutChallengeInput[]
   deleteMany?: Prisma.LearningSessionScalarWhereInput | Prisma.LearningSessionScalarWhereInput[]
 }
 
@@ -557,28 +635,107 @@ export type LearningSessionUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.LearningSessionScalarWhereInput | Prisma.LearningSessionScalarWhereInput[]
 }
 
-export type LearningSessionCreateWithoutExperienceInput = {
+export type LearningSessionCreateNestedOneWithoutMessagesInput = {
+  create?: Prisma.XOR<Prisma.LearningSessionCreateWithoutMessagesInput, Prisma.LearningSessionUncheckedCreateWithoutMessagesInput>
+  connectOrCreate?: Prisma.LearningSessionCreateOrConnectWithoutMessagesInput
+  connect?: Prisma.LearningSessionWhereUniqueInput
+}
+
+export type LearningSessionUpdateOneRequiredWithoutMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.LearningSessionCreateWithoutMessagesInput, Prisma.LearningSessionUncheckedCreateWithoutMessagesInput>
+  connectOrCreate?: Prisma.LearningSessionCreateOrConnectWithoutMessagesInput
+  upsert?: Prisma.LearningSessionUpsertWithoutMessagesInput
+  connect?: Prisma.LearningSessionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LearningSessionUpdateToOneWithWhereWithoutMessagesInput, Prisma.LearningSessionUpdateWithoutMessagesInput>, Prisma.LearningSessionUncheckedUpdateWithoutMessagesInput>
+}
+
+export type LearningSessionCreateWithoutConceptInput = {
   id?: string
-  entityType: string
-  entityId: string
   startedAt?: Date | string
   completedAt?: Date | string | null
   durationSec?: number | null
   reflectionText?: string | null
-  aiMessages?: string
+  experience?: Prisma.ExperienceCreateNestedOneWithoutLearningSessionsInput
+  challenge?: Prisma.ChallengeCreateNestedOneWithoutSessionsInput
   user: Prisma.UserCreateNestedOneWithoutLearningSessionsInput
+  messages?: Prisma.MentorMessageCreateNestedManyWithoutSessionInput
+}
+
+export type LearningSessionUncheckedCreateWithoutConceptInput = {
+  id?: string
+  userId: string
+  experienceId?: string | null
+  challengeId?: string | null
+  startedAt?: Date | string
+  completedAt?: Date | string | null
+  durationSec?: number | null
+  reflectionText?: string | null
+  messages?: Prisma.MentorMessageUncheckedCreateNestedManyWithoutSessionInput
+}
+
+export type LearningSessionCreateOrConnectWithoutConceptInput = {
+  where: Prisma.LearningSessionWhereUniqueInput
+  create: Prisma.XOR<Prisma.LearningSessionCreateWithoutConceptInput, Prisma.LearningSessionUncheckedCreateWithoutConceptInput>
+}
+
+export type LearningSessionCreateManyConceptInputEnvelope = {
+  data: Prisma.LearningSessionCreateManyConceptInput | Prisma.LearningSessionCreateManyConceptInput[]
+  skipDuplicates?: boolean
+}
+
+export type LearningSessionUpsertWithWhereUniqueWithoutConceptInput = {
+  where: Prisma.LearningSessionWhereUniqueInput
+  update: Prisma.XOR<Prisma.LearningSessionUpdateWithoutConceptInput, Prisma.LearningSessionUncheckedUpdateWithoutConceptInput>
+  create: Prisma.XOR<Prisma.LearningSessionCreateWithoutConceptInput, Prisma.LearningSessionUncheckedCreateWithoutConceptInput>
+}
+
+export type LearningSessionUpdateWithWhereUniqueWithoutConceptInput = {
+  where: Prisma.LearningSessionWhereUniqueInput
+  data: Prisma.XOR<Prisma.LearningSessionUpdateWithoutConceptInput, Prisma.LearningSessionUncheckedUpdateWithoutConceptInput>
+}
+
+export type LearningSessionUpdateManyWithWhereWithoutConceptInput = {
+  where: Prisma.LearningSessionScalarWhereInput
+  data: Prisma.XOR<Prisma.LearningSessionUpdateManyMutationInput, Prisma.LearningSessionUncheckedUpdateManyWithoutConceptInput>
+}
+
+export type LearningSessionScalarWhereInput = {
+  AND?: Prisma.LearningSessionScalarWhereInput | Prisma.LearningSessionScalarWhereInput[]
+  OR?: Prisma.LearningSessionScalarWhereInput[]
+  NOT?: Prisma.LearningSessionScalarWhereInput | Prisma.LearningSessionScalarWhereInput[]
+  id?: Prisma.StringFilter<"LearningSession"> | string
+  userId?: Prisma.StringFilter<"LearningSession"> | string
+  experienceId?: Prisma.StringNullableFilter<"LearningSession"> | string | null
+  conceptId?: Prisma.StringNullableFilter<"LearningSession"> | string | null
+  challengeId?: Prisma.StringNullableFilter<"LearningSession"> | string | null
+  startedAt?: Prisma.DateTimeFilter<"LearningSession"> | Date | string
+  completedAt?: Prisma.DateTimeNullableFilter<"LearningSession"> | Date | string | null
+  durationSec?: Prisma.IntNullableFilter<"LearningSession"> | number | null
+  reflectionText?: Prisma.StringNullableFilter<"LearningSession"> | string | null
+}
+
+export type LearningSessionCreateWithoutExperienceInput = {
+  id?: string
+  startedAt?: Date | string
+  completedAt?: Date | string | null
+  durationSec?: number | null
+  reflectionText?: string | null
+  concept?: Prisma.ConceptCreateNestedOneWithoutSessionsInput
+  challenge?: Prisma.ChallengeCreateNestedOneWithoutSessionsInput
+  user: Prisma.UserCreateNestedOneWithoutLearningSessionsInput
+  messages?: Prisma.MentorMessageCreateNestedManyWithoutSessionInput
 }
 
 export type LearningSessionUncheckedCreateWithoutExperienceInput = {
   id?: string
   userId: string
-  entityType: string
-  entityId: string
+  conceptId?: string | null
+  challengeId?: string | null
   startedAt?: Date | string
   completedAt?: Date | string | null
   durationSec?: number | null
   reflectionText?: string | null
-  aiMessages?: string
+  messages?: Prisma.MentorMessageUncheckedCreateNestedManyWithoutSessionInput
 }
 
 export type LearningSessionCreateOrConnectWithoutExperienceInput = {
@@ -607,44 +764,78 @@ export type LearningSessionUpdateManyWithWhereWithoutExperienceInput = {
   data: Prisma.XOR<Prisma.LearningSessionUpdateManyMutationInput, Prisma.LearningSessionUncheckedUpdateManyWithoutExperienceInput>
 }
 
-export type LearningSessionScalarWhereInput = {
-  AND?: Prisma.LearningSessionScalarWhereInput | Prisma.LearningSessionScalarWhereInput[]
-  OR?: Prisma.LearningSessionScalarWhereInput[]
-  NOT?: Prisma.LearningSessionScalarWhereInput | Prisma.LearningSessionScalarWhereInput[]
-  id?: Prisma.StringFilter<"LearningSession"> | string
-  userId?: Prisma.StringFilter<"LearningSession"> | string
-  entityType?: Prisma.StringFilter<"LearningSession"> | string
-  entityId?: Prisma.StringFilter<"LearningSession"> | string
-  experienceId?: Prisma.StringNullableFilter<"LearningSession"> | string | null
-  startedAt?: Prisma.DateTimeFilter<"LearningSession"> | Date | string
-  completedAt?: Prisma.DateTimeNullableFilter<"LearningSession"> | Date | string | null
-  durationSec?: Prisma.IntNullableFilter<"LearningSession"> | number | null
-  reflectionText?: Prisma.StringNullableFilter<"LearningSession"> | string | null
-  aiMessages?: Prisma.StringFilter<"LearningSession"> | string
+export type LearningSessionCreateWithoutChallengeInput = {
+  id?: string
+  startedAt?: Date | string
+  completedAt?: Date | string | null
+  durationSec?: number | null
+  reflectionText?: string | null
+  experience?: Prisma.ExperienceCreateNestedOneWithoutLearningSessionsInput
+  concept?: Prisma.ConceptCreateNestedOneWithoutSessionsInput
+  user: Prisma.UserCreateNestedOneWithoutLearningSessionsInput
+  messages?: Prisma.MentorMessageCreateNestedManyWithoutSessionInput
+}
+
+export type LearningSessionUncheckedCreateWithoutChallengeInput = {
+  id?: string
+  userId: string
+  experienceId?: string | null
+  conceptId?: string | null
+  startedAt?: Date | string
+  completedAt?: Date | string | null
+  durationSec?: number | null
+  reflectionText?: string | null
+  messages?: Prisma.MentorMessageUncheckedCreateNestedManyWithoutSessionInput
+}
+
+export type LearningSessionCreateOrConnectWithoutChallengeInput = {
+  where: Prisma.LearningSessionWhereUniqueInput
+  create: Prisma.XOR<Prisma.LearningSessionCreateWithoutChallengeInput, Prisma.LearningSessionUncheckedCreateWithoutChallengeInput>
+}
+
+export type LearningSessionCreateManyChallengeInputEnvelope = {
+  data: Prisma.LearningSessionCreateManyChallengeInput | Prisma.LearningSessionCreateManyChallengeInput[]
+  skipDuplicates?: boolean
+}
+
+export type LearningSessionUpsertWithWhereUniqueWithoutChallengeInput = {
+  where: Prisma.LearningSessionWhereUniqueInput
+  update: Prisma.XOR<Prisma.LearningSessionUpdateWithoutChallengeInput, Prisma.LearningSessionUncheckedUpdateWithoutChallengeInput>
+  create: Prisma.XOR<Prisma.LearningSessionCreateWithoutChallengeInput, Prisma.LearningSessionUncheckedCreateWithoutChallengeInput>
+}
+
+export type LearningSessionUpdateWithWhereUniqueWithoutChallengeInput = {
+  where: Prisma.LearningSessionWhereUniqueInput
+  data: Prisma.XOR<Prisma.LearningSessionUpdateWithoutChallengeInput, Prisma.LearningSessionUncheckedUpdateWithoutChallengeInput>
+}
+
+export type LearningSessionUpdateManyWithWhereWithoutChallengeInput = {
+  where: Prisma.LearningSessionScalarWhereInput
+  data: Prisma.XOR<Prisma.LearningSessionUpdateManyMutationInput, Prisma.LearningSessionUncheckedUpdateManyWithoutChallengeInput>
 }
 
 export type LearningSessionCreateWithoutUserInput = {
   id?: string
-  entityType: string
-  entityId: string
   startedAt?: Date | string
   completedAt?: Date | string | null
   durationSec?: number | null
   reflectionText?: string | null
-  aiMessages?: string
   experience?: Prisma.ExperienceCreateNestedOneWithoutLearningSessionsInput
+  concept?: Prisma.ConceptCreateNestedOneWithoutSessionsInput
+  challenge?: Prisma.ChallengeCreateNestedOneWithoutSessionsInput
+  messages?: Prisma.MentorMessageCreateNestedManyWithoutSessionInput
 }
 
 export type LearningSessionUncheckedCreateWithoutUserInput = {
   id?: string
-  entityType: string
-  entityId: string
   experienceId?: string | null
+  conceptId?: string | null
+  challengeId?: string | null
   startedAt?: Date | string
   completedAt?: Date | string | null
   durationSec?: number | null
   reflectionText?: string | null
-  aiMessages?: string
+  messages?: Prisma.MentorMessageUncheckedCreateNestedManyWithoutSessionInput
 }
 
 export type LearningSessionCreateOrConnectWithoutUserInput = {
@@ -673,173 +864,366 @@ export type LearningSessionUpdateManyWithWhereWithoutUserInput = {
   data: Prisma.XOR<Prisma.LearningSessionUpdateManyMutationInput, Prisma.LearningSessionUncheckedUpdateManyWithoutUserInput>
 }
 
-export type LearningSessionCreateManyExperienceInput = {
+export type LearningSessionCreateWithoutMessagesInput = {
   id?: string
-  userId: string
-  entityType: string
-  entityId: string
   startedAt?: Date | string
   completedAt?: Date | string | null
   durationSec?: number | null
   reflectionText?: string | null
-  aiMessages?: string
+  experience?: Prisma.ExperienceCreateNestedOneWithoutLearningSessionsInput
+  concept?: Prisma.ConceptCreateNestedOneWithoutSessionsInput
+  challenge?: Prisma.ChallengeCreateNestedOneWithoutSessionsInput
+  user: Prisma.UserCreateNestedOneWithoutLearningSessionsInput
 }
 
-export type LearningSessionUpdateWithoutExperienceInput = {
+export type LearningSessionUncheckedCreateWithoutMessagesInput = {
+  id?: string
+  userId: string
+  experienceId?: string | null
+  conceptId?: string | null
+  challengeId?: string | null
+  startedAt?: Date | string
+  completedAt?: Date | string | null
+  durationSec?: number | null
+  reflectionText?: string | null
+}
+
+export type LearningSessionCreateOrConnectWithoutMessagesInput = {
+  where: Prisma.LearningSessionWhereUniqueInput
+  create: Prisma.XOR<Prisma.LearningSessionCreateWithoutMessagesInput, Prisma.LearningSessionUncheckedCreateWithoutMessagesInput>
+}
+
+export type LearningSessionUpsertWithoutMessagesInput = {
+  update: Prisma.XOR<Prisma.LearningSessionUpdateWithoutMessagesInput, Prisma.LearningSessionUncheckedUpdateWithoutMessagesInput>
+  create: Prisma.XOR<Prisma.LearningSessionCreateWithoutMessagesInput, Prisma.LearningSessionUncheckedCreateWithoutMessagesInput>
+  where?: Prisma.LearningSessionWhereInput
+}
+
+export type LearningSessionUpdateToOneWithWhereWithoutMessagesInput = {
+  where?: Prisma.LearningSessionWhereInput
+  data: Prisma.XOR<Prisma.LearningSessionUpdateWithoutMessagesInput, Prisma.LearningSessionUncheckedUpdateWithoutMessagesInput>
+}
+
+export type LearningSessionUpdateWithoutMessagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aiMessages?: Prisma.StringFieldUpdateOperationsInput | string
+  experience?: Prisma.ExperienceUpdateOneWithoutLearningSessionsNestedInput
+  concept?: Prisma.ConceptUpdateOneWithoutSessionsNestedInput
+  challenge?: Prisma.ChallengeUpdateOneWithoutSessionsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutLearningSessionsNestedInput
+}
+
+export type LearningSessionUncheckedUpdateWithoutMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type LearningSessionCreateManyConceptInput = {
+  id?: string
+  userId: string
+  experienceId?: string | null
+  challengeId?: string | null
+  startedAt?: Date | string
+  completedAt?: Date | string | null
+  durationSec?: number | null
+  reflectionText?: string | null
+}
+
+export type LearningSessionUpdateWithoutConceptInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.ExperienceUpdateOneWithoutLearningSessionsNestedInput
+  challenge?: Prisma.ChallengeUpdateOneWithoutSessionsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutLearningSessionsNestedInput
+  messages?: Prisma.MentorMessageUpdateManyWithoutSessionNestedInput
+}
+
+export type LearningSessionUncheckedUpdateWithoutConceptInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messages?: Prisma.MentorMessageUncheckedUpdateManyWithoutSessionNestedInput
+}
+
+export type LearningSessionUncheckedUpdateManyWithoutConceptInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type LearningSessionCreateManyExperienceInput = {
+  id?: string
+  userId: string
+  conceptId?: string | null
+  challengeId?: string | null
+  startedAt?: Date | string
+  completedAt?: Date | string | null
+  durationSec?: number | null
+  reflectionText?: string | null
+}
+
+export type LearningSessionUpdateWithoutExperienceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  concept?: Prisma.ConceptUpdateOneWithoutSessionsNestedInput
+  challenge?: Prisma.ChallengeUpdateOneWithoutSessionsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutLearningSessionsNestedInput
+  messages?: Prisma.MentorMessageUpdateManyWithoutSessionNestedInput
 }
 
 export type LearningSessionUncheckedUpdateWithoutExperienceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aiMessages?: Prisma.StringFieldUpdateOperationsInput | string
+  messages?: Prisma.MentorMessageUncheckedUpdateManyWithoutSessionNestedInput
 }
 
 export type LearningSessionUncheckedUpdateManyWithoutExperienceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aiMessages?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
-export type LearningSessionCreateManyUserInput = {
+export type LearningSessionCreateManyChallengeInput = {
   id?: string
-  entityType: string
-  entityId: string
+  userId: string
   experienceId?: string | null
+  conceptId?: string | null
   startedAt?: Date | string
   completedAt?: Date | string | null
   durationSec?: number | null
   reflectionText?: string | null
-  aiMessages?: string
+}
+
+export type LearningSessionUpdateWithoutChallengeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  experience?: Prisma.ExperienceUpdateOneWithoutLearningSessionsNestedInput
+  concept?: Prisma.ConceptUpdateOneWithoutSessionsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutLearningSessionsNestedInput
+  messages?: Prisma.MentorMessageUpdateManyWithoutSessionNestedInput
+}
+
+export type LearningSessionUncheckedUpdateWithoutChallengeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  messages?: Prisma.MentorMessageUncheckedUpdateManyWithoutSessionNestedInput
+}
+
+export type LearningSessionUncheckedUpdateManyWithoutChallengeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type LearningSessionCreateManyUserInput = {
+  id?: string
+  experienceId?: string | null
+  conceptId?: string | null
+  challengeId?: string | null
+  startedAt?: Date | string
+  completedAt?: Date | string | null
+  durationSec?: number | null
+  reflectionText?: string | null
 }
 
 export type LearningSessionUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aiMessages?: Prisma.StringFieldUpdateOperationsInput | string
   experience?: Prisma.ExperienceUpdateOneWithoutLearningSessionsNestedInput
+  concept?: Prisma.ConceptUpdateOneWithoutSessionsNestedInput
+  challenge?: Prisma.ChallengeUpdateOneWithoutSessionsNestedInput
+  messages?: Prisma.MentorMessageUpdateManyWithoutSessionNestedInput
 }
 
 export type LearningSessionUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
   experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aiMessages?: Prisma.StringFieldUpdateOperationsInput | string
+  messages?: Prisma.MentorMessageUncheckedUpdateManyWithoutSessionNestedInput
 }
 
 export type LearningSessionUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  entityType?: Prisma.StringFieldUpdateOperationsInput | string
-  entityId?: Prisma.StringFieldUpdateOperationsInput | string
   experienceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conceptId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   durationSec?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   reflectionText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  aiMessages?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
+
+/**
+ * Count Type LearningSessionCountOutputType
+ */
+
+export type LearningSessionCountOutputType = {
+  messages: number
+}
+
+export type LearningSessionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  messages?: boolean | LearningSessionCountOutputTypeCountMessagesArgs
+}
+
+/**
+ * LearningSessionCountOutputType without action
+ */
+export type LearningSessionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LearningSessionCountOutputType
+   */
+  select?: Prisma.LearningSessionCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * LearningSessionCountOutputType without action
+ */
+export type LearningSessionCountOutputTypeCountMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MentorMessageWhereInput
+}
 
 
 export type LearningSessionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  entityType?: boolean
-  entityId?: boolean
   experienceId?: boolean
+  conceptId?: boolean
+  challengeId?: boolean
   startedAt?: boolean
   completedAt?: boolean
   durationSec?: boolean
   reflectionText?: boolean
-  aiMessages?: boolean
   experience?: boolean | Prisma.LearningSession$experienceArgs<ExtArgs>
+  concept?: boolean | Prisma.LearningSession$conceptArgs<ExtArgs>
+  challenge?: boolean | Prisma.LearningSession$challengeArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  messages?: boolean | Prisma.LearningSession$messagesArgs<ExtArgs>
+  _count?: boolean | Prisma.LearningSessionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["learningSession"]>
 
 export type LearningSessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  entityType?: boolean
-  entityId?: boolean
   experienceId?: boolean
+  conceptId?: boolean
+  challengeId?: boolean
   startedAt?: boolean
   completedAt?: boolean
   durationSec?: boolean
   reflectionText?: boolean
-  aiMessages?: boolean
   experience?: boolean | Prisma.LearningSession$experienceArgs<ExtArgs>
+  concept?: boolean | Prisma.LearningSession$conceptArgs<ExtArgs>
+  challenge?: boolean | Prisma.LearningSession$challengeArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["learningSession"]>
 
 export type LearningSessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  entityType?: boolean
-  entityId?: boolean
   experienceId?: boolean
+  conceptId?: boolean
+  challengeId?: boolean
   startedAt?: boolean
   completedAt?: boolean
   durationSec?: boolean
   reflectionText?: boolean
-  aiMessages?: boolean
   experience?: boolean | Prisma.LearningSession$experienceArgs<ExtArgs>
+  concept?: boolean | Prisma.LearningSession$conceptArgs<ExtArgs>
+  challenge?: boolean | Prisma.LearningSession$challengeArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["learningSession"]>
 
 export type LearningSessionSelectScalar = {
   id?: boolean
   userId?: boolean
-  entityType?: boolean
-  entityId?: boolean
   experienceId?: boolean
+  conceptId?: boolean
+  challengeId?: boolean
   startedAt?: boolean
   completedAt?: boolean
   durationSec?: boolean
   reflectionText?: boolean
-  aiMessages?: boolean
 }
 
-export type LearningSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "entityType" | "entityId" | "experienceId" | "startedAt" | "completedAt" | "durationSec" | "reflectionText" | "aiMessages", ExtArgs["result"]["learningSession"]>
+export type LearningSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "experienceId" | "conceptId" | "challengeId" | "startedAt" | "completedAt" | "durationSec" | "reflectionText", ExtArgs["result"]["learningSession"]>
 export type LearningSessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   experience?: boolean | Prisma.LearningSession$experienceArgs<ExtArgs>
+  concept?: boolean | Prisma.LearningSession$conceptArgs<ExtArgs>
+  challenge?: boolean | Prisma.LearningSession$challengeArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  messages?: boolean | Prisma.LearningSession$messagesArgs<ExtArgs>
+  _count?: boolean | Prisma.LearningSessionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LearningSessionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   experience?: boolean | Prisma.LearningSession$experienceArgs<ExtArgs>
+  concept?: boolean | Prisma.LearningSession$conceptArgs<ExtArgs>
+  challenge?: boolean | Prisma.LearningSession$challengeArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type LearningSessionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   experience?: boolean | Prisma.LearningSession$experienceArgs<ExtArgs>
+  concept?: boolean | Prisma.LearningSession$conceptArgs<ExtArgs>
+  challenge?: boolean | Prisma.LearningSession$challengeArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
@@ -847,19 +1231,21 @@ export type $LearningSessionPayload<ExtArgs extends runtime.Types.Extensions.Int
   name: "LearningSession"
   objects: {
     experience: Prisma.$ExperiencePayload<ExtArgs> | null
+    concept: Prisma.$ConceptPayload<ExtArgs> | null
+    challenge: Prisma.$ChallengePayload<ExtArgs> | null
     user: Prisma.$UserPayload<ExtArgs>
+    messages: Prisma.$MentorMessagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
-    entityType: string
-    entityId: string
     experienceId: string | null
+    conceptId: string | null
+    challengeId: string | null
     startedAt: Date
     completedAt: Date | null
     durationSec: number | null
     reflectionText: string | null
-    aiMessages: string
   }, ExtArgs["result"]["learningSession"]>
   composites: {}
 }
@@ -1255,7 +1641,10 @@ readonly fields: LearningSessionFieldRefs;
 export interface Prisma__LearningSessionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   experience<T extends Prisma.LearningSession$experienceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningSession$experienceArgs<ExtArgs>>): Prisma.Prisma__ExperienceClient<runtime.Types.Result.GetResult<Prisma.$ExperiencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  concept<T extends Prisma.LearningSession$conceptArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningSession$conceptArgs<ExtArgs>>): Prisma.Prisma__ConceptClient<runtime.Types.Result.GetResult<Prisma.$ConceptPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  challenge<T extends Prisma.LearningSession$challengeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningSession$challengeArgs<ExtArgs>>): Prisma.Prisma__ChallengeClient<runtime.Types.Result.GetResult<Prisma.$ChallengePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  messages<T extends Prisma.LearningSession$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LearningSession$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MentorMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1287,14 +1676,13 @@ export interface Prisma__LearningSessionClient<T, Null = never, ExtArgs extends 
 export interface LearningSessionFieldRefs {
   readonly id: Prisma.FieldRef<"LearningSession", 'String'>
   readonly userId: Prisma.FieldRef<"LearningSession", 'String'>
-  readonly entityType: Prisma.FieldRef<"LearningSession", 'String'>
-  readonly entityId: Prisma.FieldRef<"LearningSession", 'String'>
   readonly experienceId: Prisma.FieldRef<"LearningSession", 'String'>
+  readonly conceptId: Prisma.FieldRef<"LearningSession", 'String'>
+  readonly challengeId: Prisma.FieldRef<"LearningSession", 'String'>
   readonly startedAt: Prisma.FieldRef<"LearningSession", 'DateTime'>
   readonly completedAt: Prisma.FieldRef<"LearningSession", 'DateTime'>
   readonly durationSec: Prisma.FieldRef<"LearningSession", 'Int'>
   readonly reflectionText: Prisma.FieldRef<"LearningSession", 'String'>
-  readonly aiMessages: Prisma.FieldRef<"LearningSession", 'String'>
 }
     
 
@@ -1712,6 +2100,68 @@ export type LearningSession$experienceArgs<ExtArgs extends runtime.Types.Extensi
    */
   include?: Prisma.ExperienceInclude<ExtArgs> | null
   where?: Prisma.ExperienceWhereInput
+}
+
+/**
+ * LearningSession.concept
+ */
+export type LearningSession$conceptArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Concept
+   */
+  select?: Prisma.ConceptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Concept
+   */
+  omit?: Prisma.ConceptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConceptInclude<ExtArgs> | null
+  where?: Prisma.ConceptWhereInput
+}
+
+/**
+ * LearningSession.challenge
+ */
+export type LearningSession$challengeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Challenge
+   */
+  select?: Prisma.ChallengeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Challenge
+   */
+  omit?: Prisma.ChallengeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChallengeInclude<ExtArgs> | null
+  where?: Prisma.ChallengeWhereInput
+}
+
+/**
+ * LearningSession.messages
+ */
+export type LearningSession$messagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MentorMessage
+   */
+  select?: Prisma.MentorMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MentorMessage
+   */
+  omit?: Prisma.MentorMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MentorMessageInclude<ExtArgs> | null
+  where?: Prisma.MentorMessageWhereInput
+  orderBy?: Prisma.MentorMessageOrderByWithRelationInput | Prisma.MentorMessageOrderByWithRelationInput[]
+  cursor?: Prisma.MentorMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MentorMessageScalarFieldEnum | Prisma.MentorMessageScalarFieldEnum[]
 }
 
 /**

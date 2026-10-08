@@ -9,7 +9,214 @@
 * 🟢 You can import this file directly.
 */
 
+export const ExperienceType = {
+  MODULE: 'MODULE',
+  PROJECT: 'PROJECT',
+  EXERCISE: 'EXERCISE',
+  CASE_STUDY: 'CASE_STUDY',
+  OTHER: 'OTHER'
+} as const
+
+export type ExperienceType = (typeof ExperienceType)[keyof typeof ExperienceType]
 
 
-// This file is empty because there are no enums in the schema.
-export {}
+export const ChallengeType = {
+  BRIEF: 'BRIEF',
+  CRITIQUE: 'CRITIQUE',
+  REDESIGN: 'REDESIGN',
+  OTHER: 'OTHER'
+} as const
+
+export type ChallengeType = (typeof ChallengeType)[keyof typeof ChallengeType]
+
+
+export const AssetType = {
+  IMAGE: 'IMAGE',
+  PDF: 'PDF',
+  VIDEO: 'VIDEO',
+  FIGMA: 'FIGMA',
+  OTHER: 'OTHER'
+} as const
+
+export type AssetType = (typeof AssetType)[keyof typeof AssetType]
+
+
+export const MessageRole = {
+  USER: 'USER',
+  ASSISTANT: 'ASSISTANT',
+  SYSTEM: 'SYSTEM'
+} as const
+
+export type MessageRole = (typeof MessageRole)[keyof typeof MessageRole]
+
+
+export const RunStatus = {
+  QUEUED: 'QUEUED',
+  RUNNING: 'RUNNING',
+  PARTIAL: 'PARTIAL',
+  COMPLETE: 'COMPLETE',
+  FAILED: 'FAILED'
+} as const
+
+export type RunStatus = (typeof RunStatus)[keyof typeof RunStatus]
+
+
+export const AgentName = {
+  AGGREGATOR: 'AGGREGATOR',
+  CAREER_ALPHA: 'CAREER_ALPHA',
+  MARKET_INTELLIGENCE: 'MARKET_INTELLIGENCE',
+  DIRECTION_GENERATOR: 'DIRECTION_GENERATOR'
+} as const
+
+export type AgentName = (typeof AgentName)[keyof typeof AgentName]
+
+
+export const EvidenceSourceType = {
+  RESUME: 'RESUME',
+  PORTFOLIO: 'PORTFOLIO',
+  PROJECT: 'PROJECT',
+  EDUCATION: 'EDUCATION',
+  INTEREST: 'INTEREST',
+  BEHAVIOUR: 'BEHAVIOUR',
+  CONVERSATION: 'CONVERSATION'
+} as const
+
+export type EvidenceSourceType = (typeof EvidenceSourceType)[keyof typeof EvidenceSourceType]
+
+
+export const EvidenceCategory = {
+  ROLE: 'ROLE',
+  RESPONSIBILITY: 'RESPONSIBILITY',
+  SKILL: 'SKILL',
+  CAPABILITY: 'CAPABILITY',
+  ACHIEVEMENT: 'ACHIEVEMENT',
+  IMPACT: 'IMPACT',
+  INTEREST: 'INTEREST',
+  BEHAVIOUR: 'BEHAVIOUR',
+  TRAJECTORY: 'TRAJECTORY',
+  CONSTRAINT: 'CONSTRAINT'
+} as const
+
+export type EvidenceCategory = (typeof EvidenceCategory)[keyof typeof EvidenceCategory]
+
+
+export const EvidenceRelation = {
+  SUPPORTS: 'SUPPORTS',
+  CONTRADICTS: 'CONTRADICTS'
+} as const
+
+export type EvidenceRelation = (typeof EvidenceRelation)[keyof typeof EvidenceRelation]
+
+
+export const CapabilityType = {
+  CORE: 'CORE',
+  TRANSFERABLE: 'TRANSFERABLE',
+  DISTINCTIVE: 'DISTINCTIVE',
+  DOMAIN: 'DOMAIN',
+  LEADERSHIP: 'LEADERSHIP',
+  STRATEGIC: 'STRATEGIC',
+  CREATIVE: 'CREATIVE',
+  COLLABORATION: 'COLLABORATION'
+} as const
+
+export type CapabilityType = (typeof CapabilityType)[keyof typeof CapabilityType]
+
+
+export const DnaDimensionKind = {
+  STRONGEST: 'STRONGEST',
+  TRANSFERABLE: 'TRANSFERABLE',
+  DISTINCTIVE: 'DISTINCTIVE'
+} as const
+
+export type DnaDimensionKind = (typeof DnaDimensionKind)[keyof typeof DnaDimensionKind]
+
+
+export const MarketSourceType = {
+  GOVERNMENT: 'GOVERNMENT',
+  LABOUR_MARKET: 'LABOUR_MARKET',
+  EMPLOYER: 'EMPLOYER',
+  RESEARCH: 'RESEARCH',
+  INDUSTRY: 'INDUSTRY',
+  INVESTMENT: 'INVESTMENT',
+  EXPERT: 'EXPERT',
+  WEAK_SIGNAL: 'WEAK_SIGNAL'
+} as const
+
+export type MarketSourceType = (typeof MarketSourceType)[keyof typeof MarketSourceType]
+
+
+export const MarketHorizon = {
+  CURRENT: 'CURRENT',
+  ONE_TO_THREE_YEARS: 'ONE_TO_THREE_YEARS',
+  THREE_TO_FIVE_YEARS: 'THREE_TO_FIVE_YEARS',
+  FIVE_TO_TEN_YEARS: 'FIVE_TO_TEN_YEARS'
+} as const
+
+export type MarketHorizon = (typeof MarketHorizon)[keyof typeof MarketHorizon]
+
+
+export const Directionality = {
+  POSITIVE: 'POSITIVE',
+  NEGATIVE: 'NEGATIVE',
+  UNCERTAIN: 'UNCERTAIN'
+} as const
+
+export type Directionality = (typeof Directionality)[keyof typeof Directionality]
+
+
+export const BetArchetype = {
+  SAFE: 'SAFE',
+  GROWTH: 'GROWTH',
+  BOLD: 'BOLD',
+  RESERVE: 'RESERVE'
+} as const
+
+export type BetArchetype = (typeof BetArchetype)[keyof typeof BetArchetype]
+
+
+export const SourceKind = {
+  RESUME: 'RESUME',
+  PORTFOLIO: 'PORTFOLIO',
+  PROJECT: 'PROJECT',
+  LINK: 'LINK',
+  OTHER: 'OTHER'
+} as const
+
+export type SourceKind = (typeof SourceKind)[keyof typeof SourceKind]
+
+
+export const SourceStatus = {
+  PENDING: 'PENDING',
+  PARSED: 'PARSED',
+  FAILED: 'FAILED'
+} as const
+
+export type SourceStatus = (typeof SourceStatus)[keyof typeof SourceStatus]
+
+
+export const RoadmapStatus = {
+  ACTIVE: 'ACTIVE',
+  PAUSED: 'PAUSED',
+  COMPLETED: 'COMPLETED',
+  ARCHIVED: 'ARCHIVED'
+} as const
+
+export type RoadmapStatus = (typeof RoadmapStatus)[keyof typeof RoadmapStatus]
+
+
+export const MilestoneStatus = {
+  PLANNED: 'PLANNED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  DONE: 'DONE',
+  SKIPPED: 'SKIPPED'
+} as const
+
+export type MilestoneStatus = (typeof MilestoneStatus)[keyof typeof MilestoneStatus]
+
+
+export const FeedbackTarget = {
+  CANDIDATE: 'CANDIDATE',
+  MILESTONE: 'MILESTONE'
+} as const
+
+export type FeedbackTarget = (typeof FeedbackTarget)[keyof typeof FeedbackTarget]
