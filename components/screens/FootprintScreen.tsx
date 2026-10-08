@@ -228,7 +228,7 @@ export function FootprintScreen() {
     }
 
     setLoading(true)
-    dispatch({ type: 'SET_ERROR', error: null })
+    dispatch({ type: 'CLEAR_ERROR' })
 
     try {
       const formData = new FormData()
