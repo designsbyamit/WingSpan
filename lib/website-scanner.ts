@@ -117,10 +117,11 @@ function selectTargets(origin: string, sitemapUrls: string[], seedLinks: string[
   return all.sort((a, b) => score(b) - score(a)).slice(0, MAX_PAGES)
 }
 
-async function normalizeEvidence(
+export async function normalizeCareerEvidence(
   pages: ScannedPage[],
   sitemapUrls: string[],
-  profileUrls: Record<string, string>
+  profileUrls: Record<string, string>,
+  documentTexts: Array<{ filename: string; text: string }> = []
 ): Promise<CareerEvidence> {
   const evidencePages = pages.map((p, i) => ({
     index: i + 1, url: p.url, title: p.title, kind: p.kind,
@@ -229,7 +230,7 @@ export async function scanWebsiteToCareerEvidence(
     throw new Error('The website scanner could not start a browser. Configure PLAYWRIGHT_BROWSER_WS or PLAYWRIGHT_EXECUTABLE_PATH.')
   }
 
-  const evidence = await normalizeEvidence(rendered, sitemapUrls, profileUrls)
+  const evidence = await normalizeCareerEvidence(rendered, sitemapUrls, profileUrls)
   return {
     evidence,
     careerAlphaInput: careerEvidenceToCareerAlphaInput(evidence, []),
