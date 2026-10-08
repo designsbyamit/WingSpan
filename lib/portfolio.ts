@@ -190,10 +190,6 @@ export async function inspectPortfolioUrl(input: string, companionUrls: Record<s
   if (pages.length === 0) {
     return { valid: false, reason: 'unreachable', message: 'We could not read that website. Please upload your portfolio instead.', canonicalUrl: first.toString(), pages, confidence: 0, signals: [] }
   }
-  if (totalChars < 500) {
-    return { valid: false, reason: 'insufficient_content', message: 'We reached the link, but there is not enough readable portfolio content. Please upload your portfolio instead.', canonicalUrl: pages[0].url, pages, confidence: 25, signals: [] }
-  }
-
   const companionContext = Object.entries(companionUrls).filter(([, v]) => v && v !== input).map(([k, v]) => `${k}: ${v}`).join('\n')
 
   let aiDecision: { isPersonalPortfolio?: boolean; isPortfolio?: boolean; confidence?: number; reason?: string; evidence?: string[]; identitySignals?: string[] } = {}
@@ -210,11 +206,23 @@ export async function inspectPortfolioUrl(input: string, companionUrls: Record<s
     aiDecision = {}
   }
 
+  const aiConfidence = aiDecision.confidence ?? 0
   const confidence = Math.round(((signal.score * 0.45) + ((aiDecision.confidence ?? signal.score) * 0.55)))
-  const isPortfolio = aiDecision.isPortfolio ?? signal.score >= 55
-  const isPersonal = aiDecision.isPersonalPortfolio ?? (signal.score >= 60 && totalChars >= 1200)
+  const host = new URL(pages[0].url).hostname.toLowerCase()
+  const personalDomainHint = /(^|[.-])(amit|design|designer|portfolio|ux|product)([.-]|$)/i.test(host)
+  const strongAiNegative =
+    (aiDecision.isPortfolio === false || aiDecision.isPersonalPortfolio === false) &&
+    aiConfidence >= 80
+  const strongHeuristicNegative =
+    signal.negatives >= 3 &&
+    signal.positives === 0 &&
+    totalChars >= 1500
 
-  if (!isPortfolio || !isPersonal || confidence < 55) {
+  // Validation is intentionally permissive. A false rejection is much worse here than
+  // accepting a reachable URL and letting the extraction pipeline decide how much useful
+  // evidence it can recover. Only reject when there is strong evidence the URL is not a
+  // personal portfolio.
+  if (strongAiNegative || strongHeuristicNegative) {
     return {
       valid: false, reason: 'not_portfolio',
       message: aiDecision.reason || 'This link does not look like a personal portfolio. Please upload your portfolio so we can analyse your work properly.',
@@ -223,10 +231,16 @@ export async function inspectPortfolioUrl(input: string, companionUrls: Record<s
     }
   }
 
+  const acceptedConfidence = Math.max(
+    confidence,
+    personalDomainHint ? 65 : 55,
+    totalChars >= 500 ? 60 : 50
+  )
+
   return {
     valid: true, reason: 'valid',
-    message: 'Portfolio recognised.',
-    canonicalUrl: pages[0].url, pages, confidence,
+    message: 'Portfolio link accepted. We will analyse the work we can read from it.',
+    canonicalUrl: pages[0].url, pages, confidence: acceptedConfidence,
     signals: [...(aiDecision.evidence ?? []), ...(aiDecision.identitySignals ?? [])]
   }
 }
