@@ -241,7 +241,7 @@ export function FootprintScreen() {
     setStep('interests')
   }
 
-  const handleBeginAnalysis = async () =>
+  const handleBeginAnalysis = async () => {
     if (!canBeginAnalysis) return
     setLoading(true)
     try {
