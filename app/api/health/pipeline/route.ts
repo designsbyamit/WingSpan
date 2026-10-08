@@ -41,6 +41,33 @@ export async function GET(req: NextRequest) {
       throw e
     }
   }
+  // ?flow=models lists the text models this key can see and probes each with a tiny request.
+  if (req.nextUrl.searchParams.get('flow') === 'models') {
+    const key = (process.env.GEMINI_API_KEY ?? '').trim()
+    const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=200', { headers: { 'x-goog-api-key': key } })
+    const body = await res.json() as { models?: { name: string; supportedGenerationMethods?: string[] }[]; error?: { message?: string } }
+    if (!res.ok) return NextResponse.json({ ok: false, error: body.error?.message?.slice(0, 200) })
+    const names = (body.models ?? [])
+      .filter((m) => m.supportedGenerationMethods?.includes('generateContent'))
+      .map((m) => m.name.replace('models/', ''))
+      .filter((n) => /gemini/.test(n) && !/embed|image|tts|audio|live|robotics|computer|vision|imagen|veo|learnlm|gemma/.test(n))
+    const { GoogleGenerativeAI } = await import('@google/generative-ai')
+    const genAI = new GoogleGenerativeAI(key)
+    const probes: Record<string, string> = {}
+    await Promise.all(names.slice(0, 25).map(async (n) => {
+      try {
+        const t = Date.now()
+        await genAI.getGenerativeModel({ model: n }).generateContent('Say ok')
+        probes[n] = `ok ${Date.now() - t}ms`
+      } catch (e) {
+        const m = String(e instanceof Error ? e.message : e)
+        const i = m.search(/\[\d{3} /)
+        probes[n] = (i >= 0 ? m.slice(i) : m).replace(/\s+/g, ' ').slice(0, 140)
+      }
+    }))
+    return NextResponse.json({ ok: true, probes })
+  }
+
   // ?flow=ui runs what the app's screens actually call: Career Alpha, then the Blueprint stream.
   if (req.nextUrl.searchParams.get('flow') === 'ui') {
     try {
