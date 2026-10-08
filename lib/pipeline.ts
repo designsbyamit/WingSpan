@@ -64,12 +64,15 @@ export async function runCareerPipeline(
           } else if (event.type === 'complete') {
             dispatch({ type: 'SET_VALIDATED_DATA', data: validatedData })
             dispatch({ type: 'SET_BLUEPRINT_BACKGROUND', blueprint: { ...(event.blueprint as object), careerAlpha } as Blueprint })
+            dispatch({ type: 'SET_SCREEN', screen: 'blueprint' })
           } else if (event.type === 'error') {
             throw new Error(event.error as string)
           }
         }
       }
     }
+
+    throw new Error('Blueprint generation ended before a complete result was received.')
   } catch (err) {
     console.error('Background pipeline error:', err)
     dispatch({
@@ -78,5 +81,6 @@ export async function runCareerPipeline(
     })
     dispatch({ type: 'SET_BLUEPRINT_LOADING', loading: false })
     dispatch({ type: 'SET_PIPELINE_STAGE', stage: null })
+    dispatch({ type: 'SET_SCREEN', screen: 'footprint' })
   }
 }
