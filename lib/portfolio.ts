@@ -2,10 +2,10 @@ import dns from 'node:dns/promises'
 import net from 'node:net'
 import { routeCall } from '@/lib/router'
 
-const MAX_PAGES = 8
+const MAX_PAGES = 4
 const MAX_PAGE_CHARS = 18000
 const MAX_TOTAL_CHARS = 90000
-const FETCH_TIMEOUT_MS = 10000
+const FETCH_TIMEOUT_MS = 6000
 
 export interface PortfolioPage {
   url: string
@@ -190,53 +190,18 @@ export async function inspectPortfolioUrl(input: string, companionUrls: Record<s
   if (pages.length === 0) {
     return { valid: false, reason: 'unreachable', message: 'We could not read that website. Please upload your portfolio instead.', canonicalUrl: first.toString(), pages, confidence: 0, signals: [] }
   }
-  const companionContext = Object.entries(companionUrls).filter(([, v]) => v && v !== input).map(([k, v]) => `${k}: ${v}`).join('\n')
+  // This endpoint is a gate only for obvious unreachable/unsafe URLs. Do not make
+  // users prove that a site is a portfolio before we analyse it. Modern portfolios
+  // are often JS-rendered and can look sparse to a server-side HTML reader.
+  // Deeper portfolio classification belongs to the extraction pipeline.
+  const acceptedConfidence = Math.max(signal.score, totalChars >= 500 ? 60 : 50)
 
-  let aiDecision: { isPersonalPortfolio?: boolean; isPortfolio?: boolean; confidence?: number; reason?: string; evidence?: string[]; identitySignals?: string[] } = {}
-  try {
-    const sample = pages.slice(0, 6).map(p => `URL: ${p.url}\nTITLE: ${p.title}\nTEXT: ${p.text.slice(0, 9000)}`).join('\n\n---\n\n')
-    const response = await routeCall(
-      'You validate whether a supplied URL is the user’s personal professional portfolio. Be conservative. Never call a generic company website, agency site, social profile, blog-only site, or unrelated site a portfolio. A valid portfolio should contain substantial evidence of the person’s work, projects/case studies, professional identity, or career experience. Return only JSON.',
-      `Evaluate this URL as a personal portfolio. Look at page structure, titles, navigation, project/case-study content, about/contact signals, professional identity, and whether it appears to represent one person. Companion links can help cross-check identity but are not proof by themselves.\n\nURL: ${first.toString()}\nCOMPANION LINKS:\n${companionContext || '(none)'}\n\nPAGES:\n${sample}\n\nReturn JSON: {"isPortfolio":true,"isPersonalPortfolio":true,"confidence":0-100,"reason":"short reason","evidence":["..."],"identitySignals":["..."]}`,
-      'extraction',
-      1800
-    )
-    aiDecision = JSON.parse(response.replace(/^\`\`\`(?:json)?\n?/m, '').replace(/\n?\`\`\`$/m, '').trim())
-  } catch {
-    aiDecision = {}
+  return {
+    valid: true, reason: 'valid',
+    message: 'Portfolio link accepted. We will analyse the work we can read from it.',
+    canonicalUrl: pages[0].url, pages, confidence: acceptedConfidence,
+    signals: []
   }
-
-  const aiConfidence = aiDecision.confidence ?? 0
-  const confidence = Math.round(((signal.score * 0.45) + ((aiDecision.confidence ?? signal.score) * 0.55)))
-  const host = new URL(pages[0].url).hostname.toLowerCase()
-  const personalDomainHint = /(^|[.-])(amit|design|designer|portfolio|ux|product)([.-]|$)/i.test(host)
-  const strongAiNegative =
-    (aiDecision.isPortfolio === false || aiDecision.isPersonalPortfolio === false) &&
-    aiConfidence >= 80
-  const strongHeuristicNegative =
-    signal.negatives >= 3 &&
-    signal.positives === 0 &&
-    totalChars >= 1500
-
-  // Validation is intentionally permissive. A false rejection is much worse here than
-  // accepting a reachable URL and letting the extraction pipeline decide how much useful
-  // evidence it can recover. Only reject when there is strong evidence the URL is not a
-  // personal portfolio.
-  if (strongAiNegative || strongHeuristicNegative) {
-    return {
-      valid: false, reason: 'not_portfolio',
-      message: aiDecision.reason || 'This link does not look like a personal portfolio. Please upload your portfolio so we can analyse your work properly.',
-      canonicalUrl: pages[0].url, pages, confidence,
-      signals: aiDecision.evidence ?? []
-    }
-  }
-
-  const acceptedConfidence = Math.max(
-    confidence,
-    personalDomainHint ? 65 : 55,
-    totalChars >= 500 ? 60 : 50
-  )
-
   return {
     valid: true, reason: 'valid',
     message: 'Portfolio link accepted. We will analyse the work we can read from it.',
