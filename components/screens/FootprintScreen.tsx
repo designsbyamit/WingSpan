@@ -206,38 +206,10 @@ export function FootprintScreen() {
   const handleContinue = async () => {
     if (!canProceedStep1 || validatingPortfolio) return
 
-    // When the user relies on a URL instead of a document, verify that it is
-    // actually a personal portfolio before asking them to invest time in the
-    // rest of the flow.
-    if (!primaryFile && state.urls['portfolio']) {
-      setValidatingPortfolio(true)
-      dispatch({ type: 'CLEAR_ERROR' })
-      try {
-        const res = await fetch('/api/portfolio/inspect', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: state.urls['portfolio'], urls: state.urls }),
-        })
-        const result = await res.json()
-        if (!res.ok || !result.valid) {
-          dispatch({
-            type: 'SET_ERROR',
-            error: result.message || 'That link does not look like a personal portfolio. Please upload your portfolio.',
-          })
-          return
-        }
-        setStep('interests')
-      } catch {
-        dispatch({
-          type: 'SET_ERROR',
-          error: 'We could not verify that link. Please upload your portfolio instead.',
-        })
-      } finally {
-        setValidatingPortfolio(false)
-      }
-      return
-    }
-
+    // Do not gate the experience on server-side portfolio classification.
+    // The actual extraction pipeline will read and analyse the URL. This is
+    // intentionally permissive so genuine JS-rendered portfolios are never
+    // blocked by a preflight classifier.
     setStep('interests')
   }
 
