@@ -10,7 +10,7 @@ const GROQ_FALLBACK_MODEL = 'openai/gpt-oss-20b'
 function getGroq() { return new Groq({ apiKey: process.env.GROQ_API_KEY ?? '' }) }
 
 // Gemini — high quality, used for Blueprint analysis
-const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash'
+const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-3.1-pro-preview'
 function getGemini() {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '')
   return genAI.getGenerativeModel({ model: GEMINI_MODEL })
@@ -189,7 +189,7 @@ ${urlContext ? `Profile URLs:\n${urlContext}` : ''}`,
 export async function extractPdfViaClaudeVision(pageImages: string[]): Promise<string> {
   const { GoogleGenerativeAI } = await import('@google/generative-ai')
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '')
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+  const model = genAI.getGenerativeModel({ model: process.env.GEMINI_MODEL ?? 'gemini-3.1-pro-preview' })
 
   const parts = [
     ...pageImages.map(img => ({
