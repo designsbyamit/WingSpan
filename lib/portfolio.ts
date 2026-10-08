@@ -110,6 +110,35 @@ async function fetchPage(input: string): Promise<{ finalUrl: string; html: strin
         throw new Error('This link does not point to a readable web page.')
       }
       const html = await res.text()
+
+      // Many modern portfolios are client-rendered. In that case the HTML shell
+      // contains almost no useful career content even though a browser shows a
+      // complete portfolio. Fall back to Jina's public reader for the same URL.
+      const quickText = stripHtml(html).text
+      if (quickText.length < 250) {
+        try {
+          const readerUrl = `https://r.jina.ai/${current.toString()}`
+          const readerController = new AbortController()
+          const readerTimeout = setTimeout(() => readerController.abort(), 12000)
+          try {
+            const readerRes = await fetch(readerUrl, {
+              signal: readerController.signal,
+              headers: { 'User-Agent': 'WingSpan Portfolio Reader/1.0' },
+            })
+            if (readerRes.ok) {
+              const markdown = await readerRes.text()
+              if (markdown.trim().length > quickText.length) {
+                return { finalUrl: current.toString(), html: `<html><head><title>Portfolio</title></head><body>${markdown}</body></html>` }
+              }
+            }
+          } finally {
+            clearTimeout(readerTimeout)
+          }
+        } catch {
+          // Keep the direct HTML result if the reader fallback is unavailable.
+        }
+      }
+
       return { finalUrl: current.toString(), html }
     } finally {
       clearTimeout(timeout)
