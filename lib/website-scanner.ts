@@ -227,15 +227,21 @@ export async function scanWebsiteToCareerEvidence(
   const sitemapUrls = await readSitemap(origin)
 
   const seedLinks = Object.values(profileUrls).filter(Boolean)
-  const targets = selectTargets(originUrl, sitemapUrls, [originUrl, ...seedLinks])
 
-  // Playwright is deliberately first. If no browser endpoint is configured,
-  // the existing server reader can still be used by adding its output as text.
-  const rendered = await scanWithPlaywright(originUrl, targets)
-
-  if (rendered.length === 0) {
-    throw new Error('The website scanner could not start a browser. Configure PLAYWRIGHT_BROWSER_WS or PLAYWRIGHT_EXECUTABLE_PATH.')
+  // Render the homepage first. Its post-JS navigation reveals project/about
+  // routes that may not exist in the sitemap.
+  const homePages = await scanWithPlaywright(originUrl, [originUrl])
+  if (homePages.length === 0) {
+    throw new Error('The website scanner could not render the portfolio.')
   }
+
+  const discoveredLinks = homePages.flatMap(p => p.links)
+  const targets = selectTargets(originUrl, sitemapUrls, [originUrl, ...seedLinks, ...discoveredLinks])
+  const secondaryTargets = targets.filter(u => u !== originUrl)
+  const secondaryPages = secondaryTargets.length
+    ? await scanWithPlaywright(originUrl, secondaryTargets)
+    : []
+  const rendered = [...homePages, ...secondaryPages].slice(0, MAX_PAGES)
 
   const evidence = await normalizeCareerEvidence(rendered, sitemapUrls, profileUrls, documentTexts)
   return {
