@@ -183,7 +183,7 @@ export function FootprintScreen() {
   const [validatingPortfolio, setValidatingPortfolio] = useState(false)
 
   const primaryFile = state.files[0]
-  const hasPortfolioLink = !!(state.urls['portfolio'] || state.urls['linkedin'])
+  const hasPortfolioLink = !!state.urls['portfolio']
   const canProceedStep1 = !!primaryFile || hasPortfolioLink
   const canBeginAnalysis = canProceedStep1 && state.interests.length >= 3
   const error = state.error
@@ -250,8 +250,10 @@ export function FootprintScreen() {
       formData.append('urls', JSON.stringify(state.urls))
 
       const res = await fetch('/api/extract', { method: 'POST', body: formData })
-      if (!res.ok) throw new Error('Extraction failed')
       const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data.error || 'We could not read that source.')
+      }
 
       dispatch({ type: 'SET_EXTRACTED_DATA', data })
       dispatch({ type: 'SET_BLUEPRINT_LOADING', loading: true })
