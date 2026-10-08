@@ -180,6 +180,7 @@ export function FootprintScreen() {
   const [showExtraFiles, setShowExtraFiles] = useState(false)
   const [showMoreUrls, setShowMoreUrls] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [validatingPortfolio, setValidatingPortfolio] = useState(false)
 
   const primaryFile = state.files[0]
   const hasPortfolioLink = !!(state.urls['portfolio'] || state.urls['linkedin'])
@@ -202,7 +203,45 @@ export function FootprintScreen() {
     dispatch({ type: 'SET_FILES', files: replace ? [files[0], ...state.files.slice(1)] : [...state.files, ...files] })
   }
 
-  const handleBeginAnalysis = async () => {
+  const handleContinue = async () => {
+    if (!canProceedStep1 || validatingPortfolio) return
+
+    // When the user relies on a URL instead of a document, verify that it is
+    // actually a personal portfolio before asking them to invest time in the
+    // rest of the flow.
+    if (!primaryFile && state.urls['portfolio']) {
+      setValidatingPortfolio(true)
+      dispatch({ type: 'CLEAR_ERROR' })
+      try {
+        const res = await fetch('/api/portfolio/inspect', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: state.urls['portfolio'], urls: state.urls }),
+        })
+        const result = await res.json()
+        if (!res.ok || !result.valid) {
+          dispatch({
+            type: 'SET_ERROR',
+            error: result.message || 'That link does not look like a personal portfolio. Please upload your portfolio.',
+          })
+          return
+        }
+        setStep('interests')
+      } catch {
+        dispatch({
+          type: 'SET_ERROR',
+          error: 'We could not verify that link. Please upload your portfolio instead.',
+        })
+      } finally {
+        setValidatingPortfolio(false)
+      }
+      return
+    }
+
+    setStep('interests')
+  }
+
+  const handleBeginAnalysis = async () =>
     if (!canBeginAnalysis) return
     setLoading(true)
     try {
@@ -398,14 +437,23 @@ export function FootprintScreen() {
               <div className="sticky bottom-0 left-0 right-0 pt-3 pb-2"
                 style={{ background: 'linear-gradient(to top, var(--bg) 70%, transparent)' }}>
                 <NeonButton
-                  onClick={() => setStep('interests')}
-                  disabled={!canProceedStep1}
+,
+                  onClick={handleContinue}
+                  disabled={!canProceedStep1 || validatingPortfolio}
                   fullWidth
                 >
-                  Continue <ArrowRight size={14} />
+                  {validatingPortfolio ? 'Checking your portfolio…' : <>Continue <ArrowRight size={14} /></>}
                 </NeonButton>
+                {error && step === 'upload' && (
+                  <div className="rounded-[10px] bg-red-950/40 border border-red-800/50 p-3 mt-2">
+                    <p className="text-xs text-red-400 leading-relaxed">{error}</p>
+                    {!primaryFile && state.urls['portfolio'] && (
+                      <p className="text-[11px] text-red-300/70 mt-1">Upload your portfolio PDF to continue.</p>
+                    )}
+                  </div>
+                )}
                 {!canProceedStep1 && (
-                  <p className="text-[11px] text-center text-[var(--text-dim)] mt-2">Drop a resume or add a link to keep going.</p>
+                  <p className="text-[11px] text-center text-[var(--text-dim)] mt-2">Drop a resume or add a portfolio link to keep going.</p>
                 )}
               </div>
             </motion.div>
