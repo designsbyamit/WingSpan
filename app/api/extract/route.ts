@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { parseFile } from '@/lib/parsers'
-import { extractCareerData } from '@/lib/claude'
 import { mockExtractedData } from '@/lib/mock-data'
-import { inspectPortfolioUrl, portfolioToText } from '@/lib/portfolio'
 import { normalizeCareerEvidence, scanWebsiteToCareerEvidence } from '@/lib/website-scanner'
 import { careerEvidenceToCareerAlphaInput } from '@/lib/career-evidence'
 
@@ -37,39 +35,14 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    let websiteEvidence = null
+    let normalizedEvidence
 
     if (portfolioUrl) {
-      websiteEvidence = await scanWebsiteToCareerEvidence(portfolioUrl, urls)
+      const result = await scanWebsiteToCareerEvidence(portfolioUrl, urls, documentTexts)
+      normalizedEvidence = result.evidence
+    } else {
+      normalizedEvidence = await normalizeCareerEvidence([], [], urls, documentTexts)
     }
-
-    // If there is no website, still normalize resume/document evidence into the
-    // same canonical schema used by website scans.
-    const pages = websiteEvidence?.evidence?.pagesScanned?.map(p => ({
-      url: p.url,
-      title: p.title,
-      kind: p.type,
-      text: '',
-      links: [],
-    })) ?? []
-
-    const evidence = websiteEvidence?.evidence ?? await normalizeCareerEvidence(
-      pages as any,
-      [],
-      urls,
-      documentTexts,
-    )
-
-    // Website scans may need the resume to corroborate roles/projects. Re-run
-    // normalization with both evidence sources when documents are present.
-    const normalizedEvidence = websiteEvidence && documentTexts.length
-      ? await normalizeCareerEvidence(
-          pages as any,
-          evidence.sources.filter(s => s.url).map(s => s.url!) ,
-          urls,
-          documentTexts,
-        )
-      : evidence
 
     const extractedData = careerEvidenceToCareerAlphaInput(normalizedEvidence, [])
     extractedData.rawText = [
