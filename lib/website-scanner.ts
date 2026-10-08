@@ -112,15 +112,32 @@ function selectTargets(origin: string, sitemapUrls: string[], seedLinks: string[
       try { return new URL(u).origin === new URL(origin).origin && /^https?:$/.test(new URL(u).protocol) }
       catch { return false }
     })
-  const score = (u: string) => {
-    const p = new URL(u).pathname.toLowerCase()
-    if (/resume|cv/.test(p)) return 100
-    if (/about|profile|bio/.test(p)) return 90
-    if (/projects?|work|case-stud/.test(p)) return 80
-    if (/contact/.test(p)) return 50
-    return 10
+
+  const byKind = (pattern: RegExp) => all.filter(u => pattern.test(new URL(u).pathname.toLowerCase()))
+  const selected: string[] = [origin]
+
+  // Reserve slots for the pages that carry the most career evidence.
+  const priorityGroups = [
+    /resume|cv/,
+    /about|profile|bio/,
+    /projects?|work|case-stud/,
+    /contact/,
+  ]
+
+  for (const pattern of priorityGroups) {
+    for (const u of byKind(pattern)) {
+      if (!selected.includes(u)) selected.push(u)
+      if (selected.length >= MAX_PAGES) return selected
+      if (pattern.test('/projects?') && selected.filter(x => pattern.test(new URL(x).pathname.toLowerCase())).length >= 5) break
+    }
   }
-  return all.sort((a, b) => score(b) - score(a)).slice(0, MAX_PAGES)
+
+  // Fill remaining slots with sitemap/navigation pages.
+  for (const u of all) {
+    if (!selected.includes(u)) selected.push(u)
+    if (selected.length >= MAX_PAGES) break
+  }
+  return selected
 }
 
 export async function normalizeCareerEvidence(
