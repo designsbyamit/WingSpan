@@ -60,8 +60,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(extractedData)
   } catch (err) {
     console.error('Extract error:', err)
+    const message = err instanceof Error ? err.message : 'Unknown extraction error'
     return NextResponse.json(
-      { error: 'We could not read that source right now. Please upload your portfolio or resume instead.' },
+      { error: message, code: 'EXTRACTION_FAILED' },
       { status: 500 }
     )
   }
