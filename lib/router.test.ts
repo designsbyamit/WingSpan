@@ -27,3 +27,25 @@ test('raw provider errors are never shown to people', () => {
   assert.match(msg, /try again/i)
   assert.equal(friendlyProviderError(new Error('We could not find enough career information.')), 'We could not find enough career information.')
 })
+
+import { callValidated, describeIssues } from './v02-agents'
+import { z } from 'zod'
+
+test('agent output that fails validation is retried once with the problems listed', async () => {
+  const schema = z.object({ version: z.literal('0.2'), n: z.number() })
+  const prompts: string[] = []
+  const replies = [{ n: 'x' }, { version: '0.2', n: 3 }]
+  const ask = async (_s: string, u: string) => { prompts.push(u); return replies.shift() }
+  const out = await callValidated('sys', 'user', (o) => schema.parse(o), 100, ask as never)
+  assert.deepEqual(out, { version: '0.2', n: 3 })
+  assert.equal(prompts.length, 2)
+  assert.match(prompts[1], /version/)
+  assert.match(prompts[1], /did not match/)
+})
+
+test('a second failure is surfaced, not swallowed', async () => {
+  const schema = z.object({ n: z.number() })
+  const ask = async () => ({ n: 'still wrong' })
+  await assert.rejects(callValidated('s', 'u', (o) => schema.parse(o), 100, ask as never))
+  assert.match(describeIssues(schema.safeParse({}).error), /n/)
+})
