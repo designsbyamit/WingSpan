@@ -116,7 +116,6 @@ function selectTargets(origin: string, sitemapUrls: string[], seedLinks: string[
   const byKind = (pattern: RegExp) => all.filter(u => pattern.test(new URL(u).pathname.toLowerCase()))
   const selected: string[] = [origin]
 
-  // Reserve slots for the pages that carry the most career evidence.
   const priorityGroups = [
     /resume|cv/,
     /about|profile|bio/,
@@ -132,7 +131,6 @@ function selectTargets(origin: string, sitemapUrls: string[], seedLinks: string[
     }
   }
 
-  // Fill remaining slots with sitemap/navigation pages.
   for (const u of all) {
     if (!selected.includes(u)) selected.push(u)
     if (selected.length >= MAX_PAGES) break
@@ -151,24 +149,46 @@ export async function normalizeCareerEvidence(
     text: p.text,
   }))
 
+  const uploadedDocuments = documentTexts.map((d, i) => ({
+    index: i + 1,
+    filename: d.filename,
+    // Keep the entire source available to normalization, while preventing one
+    // oversized spreadsheet/document from consuming the whole context.
+    text: d.text.slice(0, 30000),
+  }))
+
   const imageParts = pages.filter(p => p.screenshot).map(p => ({
     inlineData: { mimeType: 'image/jpeg', data: p.screenshot! },
   }))
 
   const prompt = `Normalize this professional footprint into a canonical CareerEvidence object.
 
+The input can contain ANY COMBINATION of:
+1. Resume/CV documents
+2. Portfolio websites and case-study pages
+3. Project spreadsheets/Excel/CSV files
+4. Supporting project documents
+5. Profile links
+
+All sources must be merged into ONE coherent career evidence model before downstream analysis.
+
 Rules:
-- Use ONLY evidence found in the supplied page text, screenshots, sitemap, or profile URLs.
-- Treat About/Profile pages as likely resume evidence.
+- Use ONLY evidence found in the supplied documents, page text, screenshots, sitemap, or profile URLs.
+- Treat files whose names contain resume/cv/curriculum as resume evidence.
+- Treat Excel/CSV files as structured project evidence. Interpret headers and rows as project records, not as generic prose. Map columns such as project, client/company, year/date, industry, platform, role, responsibilities, methods, outcomes, impact, metrics, technologies, and audience wherever present.
+- Treat About/Profile pages as resume evidence.
 - Treat project/case-study pages as primary project evidence.
+- If the same project appears in multiple sources, merge the evidence into one project rather than creating duplicates.
+- Prefer more specific/corroborated evidence when sources disagree, but preserve uncertainty instead of guessing.
 - Look for role, company, date, responsibility, method, outcome, metric, technology, domain, client, audience, and leadership evidence.
-- Deduplicate projects across navigation, listing pages, and case-study pages.
 - If a project is visually clear but text is sparse, use screenshot evidence and mark the evidence accordingly.
-- Never invent dates, metrics, clients, outcomes, or skills.
-- Preserve uncertainty rather than guessing.
-- Include source URLs for every project and role where possible.
+- Never invent dates, metrics, clients, outcomes, skills, or project details.
+- Include source URLs or filenames for every project and role where possible.
 - evidenceQuality is rich only when there is broad, corroborated evidence.
 - Return ONLY valid JSON.
+
+UPLOADED DOCUMENT EVIDENCE:
+${JSON.stringify(uploadedDocuments)}
 
 PAGE EVIDENCE:
 ${JSON.stringify(evidencePages)}
@@ -242,11 +262,8 @@ export async function scanWebsiteToCareerEvidence(
   const originUrl = /^https?:\/\//i.test(inputUrl) ? inputUrl : `https://${inputUrl}`
   const origin = new URL(originUrl).origin
   const sitemapUrls = await readSitemap(origin)
-
   const seedLinks = Object.values(profileUrls).filter(Boolean)
 
-  // Render the homepage first. Its post-JS navigation reveals project/about
-  // routes that may not exist in the sitemap.
   const homePages = await scanWithPlaywright(originUrl, [originUrl])
   if (homePages.length === 0) {
     throw new Error('The website scanner could not render the portfolio.')
