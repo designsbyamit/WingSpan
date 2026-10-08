@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
     'groq-sdk',
     'google-auth-library',
     '@google/generative-ai',
+    '@sparticuz/chromium',
+    'playwright-core',
   ],
   images: {
     remotePatterns: [
