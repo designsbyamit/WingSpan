@@ -294,6 +294,48 @@ const BLUEPRINT_SCHEMA = `{
   ]
 }`
 
+/** Parse model output as a Blueprint, closing any brackets left open by a cut-off reply. */
+export function parseBlueprintJson(text: string): Blueprint {
+  let clean = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
+  const first = clean.indexOf('{')
+  if (first > 0) clean = clean.slice(first)
+  if (!clean.endsWith('}')) {
+    const stack: string[] = []
+    let inString = false
+    let escaped = false
+    for (const ch of clean) {
+      if (escaped) { escaped = false; continue }
+      if (ch === '\\' && inString) { escaped = true; continue }
+      if (ch === '"') { inString = !inString; continue }
+      if (inString) continue
+      if (ch === '{') stack.push('}')
+      if (ch === '[') stack.push(']')
+      if (ch === '}' || ch === ']') stack.pop()
+    }
+    if (inString) clean += '"'
+    while (stack.length > 0) clean += stack.pop()
+  }
+  return JSON.parse(clean) as Blueprint
+}
+
+/** What is missing from a Blueprint that should have 3 paths, strengths, actions and a roadmap. */
+export function blueprintProblems(bp: Partial<Blueprint>): string[] {
+  const problems: string[] = []
+  if (!Array.isArray(bp.futurePaths) || bp.futurePaths.length !== 3) {
+    problems.push(`futurePaths has ${Array.isArray(bp.futurePaths) ? bp.futurePaths.length : 0} items, exactly 3 are required`)
+  }
+  if (!Array.isArray(bp.strengths) || bp.strengths.length < 3) {
+    problems.push(`strengths has ${Array.isArray(bp.strengths) ? bp.strengths.length : 0} items, at least 3 are required`)
+  }
+  if (!bp.actions || !Array.isArray(bp.actions.immediate) || bp.actions.immediate.length === 0) {
+    problems.push('actions.immediate is empty')
+  }
+  if (!Array.isArray(bp.roadmapMilestones) || bp.roadmapMilestones.length < 3) {
+    problems.push('roadmapMilestones needs at least 3 phases')
+  }
+  return problems
+}
+
 export async function* streamBlueprint(
   validatedData: ValidatedCareerData,
   careerAlpha: CareerAlphaIntelligence
@@ -440,51 +482,32 @@ Your output is the first thing this person will read about their own career pote
     yield { type: 'step', step: s.step, label: s.label, percentage: s.percentage }
   }
 
-  let clean = accumulated.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
-
-  // If Claude hit the token limit and truncated mid-JSON, attempt repair:
-  // Find the last complete top-level key and close all open brackets/braces
-  if (!clean.endsWith('}')) {
-    console.warn(`Blueprint JSON appears truncated at ${clean.length} chars — attempting repair`)
-    // Count open braces/brackets and close them
-    let depth = 0
-    let inString = false
-    let escaped = false
-    for (const ch of clean) {
-      if (escaped) { escaped = false; continue }
-      if (ch === '\\' && inString) { escaped = true; continue }
-      if (ch === '"') { inString = !inString; continue }
-      if (inString) continue
-      if (ch === '{' || ch === '[') depth++
-      if (ch === '}' || ch === ']') depth--
-    }
-    // Close any open string first
-    if (inString) clean += '"'
-    // Close open structures from innermost to outermost
-    // We need to close with matching chars — use a simple heuristic
-    // by tracking the stack
-    const stack: string[] = []
-    inString = false
-    escaped = false
-    for (const ch of clean) {
-      if (escaped) { escaped = false; continue }
-      if (ch === '\\' && inString) { escaped = true; continue }
-      if (ch === '"') { inString = !inString; continue }
-      if (inString) continue
-      if (ch === '{') stack.push('}')
-      if (ch === '[') stack.push(']')
-      if (ch === '}' || ch === ']') stack.pop()
-    }
-    // Append closing chars in reverse order
-    while (stack.length > 0) clean += stack.pop()
-  }
-
   let blueprint: Blueprint
   try {
-    blueprint = JSON.parse(clean)
+    blueprint = parseBlueprintJson(accumulated)
   } catch (parseErr) {
     console.error('Blueprint JSON parse failed even after repair:', parseErr)
     throw new Error('Blueprint generation was cut short. Please try again with a shorter resume or fewer projects.')
+  }
+
+  // Smaller/faster models sometimes return a valid but thin Blueprint (e.g. 1 path instead of 3).
+  // Ask once more, naming what was missing, and keep whichever attempt is more complete.
+  const firstProblems = blueprintProblems(blueprint)
+  if (firstProblems.length > 0) {
+    console.warn('Blueprint incomplete, retrying once:', firstProblems.join('; '))
+    yield { type: 'ping', percentage: 89 }
+    try {
+      const retryRaw = await routeCall(
+        systemInstruction,
+        `${userPrompt}\n\nIMPORTANT: your previous attempt was incomplete (${firstProblems.join('; ')}). Return the COMPLETE JSON with every section fully populated, exactly as specified.`,
+        'blueprint',
+        16000,
+      )
+      const retried = parseBlueprintJson(retryRaw)
+      if (blueprintProblems(retried).length < firstProblems.length) blueprint = retried
+    } catch (retryErr) {
+      console.warn('Blueprint retry failed, keeping first attempt:', retryErr instanceof Error ? retryErr.message : retryErr)
+    }
   }
 
   // Defensive recovery for a valid Blueprint where the model omitted gap analysis.
