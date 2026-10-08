@@ -213,7 +213,8 @@ Project objects must contain:
 
 export async function scanWebsiteToCareerEvidence(
   inputUrl: string,
-  profileUrls: Record<string, string> = {}
+  profileUrls: Record<string, string> = {},
+  documentTexts: Array<{ filename: string; text: string }> = []
 ): Promise<{ evidence: CareerEvidence; careerAlphaInput: ReturnType<typeof careerEvidenceToCareerAlphaInput> }> {
   const originUrl = /^https?:\/\//i.test(inputUrl) ? inputUrl : `https://${inputUrl}`
   const origin = new URL(originUrl).origin
@@ -230,7 +231,7 @@ export async function scanWebsiteToCareerEvidence(
     throw new Error('The website scanner could not start a browser. Configure PLAYWRIGHT_BROWSER_WS or PLAYWRIGHT_EXECUTABLE_PATH.')
   }
 
-  const evidence = await normalizeCareerEvidence(rendered, sitemapUrls, profileUrls)
+  const evidence = await normalizeCareerEvidence(rendered, sitemapUrls, profileUrls, documentTexts)
   return {
     evidence,
     careerAlphaInput: careerEvidenceToCareerAlphaInput(evidence, []),
