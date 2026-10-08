@@ -214,8 +214,22 @@ export function FootprintScreen() {
   }
 
   const handleBeginAnalysis = async () => {
-    if (!canBeginAnalysis) return
+    if (loading) return
+
+    const selectedInterests = [...state.interests]
+    if (selectedInterests.length < 3) {
+      dispatch({ type: 'SET_ERROR', error: 'Pick at least 3 interests to continue.' })
+      return
+    }
+    if (!canProceedStep1) {
+      dispatch({ type: 'SET_ERROR', error: 'Add a resume or portfolio link to continue.' })
+      setStep('upload')
+      return
+    }
+
     setLoading(true)
+    dispatch({ type: 'SET_ERROR', error: null })
+
     try {
       const formData = new FormData()
       for (const file of state.files) formData.append('files', file)
@@ -232,11 +246,12 @@ export function FootprintScreen() {
       dispatch({ type: 'SET_PIPELINE_STAGE', stage: 'extract' })
       dispatch({ type: 'SET_SCREEN', screen: 'validating' })
 
-      // Fire and forget — runs while user reviews timeline
-      runCareerPipeline(data, state.interests, dispatch)
+      // Keep the selected interests from this click, even if another render occurs.
+      runCareerPipeline(data, selectedInterests, dispatch)
     } catch (err) {
-      dispatch({ type: 'SET_ERROR', error: String(err) })
-      dispatch({ type: 'SET_SCREEN', screen: 'footprint' })
+      dispatch({ type: 'SET_ERROR', error: err instanceof Error ? err.message : String(err) })
+      setLoading(false)
+      return
     } finally {
       setLoading(false)
     }
