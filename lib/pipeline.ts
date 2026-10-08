@@ -42,6 +42,28 @@ export async function runCareerPipeline(
 
     let buffer = ''
     let completed = false
+    const processLine = (line: string) => {
+      if (!line.startsWith('data: ')) return
+      let event: { type: string; [key: string]: unknown } | null = null
+      try {
+        event = JSON.parse(line.slice(6))
+      } catch { return }
+      if (!event) return
+
+      if (event.type === 'step') {
+        dispatch({ type: 'SET_DISCOVERY_STEP', step: event.step as DiscoveryStep, percentage: event.percentage as number })
+      } else if (event.type === 'observation') {
+        dispatch({ type: 'ADD_OBSERVATION', text: event.text as string })
+      } else if (event.type === 'complete') {
+        dispatch({ type: 'SET_VALIDATED_DATA', data: validatedData })
+        dispatch({ type: 'SET_BLUEPRINT_BACKGROUND', blueprint: { ...(event.blueprint as object), careerAlpha } as Blueprint })
+        completed = true
+        dispatch({ type: 'SET_SCREEN', screen: 'blueprint' })
+      } else if (event.type === 'error') {
+        throw new Error(event.error as string)
+      }
+    }
+
     while (true) {
       const { done, value } = await reader.read()
       if (done) break
@@ -50,31 +72,15 @@ export async function runCareerPipeline(
       buffer = lines.pop() ?? ''
 
       for (const line of lines) {
-        if (line.startsWith('data: ')) {
-          let event: { type: string; [key: string]: unknown } | null = null
-          try {
-            event = JSON.parse(line.slice(6))
-          } catch { /* skip malformed JSON lines */ }
-
-          if (!event) continue
-
-          if (event.type === 'step') {
-            dispatch({ type: 'SET_DISCOVERY_STEP', step: event.step as DiscoveryStep, percentage: event.percentage as number })
-          } else if (event.type === 'observation') {
-            dispatch({ type: 'ADD_OBSERVATION', text: event.text as string })
-          } else if (event.type === 'complete') {
-            dispatch({ type: 'SET_VALIDATED_DATA', data: validatedData })
-            dispatch({ type: 'SET_BLUEPRINT_BACKGROUND', blueprint: { ...(event.blueprint as object), careerAlpha } as Blueprint })
-            completed = true
-            dispatch({ type: 'SET_SCREEN', screen: 'blueprint' })
-            return
-          } else if (event.type === 'error') {
-            throw new Error(event.error as string)
-          }
-        }
+        processLine(line)
+        if (completed) return
       }
     }
 
+    // Some SSE responses end without a trailing newline. Process the final buffered event.
+    if (buffer.trim()) {
+      processLine(buffer.trim())
+    }
     if (!completed) {
       throw new Error('Blueprint generation ended before a complete result was received.')
     }
