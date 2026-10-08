@@ -1,4 +1,6 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
+import { computeCareerAlpha } from '@/lib/career-alpha'
+import { streamBlueprint } from '@/lib/claude'
 import { aggregatorAgent, careerAlphaAgent, marketIntelligenceAgent, careerDirectionGenerator } from '@/lib/v02-agents'
 import type { ExtractedCareerData } from '@/types/wingspan'
 
@@ -24,7 +26,7 @@ const SAMPLE = {
   footprintSignals: ['portfolio'],
 } as unknown as ExtractedCareerData
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   if (process.env.HEALTH_TEST !== '1') return NextResponse.json({ error: 'disabled' }, { status: 404 })
   const interests = ['AI-native products', 'Design systems', 'Design leadership']
   const stages: Record<string, string> = {}
@@ -39,6 +41,29 @@ export async function GET() {
       throw e
     }
   }
+  // ?flow=ui runs what the app's screens actually call: Career Alpha, then the Blueprint stream.
+  if (req.nextUrl.searchParams.get('flow') === 'ui') {
+    try {
+      const alpha = await timed('careerAlpha', () => computeCareerAlpha(SAMPLE, interests))
+      const bp = await timed('blueprint', async () => {
+        for await (const ev of streamBlueprint({ ...SAMPLE, interests } as never, alpha)) {
+          if (ev.type === 'complete') return ev.blueprint as Record<string, unknown[]>
+        }
+        throw new Error('stream ended without a complete event')
+      })
+      return NextResponse.json({
+        ok: true, stages,
+        sections: {
+          strengths: bp.strengths?.length, futurePaths: bp.futurePaths?.length, gaps: bp.gaps?.length,
+          immediate: (bp.actions as unknown as { immediate?: unknown[] })?.immediate?.length,
+          roadmap: bp.roadmapMilestones?.length, insights: bp.insights?.length,
+        },
+      })
+    } catch {
+      return NextResponse.json({ ok: false, stages })
+    }
+  }
+
   try {
     const graph = await timed('aggregator', () => aggregatorAgent(SAMPLE, interests))
     const dna = await timed('careerAlpha', () => careerAlphaAgent(graph, SAMPLE, interests))
