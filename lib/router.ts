@@ -76,9 +76,23 @@ function liveModels(): string[] {
   return alive.length ? alive : chain
 }
 
+/** The useful part of a Google SDK error: drop the long URL prefix, keep status and reason. */
+export function errorTail(e: unknown, max = 400): string {
+  const msg = e instanceof Error ? e.message : String(e)
+  const i = msg.search(/\[\d{3} /)
+  return (i >= 0 ? msg.slice(i) : msg).slice(0, max)
+}
+
+/** Per-minute limits recover quickly; daily quota, zero quota and missing models do not. */
+export function deadForMs(e: unknown): number {
+  const msg = e instanceof Error ? e.message : String(e)
+  const hard = /limit: 0|PerDay|not found|404|not supported|permission|403/i.test(msg)
+  return hard ? DEAD_MODEL_MS : 60 * 1000
+}
+
 function markDead(model: string, e: unknown) {
-  deadModels.set(model, Date.now() + DEAD_MODEL_MS)
-  console.warn(`Gemini model ${model} unavailable (${(e instanceof Error ? e.message : String(e)).slice(0, 120)})`)
+  deadModels.set(model, Date.now() + deadForMs(e))
+  console.warn(`Gemini model ${model} unavailable: ${errorTail(e)}`)
 }
 
 type GeminiPart = { text: string } | { inlineData: { mimeType: string; data: string } }

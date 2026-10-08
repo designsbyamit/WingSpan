@@ -65,3 +65,13 @@ test('a cut-off Blueprint reply is closed and parsed', () => {
   const bp = parseBlueprintJson('```json\n{"strengths":[{"name":"A"},{"name":"B')
   assert.equal((bp.strengths as unknown[]).length, 2)
 })
+
+import { errorTail, deadForMs } from './router'
+
+test('error logging keeps the status, and per-minute limits are skipped only briefly', () => {
+  const perMinute = new Error('Error fetching from https://generativelanguage.googleapis.com/v1beta/models/x:streamGenerateContent?alt=sse: [429 Too Many Requests] Quota exceeded for metric ...RequestsPerMinute... Please retry in 12s')
+  assert.match(errorTail(perMinute), /^\[429 Too Many Requests\]/)
+  assert.equal(deadForMs(perMinute), 60_000)
+  const daily = new Error('[429] Quota exceeded ... GenerateRequestsPerDayPerProjectPerModel-FreeTier, limit: 0')
+  assert.equal(deadForMs(daily), 15 * 60 * 1000)
+})
