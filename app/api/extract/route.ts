@@ -6,6 +6,7 @@ import { buildCareerInputBundle, CareerInputSource } from '@/lib/career-input'
 import { getSession } from '@/lib/auth'
 import { saveIngestion } from '@/lib/ingestion-store'
 import type { IngestSource } from '@/lib/ingestion-mapping'
+import { friendlyProviderError } from '@/lib/router'
 
 export const maxDuration = 120
 
@@ -102,7 +103,7 @@ export async function POST(req: NextRequest) {
     })
   } catch (err) {
     console.error('Extract error:', err)
-    const message = err instanceof Error ? err.message : 'Unknown extraction error'
+    const message = err instanceof Error ? friendlyProviderError(err) : 'Unknown extraction error'
     return NextResponse.json(
       { error: message, code: 'EXTRACTION_FAILED' },
       { status: 500 }

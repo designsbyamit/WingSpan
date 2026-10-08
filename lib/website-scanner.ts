@@ -227,22 +227,14 @@ Project objects must contain:
 {"id":"","name":"","company":"","year":"","industry":"","platform":"","audience":"","summary":"","impact":"","sourceUrls":[],"evidence":[],"visualSignals":[],"methods":[],"responsibilities":[],"outcomes":[],"technologies":[]}
 `
 
-  const gemini = process.env.GEMINI_API_KEY
-  if (!gemini) {
-    throw new Error('GEMINI_API_KEY is required for visual website analysis.')
-  }
-
-  const { GoogleGenerativeAI } = await import('@google/generative-ai')
-  const genAI = new GoogleGenerativeAI(gemini)
-  const model = genAI.getGenerativeModel({
-    model: process.env.GEMINI_MODEL ?? 'gemini-2.0-flash',
-    systemInstruction: 'You are a forensic portfolio and resume analyst. Extract evidence conservatively and comprehensively.',
-  })
-  const result = await model.generateContent([
-    { text: prompt },
-    ...imageParts.slice(0, MAX_SCREENSHOTS),
-  ])
-  const raw = result.response.text().replace(/^\`\`\`(?:json)?\n?/m, '').replace(/\n?\`\`\`$/m, '').trim()
+  const { routeMultimodal } = await import('@/lib/router')
+  const text = await routeMultimodal(
+    'You are a forensic portfolio and resume analyst. Extract evidence conservatively and comprehensively. Return only valid JSON.',
+    prompt,
+    imageParts.slice(0, MAX_SCREENSHOTS).map((p) => p.inlineData),
+    8192,
+  )
+  const raw = extractJsonObject(text)
   const parsed = JSON.parse(raw) as CareerEvidence
 
   parsed.schemaVersion = '1.0'
@@ -282,4 +274,13 @@ export async function scanWebsiteToCareerEvidence(
     evidence,
     careerAlphaInput: careerEvidenceToCareerAlphaInput(evidence, []),
   }
+}
+
+/** Pull the outermost JSON object out of a model reply (handles code fences and stray prose). */
+export function extractJsonObject(text: string): string {
+  const clean = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
+  if (clean.startsWith('{')) return clean
+  const first = clean.indexOf('{')
+  const last = clean.lastIndexOf('}')
+  return first >= 0 && last > first ? clean.slice(first, last + 1) : clean
 }

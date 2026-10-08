@@ -1,8 +1,6 @@
 // lib/mentor.ts
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import { routeStream } from '@/lib/router'
 import type { MentorMessage } from '@/types/design-evolution'
-
-const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash'
 
 interface StreamMentorParams {
   messages: MentorMessage[]
@@ -37,21 +35,16 @@ Guidelines:
     async start(controller) {
       let accumulated = ''
       try {
-        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '')
-        const model = genAI.getGenerativeModel({ model: GEMINI_MODEL, systemInstruction })
-
-        // Convert message history to Gemini format
-        const history = messages.slice(0, -1).map(m => ({
-          role: m.role === 'assistant' ? 'model' as const : 'user' as const,
-          parts: [{ text: m.content }],
-        }))
+        // Earlier turns go in as a transcript so any provider in the chain can answer.
+        const history = messages.slice(0, -1)
+          .map(m => `${m.role === 'assistant' ? 'Mentor' : 'Learner'}: ${m.content}`)
+          .join('\n\n')
         const lastMessage = messages[messages.length - 1]?.content ?? ''
+        const prompt = history
+          ? `Conversation so far:\n${history}\n\nLearner: ${lastMessage}\n\nReply as the mentor.`
+          : lastMessage
 
-        const chat = model.startChat({ history })
-        const result = await chat.sendMessageStream(lastMessage)
-
-        for await (const chunk of result.stream) {
-          const text = chunk.text()
+        for await (const text of routeStream(systemInstruction, prompt)) {
           if (text) {
             accumulated += text
             controller.enqueue(encoder.encode(text))

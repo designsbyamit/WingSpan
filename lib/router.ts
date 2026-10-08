@@ -31,14 +31,126 @@ async function callOpenRouter(messages: ChatMessage[], model = 'deepseek/deepsee
   return data.choices?.[0]?.message?.content ?? ''
 }
 
-async function callGemini(systemPrompt: string, userPrompt: string, maxTokens = 8192): Promise<string> {
+// ── Gemini model chain ──────────────────────────────────────────────────────
+// The configured model (GEMINI_MODEL) is tried first, then cheaper models that
+// have free-tier quota. A model that fails with quota/not-found is skipped for a
+// while so every later call doesn't pay for the same failure.
+
+const DEFAULT_GEMINI_FALLBACKS = ['gemini-3-flash-preview', 'gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash']
+const DEAD_MODEL_MS = 15 * 60 * 1000
+const deadModels = new Map<string, number>()
+
+const firstLine = (v: string | undefined) => (v ?? '').split('\n')[0].trim()
+
+export function geminiModelChain(env: Record<string, string | undefined> = process.env): string[] {
+  const configured = firstLine(env.GEMINI_MODEL)
+  const fallbacks = firstLine(env.GEMINI_FALLBACK_MODELS)
+    ? firstLine(env.GEMINI_FALLBACK_MODELS).split(',').map((m) => m.trim()).filter(Boolean)
+    : DEFAULT_GEMINI_FALLBACKS
+  return [...new Set([configured, ...fallbacks].filter(Boolean))]
+}
+
+/** Errors where trying another model or provider can help (quota, missing model, overload). */
+export function isRetryableProviderError(e: unknown): boolean {
+  const msg = (e instanceof Error ? e.message : String(e)).toLowerCase()
+  return /\b(429|404|403|500|502|503|504)\b/.test(msg) ||
+    /quota|rate.?limit|resource_exhausted|unavailable|overloaded|not found|not supported|permission|deadline|timeout|fetch failed/.test(msg)
+}
+
+/** A message that is safe to show people. Raw provider errors stay in the logs. */
+export function friendlyProviderError(e: unknown): string {
+  const msg = e instanceof Error ? e.message : String(e)
+  if (/429|quota|rate.?limit|resource_exhausted/i.test(msg)) {
+    return 'Our AI service is at capacity right now. Please try again in a few minutes.'
+  }
+  if (isRetryableProviderError(e)) {
+    return 'Our AI service is temporarily unavailable. Please try again in a few minutes.'
+  }
+  return msg.length > 300 ? msg.slice(0, 300) + '…' : msg
+}
+
+function liveModels(): string[] {
+  const now = Date.now()
+  const chain = geminiModelChain()
+  const alive = chain.filter((m) => (deadModels.get(m) ?? 0) < now)
+  return alive.length ? alive : chain
+}
+
+function markDead(model: string, e: unknown) {
+  deadModels.set(model, Date.now() + DEAD_MODEL_MS)
+  console.warn(`Gemini model ${model} unavailable (${(e instanceof Error ? e.message : String(e)).slice(0, 120)})`)
+}
+
+type GeminiPart = { text: string } | { inlineData: { mimeType: string; data: string } }
+
+/** Try each Gemini model in turn. Throws the last error if every model fails. */
+export async function generateWithGemini(parts: GeminiPart[], systemInstruction?: string): Promise<string> {
   const key = (process.env.GEMINI_API_KEY ?? '').trim()
   if (!key) throw new Error('No Gemini key')
-  const model = (process.env.GEMINI_MODEL ?? 'gemini-2.0-flash').split('\n')[0].trim()
   const genAI = new GoogleGenerativeAI(key)
-  const geminiModel = genAI.getGenerativeModel({ model, systemInstruction: systemPrompt })
-  const result = await geminiModel.generateContent(userPrompt)
-  return result.response.text()
+  let lastErr: unknown = new Error('No Gemini model configured')
+  for (const model of liveModels()) {
+    try {
+      const m = genAI.getGenerativeModel(systemInstruction ? { model, systemInstruction } : { model })
+      const result = await m.generateContent(parts)
+      return result.response.text()
+    } catch (e) {
+      lastErr = e
+      if (!isRetryableProviderError(e)) throw e
+      markDead(model, e)
+    }
+  }
+  throw lastErr
+}
+
+async function callGemini(systemPrompt: string, userPrompt: string): Promise<string> {
+  return generateWithGemini([{ text: userPrompt }], systemPrompt)
+}
+
+async function callGroq(systemPrompt: string, userPrompt: string, maxTokens: number): Promise<string> {
+  const response = await getGroq().chat.completions.create({
+    model: process.env.GROQ_MODEL ?? 'openai/gpt-oss-120b',
+    max_tokens: maxTokens,
+    messages: [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt },
+    ],
+  })
+  return response.choices[0]?.message?.content ?? '{}'
+}
+
+/**
+ * Text + images. Gemini (all models) sees the images; if Gemini is unavailable the
+ * text-only providers still get the full text prompt.
+ */
+export async function routeMultimodal(
+  systemPrompt: string,
+  userPrompt: string,
+  images: { mimeType: string; data: string }[] = [],
+  maxTokens = 8192,
+): Promise<string> {
+  try {
+    return await generateWithGemini([{ text: userPrompt }, ...images.map((inlineData) => ({ inlineData }))], systemPrompt)
+  } catch (e) {
+    if (!isRetryableProviderError(e) && !String(e).includes('No Gemini key')) throw e
+    console.warn('Gemini unavailable for multimodal call, falling back to text-only providers')
+  }
+  return textFallback(systemPrompt, userPrompt, maxTokens)
+}
+
+async function textFallback(systemPrompt: string, userPrompt: string, maxTokens: number): Promise<string> {
+  if (process.env.OPENROUTER_API_KEY) {
+    try {
+      return await callOpenRouter(
+        [{ role: 'system', content: systemPrompt }, { role: 'user', content: userPrompt }],
+        'deepseek/deepseek-chat',
+        maxTokens,
+      )
+    } catch (e) {
+      console.warn('OpenRouter failed, falling back to Groq:', e instanceof Error ? e.message.slice(0, 80) : e)
+    }
+  }
+  return callGroq(systemPrompt, userPrompt, maxTokens)
 }
 
 // ── Primary non-streaming call ───────────────────────────────────────────────
@@ -63,42 +175,18 @@ export async function routeCall(
     return response.choices[0]?.message?.content ?? '{}'
   }
 
-  // Analysis/blueprint: try Gemini → OpenRouter/DeepSeek → Groq
+  // Analysis/blueprint: Gemini model chain → OpenRouter/DeepSeek → Groq
   try {
-    return await callGemini(systemPrompt, userPrompt, maxTokens)
+    return await callGemini(systemPrompt, userPrompt)
   } catch (e) {
-    const msg = e instanceof Error ? e.message : ''
-    const isQuotaOrError = msg.includes('429') || msg.includes('quota') || msg.includes('404') || msg.includes('403')
-    if (!isQuotaOrError) throw e
-    console.warn(`Gemini unavailable (${msg.slice(0, 60)}), trying OpenRouter/DeepSeek`)
+    if (!isRetryableProviderError(e) && !String(e).includes('No Gemini key')) throw e
+    console.warn('All Gemini models unavailable, trying OpenRouter/DeepSeek')
   }
-
-  if (process.env.OPENROUTER_API_KEY) {
-    try {
-      return await callOpenRouter(
-        [{ role: 'system', content: systemPrompt }, { role: 'user', content: userPrompt }],
-        'deepseek/deepseek-chat',
-        maxTokens
-      )
-    } catch (e) {
-      console.warn('OpenRouter failed, falling back to Groq:', e instanceof Error ? e.message.slice(0, 60) : e)
-    }
-  }
-
-  // Final fallback: Groq
-  const response = await getGroq().chat.completions.create({
-    model: process.env.GROQ_MODEL ?? 'openai/gpt-oss-120b',
-    max_tokens: maxTokens,
-    messages: [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: userPrompt },
-    ],
-  })
-  return response.choices[0]?.message?.content ?? '{}'
+  return textFallback(systemPrompt, userPrompt, maxTokens)
 }
 
 // ── Streaming call (blueprint) ───────────────────────────────────────────────
-// Priority: Gemini streaming → OpenRouter streaming → Groq streaming
+// Priority: Gemini model chain → OpenRouter streaming → Groq streaming
 
 export async function* routeStream(
   systemPrompt: string,
@@ -108,19 +196,24 @@ export async function* routeStream(
 
   // Try Gemini streaming
   if (geminiKey) {
-    try {
-      const model = (process.env.GEMINI_MODEL ?? 'gemini-2.0-flash').split('\n')[0].trim()
-      const genAI = new GoogleGenerativeAI(geminiKey)
-      const geminiModel = genAI.getGenerativeModel({ model, systemInstruction: systemPrompt })
-      const stream = await geminiModel.generateContentStream(userPrompt)
-      for await (const chunk of stream.stream) {
-        const text = chunk.text()
-        if (text) yield text
+    const genAI = new GoogleGenerativeAI(geminiKey)
+    for (const model of liveModels()) {
+      let yielded = false
+      try {
+        const geminiModel = genAI.getGenerativeModel({ model, systemInstruction: systemPrompt })
+        const stream = await geminiModel.generateContentStream(userPrompt)
+        for await (const chunk of stream.stream) {
+          const text = chunk.text()
+          if (text) { yielded = true; yield text }
+        }
+        return
+      } catch (e) {
+        // Once text has gone out we can't restart on another model without duplicating it.
+        if (yielded) throw e
+        markDead(model, e)
       }
-      return
-    } catch (e) {
-      console.warn('Gemini stream failed, trying OpenRouter:', e instanceof Error ? e.message.slice(0, 80) : e)
     }
+    console.warn('All Gemini models failed to stream, trying OpenRouter')
   }
 
   // Try OpenRouter streaming (DeepSeek)

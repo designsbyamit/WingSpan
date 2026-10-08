@@ -1,6 +1,7 @@
 // app/api/blueprint/route.ts
 import { NextRequest } from 'next/server'
 import { streamBlueprint } from '@/lib/claude'
+import { friendlyProviderError } from '@/lib/router'
 import { ValidatedCareerData, CareerAlphaIntelligence } from '@/types/wingspan'
 import { mockBlueprint } from '@/lib/mock-data'
 
@@ -66,7 +67,7 @@ export async function POST(req: NextRequest) {
         }
       } catch (err) {
         console.error('Blueprint error:', err)
-        const errLine = `event: error\ndata: ${JSON.stringify({ error: String(err) })}\n\n`
+        const errLine = `event: error\ndata: ${JSON.stringify({ error: friendlyProviderError(err) })}\n\n`
         controller.enqueue(encoder.encode(errLine))
       } finally {
         controller.close()

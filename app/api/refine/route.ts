@@ -1,15 +1,9 @@
 // app/api/refine/route.ts
 import { NextRequest, NextResponse } from 'next/server'
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import { routeCall, friendlyProviderError } from '@/lib/router'
+import { extractJsonObject } from '@/lib/website-scanner'
 
-const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash'
-function getGemini() {
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '')
-  return genAI.getGenerativeModel({
-    model: GEMINI_MODEL,
-    systemInstruction: 'You are a career strategist. Return ONLY valid JSON — no explanation, no markdown fences, no commentary.',
-  })
-}
+const SYSTEM = 'You are a career strategist. Return ONLY valid JSON — no explanation, no markdown fences, no commentary.'
 
 export async function POST(req: NextRequest) {
   try {
@@ -64,14 +58,12 @@ pathway fields must still match a futurePaths title.`,
       return NextResponse.json({ error: `Unknown section: ${section}` }, { status: 400 })
     }
 
-    const geminiResponse = await getGemini().generateContent(prompt)
-    const text = geminiResponse.response.text()
-    const clean = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
-    const refined = JSON.parse(clean)
+    const text = await routeCall(SYSTEM, prompt, 'refine', 8192)
+    const refined = JSON.parse(extractJsonObject(text))
 
     return NextResponse.json({ refined })
   } catch (err) {
     console.error('Refine error:', err)
-    return NextResponse.json({ error: String(err) }, { status: 500 })
+    return NextResponse.json({ error: friendlyProviderError(err) }, { status: 500 })
   }
 }

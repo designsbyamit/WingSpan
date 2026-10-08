@@ -1,7 +1,6 @@
 // lib/claude.ts
 // Groq for fast extraction (Stage 1), Gemini for deep analysis (Blueprint streaming)
 import Groq from 'groq-sdk'
-import { GoogleGenerativeAI } from '@google/generative-ai'
 import { ExtractedCareerData, Blueprint, ValidatedCareerData, CareerAlphaIntelligence } from '@/types/wingspan'
 
 // Groq — fast, used for extraction only
@@ -9,12 +8,6 @@ const GROQ_MODEL = process.env.GROQ_MODEL ?? 'openai/gpt-oss-120b'
 const GROQ_FALLBACK_MODEL = 'openai/gpt-oss-20b'
 function getGroq() { return new Groq({ apiKey: process.env.GROQ_API_KEY ?? '' }) }
 
-// Gemini — high quality, used for Blueprint analysis
-const GEMINI_MODEL = process.env.GEMINI_MODEL ?? 'gemini-3.1-pro-preview'
-function getGemini() {
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '')
-  return genAI.getGenerativeModel({ model: GEMINI_MODEL })
-}
 
 // ── Stage 1: Extract structured career data from raw text ──────────────────
 
@@ -187,19 +180,12 @@ ${urlContext ? `Profile URLs:\n${urlContext}` : ''}`,
 // ── PDF Vision fallback: extract text from image-based PDFs using Claude ───
 
 export async function extractPdfViaClaudeVision(pageImages: string[]): Promise<string> {
-  const { GoogleGenerativeAI } = await import('@google/generative-ai')
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? '')
-  const model = genAI.getGenerativeModel({ model: process.env.GEMINI_MODEL ?? 'gemini-3.1-pro-preview' })
-
-  const parts = [
-    ...pageImages.map(img => ({
-      inlineData: { mimeType: 'image/jpeg' as const, data: img },
-    })),
+  // Reading scanned pages needs a vision model, so this uses the Gemini chain only.
+  const { generateWithGemini } = await import('@/lib/router')
+  return generateWithGemini([
+    ...pageImages.map(img => ({ inlineData: { mimeType: 'image/jpeg', data: img } })),
     { text: 'Extract all text content from these resume pages. Return plain text only, preserving structure (job titles, dates, company names, descriptions). No commentary, no formatting, just the text.' },
-  ]
-
-  const result = await model.generateContent(parts)
-  return result.response.text()
+  ])
 }
 
 // ── Stage 2: Stream Blueprint generation ──────────────────────────────────
