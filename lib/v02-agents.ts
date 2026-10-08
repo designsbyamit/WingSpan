@@ -1,7 +1,8 @@
 import { routeCall } from '@/lib/router'
 import type { ExtractedCareerData } from '@/types/wingspan'
 import type { EvidenceGraph, CareerDNA, MarketGraph, CareerMap } from '@/types/career-intelligence'
-import { evidenceGraphSchema, careerDNASchema, marketGraphSchema, careerMapSchema } from '@/lib/agent-contracts'
+import { evidenceGraphSchema, careerDNASchema, marketGraphSchema, careerDirectionDraftSchema } from '@/lib/agent-contracts'
+import { buildCareerMap } from '@/lib/career-scoring'
 
 const json = (s:string) => JSON.parse(s.replace(/^\`\`\`(?:json)?\n?/m,'').replace(/\n?\`\`\`$/m,'').trim())
 
@@ -28,26 +29,14 @@ export async function marketIntelligenceAgent(locationHints:string[]=[]):Promise
  return marketGraphSchema.parse(out) as unknown as MarketGraph
 }
 
-function expScore(candidate:any, dna:CareerDNA){
- const names=[...dna.strongestCapabilities,...dna.transferableCapabilities,...dna.distinctiveStrengths].map((x:any)=>String(x.name).toLowerCase())
- const t=String(candidate.direction).toLowerCase()
- const matches=names.filter(n=>t.includes(n)||n.split(' ').some((w:string)=>w.length>3 && t.includes(w))).length
- return Math.min(100,45+matches*15+(dna.confidence*20))
-}
-function interestScore(direction:string, dna:CareerDNA){
- const hay=[...dna.deepInterestSignals,...dna.emergingIdentity].join(' ').toLowerCase()
- const words=direction.toLowerCase().split(/\W+/).filter(w=>w.length>4)
- const hits=words.filter(w=>hay.includes(w)).length
- return Math.min(100,25+hits*18)
-}
-
+// The model proposes candidate directions and 0-100 component sub-scores. The final scores and the
+// Safe / Growth / Bold picks are computed deterministically in lib/career-scoring.ts, so they are
+// reproducible and auditable.
 export async function careerDirectionGenerator(dna:CareerDNA, market:MarketGraph):Promise<CareerMap>{
- const system=`You are Career Direction Generator v0.2, the decision agent. Do not re-parse resumes and do not independently research markets. Consume CareerDNA and MarketGraph only. Generate 8-15 meaningfully different candidate directions internally. Score each with Experience 40%, Market 40%, Interest 20%. Confidence may adjust final score but cannot overpower it. Select Safe, Growth, Bold with real directional diversity. Safe should maximize defensible continuity. Growth should maximize intersection of demonstrated capability, market momentum and interest. Bold can have larger capability distance when the future case is strong. Every recommendation must answer why this person, why this direction, why now. Never manufacture three recommendations when evidence is insufficient, but aim for three when reasonable. Return only JSON.`
- const user=`CareerDNA: ${JSON.stringify(dna)}\nMarketGraph: ${JSON.stringify(market)}\nReturn CareerMap v0.2. Base score = 0.40E + 0.40M + 0.20I. CareerScore = base * (0.75 + 0.25C), C = evidence confidence. Include evidenceIds as capability/direction references, capabilityDistance 0-100, and validation checks.`
+ const system=`You are Career Direction Generator v0.2, the decision agent. Do not re-parse resumes and do not independently research markets. Consume CareerDNA and MarketGraph only. Generate 8-15 meaningfully different candidate directions: genuinely different kinds of work, not several names for the same job. For each, give honest 0-100 sub-scores. Do not compute final scores and do not choose Safe, Growth or Bold; the application does both deterministically. Experience sub-scores must come from demonstrated evidence in CareerDNA. Market sub-scores must come from MarketGraph, never from hype. Interest sub-scores must keep stated interest separate from behavioural evidence. Demand alone must not make a direction look good for this person. Weak evidence should lower the evidence confidence, not erase the possibility. Every candidate must answer why this person, why this direction, why now. Return only JSON.`
+ const user=`CareerDNA: ${JSON.stringify(dna)}\nMarketGraph: ${JSON.stringify(market)}\nReturn JSON of the form {"candidates":[{"direction":string,"experience":{"capability":0-100,"project":0-100,"transferable":0-100,"context":0-100,"recency":0-100},"market":{"demand":0-100,"growth":0-100,"future":0-100,"adjacency":0-100,"relevance":0-100},"interest":{"direct":0-100,"behavioural":0-100,"stated":0-100,"curiosity":0-100,"adjacency":0-100},"capabilityDistance":0-100,"confidence":0-1,"whyThisPerson":string,"whyNow":string,"evidenceIds":string[],"rationale":string}]}. capabilityDistance is 0 when the person already does this work and 100 for a completely different field. confidence is how well the evidence supports this specific direction.`
  const out=await call(system,user,10000)
- let parsed:any
- try { parsed=careerMapSchema.parse(out) } catch {
-   throw new Error('Career direction generation returned invalid structured data.')
- }
- return parsed as CareerMap
+ const draft=careerDirectionDraftSchema.safeParse(out)
+ if(!draft.success) throw new Error('Career direction generation returned invalid structured data.')
+ return buildCareerMap(draft.data, dna.confidence)
 }

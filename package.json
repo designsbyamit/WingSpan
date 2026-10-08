@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "tsx --test lib/career-scoring.test.ts lib/agent-contracts.test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",
@@ -41,6 +42,7 @@
     "unpdf": "^1.7.0",
     "ws": "^8.21.1",
     "xlsx": "^0.18.5",
+    "zod": "^4.4.3",
     "playwright-core": "^1.63.0",
     "@sparticuz/chromium": "^153.0.0"
   },

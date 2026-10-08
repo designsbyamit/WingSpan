@@ -106,6 +106,17 @@ export interface CareerCandidate {
   evidenceIds:string[]
   capabilityDistance:number
   rationale:string
+  /** Deterministic inputs behind the scores, so every recommendation is auditable. */
+  scoreBreakdown?:CareerScoreBreakdown
+}
+export interface CareerScoreBreakdown {
+  experience:{ capability:number; project:number; transferable:number; context:number; recency:number }
+  market:{ demand:number; growth:number; future:number; adjacency:number; relevance:number }
+  interest:{ direct:number; behavioural:number; stated:number; curiosity:number; adjacency:number }
+  /** 0.40E + 0.40M + 0.20I, before the confidence multiplier */
+  baseScore:number
+  /** 0.75 + 0.25 * evidenceConfidence */
+  confidenceMultiplier:number
 }
 export interface CareerMap {
   version:'0.2'
