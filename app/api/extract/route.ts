@@ -3,6 +3,8 @@ import { parseFile } from '@/lib/parsers'
 import { extractCareerData } from '@/lib/claude'
 import { mockExtractedData } from '@/lib/mock-data'
 import { inspectPortfolioUrl, portfolioToText } from '@/lib/portfolio'
+import { normalizeCareerEvidence, scanWebsiteToCareerEvidence } from '@/lib/website-scanner'
+import { careerEvidenceToCareerAlphaInput } from '@/lib/career-evidence'
 
 export const maxDuration = 120
 
@@ -24,40 +26,61 @@ export async function POST(req: NextRequest) {
     }
 
     const texts: string[] = []
-
-    if (portfolioUrl) {
-      const inspection = await inspectPortfolioUrl(portfolioUrl, urls)
-      if (!inspection.valid) {
-        return NextResponse.json({
-          error: inspection.message,
-          code: 'PORTFOLIO_INVALID',
-          portfolio: {
-            url: portfolioUrl,
-            canonicalUrl: inspection.canonicalUrl,
-            confidence: inspection.confidence,
-            signals: inspection.signals.slice(0, 5),
-          },
-        }, { status: 422 })
-      }
-      texts.push(portfolioToText(inspection))
-    }
+    const documentTexts: Array<{ filename: string; text: string }> = []
 
     for (const file of files) {
       const buffer = Buffer.from(await file.arrayBuffer())
       const text = await parseFile(buffer, file.name, file.type)
-      if (text.trim()) texts.push(`[UPLOADED DOCUMENT: ${file.name}]\n${text}`)
+      if (text.trim()) {
+        texts.push(`[UPLOADED DOCUMENT: ${file.name}]\\n${text}`)
+        documentTexts.push({ filename: file.name, text })
+      }
     }
 
-    const combinedText = texts.join('\n\n--- SOURCE BREAK ---\n\n')
-    if (!combinedText.trim()) {
-      return NextResponse.json({
-        error: 'We could not read enough from that source. Please upload your portfolio as a PDF.',
-        code: 'SOURCE_EMPTY',
-      }, { status: 422 })
+    let websiteEvidence = null
+
+    if (portfolioUrl) {
+      websiteEvidence = await scanWebsiteToCareerEvidence(portfolioUrl, urls)
     }
 
-    const extractedData = await extractCareerData(combinedText, urls)
-    return NextResponse.json(extractedData)
+    // If there is no website, still normalize resume/document evidence into the
+    // same canonical schema used by website scans.
+    const pages = websiteEvidence?.evidence?.pagesScanned?.map(p => ({
+      url: p.url,
+      title: p.title,
+      kind: p.type,
+      text: '',
+      links: [],
+    })) ?? []
+
+    const evidence = websiteEvidence?.evidence ?? await normalizeCareerEvidence(
+      pages as any,
+      [],
+      urls,
+      documentTexts,
+    )
+
+    // Website scans may need the resume to corroborate roles/projects. Re-run
+    // normalization with both evidence sources when documents are present.
+    const normalizedEvidence = websiteEvidence && documentTexts.length
+      ? await normalizeCareerEvidence(
+          pages as any,
+          evidence.sources.filter(s => s.url).map(s => s.url!) ,
+          urls,
+          documentTexts,
+        )
+      : evidence
+
+    const extractedData = careerEvidenceToCareerAlphaInput(normalizedEvidence, [])
+    extractedData.rawText = [
+      extractedData.rawText,
+      ...texts,
+    ].filter(Boolean).join('\\n\\n').slice(0, 20000)
+
+    return NextResponse.json({
+      ...extractedData,
+      evidence: normalizedEvidence,
+    })
   } catch (err) {
     console.error('Extract error:', err)
     const message = err instanceof Error ? err.message : 'Unknown extraction error'
