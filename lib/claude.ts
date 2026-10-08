@@ -492,7 +492,7 @@ Your output is the first thing this person will read about their own career pote
   if (
     Array.isArray(blueprint.futurePaths) &&
     blueprint.futurePaths.length > 0 &&
-    (!Array.isArray(blueprint.gaps) || blueprint.gaps.length === 0)
+    (!Array.isArray(blueprint.gaps) || blueprint.futurePaths.some((fp) => !blueprint.gaps.some((g) => g.pathway === fp.title)))
   ) {
     try {
       const gapRecoveryPrompt =
@@ -517,7 +517,10 @@ Your output is the first thing this person will read about their own career pote
         .replace(/\n?\`\`\`$/m, '')
         .trim();
       const parsedRecovery = JSON.parse(recoveredClean) as { gaps?: Blueprint['gaps'] };
-      if (Array.isArray(parsedRecovery.gaps) && parsedRecovery.gaps.length > 0) {
+      // Only replace the model's own gaps if the recovery covers every path at least as well.
+      const covered = (gaps: Blueprint['gaps'] = []) => blueprint.futurePaths.filter((fp) => gaps.some((g) => g.pathway === fp.title)).length
+      if (Array.isArray(parsedRecovery.gaps) && parsedRecovery.gaps.length > 0 &&
+          covered(parsedRecovery.gaps) >= covered(blueprint.gaps)) {
         blueprint.gaps = parsedRecovery.gaps;
       }
     } catch (recoveryError) {
