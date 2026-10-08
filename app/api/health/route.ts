@@ -28,6 +28,24 @@ export async function GET() {
       const text = await generateWithGemini([{ text: 'Say ok' }])
       results.gemini_live = text.trim().slice(0, 20)
     } catch (e) { results.gemini_live = String(e).slice(0, 150) }
+
+    // The step that failed in the field: resume -> CareerEvidence, on a synthetic resume.
+    try {
+      const { normalizeCareerEvidence } = await import('@/lib/website-scanner')
+      const started = Date.now()
+      const ev = await normalizeCareerEvidence([], [], {}, [{
+        filename: 'resume.pdf',
+        text: 'Jane Test — Senior Product Designer. 2019-Present: Acme Corp, Senior Product Designer. Led the redesign of the checkout flow, lifting conversion 12%. 2016-2019: Globex, UX Designer. Built a design system used by 14 teams. Skills: Figma, user research, design systems, prototyping. Education: BDes, NID 2016.',
+      }])
+      results.normalize_live = `ok in ${Date.now() - started}ms: ${ev.timeline?.length ?? 0} roles, ${ev.projects?.length ?? 0} projects, ${ev.skills?.length ?? 0} skills, quality=${ev.evidenceQuality}`
+    } catch (e) { results.normalize_live = 'FAILED: ' + String(e).slice(0, 300) }
+
+    // The JSON-returning analysis calls go through routeCall.
+    try {
+      const { routeCall } = await import('@/lib/router')
+      const out = await routeCall('Return only JSON.', 'Return {"ok":true,"n":3}', 'analysis', 256)
+      results.route_live = JSON.stringify(JSON.parse(out.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()))
+    } catch (e) { results.route_live = 'FAILED: ' + String(e).slice(0, 300) }
   }
 
   return NextResponse.json(results)
