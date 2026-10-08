@@ -439,7 +439,6 @@ export function FootprintScreen() {
               <div className="sticky bottom-0 left-0 right-0 pt-3 pb-2"
                 style={{ background: 'linear-gradient(to top, var(--bg) 70%, transparent)' }}>
                 <NeonButton
-,
                   onClick={handleContinue}
                   disabled={!canProceedStep1 || validatingPortfolio}
                   fullWidth
