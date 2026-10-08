@@ -31,11 +31,11 @@ export async function extractCareerData(
   const extractionMessages = [
       {
         role: 'system' as const,
-        content: `You are an expert career data extraction engine. Your job is to extract EVERY piece of career information from a resume — missing a project or role is a critical failure. Be exhaustive and aggressive in your extraction.`,
+        content: `You are an expert career data extraction engine. Your job is to extract EVERY piece of career information from the supplied professional source. The source may be a resume, portfolio website, case studies, or a combination. Missing a project or role is a critical failure. Be exhaustive and aggressive in your extraction.`,
       },
       {
         role: 'user' as const,
-        content: `Extract ALL structured career information from the resume text below. Return ONLY valid JSON — no explanation, no markdown, no code fences.
+        content: `Extract ALL structured career information from the professional source below. For portfolio websites, treat project/case-study pages as primary evidence. Reconstruct roles, projects, skills, outcomes, domains, methods, leadership signals, and career progression from the source. Do not invent details that are not present. Return ONLY valid JSON — no explanation, no markdown, no code fences.
 
 Return JSON matching this schema exactly:
 {
