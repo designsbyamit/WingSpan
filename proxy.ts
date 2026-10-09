@@ -47,6 +47,10 @@ export async function proxy(request: NextRequest): Promise<NextResponse | undefi
   // Check session
   const session = await getSession()
   if (!session) {
+    // API callers get a machine-readable 401, not an HTML login page.
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
     const loginUrl = new URL('/login', request.url)
     loginUrl.searchParams.set('redirect', pathname)
     return NextResponse.redirect(loginUrl)
