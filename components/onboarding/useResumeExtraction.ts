@@ -28,6 +28,7 @@ export function useResumeExtraction() {
   const { dispatch } = useWingspan()
   const [status, setStatus] = useState<ExtractionStatus>('idle')
   const [error, setError] = useState<string | null>(null)
+  const [errorCode, setErrorCode] = useState<string | null>(null)
   const [data, setData] = useState<ExtractedCareerData | null>(null)
   const [startedAt, setStartedAt] = useState<number | null>(null)
 
@@ -52,6 +53,7 @@ export function useResumeExtraction() {
     statusRef.current = 'reading'
     setStatus('reading')
     setError(null)
+    setErrorCode(null)
     setData(null)
     setStartedAt(Date.now())
     dispatch({ type: 'CLEAR_ERROR' })
@@ -68,7 +70,8 @@ export function useResumeExtraction() {
         formData.append('urls', JSON.stringify(urls))
         const res = await fetch('/api/extract', { method: 'POST', body: formData, signal: controller.signal })
         const body = await readJson(res)
-        if (!res.ok) throw new Error(body?.error || 'We could not read that file.')
+        if (res.status === 413) { setErrorCode('TOO_LARGE'); throw new Error('That file is too large to upload. Export your resume again as a smaller PDF (under 4 MB) and try again.') }
+        if (!res.ok) { setErrorCode(typeof body?.code === 'string' ? body.code : null); throw new Error(body?.error || 'We could not read that file.') }
         if (controller.signal.aborted) return
         const extracted = body as ExtractedCareerData
         dispatch({ type: 'SET_EXTRACTED_DATA', data: extracted })
@@ -80,7 +83,7 @@ export function useResumeExtraction() {
         setBoth('done')
       } catch (err) {
         if (controller.signal.aborted) return
-        const message = err instanceof Error ? err.message : String(err)
+        const message = err instanceof TypeError ? 'We lost the connection while uploading. Check your internet and try again.' : err instanceof Error ? err.message : String(err)
         dispatch({
           type: 'ADD_ACTIVITY',
           event: { source: 'extract', status: 'error', label: 'Could not read the resume', detail: message },
@@ -100,11 +103,11 @@ export function useResumeExtraction() {
     keyRef.current = null
     lastInput.current = null
     statusRef.current = 'idle'
-    setStatus('idle'); setError(null); setData(null); setStartedAt(null)
+    setStatus('idle'); setError(null); setErrorCode(null); setData(null); setStartedAt(null)
   }, [])
 
   // Leaving the flow mid-read: stop the request so a late response can't overwrite newer state.
   useEffect(() => () => abortRef.current?.abort(), [])
 
-  return { status, error, data, startedAt, start, retry, cancel }
+  return { status, error, errorCode, data, startedAt, start, retry, cancel }
 }

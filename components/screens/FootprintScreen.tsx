@@ -5,6 +5,8 @@ import { ArrowRight, ChevronDown, ChevronUp, Link2, Upload } from 'lucide-react'
 import { useWingspan } from '@/context/WingspanContext'
 import { cancelCareerPipeline, runCareerPipeline } from '@/lib/pipeline'
 import { MIN_INTERESTS, MAX_INTERESTS } from '@/lib/interests'
+import { FILE_PROBLEMS, type UploadProblemCode } from '@/lib/upload-rules'
+import { AlertCircle } from 'lucide-react'
 import type { ExtractedCareerData } from '@/types/wingspan'
 import { ResumeDrop } from '@/components/onboarding/ResumeDrop'
 import { FocusTabs, SelectedFocus, focusHelper } from '@/components/onboarding/InterestPicker'
@@ -153,6 +155,7 @@ export function FootprintScreen() {
   const canContinue = !!primaryFile || hasPortfolioLink
   const enoughInterests = state.interests.length >= MIN_INTERESTS
   const extractionFailed = extraction.status === 'error'
+  const fileProblem = extractionFailed && FILE_PROBLEMS.includes(extraction.errorCode as UploadProblemCode)
 
   // After a step change, move focus to the new heading so keyboard and screen-reader users land in context.
   const focusHeading = () => requestAnimationFrame(() => headingRef.current?.focus())
@@ -189,6 +192,14 @@ export function FootprintScreen() {
   const retryExtraction = () => { setWaiting(false); extraction.retry() }
 
   const transition = { duration: 0.22, ease: [0.2, 0, 0, 1] as const }
+
+  // The file itself is the problem: clear it and go back to choose another.
+  const chooseAnother = () => {
+    extraction.cancel()
+    launched.current = false
+    dispatch({ type: 'SET_FILES', files: [] })
+    setStep('upload')
+  }
 
   const startOver = () => {
     cancelCareerPipeline()
@@ -259,6 +270,24 @@ export function FootprintScreen() {
                   </p>
                 </div>
 
+                {extractionFailed && (
+                  <div role="alert" className="flex flex-col gap-3 rounded-[12px] border border-red-400/25 bg-red-400/[0.06] p-4">
+                    <div className="flex gap-2.5">
+                      <AlertCircle size={16} className="mt-0.5 flex-shrink-0 text-red-300" aria-hidden />
+                      <div>
+                        <p className="text-sm font-semibold text-[var(--text-primary)]">
+                          {fileProblem ? "We can't use this file" : "We couldn't read your resume"}
+                        </p>
+                        <p className="mt-1 text-[13px] leading-relaxed text-[var(--text-secondary)]">{extraction.error}</p>
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2 pl-[26px]">
+                      <button type="button" onClick={chooseAnother} className={cx(fileProblem ? primaryButton : quietButton, 'py-2 text-[13px]')}>Upload a different file</button>
+                      {!fileProblem && <button type="button" onClick={retryExtraction} className={cx(primaryButton, 'py-2 text-[13px]')}>Try again</button>}
+                    </div>
+                  </div>
+                )}
+
                 <FocusTabs
                   status={extraction.status}
                   data={extraction.status === 'done' ? extraction.data : null}
@@ -286,7 +315,7 @@ export function FootprintScreen() {
       ) : step === 'upload' ? (
         <FlowFooter
           message={canContinue ? 'Reading starts when you continue.' : 'Add your resume to continue.'}
-          hint={primaryFile ? primaryFile.name : 'PDF or Word document, up to a few pages.'}
+          hint={primaryFile ? primaryFile.name : 'PDF or Word (.docx), up to 4 MB.'}
           actions={
             <button type="button" onClick={handleContinue} disabled={!canContinue} className={primaryButton}>
               Continue <ArrowRight size={15} aria-hidden />
@@ -300,16 +329,22 @@ export function FootprintScreen() {
           role="status"
           message={`${n} of ${MAX_INTERESTS} focus areas chosen`}
           hint={
-            extractionFailed ? 'We could not read your resume. Try again or upload a different file.'
+            extractionFailed ? (fileProblem ? 'This file cannot be used. Upload a different resume to continue.' : 'We could not read your resume. Try again or upload a different file.')
             : extraction.status === 'reading' ? `${focusHelper(n)} Reading your resume in the background…`
             : focusHelper(n)
           }
           actions={<>
             <button type="button" onClick={() => goTo('upload')} className={quietButton}>Back</button>
             {cancelButton}
-            <button type="button" onClick={handleBuild} disabled={!enoughInterests || extractionFailed} className={primaryButton}>
-              Build my Blueprint
-            </button>
+            {extractionFailed ? (
+              <button type="button" onClick={fileProblem ? chooseAnother : retryExtraction} className={primaryButton}>
+                {fileProblem ? 'Upload a different file' : 'Try again'}
+              </button>
+            ) : (
+              <button type="button" onClick={handleBuild} disabled={!enoughInterests} className={primaryButton}>
+                Build my Blueprint
+              </button>
+            )}
           </>}
         />
       )}

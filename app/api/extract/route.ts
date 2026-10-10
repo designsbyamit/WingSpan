@@ -8,6 +8,7 @@ import { normalizeExtracted } from '@/lib/extracted-shape'
 import { saveIngestion } from '@/lib/ingestion-store'
 import type { IngestSource } from '@/lib/ingestion-mapping'
 import { friendlyProviderError } from '@/lib/router'
+import { UploadProblem, checkFileBasics, checkLooksLikeResume, extensionOf, sniffMismatch } from '@/lib/upload-rules'
 
 export const maxDuration = 120
 
@@ -48,8 +49,29 @@ export async function POST(req: NextRequest) {
     const fileMeta = new Map<string, { sizeBytes: number; mimeType: string }>()
 
     for (const file of files) {
+      const isSheet = /\.(xlsx|xls|csv)$/i.test(file.name)
+      // Resume-type files get the full set of checks; spreadsheets are project data and keep their own path.
+      if (!isSheet) {
+        const basic = checkFileBasics(file.name, file.size)
+        if (basic) throw basic
+      }
       const buffer = Buffer.from(await file.arrayBuffer())
-      const text = await parseFile(buffer, file.name, file.type)
+      if (!isSheet && sniffMismatch(extensionOf(file.name), buffer.subarray(0, 8))) {
+        throw new UploadProblem('UNREADABLE', `That file is named .${extensionOf(file.name)} but is not a real ${extensionOf(file.name).toUpperCase()} document. Open your resume and export it again as a PDF or Word file.`)
+      }
+      let text: string
+      try {
+        text = await parseFile(buffer, file.name, file.type)
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e)
+        if (/password|encrypt/i.test(msg)) throw new UploadProblem('PASSWORD_PROTECTED', 'This file is password protected, so we cannot read it. Remove the password, save a copy, and upload that.')
+        if (/image-based|empty/i.test(msg)) throw new UploadProblem('TOO_LITTLE', 'This PDF seems to be a scan or image, so there is no text for us to read. Export a text-based PDF from your editor, or upload a Word file.')
+        throw new UploadProblem('UNREADABLE', "We couldn't open that file. It may be damaged. Export your resume again as a PDF or Word file and try again.")
+      }
+      if (!isSheet) {
+        const looks = checkLooksLikeResume(text)
+        if (looks && !portfolioUrl) throw looks
+      }
 
       fileMeta.set(file.name, { sizeBytes: file.size, mimeType: file.type })
       if (text.trim()) {
@@ -103,6 +125,12 @@ export async function POST(req: NextRequest) {
       sourceSummary: bundle.careerAlpha.sourceSummary,
     })
   } catch (err) {
+    if (err instanceof UploadProblem) {
+      return NextResponse.json({ error: err.message, code: err.code }, { status: err.status })
+    }
+    if (err instanceof Error && /could not find enough career information/i.test(err.message)) {
+      return NextResponse.json({ error: "We couldn't find roles, projects or skills in that file. Check it is your resume and that it contains readable text.", code: 'TOO_LITTLE' }, { status: 422 })
+    }
     console.error('Extract error:', err)
     const message = err instanceof Error ? friendlyProviderError(err) : 'Unknown extraction error'
     return NextResponse.json(

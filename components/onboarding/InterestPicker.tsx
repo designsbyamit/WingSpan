@@ -94,20 +94,9 @@ export function SuggestedInterests({ status, data, error, onRetry, onReupload }:
 
   if (status === 'error') {
     return (
-      <div role="alert" className="flex flex-col gap-3 rounded-[12px] border border-red-400/25 bg-red-400/[0.06] p-4">
-        <div className="flex gap-2.5">
-          <AlertCircle size={16} className="mt-0.5 flex-shrink-0 text-red-300" aria-hidden />
-          <div>
-            <p className="text-sm font-semibold text-[var(--text-primary)]">We couldn&apos;t read your resume</p>
-            <p className="mt-1 text-[13px] leading-relaxed text-[var(--text-secondary)]">{error}</p>
-            <p className="mt-1 text-xs text-[var(--text-muted)]">Try again, or go back and upload a different file.</p>
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-2 pl-[26px]">
-          <button type="button" onClick={onRetry} className={cx(quietButton, 'py-2 text-[13px]')}>Try again</button>
-          <button type="button" onClick={onReupload} className={cx(quietButton, 'py-2 text-[13px]')}>Upload a different file</button>
-        </div>
-      </div>
+      <p className="rounded-[12px] border border-[var(--border-ws)] bg-[var(--surface)] px-4 py-3 text-[13px] text-[var(--text-secondary)]" role="status">
+        Suggestions are not available until your resume can be read. See the message above, or choose from all focus areas.
+      </p>
     )
   }
 
