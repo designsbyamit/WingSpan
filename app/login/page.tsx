@@ -1,12 +1,35 @@
 'use client'
 
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 
 function LoginForm() {
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') ?? '/'
   const error = searchParams.get('error')
+
+  const [mode, setMode] = useState<'login' | 'signup'>('login')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [formError, setFormError] = useState('')
+
+  async function handleEmail(e: React.FormEvent) {
+    e.preventDefault()
+    setBusy(true); setFormError('')
+    try {
+      const res = await fetch(`/api/auth/${mode}`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim().toLowerCase(), password, name }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) { setFormError(data.error ?? 'Something went wrong. Please try again.'); return }
+      window.location.href = redirect.startsWith('/') ? redirect : '/'
+    } catch {
+      setFormError('Network error. Please try again.')
+    } finally { setBusy(false) }
+  }
 
   async function handleGoogle() {
     try {
@@ -32,6 +55,32 @@ function LoginForm() {
         </div>
 
         <div className="w-full rounded-2xl border border-[var(--border-ws)] p-6 flex flex-col gap-4" style={{ backgroundColor: '#353B45' }}>
+          <form onSubmit={handleEmail} className="flex flex-col gap-3">
+            {mode === 'signup' && (
+              <input value={name} onChange={e => setName(e.target.value)} placeholder="Name (optional)" autoComplete="name"
+                className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border border-[var(--border-ws)] text-white placeholder:text-[var(--text-muted)]" />
+            )}
+            <input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" autoComplete="email"
+              className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border border-[var(--border-ws)] text-white placeholder:text-[var(--text-muted)]" />
+            <input type="password" required minLength={8} value={password} onChange={e => setPassword(e.target.value)}
+              placeholder="Password (8+ characters)" autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
+              className="w-full px-4 py-3 rounded-xl text-sm bg-white/5 border border-[var(--border-ws)] text-white placeholder:text-[var(--text-muted)]" />
+            <button type="submit" disabled={busy}
+              className="w-full py-3 rounded-xl text-sm font-semibold disabled:opacity-60"
+              style={{ background: '#B6FF2E', color: '#0d0d0d' }}>
+              {busy ? 'Please wait…' : mode === 'login' ? 'Sign in' : 'Create account'}
+            </button>
+            {formError && <p className="text-xs text-red-400 text-center font-jakarta">{formError}</p>}
+            <button type="button" onClick={() => { setMode(mode === 'login' ? 'signup' : 'login'); setFormError('') }}
+              className="text-xs text-[var(--text-muted)] hover:text-white font-jakarta">
+              {mode === 'login' ? 'New here? Create an account' : 'Already have an account? Sign in'}
+            </button>
+          </form>
+
+          <div className="flex items-center gap-3 text-[10px] text-[var(--text-muted)]">
+            <span className="flex-1 h-px bg-[var(--border-ws)]" />or<span className="flex-1 h-px bg-[var(--border-ws)]" />
+          </div>
+
           <button
             type="button"
             onClick={handleGoogle}
@@ -52,9 +101,6 @@ function LoginForm() {
             </p>
           )}
 
-          <p className="text-center text-xs text-[var(--text-muted)] font-jakarta">
-            No password. No OTP. Just Google.
-          </p>
         </div>
       </div>
     </div>
