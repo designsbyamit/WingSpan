@@ -715,6 +715,23 @@ export type EnumFeedbackTargetWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumFeedbackTargetFilter<$PrismaModel>
 }
 
+export type EnumMarketCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketCategory | Prisma.EnumMarketCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketCategory[] | Prisma.ListEnumMarketCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketCategory[] | Prisma.ListEnumMarketCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketCategoryFilter<$PrismaModel> | $Enums.MarketCategory
+}
+
+export type EnumMarketCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketCategory | Prisma.EnumMarketCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketCategory[] | Prisma.ListEnumMarketCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketCategory[] | Prisma.ListEnumMarketCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketCategoryWithAggregatesFilter<$PrismaModel> | $Enums.MarketCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketCategoryFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -1351,6 +1368,23 @@ export type NestedEnumFeedbackTargetWithAggregatesFilter<$PrismaModel = never> =
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumFeedbackTargetFilter<$PrismaModel>
   _max?: Prisma.NestedEnumFeedbackTargetFilter<$PrismaModel>
+}
+
+export type NestedEnumMarketCategoryFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketCategory | Prisma.EnumMarketCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketCategory[] | Prisma.ListEnumMarketCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketCategory[] | Prisma.ListEnumMarketCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketCategoryFilter<$PrismaModel> | $Enums.MarketCategory
+}
+
+export type NestedEnumMarketCategoryWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MarketCategory | Prisma.EnumMarketCategoryFieldRefInput<$PrismaModel>
+  in?: $Enums.MarketCategory[] | Prisma.ListEnumMarketCategoryFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MarketCategory[] | Prisma.ListEnumMarketCategoryFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMarketCategoryWithAggregatesFilter<$PrismaModel> | $Enums.MarketCategory
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMarketCategoryFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMarketCategoryFilter<$PrismaModel>
 }
 
 

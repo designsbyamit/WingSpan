@@ -1195,3 +1195,91 @@ model BlueprintSnapshot {
   @@index([userId, createdAt])
   @@index([analysisRunId])
 }
+
+// ---------------------------------------------------------------- Job-market database
+// Crawled / ingested market evidence, independent of any user. Refreshed by /api/cron/market-refresh.
+
+enum MarketCategory {
+  INDUSTRY_PERFORMANCE // industry performance, skills assessments, AI impact studies
+  JOB_MARKET           // postings, hiring volumes, salaries, labour statistics
+}
+
+model MarketDataSource {
+  id            String              @id @default(cuid())
+  key           String              @unique
+  name          String
+  publisher     String
+  category      MarketCategory
+  kind          String // INDEX | PAGE | CSV | API | MANUAL
+  url           String
+  region        String              @default("Global")
+  licence       String?
+  reliability   Float               @default(0.6) // 0-1, how much to trust this publisher's numbers
+  cadenceDays   Int                 @default(10)
+  enabled       Boolean             @default(true)
+  config        Json?
+  notes         String?
+  lastFetchedAt DateTime?
+  lastStatus    String?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  documents     MarketDataDocument[]
+  observations  MarketObservation[]
+}
+
+model MarketDataDocument {
+  id           String              @id @default(cuid())
+  sourceId     String
+  url          String
+  title        String?
+  publishedAt  DateTime?
+  fetchedAt    DateTime            @default(now())
+  contentHash  String
+  wordCount    Int                 @default(0)
+  status       String // OK | FAILED | EMPTY
+  error        String?
+  source       MarketDataSource    @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  observations MarketObservation[]
+
+  @@unique([sourceId, url])
+  @@index([fetchedAt])
+}
+
+model MarketObservation {
+  id            String              @id @default(cuid())
+  fingerprint   String              @unique
+  sourceId      String
+  documentId    String?
+  category      MarketCategory
+  metric        String // controlled vocabulary, see lib/market/vocabulary.ts
+  subject       String // role, skill, sector or "all"
+  region        String
+  value         Float?
+  unit          String?
+  period        String? // "2026", "2026-H1", "2023-2026"
+  statement     String // short paraphrase of the finding
+  reliability   Float
+  observedAt    DateTime? // when the figure applies / was published
+  firstSeenAt   DateTime            @default(now())
+  lastSeenAt    DateTime            @default(now())
+  supersededAt  DateTime?
+  source        MarketDataSource    @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  document      MarketDataDocument? @relation(fields: [documentId], references: [id], onDelete: SetNull)
+
+  @@index([category, metric])
+  @@index([subject])
+  @@index([region])
+  @@index([observedAt])
+}
+
+model MarketIngestionRun {
+  id              String    @id @default(cuid())
+  trigger         String // cron | manual | health
+  startedAt       DateTime  @default(now())
+  finishedAt      DateTime?
+  status          String // RUNNING | OK | PARTIAL | FAILED
+  sourcesTried    Int       @default(0)
+  documentsNew    Int       @default(0)
+  observationsNew Int       @default(0)
+  details         Json?
+}

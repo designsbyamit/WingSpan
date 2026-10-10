@@ -220,3 +220,11 @@ export const FeedbackTarget = {
 } as const
 
 export type FeedbackTarget = (typeof FeedbackTarget)[keyof typeof FeedbackTarget]
+
+
+export const MarketCategory = {
+  INDUSTRY_PERFORMANCE: 'INDUSTRY_PERFORMANCE',
+  JOB_MARKET: 'JOB_MARKET'
+} as const
+
+export type MarketCategory = (typeof MarketCategory)[keyof typeof MarketCategory]

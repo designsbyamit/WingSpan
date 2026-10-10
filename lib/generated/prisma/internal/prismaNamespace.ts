@@ -459,7 +459,11 @@ export const ModelName = {
   AuditEvent: 'AuditEvent',
   Feedback: 'Feedback',
   UsageLedger: 'UsageLedger',
-  BlueprintSnapshot: 'BlueprintSnapshot'
+  BlueprintSnapshot: 'BlueprintSnapshot',
+  MarketDataSource: 'MarketDataSource',
+  MarketDataDocument: 'MarketDataDocument',
+  MarketObservation: 'MarketObservation',
+  MarketIngestionRun: 'MarketIngestionRun'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -475,7 +479,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "domain" | "humanPattern" | "competency" | "skill" | "concept" | "conceptPrerequisite" | "principle" | "experience" | "challenge" | "asset" | "careerLevel" | "learningPath" | "learningPathEntry" | "conceptOnSkill" | "conceptOnHumanPattern" | "conceptOnPrinciple" | "conceptOnExperience" | "skillOnCompetency" | "skillOnCareerLevel" | "experienceOnCompetency" | "experienceOnHumanPattern" | "experienceOnPrinciple" | "challengeOnSkill" | "challengeOnCompetency" | "user" | "magicLinkToken" | "userCompetency" | "userSkill" | "userConceptMastery" | "learningSession" | "mentorMessage" | "userLearningPath" | "aIMentorContext" | "challengeSubmission" | "sourceDocument" | "extractionRun" | "role" | "project" | "education" | "skillClaim" | "analysisRun" | "agentOutput" | "evidence" | "evidenceLink" | "capability" | "capabilityEvidence" | "careerDnaSnapshot" | "dnaDimension" | "dnaDimensionEvidence" | "marketDirection" | "marketSignal" | "capabilityRequirement" | "careerCandidate" | "candidateEvidence" | "chosenBet" | "roadmap" | "roadmapMilestone" | "milestoneLink" | "userCapabilityProgress" | "auditEvent" | "feedback" | "usageLedger" | "blueprintSnapshot"
+    modelProps: "domain" | "humanPattern" | "competency" | "skill" | "concept" | "conceptPrerequisite" | "principle" | "experience" | "challenge" | "asset" | "careerLevel" | "learningPath" | "learningPathEntry" | "conceptOnSkill" | "conceptOnHumanPattern" | "conceptOnPrinciple" | "conceptOnExperience" | "skillOnCompetency" | "skillOnCareerLevel" | "experienceOnCompetency" | "experienceOnHumanPattern" | "experienceOnPrinciple" | "challengeOnSkill" | "challengeOnCompetency" | "user" | "magicLinkToken" | "userCompetency" | "userSkill" | "userConceptMastery" | "learningSession" | "mentorMessage" | "userLearningPath" | "aIMentorContext" | "challengeSubmission" | "sourceDocument" | "extractionRun" | "role" | "project" | "education" | "skillClaim" | "analysisRun" | "agentOutput" | "evidence" | "evidenceLink" | "capability" | "capabilityEvidence" | "careerDnaSnapshot" | "dnaDimension" | "dnaDimensionEvidence" | "marketDirection" | "marketSignal" | "capabilityRequirement" | "careerCandidate" | "candidateEvidence" | "chosenBet" | "roadmap" | "roadmapMilestone" | "milestoneLink" | "userCapabilityProgress" | "auditEvent" | "feedback" | "usageLedger" | "blueprintSnapshot" | "marketDataSource" | "marketDataDocument" | "marketObservation" | "marketIngestionRun"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -5141,6 +5145,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    MarketDataSource: {
+      payload: Prisma.$MarketDataSourcePayload<ExtArgs>
+      fields: Prisma.MarketDataSourceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MarketDataSourceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataSourcePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MarketDataSourceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataSourcePayload>
+        }
+        findFirst: {
+          args: Prisma.MarketDataSourceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataSourcePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MarketDataSourceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataSourcePayload>
+        }
+        findMany: {
+          args: Prisma.MarketDataSourceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataSourcePayload>[]
+        }
+        create: {
+          args: Prisma.MarketDataSourceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataSourcePayload>
+        }
+        createMany: {
+          args: Prisma.MarketDataSourceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MarketDataSourceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataSourcePayload>[]
+        }
+        delete: {
+          args: Prisma.MarketDataSourceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataSourcePayload>
+        }
+        update: {
+          args: Prisma.MarketDataSourceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataSourcePayload>
+        }
+        deleteMany: {
+          args: Prisma.MarketDataSourceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MarketDataSourceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MarketDataSourceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataSourcePayload>[]
+        }
+        upsert: {
+          args: Prisma.MarketDataSourceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataSourcePayload>
+        }
+        aggregate: {
+          args: Prisma.MarketDataSourceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMarketDataSource>
+        }
+        groupBy: {
+          args: Prisma.MarketDataSourceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketDataSourceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MarketDataSourceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketDataSourceCountAggregateOutputType> | number
+        }
+      }
+    }
+    MarketDataDocument: {
+      payload: Prisma.$MarketDataDocumentPayload<ExtArgs>
+      fields: Prisma.MarketDataDocumentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MarketDataDocumentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataDocumentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MarketDataDocumentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataDocumentPayload>
+        }
+        findFirst: {
+          args: Prisma.MarketDataDocumentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataDocumentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MarketDataDocumentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataDocumentPayload>
+        }
+        findMany: {
+          args: Prisma.MarketDataDocumentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataDocumentPayload>[]
+        }
+        create: {
+          args: Prisma.MarketDataDocumentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataDocumentPayload>
+        }
+        createMany: {
+          args: Prisma.MarketDataDocumentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MarketDataDocumentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataDocumentPayload>[]
+        }
+        delete: {
+          args: Prisma.MarketDataDocumentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataDocumentPayload>
+        }
+        update: {
+          args: Prisma.MarketDataDocumentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataDocumentPayload>
+        }
+        deleteMany: {
+          args: Prisma.MarketDataDocumentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MarketDataDocumentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MarketDataDocumentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataDocumentPayload>[]
+        }
+        upsert: {
+          args: Prisma.MarketDataDocumentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketDataDocumentPayload>
+        }
+        aggregate: {
+          args: Prisma.MarketDataDocumentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMarketDataDocument>
+        }
+        groupBy: {
+          args: Prisma.MarketDataDocumentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketDataDocumentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MarketDataDocumentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketDataDocumentCountAggregateOutputType> | number
+        }
+      }
+    }
+    MarketObservation: {
+      payload: Prisma.$MarketObservationPayload<ExtArgs>
+      fields: Prisma.MarketObservationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MarketObservationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketObservationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MarketObservationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketObservationPayload>
+        }
+        findFirst: {
+          args: Prisma.MarketObservationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketObservationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MarketObservationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketObservationPayload>
+        }
+        findMany: {
+          args: Prisma.MarketObservationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketObservationPayload>[]
+        }
+        create: {
+          args: Prisma.MarketObservationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketObservationPayload>
+        }
+        createMany: {
+          args: Prisma.MarketObservationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MarketObservationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketObservationPayload>[]
+        }
+        delete: {
+          args: Prisma.MarketObservationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketObservationPayload>
+        }
+        update: {
+          args: Prisma.MarketObservationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketObservationPayload>
+        }
+        deleteMany: {
+          args: Prisma.MarketObservationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MarketObservationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MarketObservationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketObservationPayload>[]
+        }
+        upsert: {
+          args: Prisma.MarketObservationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketObservationPayload>
+        }
+        aggregate: {
+          args: Prisma.MarketObservationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMarketObservation>
+        }
+        groupBy: {
+          args: Prisma.MarketObservationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketObservationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MarketObservationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketObservationCountAggregateOutputType> | number
+        }
+      }
+    }
+    MarketIngestionRun: {
+      payload: Prisma.$MarketIngestionRunPayload<ExtArgs>
+      fields: Prisma.MarketIngestionRunFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MarketIngestionRunFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketIngestionRunPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MarketIngestionRunFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketIngestionRunPayload>
+        }
+        findFirst: {
+          args: Prisma.MarketIngestionRunFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketIngestionRunPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MarketIngestionRunFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketIngestionRunPayload>
+        }
+        findMany: {
+          args: Prisma.MarketIngestionRunFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketIngestionRunPayload>[]
+        }
+        create: {
+          args: Prisma.MarketIngestionRunCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketIngestionRunPayload>
+        }
+        createMany: {
+          args: Prisma.MarketIngestionRunCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MarketIngestionRunCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketIngestionRunPayload>[]
+        }
+        delete: {
+          args: Prisma.MarketIngestionRunDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketIngestionRunPayload>
+        }
+        update: {
+          args: Prisma.MarketIngestionRunUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketIngestionRunPayload>
+        }
+        deleteMany: {
+          args: Prisma.MarketIngestionRunDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MarketIngestionRunUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MarketIngestionRunUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketIngestionRunPayload>[]
+        }
+        upsert: {
+          args: Prisma.MarketIngestionRunUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MarketIngestionRunPayload>
+        }
+        aggregate: {
+          args: Prisma.MarketIngestionRunAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMarketIngestionRun>
+        }
+        groupBy: {
+          args: Prisma.MarketIngestionRunGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketIngestionRunGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MarketIngestionRunCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MarketIngestionRunCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -6008,6 +6308,84 @@ export const BlueprintSnapshotScalarFieldEnum = {
 export type BlueprintSnapshotScalarFieldEnum = (typeof BlueprintSnapshotScalarFieldEnum)[keyof typeof BlueprintSnapshotScalarFieldEnum]
 
 
+export const MarketDataSourceScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  name: 'name',
+  publisher: 'publisher',
+  category: 'category',
+  kind: 'kind',
+  url: 'url',
+  region: 'region',
+  licence: 'licence',
+  reliability: 'reliability',
+  cadenceDays: 'cadenceDays',
+  enabled: 'enabled',
+  config: 'config',
+  notes: 'notes',
+  lastFetchedAt: 'lastFetchedAt',
+  lastStatus: 'lastStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketDataSourceScalarFieldEnum = (typeof MarketDataSourceScalarFieldEnum)[keyof typeof MarketDataSourceScalarFieldEnum]
+
+
+export const MarketDataDocumentScalarFieldEnum = {
+  id: 'id',
+  sourceId: 'sourceId',
+  url: 'url',
+  title: 'title',
+  publishedAt: 'publishedAt',
+  fetchedAt: 'fetchedAt',
+  contentHash: 'contentHash',
+  wordCount: 'wordCount',
+  status: 'status',
+  error: 'error'
+} as const
+
+export type MarketDataDocumentScalarFieldEnum = (typeof MarketDataDocumentScalarFieldEnum)[keyof typeof MarketDataDocumentScalarFieldEnum]
+
+
+export const MarketObservationScalarFieldEnum = {
+  id: 'id',
+  fingerprint: 'fingerprint',
+  sourceId: 'sourceId',
+  documentId: 'documentId',
+  category: 'category',
+  metric: 'metric',
+  subject: 'subject',
+  region: 'region',
+  value: 'value',
+  unit: 'unit',
+  period: 'period',
+  statement: 'statement',
+  reliability: 'reliability',
+  observedAt: 'observedAt',
+  firstSeenAt: 'firstSeenAt',
+  lastSeenAt: 'lastSeenAt',
+  supersededAt: 'supersededAt'
+} as const
+
+export type MarketObservationScalarFieldEnum = (typeof MarketObservationScalarFieldEnum)[keyof typeof MarketObservationScalarFieldEnum]
+
+
+export const MarketIngestionRunScalarFieldEnum = {
+  id: 'id',
+  trigger: 'trigger',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
+  status: 'status',
+  sourcesTried: 'sourcesTried',
+  documentsNew: 'documentsNew',
+  observationsNew: 'observationsNew',
+  details: 'details'
+} as const
+
+export type MarketIngestionRunScalarFieldEnum = (typeof MarketIngestionRunScalarFieldEnum)[keyof typeof MarketIngestionRunScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -6418,6 +6796,20 @@ export type EnumFeedbackTargetFieldRefInput<$PrismaModel> = FieldRefInputType<$P
 export type ListEnumFeedbackTargetFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FeedbackTarget[]'>
     
 
+
+/**
+ * Reference to a field of type 'MarketCategory'
+ */
+export type EnumMarketCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketCategory'>
+    
+
+
+/**
+ * Reference to a field of type 'MarketCategory[]'
+ */
+export type ListEnumMarketCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MarketCategory[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -6632,6 +7024,10 @@ export type GlobalOmitConfig = {
   feedback?: Prisma.FeedbackOmit
   usageLedger?: Prisma.UsageLedgerOmit
   blueprintSnapshot?: Prisma.BlueprintSnapshotOmit
+  marketDataSource?: Prisma.MarketDataSourceOmit
+  marketDataDocument?: Prisma.MarketDataDocumentOmit
+  marketObservation?: Prisma.MarketObservationOmit
+  marketIngestionRun?: Prisma.MarketIngestionRunOmit
 }
 
 /* Types for Logging */

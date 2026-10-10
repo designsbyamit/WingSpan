@@ -332,3 +332,23 @@ export type UsageLedger = Prisma.UsageLedgerModel
  * 
  */
 export type BlueprintSnapshot = Prisma.BlueprintSnapshotModel
+/**
+ * Model MarketDataSource
+ * 
+ */
+export type MarketDataSource = Prisma.MarketDataSourceModel
+/**
+ * Model MarketDataDocument
+ * 
+ */
+export type MarketDataDocument = Prisma.MarketDataDocumentModel
+/**
+ * Model MarketObservation
+ * 
+ */
+export type MarketObservation = Prisma.MarketObservationModel
+/**
+ * Model MarketIngestionRun
+ * 
+ */
+export type MarketIngestionRun = Prisma.MarketIngestionRunModel

@@ -3,6 +3,7 @@ import { aggregatorAgent, careerAlphaAgent, marketIntelligenceAgent, careerDirec
 import { experienceFacts, groundingRules } from '@/lib/experience'
 import { normalizeExtracted } from '@/lib/extracted-shape'
 import { computeArchetypeFingerprint } from '@/lib/career-alpha'
+import { getMarketBriefing, type MarketBriefing } from '@/lib/market/context'
 import { WEIGHTS, SELECTION } from '@/lib/career-scoring'
 export { betsFrom, type Bet } from '@/lib/bets'
 import type { ExtractedCareerData, CareerAlphaIntelligence, CareerStage } from '@/types/wingspan'
@@ -16,7 +17,7 @@ import type {
 // produces the overall recommendation (the Career Alpha view the rest of the app already understands).
 
 export type AgentId = DeepAnalysisAgent['id']
-export interface AgentRun { evidenceGraph: EvidenceGraph; careerDNA: CareerDNA; marketGraph: MarketGraph; careerMap: CareerMap; timings: Partial<Record<AgentId, number>> }
+export interface AgentRun { evidenceGraph: EvidenceGraph; careerDNA: CareerDNA; marketGraph: MarketGraph; careerMap: CareerMap; timings: Partial<Record<AgentId, number>>; marketData?: MarketBriefing | null }
 export type AgentProgress = (id: AgentId, status: 'start' | 'done', note?: string) => void
 
 const pct = (n: number | undefined) => Math.round((Number.isFinite(n as number) ? (n as number) : 0) * 100)
@@ -29,6 +30,7 @@ export async function runAgents(rawData: ExtractedCareerData, interests: string[
   const facts = experienceFacts(data.timeline)
   const grounding = groundingRules(facts, interests)
   const timings: AgentRun['timings'] = {}
+  const briefingOut: { briefing?: MarketBriefing } = {}
 
   async function step<T>(id: AgentId, run: () => Promise<T>, note: (r: T) => string): Promise<T> {
     onProgress(id, 'start')
@@ -40,8 +42,13 @@ export async function runAgents(rawData: ExtractedCareerData, interests: string[
   }
 
   // The market view is independent of the person, so it runs alongside the evidence → DNA chain.
+  const hints = [...(data.geographySignals ?? []), ...(data.footprintSignals ?? [])]
   const marketP = step('market',
-    () => marketIntelligenceAgent([...(data.geographySignals ?? []), ...(data.footprintSignals ?? [])]),
+    async () => {
+      const briefing = await getMarketBriefing(hints)
+      briefingOut.briefing = briefing
+      return marketIntelligenceAgent(hints, briefing.lines)
+    },
     (m) => `Assessed ${m.directions.length} career directions against market signals`)
   const personP = (async () => {
     const evidenceGraph = await step('aggregator', () => aggregatorAgent(data, interests),
@@ -60,7 +67,7 @@ export async function runAgents(rawData: ExtractedCareerData, interests: string[
   const careerMap = await step('directions', () => careerDirectionGenerator(careerDNA, marketGraph, grounding),
     (c) => `Scored ${c.candidates.length} directions; picked ${c.safe.direction}, ${c.growth.direction}, ${c.bold.direction}`)
 
-  return { evidenceGraph, careerDNA, marketGraph, careerMap, timings }
+  return { evidenceGraph, careerDNA, marketGraph, careerMap, timings, marketData: briefingOut.briefing ?? null }
 }
 
 // ------------------------------------------------------------------ the Orchestrator
@@ -288,7 +295,9 @@ export function buildDeepAnalysis(run: AgentRun, out: OrchestratorOutput, orches
       patterns: top(g.patterns, 5), uncertainties: top(g.uncertainties, 4), contradictions: top(g.contradictions, 3),
     },
     market: {
-      basis: "Based on the model's general market knowledge. Live job-market and industry data feeds are not connected yet.",
+      basis: run.marketData && run.marketData.observations > 0
+        ? `Grounded in ${run.marketData.observations} dated observations from ${run.marketData.sources} published sources${run.marketData.latest ? ` (latest ${run.marketData.latest.toISOString().slice(0, 7)})` : ''}, refreshed about every 10 days. Where the data is silent the agent uses general market knowledge.`
+        : "Based on the model's general market knowledge; no stored market data was available for this run.",
       directions: top(rankedMarket, 8).map((x) => ({
         name: x.name, demand: Math.round(x.currentDemand), momentum: Math.round(x.momentum),
         future: Math.round(x.futurePotential), resilience: Math.round(x.resilience), thesis: x.futureThesis,

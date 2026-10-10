@@ -113,7 +113,11 @@ export const ModelName = {
   AuditEvent: 'AuditEvent',
   Feedback: 'Feedback',
   UsageLedger: 'UsageLedger',
-  BlueprintSnapshot: 'BlueprintSnapshot'
+  BlueprintSnapshot: 'BlueprintSnapshot',
+  MarketDataSource: 'MarketDataSource',
+  MarketDataDocument: 'MarketDataDocument',
+  MarketObservation: 'MarketObservation',
+  MarketIngestionRun: 'MarketIngestionRun'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -958,6 +962,84 @@ export const BlueprintSnapshotScalarFieldEnum = {
 } as const
 
 export type BlueprintSnapshotScalarFieldEnum = (typeof BlueprintSnapshotScalarFieldEnum)[keyof typeof BlueprintSnapshotScalarFieldEnum]
+
+
+export const MarketDataSourceScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  name: 'name',
+  publisher: 'publisher',
+  category: 'category',
+  kind: 'kind',
+  url: 'url',
+  region: 'region',
+  licence: 'licence',
+  reliability: 'reliability',
+  cadenceDays: 'cadenceDays',
+  enabled: 'enabled',
+  config: 'config',
+  notes: 'notes',
+  lastFetchedAt: 'lastFetchedAt',
+  lastStatus: 'lastStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MarketDataSourceScalarFieldEnum = (typeof MarketDataSourceScalarFieldEnum)[keyof typeof MarketDataSourceScalarFieldEnum]
+
+
+export const MarketDataDocumentScalarFieldEnum = {
+  id: 'id',
+  sourceId: 'sourceId',
+  url: 'url',
+  title: 'title',
+  publishedAt: 'publishedAt',
+  fetchedAt: 'fetchedAt',
+  contentHash: 'contentHash',
+  wordCount: 'wordCount',
+  status: 'status',
+  error: 'error'
+} as const
+
+export type MarketDataDocumentScalarFieldEnum = (typeof MarketDataDocumentScalarFieldEnum)[keyof typeof MarketDataDocumentScalarFieldEnum]
+
+
+export const MarketObservationScalarFieldEnum = {
+  id: 'id',
+  fingerprint: 'fingerprint',
+  sourceId: 'sourceId',
+  documentId: 'documentId',
+  category: 'category',
+  metric: 'metric',
+  subject: 'subject',
+  region: 'region',
+  value: 'value',
+  unit: 'unit',
+  period: 'period',
+  statement: 'statement',
+  reliability: 'reliability',
+  observedAt: 'observedAt',
+  firstSeenAt: 'firstSeenAt',
+  lastSeenAt: 'lastSeenAt',
+  supersededAt: 'supersededAt'
+} as const
+
+export type MarketObservationScalarFieldEnum = (typeof MarketObservationScalarFieldEnum)[keyof typeof MarketObservationScalarFieldEnum]
+
+
+export const MarketIngestionRunScalarFieldEnum = {
+  id: 'id',
+  trigger: 'trigger',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
+  status: 'status',
+  sourcesTried: 'sourcesTried',
+  documentsNew: 'documentsNew',
+  observationsNew: 'observationsNew',
+  details: 'details'
+} as const
+
+export type MarketIngestionRunScalarFieldEnum = (typeof MarketIngestionRunScalarFieldEnum)[keyof typeof MarketIngestionRunScalarFieldEnum]
 
 
 export const SortOrder = {

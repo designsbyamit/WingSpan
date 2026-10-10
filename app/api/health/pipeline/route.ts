@@ -3,6 +3,8 @@ import { computeCareerAlpha } from '@/lib/career-alpha'
 import { streamBlueprint } from '@/lib/claude'
 import { aggregatorAgent, careerAlphaAgent, marketIntelligenceAgent, careerDirectionGenerator } from '@/lib/v02-agents'
 import { runAgents, orchestratorAgent, toCareerAlpha, buildDeepAnalysis, betsFrom } from '@/lib/orchestrator'
+import { refreshMarketData } from '@/lib/market/ingest'
+import { db } from '@/lib/db'
 import type { ExtractedCareerData } from '@/types/wingspan'
 
 // Staging diagnostics: runs the four analysis agents on a synthetic profile and reports
@@ -85,6 +87,29 @@ export async function GET(req: NextRequest) {
       }
     }))
     return NextResponse.json({ ok: true, probes })
+  }
+
+  // ?flow=market runs the real market-data refresh against the staging database (add &force=1 to ignore cadence, &source=key for one source).
+  if (req.nextUrl.searchParams.get('flow') === 'market') {
+    try {
+      const summary = await refreshMarketData({
+        trigger: 'health', force: req.nextUrl.searchParams.get('force') === '1',
+        onlySource: req.nextUrl.searchParams.get('source') ?? undefined, budgetMs: 200_000, maxExtractions: 6,
+      })
+      return NextResponse.json({ ok: true, ...summary })
+    } catch (e) {
+      return NextResponse.json({ ok: false, error: e instanceof Error ? e.message.slice(0, 300) : 'failed' })
+    }
+  }
+  // ?flow=marketdb summarises what the market database holds.
+  if (req.nextUrl.searchParams.get('flow') === 'marketdb') {
+    const [sources, docs, obs, runs] = await Promise.all([
+      db.marketDataSource.findMany({ select: { key: true, kind: true, reliability: true, lastFetchedAt: true, lastStatus: true, _count: { select: { observations: true, documents: true } } }, orderBy: { key: 'asc' } }),
+      db.marketDataDocument.count(), db.marketObservation.count({ where: { supersededAt: null } }),
+      db.marketIngestionRun.findMany({ orderBy: { startedAt: 'desc' }, take: 3, select: { trigger: true, status: true, startedAt: true, documentsNew: true, observationsNew: true } }),
+    ])
+    const sample = await db.marketObservation.findMany({ where: { supersededAt: null }, orderBy: { reliability: 'desc' }, take: 12, select: { metric: true, subject: true, region: true, value: true, unit: true, period: true, statement: true, reliability: true } })
+    return NextResponse.json({ ok: true, documents: docs, observations: obs, sources, runs, sample })
   }
 
   // ?flow=orchestrated runs the real app path: four agents, Orchestrator, then the Blueprint built around the chosen bets.
