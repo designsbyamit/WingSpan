@@ -316,7 +316,36 @@ export function parseBlueprintJson(text: string): Blueprint {
     if (inString) clean += '"'
     while (stack.length > 0) clean += stack.pop()
   }
-  return JSON.parse(clean) as Blueprint
+  return normalizeBlueprint(JSON.parse(clean))
+}
+
+const lst = <T,>(v: unknown): T[] => (Array.isArray(v) ? (v as T[]) : [])
+
+/** Fill every list the Blueprint screens iterate, so a partial reply renders instead of crashing. */
+export function normalizeBlueprint(raw: unknown): Blueprint {
+  const b = (raw && typeof raw === 'object' ? raw : {}) as Partial<Blueprint>
+  const pm = (b.profileMap ?? {}) as Partial<Blueprint['profileMap']>
+  const a = (b.actions ?? {}) as Partial<Blueprint['actions']>
+  return {
+    ...b,
+    profileMap: {
+      ...pm,
+      identityStatement: pm.identityStatement ?? '',
+      yearsOfExperience: typeof pm.yearsOfExperience === 'number' ? pm.yearsOfExperience : 0,
+      industries: lst(pm.industries), platforms: lst(pm.platforms), domains: lst(pm.domains),
+      careerEvolution: pm.careerEvolution ?? '',
+      metrics: lst(pm.metrics),
+    },
+    strengths: lst(b.strengths),
+    interests: lst(b.interests),
+    futurePaths: lst(b.futurePaths),
+    gaps: lst(b.gaps),
+    actions: { immediate: lst(a.immediate), mediumTerm: lst(a.mediumTerm), longTerm: lst(a.longTerm), resources: lst(a.resources) },
+    confidenceScores: b.confidenceScores ?? { timeline: 0, projects: 0, strengths: 0, futurePaths: 0 },
+    insights: lst(b.insights),
+    rationale: b.rationale && typeof b.rationale === 'object' ? b.rationale : {},
+    roadmapMilestones: lst(b.roadmapMilestones),
+  } as Blueprint
 }
 
 /** What is missing from a Blueprint that should have 3 paths, strengths, actions and a roadmap. */

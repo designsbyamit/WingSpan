@@ -14,3 +14,23 @@ test('non-array values are replaced, real lists are kept', () => {
   assert.deepEqual(d.interests, [])
   assert.deepEqual(d.timeline, [])
 })
+
+test('a sparse model reply (missing methods/technologies/domains) builds a full input bundle', async () => {
+  const { normalizeCareerEvidence } = await import('./career-evidence')
+  const { buildCareerInputBundle } = await import('./career-input')
+  const sparse = { person: { name: 'A' }, timeline: [{ role: 'Designer', company: 'X', startDate: '2020', endDate: 'now' }], skills: ['UX'] }
+  const bundle = buildCareerInputBundle(normalizeCareerEvidence(sparse as never), [])
+  assert.ok(bundle.careerAlpha.rawText.includes('Designer at X'))
+  assert.deepEqual(bundle.careerAlpha.skills, ['UX'])
+  // even raw, un-normalized evidence must not throw
+  assert.doesNotThrow(() => buildCareerInputBundle(sparse as never, []))
+})
+
+test('a blueprint missing sections still has every list the screens iterate', async () => {
+  const { parseBlueprintJson } = await import('./claude')
+  const bp = parseBlueprintJson('{"strengths":[{"name":"x"}],"actions":{"immediate":[]}}')
+  assert.deepEqual(bp.actions.resources, [])
+  assert.deepEqual(bp.futurePaths, [])
+  assert.deepEqual(bp.profileMap.industries, [])
+  assert.equal(bp.strengths.length, 1)
+})

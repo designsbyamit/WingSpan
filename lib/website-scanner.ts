@@ -1,4 +1,4 @@
-import { careerEvidenceToCareerAlphaInput, CareerEvidence, CareerEvidenceProject, EvidenceSource } from './career-evidence'
+import { careerEvidenceToCareerAlphaInput, CareerEvidence, CareerEvidenceProject, EvidenceSource, normalizeCareerEvidence as normalizeEvidenceShape } from './career-evidence'
 
 const MAX_PAGES = 10
 const MAX_SCREENSHOTS = 6
@@ -253,10 +253,7 @@ Project objects must contain:
     8192,
   )
   const raw = extractJsonObject(text)
-  const parsed = JSON.parse(raw) as CareerEvidence
-
-  parsed.schemaVersion = '1.0'
-  parsed.sources = Array.isArray(parsed.sources) ? parsed.sources : []
+  const parsed = normalizeEvidenceShape(JSON.parse(raw))
   parsed.pagesScanned = pages.map(p => ({
     url: p.url, title: p.title, type: p.kind,
     textLength: p.text.length, screenshotCaptured: !!p.screenshot,

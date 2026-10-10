@@ -56,6 +56,7 @@ export function careerEvidenceToCareerAlphaInput(
   evidence: CareerEvidence,
   interests: string[]
 ): ExtractedCareerData & { interests: string[] } {
+  evidence = normalizeCareerEvidence(evidence)
   const rawText = [
     evidence.person.name ? `Name: ${evidence.person.name}` : '',
     evidence.person.headline ? `Headline: ${evidence.person.headline}` : '',
@@ -88,5 +89,49 @@ export function careerEvidenceToCareerAlphaInput(
     geographySignals: evidence.geographySignals,
     footprintSignals: evidence.footprintSignals,
     interests,
+  }
+}
+
+const list = <T,>(v: unknown): T[] => (Array.isArray(v) ? (v as T[]) : [])
+const strings = (v: unknown): string[] => list<unknown>(v).filter((x): x is string => typeof x === 'string')
+
+/** Models omit fields. Fill every list and object the pipeline relies on, so partial replies never crash it. */
+export function normalizeCareerEvidence(raw: Partial<CareerEvidence> | null | undefined): CareerEvidence {
+  const e = (raw && typeof raw === 'object' ? raw : {}) as Partial<CareerEvidence>
+  const quality = e.evidenceQuality === 'rich' || e.evidenceQuality === 'moderate' ? e.evidenceQuality : 'sparse'
+  return {
+    ...e,
+    schemaVersion: '1.0',
+    person: e.person && typeof e.person === 'object' ? e.person : {},
+    timeline: list<TimelineEntry>(e.timeline).filter((t) => t && typeof t === 'object'),
+    projects: list<CareerEvidenceProject>(e.projects).filter((p) => p && typeof p === 'object').map((p, i) => ({
+      ...p,
+      id: p.id ?? `project-${i + 1}`,
+      name: p.name ?? 'Untitled project',
+      company: p.company ?? '',
+      sourceUrls: strings(p.sourceUrls),
+      evidence: strings(p.evidence),
+      visualSignals: strings(p.visualSignals),
+      methods: strings(p.methods),
+      responsibilities: strings(p.responsibilities),
+      outcomes: strings(p.outcomes),
+      technologies: strings(p.technologies),
+    })),
+    skills: strings(e.skills),
+    education: list<CareerEvidence['education'][number]>(e.education).filter((x) => x && typeof x === 'object'),
+    certifications: strings(e.certifications),
+    publications: strings(e.publications),
+    communities: strings(e.communities),
+    domains: strings(e.domains),
+    methods: strings(e.methods),
+    technologies: strings(e.technologies),
+    metrics: list<CareerEvidence['metrics'][number]>(e.metrics).filter((x) => x && typeof x === 'object'),
+    interests: strings(e.interests),
+    geographySignals: strings(e.geographySignals),
+    footprintSignals: strings(e.footprintSignals),
+    evidenceQuality: quality,
+    sources: list<EvidenceSource>(e.sources),
+    pagesScanned: list<CareerEvidence['pagesScanned'][number]>(e.pagesScanned),
+    extractionNotes: strings(e.extractionNotes),
   }
 }
