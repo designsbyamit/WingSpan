@@ -25,7 +25,19 @@ export function normalizeBlueprint(raw: unknown): Blueprint {
     strengths: withLists(b.strengths, ['projects']),
     interests: withLists(b.interests, ['whyItAppears']),
     futurePaths: withLists(b.futurePaths, ['keyTransitionAreas']),
-    gaps: withLists(b.gaps, ['requiredCapabilities', 'objectives']),
+    gaps: withLists<Record<string, unknown>>(b.gaps, ['requiredCapabilities', 'objectives']).map((g) => {
+      const size = String(g.gapSize ?? '').toLowerCase()
+      const num = (v: unknown) => (typeof v === 'number' && isFinite(v) ? v : Number(v) || 0)
+      return {
+        ...g,
+        pathway: typeof g.pathway === 'string' ? g.pathway : '',
+        gapType: typeof g.gapType === 'string' && g.gapType ? g.gapType : 'Capability gap',
+        gapSize: size === 'small' || size === 'large' ? size : size.startsWith('l') || size === 'high' ? 'large' : size.startsWith('s') || size === 'low' ? 'small' : 'medium',
+        currentReadiness: num(g.currentReadiness),
+        futureReadiness: num(g.futureReadiness),
+        objectives: (g.objectives as unknown[]).filter((o) => !!o && typeof o === 'object'),
+      }
+    }) as never,
     actions: { immediate: objs(a.immediate) as never, mediumTerm: objs(a.mediumTerm) as never, longTerm: objs(a.longTerm) as never, resources: objs(a.resources) as never },
     confidenceScores: b.confidenceScores ?? { timeline: 0, projects: 0, strengths: 0, futurePaths: 0 },
     insights: lst(b.insights),

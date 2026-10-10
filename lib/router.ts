@@ -73,9 +73,14 @@ export function friendlyProviderError(e: unknown): string {
   return msg.length > 300 ? msg.slice(0, 300) + '…' : msg
 }
 
-function liveModels(): string[] {
+/** Model tried first for judgement-heavy steps (Career Alpha, Blueprint). Speed matters less there. */
+export function qualityModel(env: Record<string, string | undefined> = process.env): string {
+  return firstLine(env.GEMINI_QUALITY_MODEL) || 'gemini-3.8-flash'
+}
+
+function liveModels(prefer?: string): string[] {
   const now = Date.now()
-  const chain = geminiModelChain()
+  const chain = prefer ? [...new Set([prefer, ...geminiModelChain()])] : geminiModelChain()
   const alive = chain.filter((m) => (deadModels.get(m) ?? 0) < now)
   return alive.length ? alive : chain
 }
@@ -104,17 +109,22 @@ function markDead(model: string, e: unknown) {
 type GeminiPart = { text: string } | { inlineData: { mimeType: string; data: string } }
 
 /** Try each Gemini model in turn. Throws the last error if every model fails. */
-export async function generateWithGemini(parts: GeminiPart[], systemInstruction?: string): Promise<string> {
+export async function generateWithGemini(
+  parts: GeminiPart[],
+  systemInstruction?: string,
+  opts: { prefer?: string; firstTimeoutMs?: number } = {},
+): Promise<string> {
   const key = (process.env.GEMINI_API_KEY ?? '').trim()
   if (!key) throw new Error('No Gemini key')
   const genAI = new GoogleGenerativeAI(key)
   let lastErr: unknown = new Error('No Gemini model configured')
   const deadline = Date.now() + GEMINI_TOTAL_BUDGET_MS
-  for (const model of liveModels()) {
+  const models = liveModels(opts.prefer)
+  for (const model of models) {
     const remaining = deadline - Date.now()
     if (remaining < 8_000) { lastErr = lastErr instanceof Error && /timed out|abort/i.test(lastErr.message) ? lastErr : new Error('Gemini time budget exhausted (timed out)'); break }
     try {
-      const m = genAI.getGenerativeModel(systemInstruction ? { model, systemInstruction } : { model }, { timeout: Math.min(GEMINI_TIMEOUT_MS, remaining) })
+      const m = genAI.getGenerativeModel(systemInstruction ? { model, systemInstruction } : { model }, { timeout: Math.min(model === models[0] && opts.firstTimeoutMs ? opts.firstTimeoutMs : GEMINI_TIMEOUT_MS, remaining) })
       const result = await m.generateContent(parts)
       return result.response.text()
     } catch (e) {
@@ -126,8 +136,10 @@ export async function generateWithGemini(parts: GeminiPart[], systemInstruction?
   throw lastErr
 }
 
-async function callGemini(systemPrompt: string, userPrompt: string): Promise<string> {
-  return generateWithGemini([{ text: userPrompt }], systemPrompt)
+async function callGemini(systemPrompt: string, userPrompt: string, task: RouterTask): Promise<string> {
+  const judgement = task === 'analysis' || task === 'blueprint'
+  return generateWithGemini([{ text: userPrompt }], systemPrompt,
+    judgement ? { prefer: qualityModel(), firstTimeoutMs: 55_000 } : {})
 }
 
 async function callGroq(systemPrompt: string, userPrompt: string, maxTokens: number): Promise<string> {
@@ -200,7 +212,7 @@ export async function routeCall(
 
   // Analysis/blueprint: Gemini model chain → OpenRouter/DeepSeek → Groq
   try {
-    return await callGemini(systemPrompt, userPrompt)
+    return await callGemini(systemPrompt, userPrompt, task)
   } catch (e) {
     if (!isRetryableProviderError(e) && !String(e).includes('No Gemini key')) throw e
     console.warn('All Gemini models unavailable, trying OpenRouter/DeepSeek')
@@ -220,10 +232,10 @@ export async function* routeStream(
   // Try Gemini streaming
   if (geminiKey) {
     const genAI = new GoogleGenerativeAI(geminiKey)
-    for (const model of liveModels()) {
+    for (const model of liveModels(qualityModel())) {
       let yielded = false
       try {
-        const geminiModel = genAI.getGenerativeModel({ model, systemInstruction: systemPrompt })
+        const geminiModel = genAI.getGenerativeModel({ model, systemInstruction: systemPrompt }, { timeout: 120_000 })
         const stream = await geminiModel.generateContentStream(userPrompt)
         for await (const chunk of stream.stream) {
           const text = chunk.text()

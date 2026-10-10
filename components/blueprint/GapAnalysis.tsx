@@ -77,7 +77,7 @@ function GapCard({ gap, inProgressGaps, setInProgressGaps }: {
   setInProgressGaps: (s: Set<string>) => void
 }) {
   const [expanded, setExpanded] = useState(false)
-  const sizeStyle = GAP_SIZE_STYLE[gap.gapSize]
+  const sizeStyle = GAP_SIZE_STYLE[gap.gapSize] ?? GAP_SIZE_STYLE.medium
   const currentPct = gap.currentReadiness < 2 ? Math.round(gap.currentReadiness * 100) : Math.round(gap.currentReadiness)
   const futurePct  = gap.futureReadiness  < 2 ? Math.round(gap.futureReadiness  * 100) : Math.round(gap.futureReadiness)
   const gapPct     = Math.round(futurePct - currentPct)

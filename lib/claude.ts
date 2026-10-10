@@ -2,6 +2,7 @@
 // Groq for fast extraction (Stage 1), Gemini for deep analysis (Blueprint streaming)
 import { normalizeValidated } from '@/lib/extracted-shape'
 import { normalizeBlueprint } from '@/lib/blueprint-shape'
+import { experienceFacts, groundingRules } from '@/lib/experience'
 export { normalizeBlueprint }
 import Groq from 'groq-sdk'
 import { ExtractedCareerData, Blueprint, ValidatedCareerData, CareerAlphaIntelligence } from '@/types/wingspan'
@@ -422,6 +423,8 @@ Career Profile:
 - Skills: ${validatedData.skills.join(', ')}
 - Education: ${JSON.stringify(validatedData.education)}
 - Future Interests: ${validatedData.interests.join(', ')}
+
+${groundingRules(experienceFacts(validatedData.timeline), validatedData.interests)}
 ${negativeExamples}
 Generate a comprehensive, deeply personal Future Self Blueprint. Reference actual projects, roles, and companies by name. Every insight must cite real evidence. Make the person feel this was written only for them.
 

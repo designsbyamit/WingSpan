@@ -26,6 +26,24 @@ const SAMPLE = {
   footprintSignals: ['portfolio'],
 } as unknown as ExtractedCareerData
 
+const LEADER = {
+  timeline: [
+    { id: 'l1', role: 'Head of Design', company: 'Enterprise SaaS Co', startDate: '2020', endDate: 'Present', description: 'Lead a 40-person design org across 6 product lines; set design strategy with the CPO; built the design operations function.', confirmed: true },
+    { id: 'l2', role: 'Design Director', company: 'Fintech Ltd', startDate: '2015', endDate: '2020', description: 'Managed 4 design managers; shipped the retail banking app redesign; introduced research ops.', confirmed: true },
+    { id: 'l3', role: 'Senior Interaction Designer', company: 'Agency X', startDate: '2010', endDate: '2015', description: 'Designed web and mobile products for telecom and retail clients.', confirmed: true },
+  ],
+  projects: [
+    { id: 'lp1', name: 'Design org scale-up', company: 'Enterprise SaaS Co', year: '2022', industry: 'Enterprise software', platform: 'Web', audience: 'Enterprise users', summary: 'Grew the design team from 8 to 40 and introduced a career ladder.', impact: 'Design NPS up 30 points' },
+    { id: 'lp2', name: 'Mobile banking redesign', company: 'Fintech Ltd', year: '2018', industry: 'Banking', platform: 'Mobile', audience: 'Retail customers', summary: 'End-to-end redesign of the flagship app.', impact: 'App rating 3.1 to 4.6' },
+  ],
+  skills: ['Design leadership', 'Design strategy', 'People management', 'Design operations', 'Product strategy', 'Stakeholder management'],
+  education: [{ institution: 'NID', degree: 'MDes', year: '2010' }],
+  rawText: 'Head of Design with 16 years of experience.',
+  evidenceQuality: 'rich',
+  geographySignals: ['India'],
+  footprintSignals: [],
+} as unknown as ExtractedCareerData
+
 export async function GET(req: NextRequest) {
   if (process.env.HEALTH_TEST !== '1') return NextResponse.json({ error: 'disabled' }, { status: 404 })
   const interests = ['AI-native products', 'Design systems', 'Design leadership']
@@ -70,16 +88,22 @@ export async function GET(req: NextRequest) {
 
   // ?flow=ui runs what the app's screens actually call: Career Alpha, then the Blueprint stream.
   if (req.nextUrl.searchParams.get('flow') === 'ui') {
+    const leader = req.nextUrl.searchParams.get('profile') === 'leader'
+    const profile = leader ? LEADER : SAMPLE
+    const uiInterests = leader ? ['Product Strategy', 'Design Leadership', 'People Management', 'AI Product Design', 'Agent-Agent Collaboration'] : interests
     try {
-      const alpha = await timed('careerAlpha', () => computeCareerAlpha(SAMPLE, interests))
+      const alpha = await timed('careerAlpha', () => computeCareerAlpha(profile, uiInterests))
       const bp = await timed('blueprint', async () => {
-        for await (const ev of streamBlueprint({ ...SAMPLE, interests } as never, alpha)) {
+        for await (const ev of streamBlueprint({ ...profile, interests: uiInterests } as never, alpha)) {
           if (ev.type === 'complete') return ev.blueprint as Record<string, unknown[]>
         }
         throw new Error('stream ended without a complete event')
       })
       return NextResponse.json({
         ok: true, stages,
+        careerStage: alpha.careerStage, archetype: alpha.archetypeLabel,
+        paths: (bp.futurePaths as { title?: string; betArchetype?: string }[] | undefined)?.map((p) => `${p.betArchetype}: ${p.title}`),
+        gapSizes: (bp.gaps as { gapSize?: string }[] | undefined)?.map((g) => g.gapSize),
         sections: {
           strengths: bp.strengths?.length, futurePaths: bp.futurePaths?.length, gaps: bp.gaps?.length,
           immediate: (bp.actions as unknown as { immediate?: unknown[] })?.immediate?.length,
