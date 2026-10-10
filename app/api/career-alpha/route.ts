@@ -3,8 +3,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { computeCareerAlpha } from '@/lib/career-alpha'
 import { ExtractedCareerData } from '@/types/wingspan'
 import { CareerInputBundle } from '@/lib/career-input'
+import { friendlyProviderError } from '@/lib/router'
 
-export const maxDuration = 60
+export const maxDuration = 120
 
 export async function POST(req: NextRequest) {
   try {
@@ -36,7 +37,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error('Career Alpha error:', err)
     return NextResponse.json(
-      { error: 'Career Alpha computation failed' },
+      { error: friendlyProviderError(err) },
       { status: 500 }
     )
   }

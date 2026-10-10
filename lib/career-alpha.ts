@@ -1,6 +1,7 @@
 // lib/career-alpha.ts
 // Career Alpha Stage 2 — uses unified router (Gemini → OpenRouter/DeepSeek → Groq)
 import { routeCall } from '@/lib/router'
+import { extractJsonObject } from '@/lib/website-scanner'
 import { ExtractedCareerData, CareerAlphaIntelligence, CareerStage } from '@/types/wingspan'
 import { loadCacheEntry, updateCacheDimensions, CacheEntry, CacheDimensionEntry } from '@/lib/career-alpha-cache'
 
@@ -251,11 +252,26 @@ Return ONLY valid JSON matching this schema:
 ${CAREER_ALPHA_SCHEMA}`
 
   // Step 5: Call Gemini (with Groq fallback)
-  const text = await generateContent(CAREER_ALPHA_SYSTEM_PROMPT, userPrompt)
-  const clean = text.replace(/^```(?:json)?\n?/m, '').replace(/\n?```$/m, '').trim()
+  const parseIntelligence = (text: string): CareerAlphaIntelligence => {
+    const parsed = JSON.parse(extractJsonObject(text)) as CareerAlphaIntelligence
+    if (!parsed || typeof parsed !== 'object' || !parsed.dimensions || typeof parsed.dimensions !== 'object') {
+      throw new Error('Career Alpha reply is missing "dimensions"')
+    }
+    return parsed
+  }
 
-  // Step 6: Parse
-  const intelligence = JSON.parse(clean) as CareerAlphaIntelligence
+  // Step 6: Parse, with one repair retry if the model's JSON is malformed or incomplete
+  let intelligence: CareerAlphaIntelligence
+  try {
+    intelligence = parseIntelligence(await generateContent(CAREER_ALPHA_SYSTEM_PROMPT, userPrompt))
+  } catch (e) {
+    if (!(e instanceof SyntaxError) && !(e instanceof Error && /Career Alpha reply/.test(e.message))) throw e
+    console.warn('Career Alpha reply unusable, retrying once:', e instanceof Error ? e.message.slice(0, 120) : e)
+    intelligence = parseIntelligence(await generateContent(
+      CAREER_ALPHA_SYSTEM_PROMPT,
+      userPrompt + '\n\nIMPORTANT: your previous reply was not valid, complete JSON. Return ONLY one complete JSON object matching the schema, with every field present.',
+    ))
+  }
 
   // Ensure fingerprint is consistent with our computed value
   intelligence.archetypeFingerprint = fingerprint
