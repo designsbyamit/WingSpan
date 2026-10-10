@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from 'next/server'
+import { NextResponse, after, type NextRequest } from 'next/server'
 import { computeCareerAlpha } from '@/lib/career-alpha'
 import { streamBlueprint } from '@/lib/claude'
 import { aggregatorAgent, careerAlphaAgent, marketIntelligenceAgent, careerDirectionGenerator } from '@/lib/v02-agents'
@@ -118,44 +118,61 @@ export async function GET(req: NextRequest) {
   if (req.nextUrl.searchParams.get('flow') === 'orchestrated') {
     const leader = req.nextUrl.searchParams.get('profile') === 'leader'
     const profile = leader ? LEADER : SAMPLE
-    const ints = leader ? ['Product Strategy', 'Design Leadership', 'People Management', 'AI Product Design', 'Agent-Agent Collaboration'] : interests
-    try {
-      const run = await timed('agents', () => runAgents(profile, ints))
-      const bets = betsFrom(run.careerMap, run.marketGraph)
-      const [out, plan] = await timed('orchestrator+growth', () => Promise.all([
-        orchestratorAgent(run, profile, ints),
-        growthAgent(run, bets, profile, ints).catch((e) => { stages['growth'] = `failed: ${e instanceof Error ? e.message.slice(0, 120) : e}`; return fallbackGrowth(bets) }),
-      ]))
-      const alpha = toCareerAlpha(out, run, profile, ints)
-      const deep = buildDeepAnalysis(run, out, null, { plan, ms: null })
-      const bp = await timed('blueprint', async () => {
-        for await (const ev of streamBlueprint({ ...profile, interests: ints } as never, alpha, bets, { gaps: plan.gaps, resources: plan.resources })) {
-          if (ev.type === 'complete') return ev.blueprint as Record<string, unknown[]>
-        }
-        throw new Error('stream ended without a complete event')
-      })
-      const titles = (bp.futurePaths as { title: string }[]).map((p) => p.title)
-      const gaps = bp.gaps as { pathway: string; title?: string; currentReadiness: number; futureReadiness: number; gapSize: string }[]
-      const resources = ((bp.actions as unknown as { resources?: { pathway: string; title: string; url?: string }[] })?.resources ?? [])
-      return NextResponse.json({
-        ok: true, stages, agentTimings: run.timings,
-        careerStage: alpha.careerStage, archetype: alpha.archetypeLabel, overall: alpha.overallScore,
-        bets: bets.map((b) => `${b.archetype}: ${b.direction} (${b.careerScore})`),
-        candidates: deep.candidates.map((c) => `${c.direction} [${c.archetype}] ${c.score} d=${c.distance} risk=${c.risk ?? '-'}`),
-        validation: run.careerMap.validation,
-        marketDirections: deep.market.directions.map((d) => d.name),
-        marketEvidence: deep.market.evidence?.length ?? 0,
-        pathsMatchBets: bets.every((b, i) => titles[i] === b.direction),
-        gapsLinked: gaps.every((g) => titles.includes(g.pathway)),
-        gaps: gaps.map((g) => `${g.pathway} | ${g.title ?? '-'} | ${g.currentReadiness}→${g.futureReadiness} ${g.gapSize}`),
-        resources: titles.map((t) => `${t}: ${resources.filter((r) => r.pathway === t).map((r) => r.title).join('; ')}`),
-        growthNotes: plan.notes,
-        sections: { roadmap: bp.roadmapMilestones?.length, immediate: (bp.actions as unknown as { immediate?: unknown[] })?.immediate?.length },
-        marketBasis: deep.market.basis, whyThisOrder: out.recommendation?.whyThisOrder,
-      })
-    } catch (e) {
-      return NextResponse.json({ ok: false, stages, error: e instanceof Error ? e.message.slice(0, 300) : 'failed' })
+    const ints = leader ? ['Product Strategy', 'Design Leadership', 'People Management', 'AI Product Design', 'Agentic Experience Design'] : interests
+    const check = async (): Promise<Record<string, unknown>> => {
+      try {
+        const run = await timed('agents', () => runAgents(profile, ints))
+        const bets = betsFrom(run.careerMap, run.marketGraph)
+        const [out, plan] = await timed('orchestrator+growth', () => Promise.all([
+          orchestratorAgent(run, profile, ints),
+          growthAgent(run, bets, profile, ints).catch((e) => { stages['growth'] = `failed: ${e instanceof Error ? e.message.slice(0, 120) : e}`; return fallbackGrowth(bets) }),
+        ]))
+        const alpha = toCareerAlpha(out, run, profile, ints)
+        const deep = buildDeepAnalysis(run, out, null, { plan, ms: null })
+        const bp = await timed('blueprint', async () => {
+          for await (const ev of streamBlueprint({ ...profile, interests: ints } as never, alpha, bets, { gaps: plan.gaps, resources: plan.resources })) {
+            if (ev.type === 'complete') return ev.blueprint as Record<string, unknown[]>
+          }
+          throw new Error('stream ended without a complete event')
+        })
+        const titles = (bp.futurePaths as { title: string }[]).map((p) => p.title)
+        const gaps = bp.gaps as { pathway: string; title?: string; currentReadiness: number; futureReadiness: number; gapSize: string }[]
+        const resources = ((bp.actions as unknown as { resources?: { pathway: string; title: string; url?: string }[] })?.resources ?? [])
+        return ({
+          ok: true, stages, agentTimings: run.timings,
+          careerStage: alpha.careerStage, archetype: alpha.archetypeLabel, overall: alpha.overallScore,
+          bets: bets.map((b) => `${b.archetype}: ${b.direction} (${b.careerScore})`),
+          candidates: deep.candidates.map((c) => `${c.direction} [${c.archetype}] ${c.score} d=${c.distance} risk=${c.risk ?? '-'}`),
+          validation: run.careerMap.validation,
+          marketDirections: deep.market.directions.map((d) => d.name),
+          marketEvidence: deep.market.evidence?.length ?? 0,
+          pathsMatchBets: bets.every((b, i) => titles[i] === b.direction),
+          gapsLinked: gaps.every((g) => titles.includes(g.pathway)),
+          gaps: gaps.map((g) => `${g.pathway} | ${g.title ?? '-'} | ${g.currentReadiness}→${g.futureReadiness} ${g.gapSize}`),
+          resources: titles.map((t) => `${t}: ${resources.filter((r) => r.pathway === t).map((r) => r.title).join('; ')}`),
+          growthNotes: plan.notes,
+          sections: { roadmap: bp.roadmapMilestones?.length, immediate: (bp.actions as unknown as { immediate?: unknown[] })?.immediate?.length },
+          marketBasis: deep.market.basis, whyThisOrder: out.recommendation?.whyThisOrder,
+        })
+      } catch (e) {
+        return ({ ok: false, stages, error: e instanceof Error ? e.message.slice(0, 300) : 'failed' })
+      }
     }
+    // The full run can outlast an HTTP proxy's patience: &async=1 runs it after the response and
+    // stores the result; read it back with ?flow=last.
+    if (req.nextUrl.searchParams.get('async') === '1') {
+      after(async () => {
+        const result = await check()
+        await db.auditEvent.create({ data: { action: 'health.orchestrated', entityType: 'Health', metadata: JSON.parse(JSON.stringify(result)) } }).catch(() => undefined)
+      })
+      return NextResponse.json({ ok: true, started: true, readWith: '?flow=last' })
+    }
+    return NextResponse.json(await check())
+  }
+
+  if (req.nextUrl.searchParams.get('flow') === 'last') {
+    const last = await db.auditEvent.findFirst({ where: { action: 'health.orchestrated' }, orderBy: { createdAt: 'desc' } })
+    return NextResponse.json(last ? { at: last.createdAt, ...(last.metadata as object) } : { ok: false, none: true })
   }
 
   // ?flow=resources checks every link in the curated resource catalog from the server.
@@ -166,8 +183,10 @@ export async function GET(req: NextRequest) {
         return { id: c.id, status: res.status, finalUrl: res.url !== c.url ? res.url : undefined }
       } catch (e) { return { id: c.id, status: 0, error: e instanceof Error ? e.message.slice(0, 80) : 'failed' } }
     }))
-    const bad = results.filter((r) => r.status === 0 || r.status >= 400)
-    return NextResponse.json({ ok: bad.length === 0, total: results.length, bad, redirected: results.filter((r) => r.finalUrl) })
+    // 401/403/429 are publishers refusing server-side fetches (bot protection), not dead links.
+    const blocked = results.filter((r) => [401, 403, 429].includes(r.status))
+    const bad = results.filter((r) => r.status === 0 || (r.status >= 400 && ![401, 403, 429].includes(r.status)))
+    return NextResponse.json({ ok: bad.length === 0, total: results.length, bad, blockedForBots: blocked.map((b) => b.id), redirected: results.filter((r) => r.finalUrl) })
   }
 
   // ?flow=ui runs what the app's screens actually call: Career Alpha, then the Blueprint stream.
