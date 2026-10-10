@@ -1,5 +1,6 @@
 'use client'
 import { AlertCircle, ArrowRight, Check } from 'lucide-react'
+import { canResume } from '@/lib/pipeline'
 import { useWingspan } from '@/context/WingspanContext'
 import { currentActivityLabel, formatElapsed, useNow } from './activity'
 import { cx, linkButton, primaryButton, quietButton } from './ui'
@@ -67,12 +68,12 @@ export function AnalysisStatus({ onOpenDetails, onOpenBlueprint, onRetry }: Anal
             <AlertCircle size={18} className="mt-0.5 flex-shrink-0 text-red-300" aria-hidden />
             <div className="min-w-0">
               <p className="text-sm font-semibold text-[var(--text-primary)]">The analysis stopped</p>
-              <p className="mt-0.5 line-clamp-2 text-[13px] text-[var(--text-secondary)]">{state.error}</p>
+              <p className="mt-0.5 line-clamp-2 text-[13px] text-[var(--text-secondary)]">{state.error}{canResume() ? ' Your analysis so far is saved.' : ''}</p>
             </div>
           </div>
           <div className="flex flex-shrink-0 items-center gap-3">
             <button type="button" onClick={onOpenDetails} className={linkButton}>View details</button>
-            <button type="button" onClick={onRetry} className={cx(quietButton, 'flex-1 sm:flex-none')}>Try again</button>
+            <button type="button" onClick={onRetry} className={cx(quietButton, 'flex-1 sm:flex-none')}>{canResume() ? 'Resume' : 'Try again'}</button>
           </div>
         </div>
       </div>
