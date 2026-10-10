@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { computeCareerAlpha } from '@/lib/career-alpha'
 import { streamBlueprint } from '@/lib/claude'
 import { aggregatorAgent, careerAlphaAgent, marketIntelligenceAgent, careerDirectionGenerator } from '@/lib/v02-agents'
+import { runAgents, orchestratorAgent, toCareerAlpha, buildDeepAnalysis, betsFrom } from '@/lib/orchestrator'
 import type { ExtractedCareerData } from '@/types/wingspan'
 
 // Staging diagnostics: runs the four analysis agents on a synthetic profile and reports
@@ -84,6 +85,39 @@ export async function GET(req: NextRequest) {
       }
     }))
     return NextResponse.json({ ok: true, probes })
+  }
+
+  // ?flow=orchestrated runs the real app path: four agents, Orchestrator, then the Blueprint built around the chosen bets.
+  if (req.nextUrl.searchParams.get('flow') === 'orchestrated') {
+    const leader = req.nextUrl.searchParams.get('profile') === 'leader'
+    const profile = leader ? LEADER : SAMPLE
+    const ints = leader ? ['Product Strategy', 'Design Leadership', 'People Management', 'AI Product Design', 'Agent-Agent Collaboration'] : interests
+    try {
+      const run = await timed('agents', () => runAgents(profile, ints))
+      const out = await timed('orchestrator', () => orchestratorAgent(run, profile, ints))
+      const alpha = toCareerAlpha(out, run, profile, ints)
+      const deep = buildDeepAnalysis(run, out)
+      const bets = betsFrom(run.careerMap, run.marketGraph)
+      const bp = await timed('blueprint', async () => {
+        for await (const ev of streamBlueprint({ ...profile, interests: ints } as never, alpha, bets)) {
+          if (ev.type === 'complete') return ev.blueprint as Record<string, unknown[]>
+        }
+        throw new Error('stream ended without a complete event')
+      })
+      const titles = (bp.futurePaths as { title: string }[]).map((p) => p.title)
+      return NextResponse.json({
+        ok: true, stages, agentTimings: run.timings,
+        careerStage: alpha.careerStage, archetype: alpha.archetypeLabel, overall: alpha.overallScore,
+        bets: bets.map((b) => `${b.archetype}: ${b.direction} (${b.careerScore})`),
+        candidates: deep.candidates.map((c) => `${c.direction} [${c.archetype}] ${c.score} d=${c.distance}`),
+        pathsMatchBets: bets.every((b, i) => titles[i] === b.direction),
+        gapsLinked: (bp.gaps as { pathway: string }[]).every((g) => titles.includes(g.pathway)),
+        sections: { gaps: bp.gaps?.length, roadmap: bp.roadmapMilestones?.length },
+        orchestratorSynthesis: out.synthesis, whyThisOrder: out.recommendation?.whyThisOrder,
+      })
+    } catch (e) {
+      return NextResponse.json({ ok: false, stages, error: e instanceof Error ? e.message.slice(0, 200) : 'failed' })
+    }
   }
 
   // ?flow=ui runs what the app's screens actually call: Career Alpha, then the Blueprint stream.
