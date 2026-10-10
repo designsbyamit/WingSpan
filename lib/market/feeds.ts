@@ -105,7 +105,7 @@ export async function fetchWorldBank(config: { countries?: string[]; indicators?
   const countries = (config.countries ?? ['IND']).join(';')
   for (const [indicator, metric] of Object.entries(config.indicators ?? {})) {
     try {
-      const f = await fetchUrl(`https://api.worldbank.org/v2/country/${countries}/indicator/${indicator}?format=json&mrv=3&per_page=60`)
+      const f = await fetchUrl(`https://api.worldbank.org/v2/country/${countries}/indicator/${indicator}?format=json&mrv=3&per_page=60`, 45_000)
       observations.push(...parseWorldBank(JSON.parse(f.body.toString('utf8')), metric))
     } catch (e) { errors.push(`${indicator}: ${e instanceof Error ? e.message : e}`) }
   }

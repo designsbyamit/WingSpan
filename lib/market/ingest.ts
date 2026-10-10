@@ -29,10 +29,10 @@ export async function ensureSources(): Promise<void> {
       where: { key: s.key },
       create: {
         key: s.key, name: s.name, publisher: s.publisher, category: s.category, kind: s.kind, url: s.url, region: s.region,
-        licence: s.licence, reliability: s.reliability, cadenceDays: s.cadenceDays ?? 10, config: (s.config ?? undefined) as never, notes: s.notes,
+        licence: s.licence, reliability: s.reliability, cadenceDays: s.cadenceDays ?? 10, config: (s.config ?? undefined) as never, notes: s.notes, enabled: s.enabled !== false,
       },
       // Registry edits flow through; operational state (enabled, lastFetchedAt) is never overwritten.
-      update: { name: s.name, publisher: s.publisher, category: s.category, kind: s.kind, url: s.url, region: s.region, licence: s.licence, reliability: s.reliability, cadenceDays: s.cadenceDays ?? 10, config: (s.config ?? undefined) as never, notes: s.notes },
+      update: { ...(s.enabled === false ? { enabled: false } : {}), name: s.name, publisher: s.publisher, category: s.category, kind: s.kind, url: s.url, region: s.region, licence: s.licence, reliability: s.reliability, cadenceDays: s.cadenceDays ?? 10, config: (s.config ?? undefined) as never, notes: s.notes },
     })
   }
 }

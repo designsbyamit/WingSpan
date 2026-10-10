@@ -20,6 +20,7 @@ export interface SourceSeed {
   cadenceDays?: number
   config?: Record<string, unknown>
   notes?: string
+  enabled?: false // set only to switch a source off in the register
 }
 
 export const SOURCES: SourceSeed[] = [
@@ -65,17 +66,22 @@ export const SOURCES: SourceSeed[] = [
     key: 'wef-future-of-jobs-2025', name: 'Future of Jobs Report 2025', publisher: 'World Economic Forum',
     category: 'INDUSTRY_PERFORMANCE', kind: 'PAGE', url: 'https://www.weforum.org/publications/the-future-of-jobs-report-2025/digest/', region: 'Global',
     licence: 'Published report; facts cited with attribution', reliability: 0.85, cadenceDays: 90,
+    enabled: false,
+    notes: 'Disabled: the publisher returns HTTP 403 to automated fetches. Its findings are entered through curated documents instead.',
   },
   {
     key: 'anthropic-economic-index', name: 'Anthropic Economic Index', publisher: 'Anthropic',
     category: 'INDUSTRY_PERFORMANCE', kind: 'PAGE', url: 'https://www.anthropic.com/economic-index', region: 'Global',
     licence: 'Published research; facts cited with attribution', reliability: 0.85, cadenceDays: 30,
+    enabled: false,
+    notes: 'Disabled: the page is rendered by script, so a plain fetch finds no text.',
   },
   {
     key: 'figma-state-of-designer', name: 'State of the Designer', publisher: 'Figma',
     category: 'INDUSTRY_PERFORMANCE', kind: 'PAGE', url: 'https://www.figma.com/reports/state-of-the-designer-2026/', region: 'Global',
     licence: 'Published survey; facts cited with attribution', reliability: 0.75, cadenceDays: 60,
-    notes: 'Vendor survey (906 designers in 2026). Useful for tool and AI adoption, not for hiring volumes.',
+    enabled: false,
+    notes: 'Disabled: robots.txt forbids automated access, so it is not crawled. Vendor survey (906 designers in 2026); its headline AI-adoption figure is entered through curated documents.',
   },
   {
     key: 'cybertize-india-uiux', name: 'State of UI/UX Design in India 2026-2027', publisher: 'Cybertize Technologies',

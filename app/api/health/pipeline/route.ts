@@ -138,7 +138,7 @@ export async function GET(req: NextRequest) {
         pathsMatchBets: bets.every((b, i) => titles[i] === b.direction),
         gapsLinked: (bp.gaps as { pathway: string }[]).every((g) => titles.includes(g.pathway)),
         sections: { gaps: bp.gaps?.length, roadmap: bp.roadmapMilestones?.length },
-        orchestratorSynthesis: out.synthesis, whyThisOrder: out.recommendation?.whyThisOrder,
+        marketBasis: deep.market.basis, orchestratorSynthesis: out.synthesis, whyThisOrder: out.recommendation?.whyThisOrder,
       })
     } catch (e) {
       return NextResponse.json({ ok: false, stages, error: e instanceof Error ? e.message.slice(0, 200) : 'failed' })
