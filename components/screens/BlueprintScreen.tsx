@@ -1,33 +1,31 @@
 // components/screens/BlueprintScreen.tsx
 'use client'
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
+import { ArrowLeft, ArrowRight, Lock, LogOut, Menu, X } from 'lucide-react'
 import { useWingspan } from '@/context/WingspanContext'
-import { StepNav } from '@/components/ui/StepNav'
 import { StepErrorBoundary } from '@/components/ui/StepErrorBoundary'
 import { ProfileMap } from '@/components/blueprint/ProfileMap'
 import { CareerIntelligence } from '@/components/blueprint/CareerIntelligence'
 import { PathSelection } from '@/components/blueprint/PathSelection'
 import { GapAnalysis } from '@/components/blueprint/GapAnalysis'
 import { GrowthRoadmap } from '@/components/blueprint/GrowthRoadmap'
-import { BlueprintVersions } from '@/components/blueprint/BlueprintVersions'
 import { Resources } from '@/components/blueprint/Resources'
+import { AuthModal } from '@/components/blueprint/AuthModal'
+import { DeepAnalysisDialog } from '@/components/blueprint/DeepAnalysisPanel'
+import { SaveVersionDialog, VersionsDialog, useBlueprintVersions } from '@/components/blueprint/BlueprintVersions'
+import { SideNav, Avatar } from '@/components/blueprint/shell/SideNav'
+import { Dialog, useModalBehaviour } from '@/components/blueprint/shell/Dialog'
+import { PreferencesDialog, useThemePreference } from '@/components/blueprint/shell/PreferencesDialog'
+import { ShellContext, type ShellActions } from '@/components/blueprint/shell/ShellContext'
+import { SECTIONS, sectionIndex } from '@/components/blueprint/shell/sections'
+import { FOCUS_RING, SecondaryButton } from '@/components/blueprint/shell/ui'
+import { useAuth, notifyAuthChanged } from '@/lib/use-auth'
+import { OPEN_SAVE_VERSION } from '@/lib/blueprint-events'
+import { exportToNotionMarkdown, downloadMarkdown } from '@/lib/export'
 import { Blueprint, BlueprintStep, ExtractedCareerData } from '@/types/wingspan'
 
-const STEPS: { id: BlueprintStep; title: string; subtitle: string }[] = [
-  { id: 'profile',        title: 'Profile Map',        subtitle: "Here's what we found about you." },
-  { id: 'intelligence',   title: 'Career Intelligence', subtitle: "What you're good at. What draws you in." },
-  { id: 'path-selection', title: 'Future Paths',        subtitle: "A few directions that seem like a natural fit." },
-  { id: 'gap-analysis',   title: 'Gap Analysis',        subtitle: "What's standing between you and that future." },
-  { id: 'roadmap',        title: 'Growth Roadmap',      subtitle: "How you actually get there." },
-  { id: 'resources',      title: 'Resources',           subtitle: "Things worth exploring along the way." },
-]
-
-function StepContent({
-  step,
-  blueprint,
-  extractedData,
-}: {
+function StepContent({ step, blueprint, extractedData }: {
   step: BlueprintStep
   blueprint: Blueprint
   extractedData: ExtractedCareerData | null
@@ -43,167 +41,362 @@ function StepContent({
   }
 }
 
+type Modal = null | 'save' | 'versions' | 'preferences' | 'account' | 'deep'
+type Pending = null | 'save' | 'export'
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
 export function BlueprintScreen() {
   const { state } = useWingspan()
   const { blueprint, selectedPath, extractedData } = state
   const [currentStep, setCurrentStep] = useState<BlueprintStep>('profile')
-  const [completedSteps, setCompletedSteps] = useState<BlueprintStep[]>([])
+  const [visited, setVisited] = useState<BlueprintStep[]>([])
   const [nudgeVisible, setNudgeVisible] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [modal, setModal] = useState<Modal>(null)
+  const [showAuth, setShowAuth] = useState(false)
+  const [pending, setPending] = useState<Pending>(null)
+  const [exporting, setExporting] = useState(false)
+  const [toast, setToast] = useState('')
+  const nudgeTimer = useRef<number | undefined>(undefined)
+  const toastTimer = useRef<number | undefined>(undefined)
+  const firstRender = useRef(true)
+
+  const { user, loading: authLoading } = useAuth()
+  const signedIn = !!user
+  const versions = useBlueprintVersions(signedIn)
+  const { theme, setTheme } = useThemePreference()
+
+  const isLocked = useCallback(
+    (step: BlueprintStep) => !selectedPath && !!SECTIONS[sectionIndex(step)]?.needsPath,
+    [selectedPath],
+  )
+
+  const completedSteps = useMemo<BlueprintStep[]>(() => {
+    const done = new Set(visited)
+    if (selectedPath) done.add('path-selection')
+    return [...done]
+  }, [visited, selectedPath])
+
+  const flash = useCallback((msg: string) => {
+    setToast(msg)
+    window.clearTimeout(toastTimer.current)
+    toastTimer.current = window.setTimeout(() => setToast(''), 3000)
+  }, [])
+
+  // ── Section navigation ────────────────────────────────────────────────
+  const showNudge = useCallback(() => {
+    setNudgeVisible(true)
+    window.clearTimeout(nudgeTimer.current)
+    nudgeTimer.current = window.setTimeout(() => setNudgeVisible(false), 6000)
+  }, [])
+
+  const goTo = useCallback((step: BlueprintStep) => {
+    setDrawerOpen(false)
+    if (isLocked(step)) { showNudge(); return }
+    setNudgeVisible(false)
+    if (step === currentStep) return
+    setVisited(prev => prev.includes(currentStep) ? prev : [...prev, currentStep])
+    setCurrentStep(step)
+  }, [currentStep, isLocked, showNudge])
+
+  // Scroll to top and move focus to the new section's title on every section change.
+  useEffect(() => {
+    if (firstRender.current) { firstRender.current = false; return }
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
+    const id = window.requestAnimationFrame(() => {
+      document.querySelector<HTMLElement>('[data-section-title]')?.focus({ preventScroll: true })
+    })
+    return () => window.cancelAnimationFrame(id)
+  }, [currentStep])
+
+  useEffect(() => () => { window.clearTimeout(nudgeTimer.current); window.clearTimeout(toastTimer.current) }, [])
+
+  // ── Utilities ─────────────────────────────────────────────────────────
+  const doExport = useCallback(() => {
+    if (!blueprint) return
+    setExporting(true)
+    const md = exportToNotionMarkdown(blueprint, selectedPath)
+    downloadMarkdown(md, `wingspan-blueprint-${new Date().toISOString().split('T')[0]}.md`)
+    window.setTimeout(() => { setExporting(false); flash('Blueprint exported') }, 800)
+  }, [blueprint, selectedPath, flash])
+
+  const openSave = useCallback(() => {
+    setDrawerOpen(false)
+    if (!signedIn) { setPending('save'); setShowAuth(true); return }
+    versions.setError('')
+    setModal('save')
+  }, [signedIn, versions])
+
+  const exportMarkdown = useCallback(() => {
+    setDrawerOpen(false)
+    if (signedIn) { doExport(); return }
+    setPending('export'); setShowAuth(true)
+  }, [signedIn, doExport])
+
+  const openSignIn = useCallback(() => {
+    setDrawerOpen(false); setPending(null); setShowAuth(true)
+  }, [])
+
+  const signOut = useCallback(async () => {
+    setModal(null); setDrawerOpen(false)
+    await fetch('/api/auth/logout', { method: 'POST' }).catch(() => null)
+    notifyAuthChanged()
+    flash('Signed out')
+  }, [flash])
+
+  // Other surfaces (older code paths) can still ask for the save flow by event.
+  useEffect(() => {
+    window.addEventListener(OPEN_SAVE_VERSION, openSave)
+    return () => window.removeEventListener(OPEN_SAVE_VERSION, openSave)
+  }, [openSave])
+
+  // After sign-in, continue to whatever the guest was trying to do.
+  const onAuthSuccess = () => {
+    setShowAuth(false)
+    if (pending === 'save') { versions.setError(''); setModal('save') }
+    if (pending === 'export') doExport()
+    setPending(null)
+  }
+
+  const hasDeep = !!blueprint?.deepAnalysis && Array.isArray(blueprint.deepAnalysis.agents)
+  const openDeepAnalysis = useMemo(
+    () => (hasDeep ? () => { setDrawerOpen(false); setModal('deep') } : null),
+    [hasDeep],
+  )
+
+  const shell = useMemo<ShellActions>(() => ({
+    goTo, openSave, openVersions: () => setModal('versions'), exportMarkdown, exporting,
+    openDeepAnalysis, openSignIn, signedIn, authLoading,
+  }), [goTo, openSave, exportMarkdown, exporting, openDeepAnalysis, openSignIn, signedIn, authLoading])
 
   if (!blueprint) return null
 
-  const currentStepIdx = STEPS.findIndex(s => s.id === currentStep)
-  const currentStepMeta = STEPS[currentStepIdx]
-  const isLastStep = currentStepIdx === STEPS.length - 1
-  const canAdvance = currentStep !== 'path-selection' || !!selectedPath
+  const idx = sectionIndex(currentStep)
+  const prev = SECTIONS[idx - 1]
+  const next = SECTIONS[idx + 1]
+  const nextLocked = !!next && isLocked(next.id)
+  const current = SECTIONS[idx]
 
-  const navigateTo = (step: BlueprintStep) => {
-    // Scroll to top on every tab change, especially Future Paths
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-    setCurrentStep(step)
-    setCompletedSteps(prev => prev.includes(currentStep) ? prev : [...prev, currentStep])
-  }
-
-  const handleStepClick = (step: BlueprintStep) => {
-    const targetIdx = STEPS.findIndex(s => s.id === step)
-    const isLocked = step === 'path-selection' && !selectedPath && targetIdx > currentStepIdx + 1
-
-    if (isLocked) {
-      // Show friendly nudge instead of blocking
-      setNudgeVisible(true)
-      setTimeout(() => setNudgeVisible(false), 3000)
-      return
-    }
-    navigateTo(step)
-  }
-
-  const handleNext = () => {
-    if (!canAdvance) return
-    const next = STEPS[currentStepIdx + 1]
-    if (next) navigateTo(next.id)
-  }
-
-  const handleBack = () => {
-    const prev = STEPS[currentStepIdx - 1]
-    if (prev) navigateTo(prev.id)
+  const navProps = {
+    currentStep, completedSteps, isLocked, onStepClick: goTo, selectedPath,
+    user: user ?? null, authLoading, versionCount: versions.versions.length, exporting,
+    onSave: openSave,
+    onVersions: () => { setDrawerOpen(false); versions.setError(''); setModal('versions') },
+    onDeepAnalysis: openDeepAnalysis,
+    onExport: exportMarkdown,
+    onPreferences: () => { setDrawerOpen(false); setModal('preferences') },
+    onSignIn: openSignIn,
+    onAccount: () => setModal('account'),
+    onSignOut: signOut,
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <MotionConfig reducedMotion="user">
+      <ShellContext.Provider value={shell}>
+        <div className="min-h-screen [--ws-ink:#b6ff2e] [.light_&]:[--ws-ink:#3f6a00]">
 
-      {/* Sticky top nav */}
-      <div className="sticky top-0 z-40 bg-[var(--bg)] border-b border-[var(--border-ws)] px-6 py-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="flex items-center justify-between mb-3">
-            <span
-              className="text-xs font-normal tracking-[0.2em] text-[var(--neon)]"
-              style={{ fontFamily: 'var(--font-sora)' }}
-            >
-              Future Self Blueprint™
-            </span>
-            <div className="flex items-center gap-3">
-              <BlueprintVersions />
-              <span className="text-[10px] text-[var(--text-muted)]">
-                {currentStepIdx + 1} / {STEPS.length}
-              </span>
-            </div>
-          </div>
-          <StepNav
-            currentStep={currentStep}
-            completedSteps={completedSteps}
-            onStepClick={handleStepClick}
-          />
-        </div>
-      </div>
+          {/* Desktop sidebar (lg+) and tablet icon rail (md) */}
+          <aside className="hidden md:block fixed inset-y-0 left-0 z-30 w-[72px] lg:w-[264px] border-r border-[var(--border-ws)] bg-[var(--surface)]">
+            <div className="hidden lg:block h-full"><SideNav variant="full" {...navProps} /></div>
+            <div className="lg:hidden h-full"><SideNav variant="rail" {...navProps} /></div>
+          </aside>
 
-      {/* Step content — wider max-w for more breathing room */}
-      <div className="flex-1 px-6 py-10">
-        <div className="max-w-3xl mx-auto">
-
-          {/* Step header */}
-          <motion.div
-            key={currentStep + '-header'}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="mb-8"
-          >
-            <h2
-              className="text-2xl font-bold text-[var(--text-primary)] mb-1"
-              style={{ fontFamily: 'var(--font-sora)' }}
-            >
-              {currentStepMeta.title}
-            </h2>
-            <p className="text-sm text-[var(--text-muted)]">{currentStepMeta.subtitle}</p>
-          </motion.div>
-
-          {/* Friendly nudge when a locked tab is tapped */}
-          <AnimatePresence>
-            {nudgeVisible && (
-              <motion.div
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                className="mb-6 rounded-[10px] px-4 py-3 bg-[var(--neon-surface)] border border-[var(--neon-border)]"
-              >
-                <p className="text-xs text-[var(--neon)]">
-                  Pick a path first — then Gap Analysis and everything after will be tailored to it.
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Step body */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentStep}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.35, ease: 'easeOut' as const }}
-            >
-              <StepErrorBoundary key={currentStep} label={currentStep}>
-                <StepContent
-                  step={currentStep}
-                  blueprint={blueprint}
-                  extractedData={extractedData}
-                />
-              </StepErrorBoundary>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Navigation footer */}
-          <div className="mt-12 flex items-center justify-between">
+          {/* Phone top bar */}
+          <header className="md:hidden sticky top-0 z-30 h-14 flex items-center gap-3 px-4 border-b border-[var(--border-ws)] bg-[var(--bg)]/95 backdrop-blur">
             <button
-              onClick={handleBack}
-              disabled={currentStepIdx === 0}
-              className="text-sm text-[var(--text-muted)] hover:text-[var(--text-secondary)] disabled:opacity-0 transition-colors"
+              type="button"
+              onClick={() => setDrawerOpen(true)}
+              aria-label="Open navigation"
+              aria-expanded={drawerOpen}
+              aria-controls="blueprint-drawer"
+              className={`-ml-2 w-10 h-10 rounded-[10px] inline-flex items-center justify-center text-[var(--text-primary)] hover:bg-[var(--surface-dim)] ${FOCUS_RING}`}
             >
-              {currentStepIdx > 0 ? `← ${STEPS[currentStepIdx - 1].title}` : ''}
+              <Menu size={20} />
             </button>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/WingSpanLogo_Symbol.svg" alt="" width={24} height={24} className="w-6 h-6" />
+            <div className="min-w-0 flex-1">
+              <p className="text-[14px] font-semibold text-[var(--text-primary)] truncate leading-tight" style={{ fontFamily: 'var(--font-sora)' }}>
+                {current.label}
+              </p>
+              <p className="text-[11px] text-[var(--text-muted)] leading-tight">Step {idx + 1} of {SECTIONS.length}</p>
+            </div>
+          </header>
 
-            {!isLastStep && (
-              <button
-                onClick={handleNext}
-                disabled={!canAdvance}
-                className={`
-                  flex items-center gap-2 px-6 py-2.5 rounded-[10px] text-sm font-bold transition-all
-                  ${canAdvance
-                    ? 'bg-[var(--neon)] text-[#0a0a0a]'
-                    : 'bg-[var(--surface)] text-[var(--text-dim)] border border-[var(--border-ws)] cursor-not-allowed'
-                  }
-                `}
+          <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+            <SideNav variant="full" {...navProps} />
+          </MobileDrawer>
+
+          {/* Main column */}
+          <main className="md:pl-[72px] lg:pl-[264px]">
+            <div className="max-w-[920px] px-4 sm:px-6 lg:px-10 pt-8 pb-16 lg:pt-12">
+
+              <AnimatePresence>
+                {nudgeVisible && (
+                  <motion.div
+                    role="status"
+                    initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
+                    className="mb-8 rounded-[12px] border border-[var(--neon-border)] bg-[var(--neon-surface)] p-4 flex flex-col sm:flex-row sm:items-center gap-3"
+                  >
+                    <Lock size={16} className="shrink-0 text-[var(--ws-ink)]" aria-hidden />
+                    <p className="flex-1 text-[13px] text-[var(--text-primary)] leading-relaxed">
+                      Choose a path first. Gap Analysis, Roadmap and Resources are tailored to the path you pick.
+                    </p>
+                    {currentStep !== 'path-selection' && (
+                      <SecondaryButton onClick={() => goTo('path-selection')} className="h-9 shrink-0">Go to Future Paths</SecondaryButton>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <motion.div
+                key={currentStep}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
               >
-                {currentStep === 'path-selection' && !selectedPath
-                  ? 'Pick a direction to keep going'
-                  : `Next: ${STEPS[currentStepIdx + 1]?.title} →`
-                }
-              </button>
-            )}
-          </div>
+                <StepErrorBoundary key={currentStep} label={currentStep}>
+                  <StepContent step={currentStep} blueprint={blueprint} extractedData={extractedData} />
+                </StepErrorBoundary>
+              </motion.div>
 
+              {/* Section Prev / Next */}
+              <nav aria-label="Section navigation" className="mt-16 pt-6 border-t border-[var(--border-ws)] flex items-center justify-between gap-3">
+                {prev ? (
+                  <button
+                    type="button"
+                    onClick={() => goTo(prev.id)}
+                    className={`group inline-flex items-center gap-2 h-11 px-3 -ml-3 rounded-[10px] text-left hover:bg-[var(--surface-dim)] ${FOCUS_RING}`}
+                  >
+                    <ArrowLeft size={16} className="text-[var(--text-muted)]" aria-hidden />
+                    <span>
+                      <span className="block text-[11px] text-[var(--text-muted)] leading-tight">Previous</span>
+                      <span className="block text-[14px] font-semibold text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] leading-tight">{prev.label}</span>
+                    </span>
+                  </button>
+                ) : <span />}
+
+                {next && (
+                  nextLocked ? (
+                    <button
+                      type="button"
+                      onClick={showNudge}
+                      aria-disabled="true"
+                      className={`inline-flex items-center gap-2 h-11 px-4 rounded-[10px] border border-[var(--border-ws)] text-[13px] font-semibold text-[var(--text-muted)] cursor-not-allowed ${FOCUS_RING}`}
+                    >
+                      <Lock size={14} aria-hidden />
+                      Choose a path to continue
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => goTo(next.id)}
+                      className={`inline-flex items-center gap-3 h-11 pl-4 pr-3 rounded-[10px] bg-[var(--neon)] text-[#0a0a0a] text-left hover:opacity-90 ${FOCUS_RING}`}
+                    >
+                      <span>
+                        <span className="block text-[11px] leading-tight opacity-70">Next</span>
+                        <span className="block text-[14px] font-bold leading-tight">{next.label}</span>
+                      </span>
+                      <ArrowRight size={16} aria-hidden />
+                    </button>
+                  )
+                )}
+              </nav>
+            </div>
+          </main>
+
+          {/* Dialogs */}
+          <SaveVersionDialog
+            open={modal === 'save'}
+            onClose={() => setModal(null)}
+            api={versions}
+            onSaved={() => { setModal(null); flash('Version saved') }}
+          />
+          <VersionsDialog
+            open={modal === 'versions'}
+            onClose={() => setModal(null)}
+            api={versions}
+            onOpened={() => { setModal(null); flash('Version opened') }}
+            onSaveNew={() => { versions.setError(''); setModal('save') }}
+          />
+          <PreferencesDialog open={modal === 'preferences'} onClose={() => setModal(null)} theme={theme} setTheme={setTheme} />
+          <Dialog open={modal === 'account' && !!user} onClose={() => setModal(null)} title="Account">
+            {user && (
+              <div className="flex flex-col gap-5">
+                <div className="flex items-center gap-3">
+                  <Avatar email={user.email} />
+                  <p className="text-[14px] text-[var(--text-primary)] truncate">{user.email}</p>
+                </div>
+                <SecondaryButton onClick={signOut} className="self-start"><LogOut size={14} />Sign out</SecondaryButton>
+              </div>
+            )}
+          </Dialog>
+          <DeepAnalysisDialog analysis={blueprint.deepAnalysis} open={modal === 'deep'} onClose={() => setModal(null)} />
+
+          <AnimatePresence>
+            {showAuth && (
+              <AuthModal
+                onClose={() => { setShowAuth(false); setPending(null) }}
+                onSuccess={onAuthSuccess}
+              />
+            )}
+          </AnimatePresence>
+
+          {/* Confirmation toast */}
+          <div aria-live="polite" className="fixed bottom-6 left-1/2 -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 z-[80] pointer-events-none">
+            <AnimatePresence>
+              {toast && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }}
+                  className="rounded-full border border-[var(--border-ws)] bg-[var(--surface)] px-4 h-10 inline-flex items-center gap-2 text-[13px] font-semibold text-[var(--text-primary)] shadow-xl"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--neon)]" aria-hidden />
+                  {toast}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
-      </div>
-    </div>
+      </ShellContext.Provider>
+    </MotionConfig>
+  )
+}
+
+function MobileDrawer({ open, onClose, children }: { open: boolean; onClose: () => void; children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  useModalBehaviour(open, onClose, ref)
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="md:hidden fixed inset-0 z-[60] bg-black/60"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          onMouseDown={(e) => { if (e.target === e.currentTarget) onClose() }}
+        >
+          <motion.div
+            ref={ref}
+            id="blueprint-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Blueprint navigation"
+            initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
+            transition={{ duration: 0.22, ease: 'easeOut' }}
+            className="relative h-full w-[300px] max-w-[86vw] bg-[var(--surface)] border-r border-[var(--border-ws)] shadow-2xl"
+          >
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close navigation"
+              className={`absolute right-3 top-5 z-10 w-9 h-9 rounded-full inline-flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-dim)] ${FOCUS_RING}`}
+            >
+              <X size={18} />
+            </button>
+            <div className="h-full overflow-y-auto">{children}</div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
