@@ -27,7 +27,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sora.variable} ${plusJakarta.variable}`}>
+    <html lang="en" className={`${sora.variable} ${plusJakarta.variable}`} suppressHydrationWarning>
+      <head>
+        {/* Apply a saved theme before first paint so every screen, including the Blueprint, uses the same one. Dark is the default. */}
+        <script dangerouslySetInnerHTML={{ __html: "try{if(localStorage.getItem('wingspan-theme-v2')==='light')document.documentElement.classList.add('light')}catch(e){}" }} />
+      </head>
       <body>
         <WingspanProvider>{children}</WingspanProvider>
       </body>

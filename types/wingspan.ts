@@ -264,6 +264,7 @@ export type WingspanAction =
   | { type: 'SET_BLUEPRINT'; blueprint: Blueprint }
   | { type: 'SET_ERROR'; error: string }
   | { type: 'CLEAR_ERROR' }
+  | { type: 'RESET_FLOW' }
   | { type: 'SELECT_PATH'; path: string }
   | { type: 'SET_PROJECT_VIEW'; view: ProjectView }
   | { type: 'UPDATE_PROJECT'; project: Project }

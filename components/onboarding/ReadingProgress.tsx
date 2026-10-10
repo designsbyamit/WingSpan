@@ -1,13 +1,12 @@
 'use client'
 import { Check, Loader2 } from 'lucide-react'
 import { formatElapsed, useNow } from './activity'
-import { cx, linkButton } from './ui'
+import { cx } from './ui'
 
 interface ReadingProgressProps {
   fileName: string | undefined
   interests: string[]
   startedAt: number | null
-  onBack: () => void
 }
 
 type StepState = 'done' | 'active' | 'pending'
@@ -34,7 +33,7 @@ function StepMark({ state }: { state: StepState }) {
  * Shown when the person asks for their Blueprint while the resume is still being read.
  * Calm and factual: what is done, what is happening, what comes next. Resolves on its own.
  */
-export function ReadingProgress({ fileName, interests, startedAt, onBack }: ReadingProgressProps) {
+export function ReadingProgress({ fileName, interests, startedAt }: ReadingProgressProps) {
   const now = useNow(true)
   const elapsed = startedAt ? formatElapsed(now - startedAt) : null
 
@@ -80,10 +79,6 @@ export function ReadingProgress({ fileName, interests, startedAt, onBack }: Read
           </li>
         ))}
       </ol>
-
-      <div>
-        <button type="button" onClick={onBack} className={linkButton}>Change focus areas</button>
-      </div>
 
       <style>{`@keyframes ws-indeterminate { 0% { transform: translateX(-110%); } 100% { transform: translateX(310%); } }`}</style>
     </div>

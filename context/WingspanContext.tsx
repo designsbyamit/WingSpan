@@ -43,6 +43,8 @@ function reducer(state: WingspanState, action: WingspanAction): WingspanState {
         ...state,
         activity: [...state.activity, { ...action.event, id: `${Date.now()}-${state.activity.length}`, at: Date.now() }].slice(-200),
       }
+    case 'RESET_FLOW':
+      return { ...initialState }
     case 'RESET_ACTIVITY':
       return { ...state, activity: [] }
     case 'SET_SCREEN':

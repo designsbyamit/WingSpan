@@ -16,6 +16,8 @@ import { DeepAnalysisDialog } from '@/components/blueprint/DeepAnalysisPanel'
 import { SaveVersionDialog, VersionsDialog, useBlueprintVersions } from '@/components/blueprint/BlueprintVersions'
 import { SideNav, Avatar } from '@/components/blueprint/shell/SideNav'
 import { Dialog, useModalBehaviour } from '@/components/blueprint/shell/Dialog'
+import { FlowFooter } from '@/components/onboarding/FlowFooter'
+import { cx, primaryButton, quietButton } from '@/components/onboarding/ui'
 import { PreferencesDialog, useThemePreference } from '@/components/blueprint/shell/PreferencesDialog'
 import { ShellContext, type ShellActions } from '@/components/blueprint/shell/ShellContext'
 import { SECTIONS, sectionIndex } from '@/components/blueprint/shell/sections'
@@ -231,7 +233,7 @@ export function BlueprintScreen() {
 
           {/* Main column */}
           <main className="md:pl-[72px] lg:pl-[264px]">
-            <div className="max-w-[920px] px-4 sm:px-6 lg:px-10 pt-8 pb-16 lg:pt-12">
+            <div className="max-w-[920px] px-4 sm:px-6 lg:px-10 pt-8 pb-48 sm:pb-40 lg:pt-12">
 
               <AnimatePresence>
                 {nudgeVisible && (
@@ -262,50 +264,32 @@ export function BlueprintScreen() {
                 </StepErrorBoundary>
               </motion.div>
 
-              {/* Section Prev / Next */}
-              <nav aria-label="Section navigation" className="mt-16 pt-6 border-t border-[var(--border-ws)] flex items-center justify-between gap-3">
-                {prev ? (
-                  <button
-                    type="button"
-                    onClick={() => goTo(prev.id)}
-                    className={`group inline-flex items-center gap-2 h-11 px-3 -ml-3 rounded-[10px] text-left hover:bg-[var(--surface-dim)] ${FOCUS_RING}`}
-                  >
-                    <ArrowLeft size={16} className="text-[var(--text-muted)]" aria-hidden />
-                    <span>
-                      <span className="block text-[11px] text-[var(--text-muted)] leading-tight">Previous</span>
-                      <span className="block text-[14px] font-semibold text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] leading-tight">{prev.label}</span>
-                    </span>
-                  </button>
-                ) : <span />}
-
-                {next && (
-                  nextLocked ? (
-                    <button
-                      type="button"
-                      onClick={showNudge}
-                      aria-disabled="true"
-                      className={`inline-flex items-center gap-2 h-11 px-4 rounded-[10px] border border-[var(--border-ws)] text-[13px] font-semibold text-[var(--text-muted)] cursor-not-allowed ${FOCUS_RING}`}
-                    >
-                      <Lock size={14} aria-hidden />
-                      Choose a path to continue
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => goTo(next.id)}
-                      className={`inline-flex items-center gap-3 h-11 pl-4 pr-3 rounded-[10px] bg-[var(--neon)] text-[#0a0a0a] text-left hover:opacity-90 ${FOCUS_RING}`}
-                    >
-                      <span>
-                        <span className="block text-[11px] leading-tight opacity-70">Next</span>
-                        <span className="block text-[14px] font-bold leading-tight">{next.label}</span>
-                      </span>
-                      <ArrowRight size={16} aria-hidden />
-                    </button>
-                  )
-                )}
-              </nav>
             </div>
           </main>
+
+          {/* Same sticky footer as the rest of the journey, carrying Previous / Next */}
+          <FlowFooter
+            inset="left-0 md:left-[72px] lg:left-[264px]"
+            progress={Math.round(((idx + 1) / SECTIONS.length) * 100)}
+            message={<>Step {idx + 1} of {SECTIONS.length} · {current.label}</>}
+            hint={nextLocked ? 'Choose a path in Future Paths to unlock the next steps.' : next ? `Next: ${next.label}` : 'You have reached the last step.'}
+            actions={<>
+              {prev && (
+                <button type="button" onClick={() => goTo(prev.id)} className={quietButton}>
+                  <ArrowLeft size={15} aria-hidden /> <span className="hidden sm:inline">{prev.label}</span><span className="sm:hidden">Back</span>
+                </button>
+              )}
+              {next && (nextLocked ? (
+                <button type="button" onClick={showNudge} aria-disabled="true" className={cx(quietButton, 'cursor-not-allowed text-[var(--text-muted)]')}>
+                  <Lock size={14} aria-hidden /> Choose a path to continue
+                </button>
+              ) : (
+                <button type="button" onClick={() => goTo(next.id)} className={primaryButton}>
+                  {next.label} <ArrowRight size={15} aria-hidden />
+                </button>
+              ))}
+            </>}
+          />
 
           {/* Dialogs */}
           <SaveVersionDialog

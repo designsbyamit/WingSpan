@@ -5,7 +5,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { MotionConfig } from 'framer-motion'
 import { useWingspan } from '@/context/WingspanContext'
-import { runCareerPipeline } from '@/lib/pipeline'
+import { cancelCareerPipeline, runCareerPipeline } from '@/lib/pipeline'
 import { factsOf } from '@/lib/experience'
 import { ActivityDrawer } from '@/components/onboarding/ActivityDrawer'
 import { AnalysisStatus } from '@/components/onboarding/AnalysisStatus'
@@ -51,7 +51,7 @@ export function ValidationScreen() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <main className="mx-auto w-full max-w-5xl px-4 pb-32 pt-24 sm:px-6 md:pt-28">
+      <main className="mx-auto w-full max-w-5xl px-4 pb-48 pt-24 sm:pb-40 sm:px-6 md:pt-28">
         <div className="flex flex-col gap-6">
           <IdentityHeader facts={facts} />
           <KpiStrip data={extractedData} years={facts.years} />
@@ -74,6 +74,7 @@ export function ValidationScreen() {
         onOpenDetails={() => setDrawerOpen(true)}
         onOpenBlueprint={openBlueprint}
         onRetry={retry}
+        onCancel={() => { cancelCareerPipeline(); dispatch({ type: 'RESET_FLOW' }) }}
       />
 
       <ActivityDrawer open={drawerOpen} onClose={closeDrawer} />

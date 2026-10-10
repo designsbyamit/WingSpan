@@ -5,7 +5,8 @@ import { Dialog } from './Dialog'
 import { FOCUS_RING, INK } from './ui'
 
 type Theme = 'dark' | 'light'
-const STORAGE_KEY = 'wingspan-theme' // same key and `.light` class as components/ui/ThemeToggle
+// v2: an earlier build stored an accidental 'light' for some people. Only an explicit choice here is kept now.
+const STORAGE_KEY = 'wingspan-theme-v2'
 
 function readStored(): Theme {
   try { return localStorage.getItem(STORAGE_KEY) === 'light' ? 'light' : 'dark' } catch { return 'dark' }

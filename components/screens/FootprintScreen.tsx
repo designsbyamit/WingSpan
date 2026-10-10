@@ -3,11 +3,13 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
 import { ArrowRight, ChevronDown, ChevronUp, Link2, Upload } from 'lucide-react'
 import { useWingspan } from '@/context/WingspanContext'
-import { runCareerPipeline } from '@/lib/pipeline'
-import { MIN_INTERESTS } from '@/lib/interests'
+import { cancelCareerPipeline, runCareerPipeline } from '@/lib/pipeline'
+import { MIN_INTERESTS, MAX_INTERESTS } from '@/lib/interests'
 import type { ExtractedCareerData } from '@/types/wingspan'
 import { ResumeDrop } from '@/components/onboarding/ResumeDrop'
-import { InterestGroups, SelectionTray, SuggestedInterests } from '@/components/onboarding/InterestPicker'
+import { FocusTabs, SelectedFocus, focusHelper } from '@/components/onboarding/InterestPicker'
+import { FlowFooter, FOOTER_SPACE } from '@/components/onboarding/FlowFooter'
+import { CancelFlowButton } from '@/components/onboarding/CancelFlow'
 import { ReadingProgress } from '@/components/onboarding/ReadingProgress'
 import { useResumeExtraction } from '@/components/onboarding/useResumeExtraction'
 import { cx, focusRing, primaryButton, quietButton } from '@/components/onboarding/ui'
@@ -188,9 +190,26 @@ export function FootprintScreen() {
 
   const transition = { duration: 0.22, ease: [0.2, 0, 0, 1] as const }
 
+  const startOver = () => {
+    cancelCareerPipeline()
+    extraction.cancel()
+    launched.current = false
+    setWaiting(false)
+    dispatch({ type: 'RESET_FLOW' })
+    setStep('upload')
+  }
+  const cancelButton = (
+    <CancelFlowButton
+      onConfirm={startOver}
+      body="This stops reading your resume and takes you back to the start, where you can upload a different one."
+    />
+  )
+
+  const n = state.interests.length
+
   return (
     <MotionConfig reducedMotion="user">
-      <main className="flex min-h-screen justify-center px-4 pb-0 pt-24 sm:px-6 sm:pt-28">
+      <main className={cx('flex min-h-screen justify-center px-4 pt-24 sm:px-6 sm:pt-28', FOOTER_SPACE)}>
         <div className="flex w-full max-w-2xl flex-col gap-8">
           {!showWaiting && <StepRail step={step} onGoTo={goTo} />}
 
@@ -202,7 +221,6 @@ export function FootprintScreen() {
                   fileName={primaryFile?.name}
                   interests={state.interests}
                   startedAt={extraction.startedAt}
-                  onBack={() => setWaiting(false)}
                 />
               </motion.div>
             ) : step === 'upload' ? (
@@ -226,18 +244,9 @@ export function FootprintScreen() {
                 />
 
                 {ENABLE_LINK_INPUTS && <LinkInputs />}
-
-                <div className="flex flex-col gap-2 pb-10 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-xs text-[var(--text-muted)]">
-                    {canContinue ? 'Reading starts when you continue.' : 'Add your resume to continue.'}
-                  </p>
-                  <button type="button" onClick={handleContinue} disabled={!canContinue} className={cx(primaryButton, 'w-full sm:w-auto')}>
-                    Continue <ArrowRight size={15} aria-hidden />
-                  </button>
-                </div>
               </motion.div>
             ) : (
-              <motion.div key="interests" className="flex flex-col gap-8"
+              <motion.div key="interests" className="flex flex-col gap-7"
                 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={transition}>
                 <div>
                   <h1 ref={headingRef} tabIndex={-1}
@@ -246,41 +255,64 @@ export function FootprintScreen() {
                     Choose where you want to grow
                   </h1>
                   <p className="mt-2 max-w-[56ch] text-[15px] leading-relaxed text-[var(--text-secondary)]">
-                    Pick {MIN_INTERESTS} to 5 focus areas. Your Blueprint weighs its directions and learning toward them.
+                    Pick {MIN_INTERESTS} to {MAX_INTERESTS} focus areas. Your Blueprint weighs its directions and learning toward them.
                   </p>
                 </div>
 
-                <SuggestedInterests
+                <FocusTabs
                   status={extraction.status}
-                  data={extraction.data}
+                  data={extraction.status === 'done' ? extraction.data : null}
                   error={extraction.error}
                   onRetry={retryExtraction}
                   onReupload={() => goTo('upload')}
                 />
-
-                <InterestGroups data={extraction.status === 'done' ? extraction.data : null} />
-
-                <SelectionTray
-                  status={extraction.status}
-                  actions={
-                    <>
-                      <button type="button" onClick={() => goTo('upload')} className={quietButton}>Back</button>
-                      <button
-                        type="button"
-                        onClick={handleBuild}
-                        disabled={!enoughInterests || extractionFailed}
-                        className={cx(primaryButton, 'flex-1')}
-                      >
-                        Build my Blueprint
-                      </button>
-                    </>
-                  }
-                />
+                <SelectedFocus />
               </motion.div>
             )}
           </AnimatePresence>
         </div>
       </main>
+
+      {showWaiting ? (
+        <FlowFooter
+          progress="sweep"
+          message="Finishing reading your resume"
+          hint="Your analysis starts the moment this is done. It usually takes under a minute."
+          actions={<>
+            <button type="button" onClick={() => setWaiting(false)} className={quietButton}>Change focus areas</button>
+            {cancelButton}
+          </>}
+        />
+      ) : step === 'upload' ? (
+        <FlowFooter
+          message={canContinue ? 'Reading starts when you continue.' : 'Add your resume to continue.'}
+          hint={primaryFile ? primaryFile.name : 'PDF or Word document, up to a few pages.'}
+          actions={
+            <button type="button" onClick={handleContinue} disabled={!canContinue} className={primaryButton}>
+              Continue <ArrowRight size={15} aria-hidden />
+            </button>
+          }
+        />
+      ) : (
+        <FlowFooter
+          progress={extraction.status === 'reading' ? 'sweep' : undefined}
+          tone={extractionFailed ? 'error' : 'default'}
+          role="status"
+          message={`${n} of ${MAX_INTERESTS} focus areas chosen`}
+          hint={
+            extractionFailed ? 'We could not read your resume. Try again or upload a different file.'
+            : extraction.status === 'reading' ? `${focusHelper(n)} Reading your resume in the background…`
+            : focusHelper(n)
+          }
+          actions={<>
+            <button type="button" onClick={() => goTo('upload')} className={quietButton}>Back</button>
+            {cancelButton}
+            <button type="button" onClick={handleBuild} disabled={!enoughInterests || extractionFailed} className={primaryButton}>
+              Build my Blueprint
+            </button>
+          </>}
+        />
+      )}
     </MotionConfig>
   )
 }

@@ -95,8 +95,16 @@ export function useResumeExtraction() {
     if (lastInput.current) start(lastInput.current.files, lastInput.current.urls, true)
   }, [start])
 
+  const cancel = useCallback(() => {
+    abortRef.current?.abort()
+    keyRef.current = null
+    lastInput.current = null
+    statusRef.current = 'idle'
+    setStatus('idle'); setError(null); setData(null); setStartedAt(null)
+  }, [])
+
   // Leaving the flow mid-read: stop the request so a late response can't overwrite newer state.
   useEffect(() => () => abortRef.current?.abort(), [])
 
-  return { status, error, data, startedAt, start, retry }
+  return { status, error, data, startedAt, start, retry, cancel }
 }

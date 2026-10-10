@@ -50,12 +50,24 @@ export function canResume(): boolean {
   try { return !!sessionStorage.getItem(STORE) } catch { return false }
 }
 
+let controller: AbortController | null = null
+
+/** Stop any analysis in flight and forget saved results (used by Cancel / start over). */
+export function cancelCareerPipeline() {
+  controller?.abort()
+  controller = null
+  checkpoint = null
+  try { sessionStorage.removeItem(STORE) } catch { /* ignore */ }
+}
+
 export async function runCareerPipeline(
   extractedData: ExtractedCareerData,
   interests: string[],
   dispatch: Dispatch<WingspanAction>
 ): Promise<void> {
   const activity = (event: Omit<ActivityEvent, 'id' | 'at'>) => dispatch({ type: 'ADD_ACTIVITY', event })
+  controller?.abort()
+  const ctl = (controller = new AbortController())
   dispatch({ type: 'CLEAR_ERROR' })
   dispatch({ type: 'SET_BLUEPRINT_LOADING', loading: true })
   try {
@@ -76,6 +88,7 @@ export async function runCareerPipeline(
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ extractedData, interests }),
+        signal: ctl.signal,
       })
       if (!caRes.ok) {
         const failure = await readJson(caRes)
@@ -110,6 +123,7 @@ export async function runCareerPipeline(
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ validatedData, careerAlpha, bets, growth }),
+      signal: ctl.signal,
     })
     if (!res.ok) throw new Error('Blueprint failed')
 
@@ -135,6 +149,7 @@ export async function runCareerPipeline(
     })
     if (!completed) throw new Error('Blueprint generation ended before a complete result was received. Please try again.')
   } catch (err) {
+    if (ctl.signal.aborted) return // cancelled on purpose
     console.error('Background pipeline error:', err)
     const message = err instanceof Error ? err.message : 'Something went wrong while building your Blueprint.'
     activity({ source: 'system', status: 'error', label: 'The analysis stopped', detail: message })
