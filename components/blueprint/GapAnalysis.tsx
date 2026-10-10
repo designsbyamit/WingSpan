@@ -1,6 +1,7 @@
 // components/blueprint/GapAnalysis.tsx
 'use client'
 import { useState } from 'react'
+import { matchesPath } from '@/lib/path-match'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { Blueprint, Gap } from '@/types/wingspan'
@@ -243,7 +244,7 @@ export function GapAnalysis({ blueprint }: { blueprint: Blueprint }) {
 
   const selectedPath = state.selectedPath
   const filteredGaps = selectedPath
-    ? gaps.filter(g => g.pathway === selectedPath || g.pathway.includes(selectedPath.split('/')[0].trim()))
+    ? gaps.filter(g => matchesPath(g.pathway, selectedPath))
     : gaps
 
   if (!selectedPath) {

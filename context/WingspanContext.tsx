@@ -2,6 +2,7 @@
 'use client'
 
 import { createContext, useContext, useReducer, ReactNode } from 'react'
+import { normalizeBlueprint } from '@/lib/blueprint-shape'
 import {
   WingspanState,
   WingspanAction,
@@ -105,9 +106,9 @@ function reducer(state: WingspanState, action: WingspanAction): WingspanState {
     case 'SET_BLUEPRINT':
       return {
         ...state,
-        blueprint: action.blueprint.careerAlpha
+        blueprint: normalizeBlueprint(action.blueprint.careerAlpha
           ? action.blueprint
-          : { ...action.blueprint, careerAlpha: state.careerAlpha ?? undefined },
+          : { ...action.blueprint, careerAlpha: state.careerAlpha ?? undefined }),
       }
     case 'SET_ERROR':
       return { ...state, error: action.error }
@@ -136,9 +137,9 @@ function reducer(state: WingspanState, action: WingspanAction): WingspanState {
     case 'SET_BLUEPRINT_BACKGROUND':
       return {
         ...state,
-        blueprint: action.blueprint.careerAlpha
+        blueprint: normalizeBlueprint(action.blueprint.careerAlpha
           ? action.blueprint
-          : { ...action.blueprint, careerAlpha: state.careerAlpha ?? undefined },
+          : { ...action.blueprint, careerAlpha: state.careerAlpha ?? undefined }),
         blueprintReady: true,
         blueprintLoading: false,
         pipelineStage: null,

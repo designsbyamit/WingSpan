@@ -1,6 +1,7 @@
 // lib/export.ts
 // Generates a Notion-importable Markdown document from the Blueprint
 import { Blueprint } from '@/types/wingspan'
+import { matchesPath } from '@/lib/path-match'
 
 export function exportToNotionMarkdown(blueprint: Blueprint, selectedPath: string | null): string {
   const { profileMap, strengths, futurePaths, gaps, actions, roadmapMilestones, positioning } = blueprint
@@ -75,7 +76,7 @@ export function exportToNotionMarkdown(blueprint: Blueprint, selectedPath: strin
   // Gap Analysis
   if (gaps && gaps.length > 0) {
     const pathGaps = selectedPath
-      ? gaps.filter(g => g.pathway === selectedPath || g.pathway.includes(selectedPath.split('/')[0].trim()))
+      ? gaps.filter(g => matchesPath(g.pathway, selectedPath))
       : gaps
     if (pathGaps.length > 0) {
       lines.push(`---`, ``, `## Gap Analysis`, ``)
@@ -98,7 +99,7 @@ export function exportToNotionMarkdown(blueprint: Blueprint, selectedPath: strin
 
   // Actions
   const immediate = selectedPath
-    ? actions.immediate.filter(a => a.pathway === selectedPath || a.pathway.includes(selectedPath.split('/')[0].trim()))
+    ? actions.immediate.filter(a => matchesPath(a.pathway, selectedPath))
     : actions.immediate
 
   if (immediate.length > 0) {
@@ -114,7 +115,7 @@ export function exportToNotionMarkdown(blueprint: Blueprint, selectedPath: strin
 
   // Resources
   const resources = selectedPath
-    ? actions.resources.filter(r => r.pathway === selectedPath || r.pathway.includes(selectedPath.split('/')[0].trim()))
+    ? actions.resources.filter(r => matchesPath(r.pathway, selectedPath))
     : actions.resources
 
   if (resources.length > 0) {

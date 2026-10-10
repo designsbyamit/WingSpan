@@ -34,3 +34,24 @@ test('a blueprint missing sections still has every list the screens iterate', as
   assert.deepEqual(bp.profileMap.industries, [])
   assert.equal(bp.strengths.length, 1)
 })
+
+test('nested lists inside blueprint items are always arrays', async () => {
+  const { normalizeBlueprint } = await import('./blueprint-shape')
+  const bp = normalizeBlueprint({
+    roadmapMilestones: [{ phase: 'P1' }],
+    gaps: [{ title: 'g' }],
+    futurePaths: [{ name: 'f' }],
+    actions: { resources: [{ title: 'r' }, null] },
+  })
+  assert.deepEqual(bp.roadmapMilestones?.[0].hardSkills, [])
+  assert.deepEqual(bp.gaps[0].objectives, [])
+  assert.deepEqual(bp.futurePaths[0].keyTransitionAreas, [])
+  assert.equal(bp.actions.resources.length, 1)
+})
+
+test('path matching tolerates missing pathway tags', async () => {
+  const { matchesPath } = await import('./path-match')
+  assert.equal(matchesPath(undefined, 'AI Product Leader'), false)
+  assert.equal(matchesPath('AI Product Leader / Strategy', 'AI Product Leader'), true)
+  assert.equal(matchesPath('anything', null), true)
+})

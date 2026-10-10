@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useWingspan } from '@/context/WingspanContext'
 import { StepNav } from '@/components/ui/StepNav'
+import { StepErrorBoundary } from '@/components/ui/StepErrorBoundary'
 import { ProfileMap } from '@/components/blueprint/ProfileMap'
 import { CareerIntelligence } from '@/components/blueprint/CareerIntelligence'
 import { PathSelection } from '@/components/blueprint/PathSelection'
@@ -161,11 +162,13 @@ export function BlueprintScreen() {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.35, ease: 'easeOut' as const }}
             >
-              <StepContent
-                step={currentStep}
-                blueprint={blueprint}
-                extractedData={extractedData}
-              />
+              <StepErrorBoundary key={currentStep} label={currentStep}>
+                <StepContent
+                  step={currentStep}
+                  blueprint={blueprint}
+                  extractedData={extractedData}
+                />
+              </StepErrorBoundary>
             </motion.div>
           </AnimatePresence>
 

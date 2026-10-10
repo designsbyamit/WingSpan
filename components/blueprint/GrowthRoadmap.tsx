@@ -1,6 +1,7 @@
 // components/blueprint/GrowthRoadmap.tsx
 'use client'
 import { Blueprint, RoadmapMilestone } from '@/types/wingspan'
+import { matchesPath } from '@/lib/path-match'
 import { useWingspan } from '@/context/WingspanContext'
 import { ActionsSection } from './ActionsSection'
 import { Target, Building2, User, ArrowDown } from 'lucide-react'
@@ -160,10 +161,10 @@ export function GrowthRoadmap({ blueprint }: { blueprint: Blueprint }) {
     ...blueprint,
     actions: {
       ...actions,
-      immediate: actions.immediate.filter(a => a.pathway === selectedPath || a.pathway.includes(selectedPath.split('/')[0].trim())),
-      mediumTerm: actions.mediumTerm.filter(a => a.pathway === selectedPath || a.pathway.includes(selectedPath.split('/')[0].trim())),
-      longTerm: actions.longTerm.filter(a => a.pathway === selectedPath || a.pathway.includes(selectedPath.split('/')[0].trim())),
-      resources: actions.resources.filter(r => r.pathway === selectedPath || r.pathway.includes(selectedPath.split('/')[0].trim())),
+      immediate: actions.immediate.filter(a => matchesPath(a.pathway, selectedPath)),
+      mediumTerm: actions.mediumTerm.filter(a => matchesPath(a.pathway, selectedPath)),
+      longTerm: actions.longTerm.filter(a => matchesPath(a.pathway, selectedPath)),
+      resources: actions.resources.filter(r => matchesPath(r.pathway, selectedPath)),
     },
   }
 

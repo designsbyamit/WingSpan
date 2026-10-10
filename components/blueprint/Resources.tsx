@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { matchesPath } from '@/lib/path-match'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ExternalLink, BookOpen, Users, Link2, ChevronDown, Download, X, Loader2, Bookmark } from 'lucide-react'
 import { Blueprint, Resource } from '@/types/wingspan'
@@ -120,7 +121,7 @@ export function Resources({ blueprint }: { blueprint: Blueprint }) {
   }
 
   const filteredResources = blueprint.actions.resources.filter(r =>
-    r.pathway === selectedPath || r.pathway.includes(selectedPath.split('/')[0].trim())
+    matchesPath(r.pathway, selectedPath)
   )
 
   return (
