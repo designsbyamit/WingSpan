@@ -52,6 +52,7 @@ export async function POST(req: NextRequest) {
   const validatedData: ValidatedCareerData = body.validatedData
   const careerAlpha: CareerAlphaIntelligence = body.careerAlpha
   const bets = Array.isArray(body.bets) && body.bets.length === 3 ? body.bets : undefined
+  const growth = body.growth && typeof body.growth === 'object' ? body.growth : null
   if (!careerAlpha) {
     return new Response('careerAlpha is required', { status: 400 })
   }
@@ -60,7 +61,7 @@ export async function POST(req: NextRequest) {
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        for await (const event of streamBlueprint(validatedData, careerAlpha, bets)) {
+        for await (const event of streamBlueprint(validatedData, careerAlpha, bets, growth)) {
           // 'ping' events are keepalives — still send them so the connection stays open
           // but update percentage so the client's progress bar moves
           const line = `event: ${event.type}\ndata: ${JSON.stringify(event)}\n\n`

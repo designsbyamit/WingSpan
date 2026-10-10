@@ -5,6 +5,7 @@
 import { NextRequest } from 'next/server'
 import { runAgents, orchestratorAgent, toCareerAlpha, buildDeepAnalysis, betsFrom } from '@/lib/orchestrator'
 import { computeCareerAlpha } from '@/lib/career-alpha'
+import { growthAgent, fallbackGrowth } from '@/lib/growth-agent'
 import { saveWorkingRun } from '@/lib/analysis-store'
 import { getSession } from '@/lib/auth'
 import { friendlyProviderError } from '@/lib/router'
@@ -19,6 +20,7 @@ const LABELS = {
   market: 'Scanning the market…',
   directions: 'Scoring career directions…',
   orchestrator: 'Weighing everything together…',
+  growth: 'Planning how you close the gaps…',
 } as const
 
 export async function POST(req: NextRequest) {
@@ -41,15 +43,23 @@ export async function POST(req: NextRequest) {
           const run = await runAgents(data, interests, (id, status, note) => {
             send('agent', { id, status, label: LABELS[id], note })
           })
+          // The Orchestrator and the Growth Planner both work from the agents' outputs, so they run together.
+          const bets = betsFrom(run.careerMap, run.marketGraph)
           send('agent', { id: 'orchestrator', status: 'start', label: LABELS.orchestrator })
+          send('agent', { id: 'growth', status: 'start', label: LABELS.growth })
           const t0 = Date.now()
-          const out = await orchestratorAgent(run, data, interests)
-          const orchestratorMs = Date.now() - t0
-          send('agent', { id: 'orchestrator', status: 'done', label: LABELS.orchestrator })
+          const [outR, growthR] = await Promise.allSettled([
+            orchestratorAgent(run, data, interests).then((o) => { send('agent', { id: 'orchestrator', status: 'done', label: LABELS.orchestrator, note: 'Weighed the agents and formed the recommendation' }); return { o, ms: Date.now() - t0 } }),
+            growthAgent(run, bets, data, interests).then((g) => { send('agent', { id: 'growth', status: 'done', label: LABELS.growth, note: `${g.gaps.length} capability gaps and ${g.resources.length} resources across your three directions` }); return { g, ms: Date.now() - t0 } }),
+          ])
+          if (outR.status === 'rejected') throw outR.reason
+          const out = outR.value.o
+          const growth = growthR.status === 'fulfilled'
+            ? { plan: growthR.value.g, ms: growthR.value.ms }
+            : (console.error('Growth Planner failed, using catalog fallback:', growthR.reason), send('agent', { id: 'growth', status: 'error', label: LABELS.growth, note: 'Fell back to topic-matched resources' }), { plan: fallbackGrowth(bets), ms: null })
 
           const careerAlpha = toCareerAlpha(out, run, data, interests)
-          const deepAnalysis = buildDeepAnalysis(run, out, orchestratorMs)
-          const bets = betsFrom(run.careerMap, run.marketGraph)
+          const deepAnalysis = buildDeepAnalysis(run, out, outR.value.ms, growth)
 
           if (session) {
             // Best effort: a storage problem must never cost the person their result.
@@ -59,7 +69,7 @@ export async function POST(req: NextRequest) {
               { durationMs: Date.now() - startedAt },
             ).catch((e) => console.error('Could not store analysis run:', e))
           }
-          send('complete', { careerAlpha, observations: careerAlpha.observations, deepAnalysis, bets })
+          send('complete', { careerAlpha, observations: careerAlpha.observations, deepAnalysis, bets, growth: { gaps: growth.plan.gaps, resources: growth.plan.resources } })
         } catch (agentErr) {
           console.error('Agent pipeline failed, falling back to single-call Career Alpha:', agentErr)
           send('agent', { id: 'fallback', status: 'start', label: 'Taking a simpler route…' })

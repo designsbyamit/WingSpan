@@ -3,6 +3,9 @@ import type { ExtractedCareerData } from '@/types/wingspan'
 import type { EvidenceGraph, CareerDNA, MarketGraph, CareerMap } from '@/types/career-intelligence'
 import { evidenceGraphSchema, careerDNASchema, marketGraphSchema, careerDirectionDraftSchema } from '@/lib/agent-contracts'
 import { buildCareerMap } from '@/lib/career-scoring'
+import { canonicalizeTitle, fitsSeniority, titleCatalogPrompt } from '@/lib/role-taxonomy'
+import type { ExperienceFacts } from '@/lib/experience'
+import type { CareerDirectionDraft } from '@/lib/agent-contracts'
 
 const json = (s:string) => JSON.parse(s.replace(/^\`\`\`(?:json)?\n?/m,'').replace(/\n?\`\`\`$/m,'').trim())
 
@@ -44,19 +47,62 @@ export async function careerAlphaAgent(graph:EvidenceGraph, data:ExtractedCareer
  return callValidated(system,user,(o)=>careerDNASchema.parse(o) as unknown as CareerDNA)
 }
 
-export async function marketIntelligenceAgent(locationHints:string[]=[], observed:string[]=[]):Promise<MarketGraph>{
- const system = `You are Market Intelligence Agent v0.2. Analyze the external market independently of any person. Prefer hard labour-market data, then employer signals, macro trends and credible forecasts. Weak signals may support but never dominate. Think current, 1-3 years, 3-5 years, 5-10 years. Separate structural trend from hype. Return only JSON. Never personalize recommendations.`
- const evidenceBlock = observed.length ? `OBSERVED MARKET DATA (dated, cited, from our job-market database). Treat these as hard evidence: ground demand, momentum and salary-related judgements in them where they apply, cite them in each direction's evidence (sourceType per the source: labour_market, government, research or industry), and do not contradict them. Lower-reliability items should be weighed less. Where the data is silent, use general knowledge and say the evidence is weak.\n${observed.join('\n')}\n\n` : ''
- const user = `${evidenceBlock}Geography hints: ${JSON.stringify(locationHints)}\nBuild a MarketGraph for major professional/design/technology career directions likely relevant to modern knowledge workers. Include current demand, momentum, future potential, resilience, adjacency, capabilities, future thesis, invalidation risks, geography, horizon, evidence provenance and confidence. Cover enough distinct directions for downstream candidate generation.\nReturn exactly this JSON structure: {"version":"0.2","directions":[{"name":string,"currentDemand":0-100,"momentum":0-100,"futurePotential":0-100,"resilience":0-100,"adjacency":string[],"currentCapabilities":string[],"growingCapabilities":string[],"decliningCapabilities":string[],"futureThesis":string,"invalidationRisks":string[],"geography":string[],"horizon":string,"confidence":0-1,"evidence":[{"id":string,"direction":string,"signal":string,"source":string,"sourceType":"government"|"labour_market"|"employer"|"research"|"industry"|"investment"|"expert"|"weak_signal","geography":string,"observedAt":string,"horizon":"current"|"1-3_years"|"3-5_years"|"5-10_years","directionality":"positive"|"negative"|"uncertain","magnitude":number,"reliability":0-1,"supportingEvidence":string[]}]}],"capabilityRequirements":[{"capability":string,"importance":0-100,"levelRequired":0-100,"futureImportance":0-100,"marketDemand":0-100}],"confidence":0-1}. Keep each direction to at most 3 evidence items.`
- return callValidated(system,user,(o)=>marketGraphSchema.parse(o) as unknown as MarketGraph,10000)
+export async function marketIntelligenceAgent(locationHints:string[]=[], observed:string[]=[], fields:string[]=[]):Promise<MarketGraph>{
+ const system = `You are Market Intelligence Agent v0.2. Analyze the external market independently of any person. Prefer hard labour-market data, then employer signals, macro trends and credible forecasts. Weak signals may support but never dominate. Think current, 1-3 years, 3-5 years, 5-10 years. Separate structural trend from hype. Assess risk honestly for every direction: automation exposure, hype, oversupply of talent, budget cycles, regional concentration. Return only JSON. Never personalize recommendations.`
+ const evidenceBlock = observed.length ? `OBSERVED MARKET DATA (dated, cited, from our job-market database). Use it as evidence, not as the scope: ground demand, momentum, salary and risk judgements in it where it applies, cite it in the relevant directions' evidence (sourceType per the source: labour_market, government, research or industry), and never contradict it. Do not build a direction around a single data point, and do not let one source (for example a report on one sector) narrow the landscape. Lower-reliability items count less. Where the data is silent, use general knowledge and lower that direction's confidence.\n${observed.join('\n')}\n\n` : ''
+ const scope = fields.length ? `FIELD TO COVER: role families around ${fields.join(', ')}, plus their natural adjacent families (product, research, strategy, operations, AI, consulting, education, ventures). This is the field, not a person.\n` : ''
+ const user = `${evidenceBlock}${scope}Geography hints: ${JSON.stringify(locationHints)}\nBuild a MarketGraph with 10-14 distinct career directions. Name each direction as a recognisable role family with its typical titles, e.g. "Design leadership (Head of Design, VP of Design)", "Product management (Senior PM, Director of Product)", "AI product design (AI Product Designer, Conversation Designer)". Include current demand, momentum, future potential, resilience (100 = very resilient to automation, hype and downturns), adjacency, capabilities, future thesis, invalidation risks (at least two specific risks each), geography, horizon, evidence provenance and confidence.\nReturn exactly this JSON structure: {"version":"0.2","directions":[{"name":string,"currentDemand":0-100,"momentum":0-100,"futurePotential":0-100,"resilience":0-100,"adjacency":string[],"currentCapabilities":string[],"growingCapabilities":string[],"decliningCapabilities":string[],"futureThesis":string,"invalidationRisks":string[],"geography":string[],"horizon":string,"confidence":0-1,"evidence":[{"id":string,"direction":string,"signal":string,"source":string,"sourceType":"government"|"labour_market"|"employer"|"research"|"industry"|"investment"|"expert"|"weak_signal","geography":string,"observedAt":string,"horizon":"current"|"1-3_years"|"3-5_years"|"5-10_years","directionality":"positive"|"negative"|"uncertain","magnitude":number,"reliability":0-1,"supportingEvidence":string[]}]}],"capabilityRequirements":[{"capability":string,"importance":0-100,"levelRequired":0-100,"futureImportance":0-100,"marketDemand":0-100}],"confidence":0-1}. Keep each direction to at most 3 evidence items. Give 10-20 capabilityRequirements across the field.`
+ let attempt = 0
+ return callValidated(system,user,(o)=>{
+  const first = attempt++ === 0
+  const g = marketGraphSchema.parse(o) as unknown as MarketGraph
+  if (g.directions.length < (first ? 8 : 3)) throw new TitleIssues([`Only ${g.directions.length} directions; the landscape needs 10-14 distinct role families`])
+  return g
+ },12000)
 }
 
-// The model proposes candidate directions and 0-100 component sub-scores. The final scores and the
-// Safe / Growth / Bold picks are computed deterministically in lib/career-scoring.ts, so they are
-// reproducible and auditable.
-export async function careerDirectionGenerator(dna:CareerDNA, market:MarketGraph, grounding=''):Promise<CareerMap>{
- const system=`You are Career Direction Generator v0.2, the decision agent. Do not re-parse resumes and do not independently research markets. Consume CareerDNA and MarketGraph only. Generate 8-15 meaningfully different candidate directions: genuinely different kinds of work, not several names for the same job. For each, give honest 0-100 sub-scores. Do not compute final scores and do not choose Safe, Growth or Bold; the application does both deterministically. Experience sub-scores must come from demonstrated evidence in CareerDNA. Market sub-scores must come from MarketGraph, never from hype. Interest sub-scores must keep stated interest separate from behavioural evidence. Demand alone must not make a direction look good for this person. Weak evidence should lower the evidence confidence, not erase the possibility. Every candidate must answer why this person, why this direction, why now. Return only JSON.`
- const user=`${grounding ? grounding + '\n\n' : ''}CareerDNA: ${JSON.stringify(dna)}\nMarketGraph: ${JSON.stringify(market)}\nReturn JSON of the form {"candidates":[{"direction":string,"experience":{"capability":0-100,"project":0-100,"transferable":0-100,"context":0-100,"recency":0-100},"market":{"demand":0-100,"growth":0-100,"future":0-100,"adjacency":0-100,"relevance":0-100},"interest":{"direct":0-100,"behavioural":0-100,"stated":0-100,"curiosity":0-100,"adjacency":0-100},"capabilityDistance":0-100,"confidence":0-1,"whyThisPerson":string,"whyNow":string,"evidenceIds":string[],"rationale":string}]}. capabilityDistance is 0 when the person already does this work and 100 for a completely different field. confidence is how well the evidence supports this specific direction.`
- const draft=await callValidated(system,user,(o)=>careerDirectionDraftSchema.parse(o),10000)
- return buildCareerMap(draft, dna.confidence)
+export class TitleIssues extends Error {
+ issues: { path: (string|number)[]; message: string }[]
+ constructor(bad: string[]) {
+  super('Directions used non-standard or unsuitable titles')
+  this.issues = bad.map((b) => ({ path: ['candidates', 'direction'], message: b }))
+ }
+}
+
+/**
+ * Every direction must be a real job title from the catalog (lib/role-taxonomy.ts) that fits the
+ * person's seniority. Strict on the first pass (the model is told exactly which titles failed and
+ * retries); lenient on the retry, where near-misses are mapped and the rest dropped.
+ */
+export function canonicalizeDrafts(draft: CareerDirectionDraft, seniority: ExperienceFacts['seniority'] | null, strict: boolean): { draft: CareerDirectionDraft; notes: string[] } {
+ const kept: CareerDirectionDraft['candidates'] = []
+ const bad: string[] = []
+ const notes: string[] = []
+ for (const c of draft.candidates) {
+  const t = canonicalizeTitle(c.direction, { strict })
+  if (!t) { bad.push(`"${c.direction}" is not a recognised job title; use a base title from the ALLOWED JOB TITLES list`); continue }
+  if (seniority && !fitsSeniority(t.base, seniority)) { bad.push(`"${c.direction}" is below this person's ${seniority} seniority`); continue }
+  if (t.direction !== c.direction) notes.push(`Renamed "${c.direction}" to the standard title "${t.direction}".`)
+  kept.push({ ...c, direction: t.direction })
+ }
+ if (strict && bad.length) throw new TitleIssues(bad)
+ if (bad.length) notes.push(`Dropped ${bad.length} direction(s) without a recognised title: ${bad.map((b) => b.split('"')[1]).join(', ')}.`)
+ return { draft: { candidates: kept }, notes }
+}
+
+export async function careerDirectionGenerator(dna:CareerDNA, market:MarketGraph, grounding='', seniority: ExperienceFacts['seniority'] | null = null):Promise<CareerMap>{
+ const system=`You are Career Direction Generator v0.2, the decision agent. Do not re-parse resumes and do not independently research markets. Consume CareerDNA and MarketGraph only. Generate 10-14 meaningfully different candidate directions: genuinely different kinds of work (different base job titles), not several names for the same job. Every direction MUST be named with a real job title from the allowed list, optionally with a short focus ("Head of Design, AI Products"). For each, give honest 0-100 sub-scores. Do not compute final scores and do not choose Safe, Growth or Bold; the application does both deterministically. Experience sub-scores must come from demonstrated evidence in CareerDNA. Market sub-scores must come from MarketGraph, never from hype, and must include risk: how exposed this direction is to automation, hype, oversupply or decline (use the MarketGraph invalidation risks and resilience). Interest sub-scores must keep stated interest separate from behavioural evidence. Demand alone must not make a direction look good for this person. Weak evidence should lower the evidence confidence, not erase the possibility. Every candidate must answer why this person, why this direction, why now. Return only JSON.`
+ const user=`${grounding ? grounding + '\n\n' : ''}${seniority ? titleCatalogPrompt(seniority) + '\n\n' : ''}CareerDNA: ${JSON.stringify(dna)}\nMarketGraph: ${JSON.stringify(market)}\nReturn JSON of the form {"candidates":[{"direction":string,"experience":{"capability":0-100,"project":0-100,"transferable":0-100,"context":0-100,"recency":0-100},"market":{"demand":0-100,"growth":0-100,"future":0-100,"adjacency":0-100,"relevance":0-100,"risk":0-100},"interest":{"direct":0-100,"behavioural":0-100,"stated":0-100,"curiosity":0-100,"adjacency":0-100},"capabilityDistance":0-100,"confidence":0-1,"risks":string[],"whyThisPerson":string,"whyNow":string,"evidenceIds":string[],"rationale":string}]}. market.risk is 0 for a very safe direction and 100 for one highly exposed to automation, hype or decline; "risks" names the 1-2 specific risks. capabilityDistance is 0 when the person already does this work and 100 for a completely different field. confidence is how well the evidence supports this specific direction.`
+ let attempt = 0
+ let notes: string[] = []
+ const draft=await callValidated(system,user,(o)=>{
+  const strict = attempt++ === 0 // only the first reply is held to exact titles; the retry is mapped leniently
+  const parsed = careerDirectionDraftSchema.parse(o)
+  const r = canonicalizeDrafts(parsed, seniority, strict)
+  if (r.draft.candidates.length < 3) throw new TitleIssues(['Fewer than three directions with recognised titles; propose 10-14 using the allowed titles'])
+  notes = r.notes
+  return r.draft
+ },10000)
+ const map = buildCareerMap(draft, dna.confidence)
+ return { ...map, validation: [...map.validation, ...notes] }
 }

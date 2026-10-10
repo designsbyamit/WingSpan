@@ -1,5 +1,6 @@
 import { careerMapSchema, type CandidateDraft, type CareerDirectionDraft } from '@/lib/agent-contracts'
 import type { CareerCandidate, CareerMap } from '@/types/career-intelligence'
+import { canonicalizeTitle } from '@/lib/role-taxonomy'
 
 // Deterministic scoring and Safe / Growth / Bold selection for the Career Direction Generator.
 //
@@ -7,7 +8,8 @@ import type { CareerCandidate, CareerMap } from '@/types/career-intelligence'
 // Everything below is reproducible: the same drafts always give the same scores and the same picks.
 //
 //   E = 0.30 capability + 0.25 project + 0.20 transferable + 0.15 context + 0.10 recency
-//   M = 0.30 demand     + 0.25 growth  + 0.20 future       + 0.15 adjacency + 0.10 relevance
+//   M = 0.25 demand     + 0.20 growth  + 0.20 future       + 0.15 adjacency + 0.10 relevance + 0.10 safety
+//       where safety = 100 - risk (exposure to automation, hype, saturation or decline)
 //   I = 0.30 direct     + 0.25 behavioural + 0.20 stated   + 0.15 curiosity  + 0.10 adjacency
 //   CareerScore = (0.40E + 0.40M + 0.20I) * (0.75 + 0.25C)
 
@@ -16,7 +18,7 @@ export const FORMULA = '0.40E + 0.40M + 0.20I, confidence-adjusted' as const
 export const WEIGHTS = {
   overall: { experience: 0.4, market: 0.4, interest: 0.2 },
   experience: { capability: 0.3, project: 0.25, transferable: 0.2, context: 0.15, recency: 0.1 },
-  market: { demand: 0.3, growth: 0.25, future: 0.2, adjacency: 0.15, relevance: 0.1 },
+  market: { demand: 0.25, growth: 0.2, future: 0.2, adjacency: 0.15, relevance: 0.1, safety: 0.1 },
   interest: { direct: 0.3, behavioural: 0.25, stated: 0.2, curiosity: 0.15, adjacency: 0.1 },
 } as const
 
@@ -53,8 +55,14 @@ export function confidenceMultiplier(evidenceConfidence: number): number {
 export function experienceScore(c: CandidateDraft['experience']): number {
   return weighted(c, WEIGHTS.experience)
 }
+/** Safety = 100 - risk. When the model gave no risk, use the mean of the other market signals (neutral, not invented). */
+export function marketSafety(c: CandidateDraft['market']): number {
+  if (typeof c.risk === 'number' && Number.isFinite(c.risk)) return 100 - clamp(c.risk, 0, 100)
+  return (c.demand + c.growth + c.future + c.adjacency + c.relevance) / 5
+}
 export function marketScore(c: CandidateDraft['market']): number {
-  return weighted(c, WEIGHTS.market)
+  const { demand, growth, future, adjacency, relevance } = c
+  return weighted({ demand, growth, future, adjacency, relevance, safety: marketSafety(c) }, WEIGHTS.market)
 }
 export function interestScore(c: CandidateDraft['interest']): number {
   return weighted(c, WEIGHTS.interest)
@@ -88,6 +96,9 @@ export function scoreCandidate(draft: CandidateDraft, fallbackConfidence: number
     evidenceIds: draft.evidenceIds,
     capabilityDistance: round1(draft.capabilityDistance),
     rationale: draft.rationale,
+    ...titleFields(draft.direction),
+    ...(typeof draft.market.risk === 'number' ? { marketRisk: round1(draft.market.risk) } : {}),
+    risks: draft.risks ?? [],
     scoreBreakdown: {
       experience: draft.experience,
       market: draft.market,
@@ -96,6 +107,11 @@ export function scoreCandidate(draft: CandidateDraft, fallbackConfidence: number
       confidenceMultiplier: round2(multiplier),
     },
   }
+}
+
+function titleFields(direction: string): Pick<CareerCandidate, 'baseTitle' | 'family' | 'focus'> {
+  const c = canonicalizeTitle(direction)
+  return c ? { baseTitle: c.base.title, family: c.base.family, focus: c.focus } : {}
 }
 
 // ---------------------------------------------------------------- selection
@@ -132,10 +148,13 @@ function dedupe(candidates: CareerCandidate[]): CareerCandidate[] {
   return [...best.values()]
 }
 
+// Same base title with a different focus ("Head of Design, AI Products" vs "Head of Design, Fintech")
+// is the same kind of work, so it never counts as a distinct pick.
+const sameJob = (a: CareerCandidate, b: CareerCandidate) =>
+  (!!a.baseTitle && a.baseTitle === b.baseTitle) || similarity(a.direction, b.direction) >= SELECTION.maxSimilarity
+
 function firstDistinct(sorted: CareerCandidate[], picked: CareerCandidate[]): CareerCandidate | undefined {
-  return sorted.find(
-    (c) => !picked.includes(c) && picked.every((p) => similarity(c.direction, p.direction) < SELECTION.maxSimilarity),
-  )
+  return sorted.find((c) => !picked.includes(c) && picked.every((p) => !sameJob(c, p)))
 }
 
 export interface BetSelection {

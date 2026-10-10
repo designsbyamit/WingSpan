@@ -153,7 +153,10 @@ function GapSummaryCard({ gap, inProgress, onOpen }: { gap: Gap; inProgress: boo
   return (
     <Card as="li" className="p-5 sm:p-6 flex flex-col gap-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <h3 className="text-[16px] font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-sora)' }}>{gap.gapType}</h3>
+        <div>
+          {gap.title && <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">{gap.gapType}</p>}
+          <h3 className="text-[16px] font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-sora)' }}>{gap.title || gap.gapType}</h3>
+        </div>
         <GapBadges gap={gap} inProgress={inProgress} />
       </div>
       <ReadinessMeter gap={gap} />
@@ -172,7 +175,10 @@ function GapDetail({ gap, inProgress, onToggleProgress }: { gap: Gap; inProgress
     <Card as="article" className="p-5 sm:p-7 flex flex-col gap-7">
       <div className="flex flex-col gap-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <h3 className="text-[20px] font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-sora)' }}>{gap.gapType}</h3>
+          <div>
+            {gap.title && <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">{gap.gapType}</p>}
+            <h3 className="text-[20px] font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-sora)' }}>{gap.title || gap.gapType}</h3>
+          </div>
           <GapBadges gap={gap} inProgress={inProgress} />
         </div>
         <ReadinessMeter gap={gap} size="lg" />
@@ -189,6 +195,13 @@ function GapDetail({ gap, inProgress, onToggleProgress }: { gap: Gap; inProgress
             <FieldLabel accent>Where you need to be</FieldLabel>
             <p className="text-[14px] text-[var(--text-primary)] leading-relaxed">{gap.desiredState || 'Not described.'}</p>
           </div>
+        </div>
+      )}
+
+      {gap.evidence && (
+        <div>
+          <FieldLabel>What we based your current level on</FieldLabel>
+          <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed max-w-[68ch]">{gap.evidence}</p>
         </div>
       )}
 

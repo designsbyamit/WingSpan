@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { normalizeExtracted, normalizeValidated } from './extracted-shape'
+import { normalizeBlueprint as normBp } from './blueprint-shape'
 
 test('missing lists become empty arrays so nothing downstream throws', () => {
   const d = normalizeExtracted({ rawText: 'x' })
@@ -54,4 +55,14 @@ test('path matching tolerates missing pathway tags', async () => {
   assert.equal(matchesPath(undefined, 'AI Product Leader'), false)
   assert.equal(matchesPath('AI Product Leader / Strategy', 'AI Product Leader'), true)
   assert.equal(matchesPath('anything', null), true)
+})
+
+test('gap readiness accepts percentages, strings and fractions', () => {
+  const bp = normBp({ gaps: [
+    { pathway: 'A', currentReadiness: '40%', futureReadiness: 0.85, gapSize: 'Medium' },
+    { pathway: 'A', currentReadiness: 'n/a', futureReadiness: 90 },
+  ] })
+  assert.equal(bp.gaps[0].currentReadiness, 40)
+  assert.equal(bp.gaps[0].futureReadiness, 85)
+  assert.equal(bp.gaps[1].currentReadiness, 0)
 })

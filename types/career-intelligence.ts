@@ -108,10 +108,17 @@ export interface CareerCandidate {
   rationale:string
   /** Deterministic inputs behind the scores, so every recommendation is auditable. */
   scoreBreakdown?:CareerScoreBreakdown
+  /** Canonical job title (lib/role-taxonomy.ts) and optional focus, e.g. "Head of Design" + "AI Products". */
+  baseTitle?:string
+  family?:string
+  focus?:string|null
+  /** 0 = safe, 100 = highly exposed to automation, hype, saturation or decline. */
+  marketRisk?:number
+  risks?:string[]
 }
 export interface CareerScoreBreakdown {
   experience:{ capability:number; project:number; transferable:number; context:number; recency:number }
-  market:{ demand:number; growth:number; future:number; adjacency:number; relevance:number }
+  market:{ demand:number; growth:number; future:number; adjacency:number; relevance:number; risk?:number }
   interest:{ direct:number; behavioural:number; stated:number; curiosity:number; adjacency:number }
   /** 0.40E + 0.40M + 0.20I, before the confidence multiplier */
   baseScore:number
@@ -131,7 +138,7 @@ export interface CareerMap {
 
 /** One agent's contribution, as shown in the "Deep analysis" panel. */
 export interface DeepAnalysisAgent {
-  id:'aggregator'|'careerDna'|'market'|'directions'|'orchestrator'
+  id:'aggregator'|'careerDna'|'market'|'directions'|'orchestrator'|'growth'
   name:string
   role:string
   durationMs:number|null
@@ -148,13 +155,21 @@ export interface DeepAnalysisCandidate {
   score:number
   distance:number
   calc:string
+  /** 0 = safe, 100 = highly exposed; null when the agent gave no risk */
+  risk?:number|null
+  risks?:string[]
 }
 /** A compact, user-facing record of how the recommendation was reached. No simulation internals. */
 export interface DeepAnalysis {
   generatedAt:string
   agents:DeepAnalysisAgent[]
   evidence:{ count:number; capabilities:{name:string;level:number}[]; patterns:string[]; uncertainties:string[]; contradictions:string[] }
-  market:{ basis:string; directions:{name:string;demand:number;momentum:number;future:number;resilience:number;thesis:string}[] }
+  market:{
+    basis:string
+    directions:{name:string;demand:number;momentum:number;future:number;resilience:number;thesis:string;risks?:string[]}[]
+    /** The dated, cited observations from the market database that the agent was given. */
+    evidence?:{statement:string;publisher:string;when:string;reliability:number;region:string}[]
+  }
   candidates:DeepAnalysisCandidate[]
   orchestration:{
     formula:string

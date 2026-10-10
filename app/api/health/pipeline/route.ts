@@ -4,6 +4,8 @@ import { streamBlueprint } from '@/lib/claude'
 import { aggregatorAgent, careerAlphaAgent, marketIntelligenceAgent, careerDirectionGenerator } from '@/lib/v02-agents'
 import { runAgents, orchestratorAgent, toCareerAlpha, buildDeepAnalysis, betsFrom } from '@/lib/orchestrator'
 import { refreshMarketData } from '@/lib/market/ingest'
+import { growthAgent, fallbackGrowth } from '@/lib/growth-agent'
+import { CATALOG } from '@/lib/resources-catalog'
 import { db } from '@/lib/db'
 import type { ExtractedCareerData } from '@/types/wingspan'
 
@@ -119,30 +121,53 @@ export async function GET(req: NextRequest) {
     const ints = leader ? ['Product Strategy', 'Design Leadership', 'People Management', 'AI Product Design', 'Agent-Agent Collaboration'] : interests
     try {
       const run = await timed('agents', () => runAgents(profile, ints))
-      const out = await timed('orchestrator', () => orchestratorAgent(run, profile, ints))
-      const alpha = toCareerAlpha(out, run, profile, ints)
-      const deep = buildDeepAnalysis(run, out)
       const bets = betsFrom(run.careerMap, run.marketGraph)
+      const [out, plan] = await timed('orchestrator+growth', () => Promise.all([
+        orchestratorAgent(run, profile, ints),
+        growthAgent(run, bets, profile, ints).catch((e) => { stages['growth'] = `failed: ${e instanceof Error ? e.message.slice(0, 120) : e}`; return fallbackGrowth(bets) }),
+      ]))
+      const alpha = toCareerAlpha(out, run, profile, ints)
+      const deep = buildDeepAnalysis(run, out, null, { plan, ms: null })
       const bp = await timed('blueprint', async () => {
-        for await (const ev of streamBlueprint({ ...profile, interests: ints } as never, alpha, bets)) {
+        for await (const ev of streamBlueprint({ ...profile, interests: ints } as never, alpha, bets, { gaps: plan.gaps, resources: plan.resources })) {
           if (ev.type === 'complete') return ev.blueprint as Record<string, unknown[]>
         }
         throw new Error('stream ended without a complete event')
       })
       const titles = (bp.futurePaths as { title: string }[]).map((p) => p.title)
+      const gaps = bp.gaps as { pathway: string; title?: string; currentReadiness: number; futureReadiness: number; gapSize: string }[]
+      const resources = ((bp.actions as unknown as { resources?: { pathway: string; title: string; url?: string }[] })?.resources ?? [])
       return NextResponse.json({
         ok: true, stages, agentTimings: run.timings,
         careerStage: alpha.careerStage, archetype: alpha.archetypeLabel, overall: alpha.overallScore,
         bets: bets.map((b) => `${b.archetype}: ${b.direction} (${b.careerScore})`),
-        candidates: deep.candidates.map((c) => `${c.direction} [${c.archetype}] ${c.score} d=${c.distance}`),
+        candidates: deep.candidates.map((c) => `${c.direction} [${c.archetype}] ${c.score} d=${c.distance} risk=${c.risk ?? '-'}`),
+        validation: run.careerMap.validation,
+        marketDirections: deep.market.directions.map((d) => d.name),
+        marketEvidence: deep.market.evidence?.length ?? 0,
         pathsMatchBets: bets.every((b, i) => titles[i] === b.direction),
-        gapsLinked: (bp.gaps as { pathway: string }[]).every((g) => titles.includes(g.pathway)),
-        sections: { gaps: bp.gaps?.length, roadmap: bp.roadmapMilestones?.length },
-        marketBasis: deep.market.basis, orchestratorSynthesis: out.synthesis, whyThisOrder: out.recommendation?.whyThisOrder,
+        gapsLinked: gaps.every((g) => titles.includes(g.pathway)),
+        gaps: gaps.map((g) => `${g.pathway} | ${g.title ?? '-'} | ${g.currentReadiness}→${g.futureReadiness} ${g.gapSize}`),
+        resources: titles.map((t) => `${t}: ${resources.filter((r) => r.pathway === t).map((r) => r.title).join('; ')}`),
+        growthNotes: plan.notes,
+        sections: { roadmap: bp.roadmapMilestones?.length, immediate: (bp.actions as unknown as { immediate?: unknown[] })?.immediate?.length },
+        marketBasis: deep.market.basis, whyThisOrder: out.recommendation?.whyThisOrder,
       })
     } catch (e) {
-      return NextResponse.json({ ok: false, stages, error: e instanceof Error ? e.message.slice(0, 200) : 'failed' })
+      return NextResponse.json({ ok: false, stages, error: e instanceof Error ? e.message.slice(0, 300) : 'failed' })
     }
+  }
+
+  // ?flow=resources checks every link in the curated resource catalog from the server.
+  if (req.nextUrl.searchParams.get('flow') === 'resources') {
+    const results = await Promise.all(CATALOG.map(async (c) => {
+      try {
+        const res = await fetch(c.url, { method: 'GET', redirect: 'follow', signal: AbortSignal.timeout(15_000), headers: { 'User-Agent': 'Mozilla/5.0 (compatible; WingSpanLinkCheck/1.0)' } })
+        return { id: c.id, status: res.status, finalUrl: res.url !== c.url ? res.url : undefined }
+      } catch (e) { return { id: c.id, status: 0, error: e instanceof Error ? e.message.slice(0, 80) : 'failed' } }
+    }))
+    const bad = results.filter((r) => r.status === 0 || r.status >= 400)
+    return NextResponse.json({ ok: bad.length === 0, total: results.length, bad, redirected: results.filter((r) => r.finalUrl) })
   }
 
   // ?flow=ui runs what the app's screens actually call: Career Alpha, then the Blueprint stream.

@@ -27,7 +27,12 @@ export function normalizeBlueprint(raw: unknown): Blueprint {
     futurePaths: withLists(b.futurePaths, ['keyTransitionAreas']),
     gaps: withLists<Record<string, unknown>>(b.gaps, ['requiredCapabilities', 'objectives']).map((g) => {
       const size = String(g.gapSize ?? '').toLowerCase()
-      const num = (v: unknown) => (typeof v === 'number' && isFinite(v) ? v : Number(v) || 0)
+      // Readiness arrives as 40, "40", "40%" or 0.4; anything unreadable becomes 0 (the UI then shows the gap size instead).
+      const num = (v: unknown) => {
+        const n = typeof v === 'number' ? v : Number(String(v ?? '').replace('%', '').trim())
+        if (!Number.isFinite(n) || n < 0) return 0
+        return Math.round(Math.min(100, n > 0 && n <= 1 ? n * 100 : n))
+      }
       return {
         ...g,
         pathway: typeof g.pathway === 'string' ? g.pathway : '',

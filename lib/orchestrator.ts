@@ -5,6 +5,8 @@ import { normalizeExtracted } from '@/lib/extracted-shape'
 import { computeArchetypeFingerprint } from '@/lib/career-alpha'
 import { getMarketBriefing, type MarketBriefing } from '@/lib/market/context'
 import { WEIGHTS, SELECTION } from '@/lib/career-scoring'
+import { fieldsFor } from '@/lib/role-taxonomy'
+import type { GrowthPlan } from '@/lib/growth-agent'
 export { betsFrom, type Bet } from '@/lib/bets'
 import type { ExtractedCareerData, CareerAlphaIntelligence, CareerStage } from '@/types/wingspan'
 import type {
@@ -47,7 +49,7 @@ export async function runAgents(rawData: ExtractedCareerData, interests: string[
     async () => {
       const briefing = await getMarketBriefing(hints)
       briefingOut.briefing = briefing
-      return marketIntelligenceAgent(hints, briefing.lines)
+      return marketIntelligenceAgent(hints, briefing.lines, fieldsFor(data.timeline.map((t) => t.role), interests))
     },
     (m) => `Assessed ${m.directions.length} career directions against market signals`)
   const personP = (async () => {
@@ -64,7 +66,7 @@ export async function runAgents(rawData: ExtractedCareerData, interests: string[
   const marketGraph = m.value
   const { evidenceGraph, careerDNA } = p.value
 
-  const careerMap = await step('directions', () => careerDirectionGenerator(careerDNA, marketGraph, grounding),
+  const careerMap = await step('directions', () => careerDirectionGenerator(careerDNA, marketGraph, grounding, data.timeline.length ? facts.seniority : null),
     (c) => `Scored ${c.candidates.length} directions; picked ${c.safe.direction}, ${c.growth.direction}, ${c.bold.direction}`)
 
   return { evidenceGraph, careerDNA, marketGraph, careerMap, timings, marketData: briefingOut.briefing ?? null }
@@ -227,7 +229,7 @@ export function calcString(c: CareerCandidate): string {
   return `${w.experience}×${f1(c.experienceScore)} + ${w.market}×${f1(c.marketScore)} + ${w.interest}×${f1(c.interestScore)} = ${f1(b.baseScore)}; × ${b.confidenceMultiplier} (confidence ${c.confidence}) = ${f1(c.careerScore)}`
 }
 
-export function buildDeepAnalysis(run: AgentRun, out: OrchestratorOutput, orchestratorMs: number | null = null): DeepAnalysis {
+export function buildDeepAnalysis(run: AgentRun, out: OrchestratorOutput, orchestratorMs: number | null = null, growth: { plan: GrowthPlan; ms: number | null } | null = null): DeepAnalysis {
   const { evidenceGraph: g, careerDNA: d, marketGraph: m, careerMap: map, timings } = run
   const rankedMarket = [...m.directions].sort((a, b) =>
     (b.currentDemand + b.momentum + b.futurePotential) - (a.currentDemand + a.momentum + a.futurePotential))
@@ -261,6 +263,8 @@ export function buildDeepAnalysis(run: AgentRun, out: OrchestratorOutput, orches
         `${m.directions.length} career directions assessed across current, 1–3, 3–5 and 5–10 year horizons.`,
         ...top(rankedMarket, 3).map((x) => `${x.name}: demand ${Math.round(x.currentDemand)}, momentum ${Math.round(x.momentum)}, future ${Math.round(x.futurePotential)}.`),
         ...(rankedMarket[0]?.invalidationRisks?.[0] ? [`Main risk to watch: ${rankedMarket[0].invalidationRisks[0]}`] : []),
+        `Risk is scored for every direction (automation, hype, oversupply, decline) and counts for 10% of the market score.`,
+        ...(run.marketData && run.marketData.observations > 0 ? [`Used ${run.marketData.items.length} dated observations from the market database as evidence.`] : []),
       ],
     },
     {
@@ -278,12 +282,23 @@ export function buildDeepAnalysis(run: AgentRun, out: OrchestratorOutput, orches
       durationMs: orchestratorMs, confidence: pct(map.confidence),
       insights: [out.synthesis, ...(out.recommendation?.whyThisOrder ? [out.recommendation.whyThisOrder] : [])],
     },
+    ...(growth ? [{
+      id: 'growth' as const, name: 'Growth Planner', role: 'Measures what stands between you and each direction, and picks real resources to close it.',
+      durationMs: growth.ms, confidence: null,
+      insights: [
+        `${growth.plan.gaps.length} capability gaps across the three directions, each with a current and required level.`,
+        ...growth.plan.gaps.slice(0, 3).map((x) => `${x.pathway}: ${x.title ?? x.gapType} (${x.currentReadiness} → ${x.futureReadiness}).`),
+        `${growth.plan.resources.length} resources chosen from a curated library of real books, courses, frameworks and communities.`,
+        ...growth.plan.notes.slice(0, 2),
+      ],
+    }] : []),
   ]
 
   const candidates: DeepAnalysisCandidate[] = map.candidates.slice(0, 12).map((c) => ({
     direction: c.direction, archetype: c.archetype,
     experience: c.experienceScore, market: c.marketScore, interest: c.interestScore,
     confidence: c.confidence, score: c.careerScore, distance: c.capabilityDistance, calc: calcString(c),
+    risk: typeof c.marketRisk === 'number' ? Math.round(c.marketRisk) : null, risks: c.risks ?? [],
   }))
 
   return {
@@ -298,10 +313,12 @@ export function buildDeepAnalysis(run: AgentRun, out: OrchestratorOutput, orches
       basis: run.marketData && run.marketData.observations > 0
         ? `Grounded in ${run.marketData.observations} dated observations from ${run.marketData.sources} published sources${run.marketData.latest ? ` (latest ${run.marketData.latest.toISOString().slice(0, 7)})` : ''}, refreshed about every 10 days. Where the data is silent the agent uses general market knowledge.`
         : "Based on the model's general market knowledge; no stored market data was available for this run.",
-      directions: top(rankedMarket, 8).map((x) => ({
+      directions: top(rankedMarket, 14).map((x) => ({
         name: x.name, demand: Math.round(x.currentDemand), momentum: Math.round(x.momentum),
         future: Math.round(x.futurePotential), resilience: Math.round(x.resilience), thesis: x.futureThesis,
+        risks: top(x.invalidationRisks, 2),
       })),
+      evidence: run.marketData?.items ?? [],
     },
     candidates,
     orchestration: {

@@ -69,6 +69,11 @@ function Overall({ d }: { d: DeepAnalysis }) {
                 <p className="text-sm font-bold" style={{ color: ARCH_COLOR[c.archetype] }}>{c.score}</p>
               </div>
               <p className="text-[11px] text-[var(--text-muted)] mt-0.5 break-words">{c.calc}</p>
+              {typeof c.risk === 'number' && (
+                <p className="text-[11px] text-[var(--text-muted)] mt-0.5">
+                  Market risk <RiskTag risk={c.risk} />{c.risks && c.risks.length > 0 && <> · {c.risks.slice(0, 2).join('; ')}</>}
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -108,7 +113,7 @@ function Directions({ d }: { d: DeepAnalysis }) {
   return (
     <div className="flex flex-col gap-3">
       <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-        Every direction the agents considered, with its Experience, Market and Interest scores. Distance is how far the work is from what you do today (0 = same work).
+        Every direction the agents considered, named with standard job titles, with its Experience, Market and Interest scores. The market score already includes risk (exposure to automation, hype, oversupply or decline). Distance is how far the work is from what you do today (0 = same work).
       </p>
       {d.candidates.map((c) => (
         <Card key={c.direction}>
@@ -122,6 +127,12 @@ function Directions({ d }: { d: DeepAnalysis }) {
               <Bar value={c[k]} color={ARCH_COLOR[c.archetype]} />
             </div>
           ))}
+          {typeof c.risk === 'number' && (
+            <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-[var(--text-secondary)]">
+              <span className="text-[10px] text-[var(--text-muted)]">Market risk</span><RiskTag risk={c.risk} />
+              {c.risks && c.risks.length > 0 && <span className="text-[var(--text-muted)]">{c.risks.slice(0, 2).join(' · ')}</span>}
+            </div>
+          )}
           <p className="text-[10px] text-[var(--text-muted)] mt-2">
             {c.archetype === 'reserve' ? 'Considered, not selected' : `Selected as ${c.archetype}`} · distance {c.distance} · evidence confidence {Math.round(c.confidence * 100)}%
           </p>
@@ -132,22 +143,50 @@ function Directions({ d }: { d: DeepAnalysis }) {
 }
 
 function Market({ d }: { d: DeepAnalysis }) {
+  const ev = d.market.evidence ?? []
   return (
     <div className="flex flex-col gap-3">
       <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{d.market.basis}</p>
+      <Label>Role families assessed ({d.market.directions.length})</Label>
       {d.market.directions.map((m) => (
         <Card key={m.name}>
           <p className="text-sm font-semibold text-[var(--text-primary)] mb-2">{m.name}</p>
-          <div className="grid grid-cols-4 gap-2 mb-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-2">
             {([['Demand', m.demand], ['Momentum', m.momentum], ['Future', m.future], ['Resilience', m.resilience]] as const).map(([l, v]) => (
               <div key={l}><p className="text-[10px] text-[var(--text-muted)] mb-0.5">{l} {v}</p><Bar value={v} /></div>
             ))}
           </div>
           <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">{m.thesis}</p>
+          {m.risks && m.risks.length > 0 && (
+            <p className="text-[11px] text-[var(--text-muted)] leading-relaxed mt-1.5"><span className="text-[10px] uppercase tracking-[1.5px] mr-1.5">Risks</span>{m.risks.join(' · ')}</p>
+          )}
         </Card>
       ))}
+      {ev.length > 0 && (
+        <>
+          <div className="mt-2"><Label>Data the agent was given ({ev.length} observations)</Label></div>
+          <Card>
+            <ul className="flex flex-col divide-y divide-[var(--border-ws)]">
+              {ev.map((e, i) => (
+                <li key={i} className="py-2 first:pt-0 last:pb-0">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{e.statement}</p>
+                  <p className="text-[10px] text-[var(--text-muted)] mt-0.5">
+                    {e.publisher} · {e.when} · {e.region} · reliability {Math.round(e.reliability * 100)}%
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        </>
+      )}
     </div>
   )
+}
+
+function RiskTag({ risk }: { risk: number }) {
+  const level = risk >= 60 ? 'High' : risk >= 35 ? 'Medium' : 'Low'
+  const color = risk >= 60 ? '#fb923c' : risk >= 35 ? '#facc15' : '#5eead4'
+  return <span className="inline-flex items-center gap-1 font-semibold" style={{ color }}>{level} ({risk})</span>
 }
 
 function Evidence({ d }: { d: DeepAnalysis }) {

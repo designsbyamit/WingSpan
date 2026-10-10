@@ -139,11 +139,14 @@ export const candidateDraftSchema = z.object({
   }),
   market: z.object({
     demand: pct, growth: pct, future: pct, adjacency: pct, relevance: pct,
+    // 0 = very safe, 100 = highly exposed (automation, hype, saturation, decline). Optional for old drafts.
+    risk: pct.optional(),
   }),
   interest: z.object({
     direct: pct, behavioural: pct, stated: pct, curiosity: pct, adjacency: pct,
   }),
   capabilityDistance: pct,
+  risks: z.array(z.string()).optional(),
   confidence: unit.optional(),
   whyThisPerson: z.string().default(''),
   whyNow: z.string().default(''),
@@ -164,7 +167,7 @@ export const scoreBreakdownSchema = z.object({
     capability: pct, project: pct, transferable: pct, context: pct, recency: pct,
   }),
   market: z.object({
-    demand: pct, growth: pct, future: pct, adjacency: pct, relevance: pct,
+    demand: pct, growth: pct, future: pct, adjacency: pct, relevance: pct, risk: pct.optional(),
   }),
   interest: z.object({
     direct: pct, behavioural: pct, stated: pct, curiosity: pct, adjacency: pct,
@@ -187,6 +190,11 @@ export const careerCandidateSchema = z.object({
   capabilityDistance: pct,
   rationale: z.string().default(''),
   scoreBreakdown: scoreBreakdownSchema.optional(),
+  baseTitle: z.string().optional(),
+  family: z.string().optional(),
+  focus: z.string().nullable().optional(),
+  marketRisk: pct.optional(),
+  risks: strings.optional(),
 })
 
 export const careerMapSchema = z.object({

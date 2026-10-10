@@ -6,7 +6,7 @@ import { normalizeBlueprint } from '@/lib/blueprint-shape'
 import { experienceFacts, groundingRules } from '@/lib/experience'
 export { normalizeBlueprint }
 import Groq from 'groq-sdk'
-import { ExtractedCareerData, Blueprint, ValidatedCareerData, CareerAlphaIntelligence } from '@/types/wingspan'
+import { ExtractedCareerData, Blueprint, ValidatedCareerData, CareerAlphaIntelligence, Gap, Resource } from '@/types/wingspan'
 
 // Groq — fast, used for extraction only
 const GROQ_MODEL = process.env.GROQ_MODEL ?? 'openai/gpt-oss-120b'
@@ -345,7 +345,8 @@ export function blueprintProblems(bp: Partial<Blueprint>): string[] {
 export async function* streamBlueprint(
   rawValidatedData: ValidatedCareerData,
   careerAlpha: CareerAlphaIntelligence,
-  bets?: Bet[]
+  bets?: Bet[],
+  growth?: { gaps?: Gap[]; resources?: Resource[] } | null
 ): AsyncGenerator<{ type: string; [key: string]: unknown }> {
   const validatedData = normalizeValidated(rawValidatedData)
 
@@ -383,7 +384,16 @@ For each bet populate all fields including betRationale, whyNotOtherPaths, caree
 
   const pathsInstruction = bets && bets.length === 3 ? betsInstruction(bets) : careerBetsInstruction
 
-  const gapInstruction = `NEVER frame gaps as deficits. Always frame as capability unlocks.
+  // When the Growth Planner has already measured the gaps and chosen resources, the Blueprint writer
+  // builds the roadmap and actions on top of them instead of inventing its own.
+  const plannedGaps = Array.isArray(growth?.gaps) ? growth!.gaps!.filter((g) => g && g.pathway) : []
+  const plannedResources = Array.isArray(growth?.resources) ? growth!.resources!.filter((r) => r && r.pathway) : []
+  const hasPlan = plannedGaps.length > 0 && !!bets && bets.every((b) => plannedGaps.some((g) => g.pathway === b.direction))
+  const planInstruction = hasPlan ? `CAPABILITY GAPS ARE ALREADY MEASURED (do not regenerate them; return "gaps": [] and "resources": [] in actions). Build the roadmap milestones and the immediate / medium-term / long-term actions so they close these gaps, per direction:
+${plannedGaps.map((g) => `- [${g.pathway}] ${g.title ?? g.gapType}: ${g.currentReadiness} → ${g.futureReadiness}. ${g.howToClose}`).join('\n')}
+Resources already chosen (refer to them by title in actions where useful): ${plannedResources.map((r) => `[${r.pathway}] ${r.title}`).join('; ')}` : ''
+
+  const gapInstruction = hasPlan ? planInstruction : `NEVER frame gaps as deficits. Always frame as capability unlocks.
 NOT: "You lack X" — INSTEAD: "X could unlock your path to Y"
 For each gap include: why it matters for the selected Career Bet, recommended acquisition sequence, estimated effort aligned with Career Alpha ROI analysis, specific actionable milestones.`
 
@@ -503,6 +513,17 @@ Your output is the first thing this person will read about their own career pote
   }
 
   if (bets && bets.length === 3) blueprint = enforceBets(blueprint, bets)
+  const applyPlan = (bp: Blueprint): Blueprint => {
+    if (!hasPlan) return bp
+    const covered = new Set(plannedGaps.map((g) => g.pathway))
+    const actions = bp.actions ?? { immediate: [], mediumTerm: [], longTerm: [], resources: [] }
+    return {
+      ...bp,
+      gaps: [...plannedGaps, ...(Array.isArray(bp.gaps) ? bp.gaps.filter((g) => g && !covered.has(g.pathway)) : [])],
+      actions: { ...actions, resources: plannedResources.length ? plannedResources : (actions.resources ?? []) },
+    }
+  }
+  blueprint = applyPlan(blueprint)
 
   // Smaller/faster models sometimes return a valid but thin Blueprint (e.g. 1 path instead of 3).
   // Ask once more, naming what was missing, and keep whichever attempt is more complete.
@@ -518,7 +539,7 @@ Your output is the first thing this person will read about their own career pote
         16000,
       )
       const retried = parseBlueprintJson(retryRaw)
-      if (blueprintProblems(retried).length < firstProblems.length) blueprint = bets && bets.length === 3 ? enforceBets(retried, bets) : retried
+      if (blueprintProblems(retried).length < firstProblems.length) blueprint = applyPlan(bets && bets.length === 3 ? enforceBets(retried, bets) : retried)
     } catch (retryErr) {
       console.warn('Blueprint retry failed, keeping first attempt:', retryErr instanceof Error ? retryErr.message : retryErr)
     }

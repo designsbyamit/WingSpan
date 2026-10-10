@@ -48,7 +48,10 @@ test('weights each sum to 1', () => {
 test('component scores follow the documented weights', () => {
   // 0.30*80 + 0.25*60 + 0.20*40 + 0.15*20 + 0.10*100 = 60
   close(experienceScore({ capability: 80, project: 60, transferable: 40, context: 20, recency: 100 }), 60)
-  close(marketScore({ demand: 100, growth: 0, future: 0, adjacency: 0, relevance: 0 }), 30)
+  // demand 25 + safety from the neutral mean (20) × 0.10 = 27; an explicit risk replaces the neutral value
+  close(marketScore({ demand: 100, growth: 0, future: 0, adjacency: 0, relevance: 0 }), 27)
+  close(marketScore({ demand: 100, growth: 0, future: 0, adjacency: 0, relevance: 0, risk: 0 }), 35)
+  close(marketScore({ demand: 100, growth: 100, future: 100, adjacency: 100, relevance: 100, risk: 100 }), 90)
   close(interestScore({ direct: 0, behavioural: 100, stated: 0, curiosity: 0, adjacency: 0 }), 25)
   close(experienceScore({ capability: 100, project: 100, transferable: 100, context: 100, recency: 100 }), 100)
 })

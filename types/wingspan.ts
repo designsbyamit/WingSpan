@@ -117,6 +117,10 @@ export interface RoadmapMilestone {
 }
 
 export interface Gap {
+  /** The capability to build, e.g. "Executive stakeholder influence". Older Blueprints may not have it. */
+  title?: string
+  /** What in the person's history supports the current level. */
+  evidence?: string
   pathway: string
   gapType: GapType
   currentReadiness: number
