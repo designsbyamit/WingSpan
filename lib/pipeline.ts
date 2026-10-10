@@ -3,6 +3,9 @@
 import type { Dispatch } from 'react'
 import type { WingspanAction, ExtractedCareerData, Blueprint, DiscoveryStep } from '@/types/wingspan'
 import { readJson } from '@/lib/safe-json'
+import { readSse } from '@/lib/sse-client'
+import type { CareerAlphaIntelligence } from '@/types/wingspan'
+import type { DeepAnalysis } from '@/types/career-intelligence'
 
 export async function runCareerPipeline(
   extractedData: ExtractedCareerData,
@@ -10,19 +13,40 @@ export async function runCareerPipeline(
   dispatch: Dispatch<WingspanAction>
 ): Promise<void> {
   try {
-    // Stage 1: Career Alpha
+    // Stage 1: the agent team (evidence, career DNA, market, directions) and the Orchestrator
     dispatch({ type: 'SET_PIPELINE_STAGE', stage: 'career-alpha' })
-    const caRes = await fetch('/api/career-alpha', {
+    const caRes = await fetch('/api/orchestrate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ extractedData, interests }),
     })
-    if (!caRes.ok) throw new Error('Career Alpha failed')
-    const { careerAlpha, observations } = await readJson(caRes)
+    if (!caRes.ok) {
+      const failure = await readJson(caRes).catch((e: Error) => { throw e })
+      throw new Error(failure?.error ?? 'Career analysis failed')
+    }
+    let careerAlpha: CareerAlphaIntelligence | null = null
+    let deepAnalysis: DeepAnalysis | null = null
+    let bets: unknown[] | null = null
+    let observations: string[] = []
+    await readSse(caRes, (event) => {
+      if (event.type === 'agent') {
+        if (event.status === 'done' && typeof event.note === 'string') {
+          dispatch({ type: 'ADD_OBSERVATION', text: event.note })
+        }
+      } else if (event.type === 'complete') {
+        careerAlpha = event.careerAlpha as CareerAlphaIntelligence
+        deepAnalysis = (event.deepAnalysis as DeepAnalysis | null) ?? null
+        bets = Array.isArray(event.bets) ? (event.bets as unknown[]) : null
+        observations = Array.isArray(event.observations) ? (event.observations as string[]) : []
+      } else if (event.type === 'error') {
+        throw new Error(String(event.error ?? 'Career analysis failed'))
+      }
+    })
+    if (!careerAlpha) throw new Error('The analysis ended before a result was received. Please try again.')
     dispatch({ type: 'SET_CAREER_ALPHA', data: careerAlpha })
 
     // Trickle observations with delay
-    for (const obs of (observations ?? [])) {
+    for (const obs of observations) {
       dispatch({ type: 'ADD_OBSERVATION', text: obs })
       await new Promise(r => setTimeout(r, 400))
     }
@@ -33,7 +57,7 @@ export async function runCareerPipeline(
     const res = await fetch('/api/blueprint', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ validatedData, careerAlpha }),
+      body: JSON.stringify({ validatedData, careerAlpha, bets }),
     })
     if (!res.ok) throw new Error('Blueprint failed')
 
@@ -57,7 +81,7 @@ export async function runCareerPipeline(
         dispatch({ type: 'ADD_OBSERVATION', text: event.text as string })
       } else if (event.type === 'complete') {
         dispatch({ type: 'SET_VALIDATED_DATA', data: validatedData })
-        dispatch({ type: 'SET_BLUEPRINT_BACKGROUND', blueprint: { ...(event.blueprint as object), careerAlpha } as Blueprint })
+        dispatch({ type: 'SET_BLUEPRINT_BACKGROUND', blueprint: { ...(event.blueprint as object), careerAlpha, ...(deepAnalysis ? { deepAnalysis } : {}) } as Blueprint })
         completed = true
         dispatch({ type: 'SET_SCREEN', screen: 'blueprint' })
       } else if (event.type === 'error') {

@@ -9,6 +9,7 @@ import { exportToNotionMarkdown, downloadMarkdown } from '@/lib/export'
 import { useAuth } from '@/lib/use-auth'
 import { AuthModal } from '@/components/blueprint/AuthModal'
 import { OPEN_SAVE_VERSION } from '@/lib/blueprint-events'
+import { DeepAnalysisButton } from '@/components/blueprint/DeepAnalysisPanel'
 
 // ── Resource Card ──────────────────────────────────────────────────────────
 
@@ -114,8 +115,11 @@ export function Resources({ blueprint }: { blueprint: Blueprint }) {
 
   if (!selectedPath) {
     return (
-      <div className="rounded-[12px] bg-[var(--surface)] border border-[var(--border-ws)] p-8 text-center">
-        <p className="text-sm text-[var(--text-muted)]">Pick a direction and we'll point you to the right resources.</p>
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-end"><DeepAnalysisButton analysis={blueprint.deepAnalysis} /></div>
+        <div className="rounded-[12px] bg-[var(--surface)] border border-[var(--border-ws)] p-8 text-center">
+          <p className="text-sm text-[var(--text-muted)]">Pick a direction and we'll point you to the right resources.</p>
+        </div>
       </div>
     )
   }
@@ -153,11 +157,14 @@ export function Resources({ blueprint }: { blueprint: Blueprint }) {
         </motion.div>
       )}
 
-      <div className="mb-2">
-        <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">Useful stuff for</p>
-        <p className="text-base font-bold text-[var(--neon)]" style={{ fontFamily: 'var(--font-sora)' }}>
-          {selectedPath}
-        </p>
+      <div className="mb-2 flex items-start justify-between gap-3">
+        <div>
+          <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">Useful stuff for</p>
+          <p className="text-base font-bold text-[var(--neon)]" style={{ fontFamily: 'var(--font-sora)' }}>
+            {selectedPath}
+          </p>
+        </div>
+        <DeepAnalysisButton analysis={blueprint.deepAnalysis} />
       </div>
 
       {filteredResources.length === 0 ? (

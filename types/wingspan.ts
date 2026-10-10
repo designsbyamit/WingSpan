@@ -188,6 +188,7 @@ export interface Blueprint {
   positioning?: PositioningStrategy
   roadmapMilestones?: RoadmapMilestone[]
   careerAlpha?: CareerAlphaIntelligence
+  deepAnalysis?: import('./career-intelligence').DeepAnalysis
 }
 
 export type DiscoveryStep =

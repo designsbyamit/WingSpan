@@ -1,5 +1,6 @@
 // lib/claude.ts
 // Groq for fast extraction (Stage 1), Gemini for deep analysis (Blueprint streaming)
+import { betsInstruction, enforceBets, type Bet } from '@/lib/bets'
 import { normalizeValidated } from '@/lib/extracted-shape'
 import { normalizeBlueprint } from '@/lib/blueprint-shape'
 import { experienceFacts, groundingRules } from '@/lib/experience'
@@ -343,7 +344,8 @@ export function blueprintProblems(bp: Partial<Blueprint>): string[] {
 
 export async function* streamBlueprint(
   rawValidatedData: ValidatedCareerData,
-  careerAlpha: CareerAlphaIntelligence
+  careerAlpha: CareerAlphaIntelligence,
+  bets?: Bet[]
 ): AsyncGenerator<{ type: string; [key: string]: unknown }> {
   const validatedData = normalizeValidated(rawValidatedData)
 
@@ -379,6 +381,8 @@ Highest-upside direction. Career Alpha futures analysis and human advantage sugg
 
 For each bet populate all fields including betRationale, whyNotOtherPaths, careerAlphaScore, marketOpportunityScore, futureResilienceScore, learningInvestment, estimatedTransitionMonths, careerROIScore.`
 
+  const pathsInstruction = bets && bets.length === 3 ? betsInstruction(bets) : careerBetsInstruction
+
   const gapInstruction = `NEVER frame gaps as deficits. Always frame as capability unlocks.
 NOT: "You lack X" — INSTEAD: "X could unlock your path to Y"
 For each gap include: why it matters for the selected Career Bet, recommended acquisition sequence, estimated effort aligned with Career Alpha ROI analysis, specific actionable milestones.`
@@ -413,7 +417,7 @@ insights
 Career stage tone: ${stageInstruction}
 ${evidenceInstruction}
 
-${careerBetsInstruction}
+${pathsInstruction}
 
 ${gapInstruction}
 
@@ -498,6 +502,8 @@ Your output is the first thing this person will read about their own career pote
     throw new Error('Blueprint generation was cut short. Please try again with a shorter resume or fewer projects.')
   }
 
+  if (bets && bets.length === 3) blueprint = enforceBets(blueprint, bets)
+
   // Smaller/faster models sometimes return a valid but thin Blueprint (e.g. 1 path instead of 3).
   // Ask once more, naming what was missing, and keep whichever attempt is more complete.
   const firstProblems = blueprintProblems(blueprint)
@@ -512,7 +518,7 @@ Your output is the first thing this person will read about their own career pote
         16000,
       )
       const retried = parseBlueprintJson(retryRaw)
-      if (blueprintProblems(retried).length < firstProblems.length) blueprint = retried
+      if (blueprintProblems(retried).length < firstProblems.length) blueprint = bets && bets.length === 3 ? enforceBets(retried, bets) : retried
     } catch (retryErr) {
       console.warn('Blueprint retry failed, keeping first attempt:', retryErr instanceof Error ? retryErr.message : retryErr)
     }

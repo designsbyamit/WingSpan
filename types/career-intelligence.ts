@@ -128,3 +128,43 @@ export interface CareerMap {
   confidence:number
   validation:string[]
 }
+
+/** One agent's contribution, as shown in the "Deep analysis" panel. */
+export interface DeepAnalysisAgent {
+  id:'aggregator'|'careerDna'|'market'|'directions'|'orchestrator'
+  name:string
+  role:string
+  durationMs:number|null
+  confidence:number|null
+  insights:string[]
+}
+export interface DeepAnalysisCandidate {
+  direction:string
+  archetype:CareerCandidate['archetype']
+  experience:number
+  market:number
+  interest:number
+  confidence:number
+  score:number
+  distance:number
+  calc:string
+}
+/** A compact, user-facing record of how the recommendation was reached. No simulation internals. */
+export interface DeepAnalysis {
+  generatedAt:string
+  agents:DeepAnalysisAgent[]
+  evidence:{ count:number; capabilities:{name:string;level:number}[]; patterns:string[]; uncertainties:string[]; contradictions:string[] }
+  market:{ basis:string; directions:{name:string;demand:number;momentum:number;future:number;resilience:number;thesis:string}[] }
+  candidates:DeepAnalysisCandidate[]
+  orchestration:{
+    formula:string
+    weights:{ label:string; value:string }[]
+    confidenceRule:string
+    selectionRules:string[]
+    notes:string[]
+    narrative:string
+    whyThisOrder:string
+    tradeoffs:string[]
+    caveats:string[]
+  }
+}
