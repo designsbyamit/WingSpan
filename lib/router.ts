@@ -40,6 +40,8 @@ const DEFAULT_GEMINI_FALLBACKS = ['gemini-3.8-flash', 'gemini-3.5-flash', 'gemin
 const DEAD_MODEL_MS = 15 * 60 * 1000
 // One slow model must not eat the whole request; fail over to the next one.
 const GEMINI_TIMEOUT_MS = 40_000
+// Across the whole model chain, so the request ends well inside the 120s function limit.
+const GEMINI_TOTAL_BUDGET_MS = 85_000
 const deadModels = new Map<string, number>()
 
 const firstLine = (v: string | undefined) => (v ?? '').split('\n')[0].trim()
@@ -105,9 +107,12 @@ export async function generateWithGemini(parts: GeminiPart[], systemInstruction?
   if (!key) throw new Error('No Gemini key')
   const genAI = new GoogleGenerativeAI(key)
   let lastErr: unknown = new Error('No Gemini model configured')
+  const deadline = Date.now() + GEMINI_TOTAL_BUDGET_MS
   for (const model of liveModels()) {
+    const remaining = deadline - Date.now()
+    if (remaining < 8_000) { lastErr = lastErr instanceof Error && /timed out|abort/i.test(lastErr.message) ? lastErr : new Error('Gemini time budget exhausted (timed out)'); break }
     try {
-      const m = genAI.getGenerativeModel(systemInstruction ? { model, systemInstruction } : { model }, { timeout: GEMINI_TIMEOUT_MS })
+      const m = genAI.getGenerativeModel(systemInstruction ? { model, systemInstruction } : { model }, { timeout: Math.min(GEMINI_TIMEOUT_MS, remaining) })
       const result = await m.generateContent(parts)
       return result.response.text()
     } catch (e) {
