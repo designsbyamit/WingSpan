@@ -1,8 +1,9 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ExternalLink, ChevronDown, BookOpen, Link2, Code2, Users, Pen, ArrowRight, CheckCircle2, Circle, Clock } from 'lucide-react'
-import { Blueprint, Action, Resource, ActionType } from '@/types/wingspan'
+import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { ExternalLink, ChevronDown, BookOpen, Link2, Code2, Users, Pen, ArrowRight, CheckCircle2, Circle, Clock, type LucideIcon } from 'lucide-react'
+import { Action, ActionType } from '@/types/wingspan'
+import { Badge, Bar, Card, EmptyState, FieldLabel, FOCUS_RING, INK } from './shell/ui'
 
 type ProgressState = 'not-started' | 'in-progress' | 'done'
 
@@ -14,43 +15,35 @@ function loadProgress(): Record<string, ProgressState> {
 }
 
 function saveProgress(p: Record<string, ProgressState>) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(p))
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)) } catch { /* storage unavailable */ }
 }
 
-function actionIcon(type: ActionType) {
-  switch (type) {
-    case 'publish':   return <Pen size={14} />
-    case 'book':      return <BookOpen size={14} />
-    case 'course':    return <BookOpen size={14} />
-    case 'link':      return <Link2 size={14} />
-    case 'project':   return <Code2 size={14} />
-    case 'connect':   return <Users size={14} />
-    case 'community': return <Users size={14} />
-    default:          return <ArrowRight size={14} />
-  }
+const ACTION_ICON: Partial<Record<ActionType, LucideIcon>> = {
+  publish: Pen, book: BookOpen, course: BookOpen, link: Link2, project: Code2, connect: Users, community: Users,
 }
 
-function ProgressPill({ state, onChange }: { state: ProgressState; onChange: (s: ProgressState) => void }) {
-  const next: Record<ProgressState, ProgressState> = {
-    'not-started': 'in-progress',
-    'in-progress': 'done',
-    'done': 'not-started',
-  }
-  const cfg = {
-    'not-started': { label: 'Not started yet', icon: <Circle size={11} />, cls: 'text-[var(--text-dim)] border-[var(--border-ws)] bg-transparent' },
-    'in-progress': { label: 'In progress', icon: <Clock size={11} />, cls: 'text-yellow-400 border-yellow-800/50 bg-yellow-950/30' },
-    'done':        { label: 'Done', icon: <CheckCircle2 size={11} />, cls: 'text-[var(--neon)] border-[var(--neon-border)] bg-[var(--neon-surface)]' },
-  }
-  const { label, icon, cls } = cfg[state]
+const PROGRESS: Record<ProgressState, { label: string; icon: typeof Circle; cls: string; next: ProgressState }> = {
+  'not-started': { label: 'Not started', icon: Circle,       cls: 'text-[var(--text-muted)] border-[var(--border-ws)]', next: 'in-progress' },
+  'in-progress': { label: 'In progress', icon: Clock,        cls: 'text-amber-500 border-amber-500/40 bg-amber-500/10', next: 'done' },
+  'done':        { label: 'Done',        icon: CheckCircle2, cls: `${INK} border-[var(--neon-border)] bg-[var(--neon-surface)]`, next: 'not-started' },
+}
+
+function ProgressButton({ state, onChange, title }: { state: ProgressState; onChange: (s: ProgressState) => void; title: string }) {
+  const cfg = PROGRESS[state]
+  const Icon = cfg.icon
   return (
     <button
-      onClick={(e) => { e.stopPropagation(); onChange(next[state]) }}
-      className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[10px] font-semibold transition-all ${cls}`}
+      type="button"
+      onClick={() => onChange(cfg.next)}
+      aria-label={`${title}: ${cfg.label}. Mark as ${PROGRESS[cfg.next].label.toLowerCase()}`}
+      className={`shrink-0 inline-flex items-center gap-1.5 h-8 px-3 rounded-full border text-[12px] font-semibold transition-colors ${FOCUS_RING} ${cfg.cls}`}
     >
-      {icon}{label}
+      <Icon size={13} aria-hidden />{cfg.label}
     </button>
   )
 }
+
+const PRIORITY_TONE = { high: 'accent', medium: 'warn', low: 'neutral' } as const
 
 function ActionCard({ action, progress, onProgress }: {
   action: Action
@@ -58,174 +51,98 @@ function ActionCard({ action, progress, onProgress }: {
   onProgress: (s: ProgressState) => void
 }) {
   const [expanded, setExpanded] = useState(false)
-
-  const priorityCls = action.priority === 'high'
-    ? 'text-[var(--neon)] bg-[var(--neon-surface)] border-[var(--neon-border)]'
-    : action.priority === 'medium'
-    ? 'text-yellow-400 bg-yellow-950/20 border-yellow-800/40'
-    : 'text-[var(--text-muted)] bg-transparent border-[var(--border-ws)]'
+  const Icon = ACTION_ICON[action.actionType] ?? ArrowRight
+  const done = progress === 'done'
+  const hasDetail = !!(action.howToStart || action.whereToStart || action.measurable || action.link)
 
   return (
-    <motion.div
-      layout
-      className={`rounded-[12px] border transition-all overflow-hidden ${
-        progress === 'done'
-          ? 'bg-[var(--card-inner)] border-[var(--border-ws)] opacity-60'
-          : 'bg-[var(--surface)] border-[var(--border-ws)]'
-      }`}
-    >
-      {/* Header row */}
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className="w-full text-left p-4 flex items-start gap-3"
-      >
-        <div className="flex-shrink-0 w-7 h-7 rounded-[8px] bg-[var(--neon-surface)] border border-[var(--neon-border)] flex items-center justify-center text-[var(--neon)] mt-0.5">
-          {actionIcon(action.actionType)}
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-2 mb-1">
-            <span className={`text-sm font-semibold leading-snug ${progress === 'done' ? 'line-through text-[var(--text-muted)]' : 'text-[var(--text-primary)]'}`}>
-              {action.title}
-            </span>
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border capitalize ${priorityCls}`}>
-                {action.priority}
-              </span>
-              <motion.div animate={{ rotate: expanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
-                <ChevronDown size={14} className="text-[var(--text-muted)]" />
-              </motion.div>
-            </div>
+    <Card as="li" className={`overflow-hidden ${done ? 'opacity-70' : ''}`}>
+      <div className="p-5 flex items-start gap-4">
+        <span className={`shrink-0 w-9 h-9 rounded-[10px] bg-[var(--surface-dim)] flex items-center justify-center ${INK}`}>
+          <Icon size={16} aria-hidden />
+        </span>
+        <div className="flex-1 min-w-0 flex flex-col gap-2">
+          <p className={`text-[15px] font-semibold leading-snug ${done ? 'line-through text-[var(--text-muted)]' : 'text-[var(--text-primary)]'}`}>{action.title}</p>
+          {action.description && <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed">{action.description}</p>}
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            {action.priority && <Badge tone={PRIORITY_TONE[action.priority] ?? 'neutral'}>{action.priority[0].toUpperCase() + action.priority.slice(1)} priority</Badge>}
+            {action.timeEstimate && (
+              <span className="inline-flex items-center gap-1 text-[12px] text-[var(--text-muted)]"><Clock size={12} aria-hidden />{action.timeEstimate}</span>
+            )}
           </div>
-          <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{action.description}</p>
-          {action.timeEstimate && (
-            <span className="text-[10px] text-[var(--text-muted)] mt-1 flex items-center gap-1">
-              <Clock size={9} />{action.timeEstimate}
-            </span>
-          )}
         </div>
-      </button>
+      </div>
 
-      {/* Expanded detail */}
-      <AnimatePresence>
+      <div className="px-5 pb-4 flex items-center justify-between gap-3">
+        {hasDetail ? (
+          <button
+            type="button"
+            aria-expanded={expanded}
+            onClick={() => setExpanded(e => !e)}
+            className={`inline-flex items-center gap-1.5 h-8 rounded-[8px] text-[13px] font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] ${FOCUS_RING}`}
+          >
+            {expanded ? 'Hide steps' : 'How to start'}
+            <ChevronDown size={14} className={`transition-transform ${expanded ? 'rotate-180' : ''}`} aria-hidden />
+          </button>
+        ) : <span />}
+        <ProgressButton state={progress} onChange={onProgress} title={action.title} />
+      </div>
+
+      <AnimatePresence initial={false}>
         {expanded && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="px-4 pb-4 flex flex-col gap-4 border-t border-[var(--border-ws)] pt-4">
-              <div>
-                <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-2">Where to begin</p>
-                <p className="text-xs text-[var(--text-secondary)] leading-relaxed bg-[var(--surface-dim)] rounded-[8px] p-3 border border-[var(--border-ws)]">
-                  {action.howToStart}
-                </p>
-              </div>
+            <div className="mx-5 mb-5 pt-4 border-t border-[var(--border-ws)] flex flex-col gap-4">
+              {action.howToStart && (
+                <div>
+                  <FieldLabel>Where to begin</FieldLabel>
+                  <p className="text-[14px] text-[var(--text-primary)] leading-relaxed">{action.howToStart}</p>
+                </div>
+              )}
               {action.whereToStart && (
                 <div>
-                  <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">Where</p>
-                  <p className="text-xs text-[var(--text-secondary)]">{action.whereToStart}</p>
+                  <FieldLabel>Where</FieldLabel>
+                  <p className="text-[14px] text-[var(--text-secondary)]">{action.whereToStart}</p>
                 </div>
               )}
-              <div>
-                <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">You'll know it worked when</p>
-                <p className="text-xs text-[var(--neon)] opacity-80">{action.measurable}</p>
-              </div>
-              <div className="flex items-center justify-between flex-wrap gap-3">
-                {action.link && (
-                  <a
-                    href={action.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-[8px] bg-[var(--neon)] text-[#0a0a0a] text-xs font-bold hover:opacity-90 transition-opacity"
-                    style={{ boxShadow: '0 0 14px var(--neon-glow)' }}
-                  >
-                    {action.linkLabel ?? "Let's go"}
-                    <ExternalLink size={11} />
-                  </a>
-                )}
-                <ProgressPill state={progress} onChange={onProgress} />
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Collapsed progress pill */}
-      {!expanded && (
-        <div className="px-4 pb-3 flex justify-end">
-          <ProgressPill state={progress} onChange={onProgress} />
-        </div>
-      )}
-    </motion.div>
-  )
-}
-
-function ResourceCard({ resource }: { resource: Resource }) {
-  const [expanded, setExpanded] = useState(false)
-  const icon = resource.type === 'book' || resource.type === 'course'
-    ? <BookOpen size={13} />
-    : resource.type === 'community'
-    ? <Users size={13} />
-    : <Link2 size={13} />
-
-  return (
-    <motion.div layout className="rounded-[12px] bg-[var(--surface)] border border-[var(--border-ws)] overflow-hidden">
-      <button onClick={() => setExpanded(!expanded)} className="w-full text-left p-3 flex items-center gap-3">
-        <div className="flex-shrink-0 w-6 h-6 rounded-[6px] bg-[var(--surface-dim)] border border-[var(--border-ws)] flex items-center justify-center text-[var(--text-muted)]">
-          {icon}
-        </div>
-        <div className="flex-1 min-w-0">
-          <span className="text-[10px] text-[var(--text-muted)] capitalize">{resource.type}</span>
-          <p className="text-xs font-semibold text-[var(--text-primary)] leading-tight">{resource.title}</p>
-        </div>
-        <div className="flex items-center gap-2">
-          {resource.url && (
-            <a href={resource.url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-[var(--neon)] hover:opacity-80 transition-opacity">
-              <ExternalLink size={13} />
-            </a>
-          )}
-          <motion.div animate={{ rotate: expanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
-            <ChevronDown size={13} className="text-[var(--text-muted)]" />
-          </motion.div>
-        </div>
-      </button>
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="overflow-hidden border-t border-[var(--border-ws)]"
-          >
-            <div className="p-3 flex flex-col gap-2">
-              {resource.whereToStart && (
+              {action.measurable && (
                 <div>
-                  <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">Where to start</p>
-                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{resource.whereToStart}</p>
+                  <FieldLabel>You’ll know it worked when</FieldLabel>
+                  <p className={`text-[14px] ${INK}`}>{action.measurable}</p>
                 </div>
               )}
-              {resource.firstStep && (
-                <div>
-                  <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">First step</p>
-                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{resource.firstStep}</p>
-                </div>
+              {action.link && (
+                <a
+                  href={action.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`self-start inline-flex items-center gap-2 h-9 px-4 rounded-[10px] bg-[var(--neon)] text-[#0a0a0a] text-[13px] font-bold hover:opacity-90 ${FOCUS_RING}`}
+                >
+                  {action.linkLabel ?? 'Open link'}
+                  <ExternalLink size={13} aria-hidden />
+                  <span className="sr-only">(opens in a new tab)</span>
+                </a>
               )}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </Card>
   )
 }
 
-export function ActionsSection({ blueprint }: { blueprint: Blueprint }) {
-  const { actions } = blueprint
-  const [progress, setProgress] = useState<Record<string, ProgressState>>({})
+const GROUPS = [
+  { key: 'immediate',  title: 'Now',   description: 'Start here.' },
+  { key: 'mediumTerm', title: 'Next',  description: 'Build toward these once the first steps are moving.' },
+  { key: 'longTerm',   title: 'Later', description: 'The long game.' },
+] as const
 
-  useEffect(() => { setProgress(loadProgress()) }, [])
+/** Now / Next / Later action lists with progress tracking (stored on this device). */
+export function ActionsSection({ actions }: { actions: { immediate: Action[]; mediumTerm: Action[]; longTerm: Action[] } }) {
+  const [progress, setProgress] = useState<Record<string, ProgressState>>(loadProgress)
 
   const setActionProgress = (title: string, state: ProgressState) => {
     const next = { ...progress, [title]: state }
@@ -233,78 +150,46 @@ export function ActionsSection({ blueprint }: { blueprint: Blueprint }) {
     saveProgress(next)
   }
 
-  const allActions = [
-    ...actions.immediate,
-    ...actions.mediumTerm,
-    ...actions.longTerm,
-  ]
-  const doneCount = allActions.filter(a => progress[a.title] === 'done').length
-  const inProgressCount = allActions.filter(a => progress[a.title] === 'in-progress').length
+  const all = [...actions.immediate, ...actions.mediumTerm, ...actions.longTerm]
+  if (all.length === 0) {
+    return <EmptyState title="No actions for this path yet" body="Run the analysis again to generate concrete next steps." />
+  }
+  const doneCount = all.filter(a => progress[a.title] === 'done').length
+  const inProgressCount = all.filter(a => progress[a.title] === 'in-progress').length
+  const pct = Math.round((doneCount / all.length) * 100)
 
   return (
-    <div className="flex flex-col gap-8">
+    <>
+      <Card tone="quiet" className="p-5 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
+        <p className="text-[14px] text-[var(--text-secondary)]">
+          <span className="text-[var(--text-primary)] font-semibold tabular-nums">{doneCount} of {all.length}</span> done
+          {inProgressCount > 0 && <>, <span className="tabular-nums">{inProgressCount}</span> in progress</>}
+        </p>
+        <div className="flex-1"><Bar value={pct} label={`${pct} percent of actions done`} /></div>
+      </Card>
 
-      {/* Progress summary bar */}
-      {(doneCount > 0 || inProgressCount > 0) && (
-        <div className="rounded-[12px] bg-[var(--card-inner)] border border-[var(--border-ws)] p-4 flex items-center gap-6">
-          <div className="text-center">
-            <div className="text-xl font-bold text-[var(--neon)]">{doneCount}</div>
-            <div className="text-[10px] text-[var(--text-muted)]">completed</div>
-          </div>
-          <div className="text-center">
-            <div className="text-xl font-bold text-yellow-400">{inProgressCount}</div>
-            <div className="text-[10px] text-[var(--text-muted)]">in progress</div>
-          </div>
-          <div className="flex-1">
-            <div className="h-[2px] rounded-full bg-[var(--border-ws)]">
-              <div
-                className="h-full rounded-full bg-[var(--neon)] transition-all duration-700"
-                style={{ width: `${Math.round((doneCount / allActions.length) * 100)}%` }}
-              />
+      {GROUPS.map(g => {
+        const list = actions[g.key]
+        if (list.length === 0) return null
+        return (
+          <section key={g.key} className="flex flex-col gap-4" aria-labelledby={`actions-${g.key}`}>
+            <div className="flex items-baseline gap-3">
+              <h3 id={`actions-${g.key}`} className="text-[18px] font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-sora)' }}>{g.title}</h3>
+              <span className="text-[13px] text-[var(--text-muted)]">{list.length} {list.length === 1 ? 'action' : 'actions'}. {g.description}</span>
             </div>
-            <p className="text-[10px] text-[var(--text-muted)] mt-1">{Math.round((doneCount / allActions.length) * 100)}% complete</p>
-          </div>
-        </div>
-      )}
-
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-2">
-          <h3 className="text-xs font-bold tracking-[2px] uppercase text-[var(--text-muted)]">Immediate Actions</h3>
-          <span className="text-[10px] text-[var(--text-dim)]">Do these now</span>
-        </div>
-        {actions.immediate.map((action) => (
-          <ActionCard key={action.title} action={action} progress={progress[action.title] ?? 'not-started'} onProgress={(s) => setActionProgress(action.title, s)} />
-        ))}
-      </div>
-
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-2">
-          <h3 className="text-xs font-bold tracking-[2px] uppercase text-[var(--text-muted)]">Medium-Term</h3>
-          <span className="text-[10px] text-[var(--text-dim)]">Build toward these</span>
-        </div>
-        {actions.mediumTerm.map((action) => (
-          <ActionCard key={action.title} action={action} progress={progress[action.title] ?? 'not-started'} onProgress={(s) => setActionProgress(action.title, s)} />
-        ))}
-      </div>
-
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-2">
-          <h3 className="text-xs font-bold tracking-[2px] uppercase text-[var(--text-muted)]">Long-Term</h3>
-          <span className="text-[10px] text-[var(--text-dim)]">Play the long game</span>
-        </div>
-        {actions.longTerm.map((action) => (
-          <ActionCard key={action.title} action={action} progress={progress[action.title] ?? 'not-started'} onProgress={(s) => setActionProgress(action.title, s)} />
-        ))}
-      </div>
-
-      {actions.resources.length > 0 && (
-        <div className="flex flex-col gap-3">
-          <h3 className="text-xs font-bold tracking-[2px] uppercase text-[var(--text-muted)]">Resources</h3>
-          {actions.resources.map((resource) => (
-            <ResourceCard key={resource.title} resource={resource} />
-          ))}
-        </div>
-      )}
-    </div>
+            <ul className="flex flex-col gap-3">
+              {list.map((action, i) => (
+                <ActionCard
+                  key={`${action.title}-${i}`}
+                  action={action}
+                  progress={progress[action.title] ?? 'not-started'}
+                  onProgress={(s) => setActionProgress(action.title, s)}
+                />
+              ))}
+            </ul>
+          </section>
+        )
+      })}
+    </>
   )
 }

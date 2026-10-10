@@ -1,208 +1,159 @@
 // components/blueprint/GrowthRoadmap.tsx
 'use client'
+import { useState } from 'react'
+import { Building2, Route, Signpost, Target } from 'lucide-react'
 import { Blueprint, RoadmapMilestone } from '@/types/wingspan'
 import { matchesPath } from '@/lib/path-match'
 import { useWingspan } from '@/context/WingspanContext'
 import { ActionsSection } from './ActionsSection'
-import { Target, Building2, User, ArrowDown } from 'lucide-react'
+import { SectionFrame, type SectionTab } from './shell/SectionFrame'
+import { useShell } from './shell/ShellContext'
+import { Badge, Block, Card, Chip, EmptyState, FieldLabel, INK, PrimaryButton } from './shell/ui'
 
-const PHASE_COLORS: Record<string, string> = {
-  'Today':      'bg-[var(--neon)] text-[#0a0a0a]',
-  '30 Days':    'bg-[var(--neon-surface)] text-[var(--neon)] border border-[var(--neon-border)]',
-  '90 Days':    'bg-[var(--neon-surface)] text-[var(--neon)] border border-[var(--neon-border)]',
-  '6 Months':   'bg-[var(--surface)] text-[var(--text-secondary)] border border-[var(--border-ws)]',
-  '12 Months':  'bg-[var(--surface)] text-[var(--text-secondary)] border border-[var(--border-ws)]',
-  '18 Months':  'bg-[var(--surface)] text-[var(--text-secondary)] border border-[var(--border-ws)]',
+type RoadmapTab = 'milestones' | 'actions'
+
+function Positioning({ blueprint }: { blueprint: Blueprint }) {
+  const p = blueprint.positioning
+  if (!p) return null
+  const companies = Array.isArray(p.targetCompanies) ? p.targetCompanies : []
+  const identity = Array.isArray(p.targetIdentity) ? p.targetIdentity : []
+  return (
+    <Card className="p-6 sm:p-7 flex flex-col gap-6">
+      <div className="flex items-start gap-4">
+        <span className={`shrink-0 w-10 h-10 rounded-[10px] bg-[var(--neon-surface)] border border-[var(--neon-border)] flex items-center justify-center ${INK}`}>
+          <Target size={18} aria-hidden />
+        </span>
+        <div className="min-w-0">
+          <p className="text-[13px] text-[var(--text-muted)]">Where you’re headed</p>
+          <p className="text-[20px] font-semibold text-[var(--text-primary)] leading-snug mt-1" style={{ fontFamily: 'var(--font-sora)' }}>{p.targetRole}</p>
+        </div>
+      </div>
+      {p.positioningStatement && (
+        <blockquote className="border-l-2 border-[var(--neon)] pl-4 text-[15px] text-[var(--text-primary)] leading-[1.7] max-w-[64ch]">
+          {p.positioningStatement}
+        </blockquote>
+      )}
+      <div className="grid sm:grid-cols-2 gap-6">
+        {companies.length > 0 && (
+          <div>
+            <FieldLabel><span className="inline-flex items-center gap-1.5"><Building2 size={13} aria-hidden />Companies to aim for</span></FieldLabel>
+            <div className="flex flex-wrap gap-2">{companies.map(c => <Chip key={c}>{c}</Chip>)}</div>
+          </div>
+        )}
+        {identity.length > 0 && (
+          <div>
+            <FieldLabel>How you’ll be known</FieldLabel>
+            <div className="flex flex-wrap gap-2">{identity.map(c => <Chip key={c} accent>{c}</Chip>)}</div>
+          </div>
+        )}
+      </div>
+    </Card>
+  )
 }
 
-function PositioningSection({ blueprint }: { blueprint: Blueprint }) {
-  const { positioning } = blueprint
-  if (!positioning) return null
-
+function SkillList({ label, items, accent }: { label: string; items?: string[]; accent?: boolean }) {
+  if (!items || items.length === 0) return null
   return (
-    <div className="rounded-[16px] bg-[var(--card-inner)] border border-[var(--border-ws)] p-5 flex flex-col gap-4">
-      <p className="text-[10px] font-bold tracking-[2.5px] uppercase text-[var(--text-muted)]">Where you're headed</p>
-
-      <div className="flex gap-3">
-        <div className="flex-shrink-0 w-7 h-7 rounded-[8px] bg-[var(--neon-surface)] border border-[var(--neon-border)] flex items-center justify-center text-[var(--neon)]">
-          <Target size={13} />
-        </div>
-        <div>
-          <p className="text-[9px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">Aiming for</p>
-          <p className="text-sm font-bold text-[var(--neon)]" style={{ fontFamily: 'var(--font-sora)' }}>
-            {positioning.targetRole}
-          </p>
-        </div>
-      </div>
-
-      <div className="flex gap-3">
-        <div className="flex-shrink-0 w-7 h-7 rounded-[8px] bg-[var(--surface)] border border-[var(--border-ws)] flex items-center justify-center text-[var(--text-muted)]">
-          <Building2 size={13} />
-        </div>
-        <div>
-          <p className="text-[9px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-2">Target Companies</p>
-          <div className="flex flex-wrap gap-1.5">
-            {positioning.targetCompanies.map(c => (
-              <span key={c} className="text-xs px-2.5 py-1 rounded-[6px] bg-[var(--surface)] border border-[var(--border-ws)] text-[var(--text-secondary)]">{c}</span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="flex gap-3">
-        <div className="flex-shrink-0 w-7 h-7 rounded-[8px] bg-[var(--surface)] border border-[var(--border-ws)] flex items-center justify-center text-[var(--text-muted)]">
-          <User size={13} />
-        </div>
-        <div>
-          <p className="text-[9px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-2">Target Identity</p>
-          <div className="flex flex-wrap gap-1.5">
-            {positioning.targetIdentity.map(id => (
-              <span key={id} className="text-xs px-2.5 py-1 rounded-[6px] bg-[var(--neon-surface)] border border-[var(--neon-border)] text-[var(--neon)]">{id}</span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-[10px] bg-[var(--surface)] border border-[var(--border-ws)] p-3">
-        <p className="text-[9px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">Positioning Statement</p>
-        <p className="text-sm text-[var(--text-secondary)] leading-relaxed italic">"{positioning.positioningStatement}"</p>
-      </div>
+    <div>
+      <FieldLabel>{label}</FieldLabel>
+      <div className="flex flex-wrap gap-2">{items.map(s => <Chip key={s} accent={accent}>{s}</Chip>)}</div>
     </div>
   )
 }
 
-function MilestoneCard({ milestone, isLast }: { milestone: RoadmapMilestone; isLast: boolean }) {
-  const phaseCls = PHASE_COLORS[milestone.phase] ?? PHASE_COLORS['6 Months']
-
+function Milestone({ m, index, isLast }: { m: RoadmapMilestone; index: number; isLast: boolean }) {
+  const actions = Array.isArray(m.actions) ? m.actions : []
   return (
-    <div className="flex gap-4">
-      {/* Spine */}
-      <div className="flex flex-col items-center flex-shrink-0">
-        <div className={`px-2.5 py-1 rounded-full text-[10px] font-bold whitespace-nowrap ${phaseCls}`}>
-          {milestone.phase}
-        </div>
-        {!isLast && (
-          <div className="flex flex-col items-center gap-1 py-2">
-            <div className="w-[1px] h-4 bg-[var(--border-ws)]" />
-            <ArrowDown size={10} className="text-[var(--border-ws)]" />
-            <div className="w-[1px] h-4 bg-[var(--border-ws)]" />
-          </div>
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="flex-1 pb-2">
-        <div className="rounded-[12px] bg-[var(--surface)] border border-[var(--border-ws)] p-4 flex flex-col gap-3 mb-2">
-          <div>
-            <p className="text-[9px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-2">Actions</p>
-            <ul className="flex flex-col gap-1.5">
-              {milestone.actions.map((action, i) => (
-                <li key={i} className="flex items-start gap-2 text-xs text-[var(--text-secondary)]">
-                  <span className="text-[var(--neon)] mt-0.5 flex-shrink-0">→</span>
-                  {action}
+    <li className="grid grid-cols-[28px_1fr] sm:grid-cols-[96px_28px_1fr] gap-x-4">
+      <p className={`hidden sm:block pt-1 text-right text-[13px] font-semibold ${index === 0 ? INK : 'text-[var(--text-secondary)]'}`}>{m.phase}</p>
+      <span className="flex flex-col items-center" aria-hidden>
+        <span className={`mt-1 w-7 h-7 rounded-full border text-[12px] font-semibold flex items-center justify-center tabular-nums ${
+          index === 0 ? 'bg-[var(--neon)] border-[var(--neon)] text-[#0a0a0a]' : 'bg-[var(--surface)] border-[var(--border-ws)] text-[var(--text-secondary)]'
+        }`}>{index + 1}</span>
+        {!isLast && <span className="w-px flex-1 bg-[var(--border-ws)] my-1.5" />}
+      </span>
+      <div className="pb-8 min-w-0">
+        <p className={`sm:hidden text-[13px] font-semibold mb-2 ${index === 0 ? INK : 'text-[var(--text-secondary)]'}`}>{m.phase}</p>
+        <Card className="p-5 flex flex-col gap-5">
+          {actions.length > 0 && (
+            <ul className="flex flex-col gap-2.5">
+              {actions.map((a, i) => (
+                <li key={i} className="flex gap-3 text-[14px] text-[var(--text-primary)] leading-relaxed">
+                  <span className="mt-[8px] w-1.5 h-1.5 rounded-full bg-[var(--neon)] shrink-0" aria-hidden />{a}
                 </li>
               ))}
             </ul>
-          </div>
-
-          {milestone.hardSkills && milestone.hardSkills.length > 0 && (
-            <div>
-              <p className="text-[9px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1.5">Hard Skills</p>
-              <div className="flex flex-wrap gap-1.5">
-                {milestone.hardSkills.map(s => (
-                  <span key={s} className="text-[10px] px-2 py-0.5 rounded-[5px] bg-[var(--neon-surface)] border border-[var(--neon-border)] text-[var(--neon)]">{s}</span>
-                ))}
-              </div>
-            </div>
           )}
-
-          {milestone.softSkills && milestone.softSkills.length > 0 && (
-            <div>
-              <p className="text-[9px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1.5">Soft Skills</p>
-              <div className="flex flex-wrap gap-1.5">
-                {milestone.softSkills.map(s => (
-                  <span key={s} className="text-[10px] px-2 py-0.5 rounded-[5px] bg-[var(--surface)] border border-[var(--border-ws)] text-[var(--text-muted)]">{s}</span>
-                ))}
-              </div>
+          {(m.hardSkills?.length || m.softSkills?.length || m.positioningMoves?.length) ? (
+            <div className="grid sm:grid-cols-3 gap-5 pt-5 border-t border-[var(--border-ws)]">
+              <SkillList label="Hard skills" items={m.hardSkills} accent />
+              <SkillList label="Soft skills" items={m.softSkills} />
+              <SkillList label="Positioning" items={m.positioningMoves} />
             </div>
-          )}
-
-          {milestone.positioningMoves && milestone.positioningMoves.length > 0 && (
-            <div>
-              <p className="text-[9px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1.5">Positioning</p>
-              <div className="flex flex-wrap gap-1.5">
-                {milestone.positioningMoves.map(m => (
-                  <span key={m} className="text-[10px] px-2 py-0.5 rounded-[5px] bg-blue-950/30 border border-blue-800/50 text-blue-400">{m}</span>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+          ) : null}
+        </Card>
       </div>
-    </div>
+    </li>
   )
 }
 
 export function GrowthRoadmap({ blueprint }: { blueprint: Blueprint }) {
   const { state } = useWingspan()
+  const { goTo } = useShell()
   const selectedPath = state.selectedPath
+  const [tab, setTab] = useState<RoadmapTab>('milestones')
 
   if (!selectedPath) {
     return (
-      <div className="rounded-[12px] bg-[var(--surface)] border border-[var(--border-ws)] p-8 text-center">
-        <p className="text-sm text-[var(--text-muted)]">Pick a direction first and we'll build your roadmap.</p>
-      </div>
+      <SectionFrame section="roadmap" tabs={[]} activeTab="" onTabChange={() => {}}>
+        <EmptyState
+          icon={Signpost}
+          title="Choose a path to build your roadmap"
+          body="The roadmap is sequenced for one direction. Pick it in Future Paths."
+          action={<PrimaryButton onClick={() => goTo('path-selection')}>Go to Future Paths</PrimaryButton>}
+        />
+      </SectionFrame>
     )
   }
 
-  const milestones = blueprint.roadmapMilestones
-  const { actions } = blueprint
-  const filteredBlueprint = {
-    ...blueprint,
-    actions: {
-      ...actions,
-      immediate: actions.immediate.filter(a => matchesPath(a.pathway, selectedPath)),
-      mediumTerm: actions.mediumTerm.filter(a => matchesPath(a.pathway, selectedPath)),
-      longTerm: actions.longTerm.filter(a => matchesPath(a.pathway, selectedPath)),
-      resources: actions.resources.filter(r => matchesPath(r.pathway, selectedPath)),
-    },
+  const milestones = Array.isArray(blueprint.roadmapMilestones) ? blueprint.roadmapMilestones : []
+  const a = blueprint.actions ?? { immediate: [], mediumTerm: [], longTerm: [], resources: [] }
+  const actions = {
+    immediate: (a.immediate ?? []).filter(x => matchesPath(x.pathway, selectedPath)),
+    mediumTerm: (a.mediumTerm ?? []).filter(x => matchesPath(x.pathway, selectedPath)),
+    longTerm: (a.longTerm ?? []).filter(x => matchesPath(x.pathway, selectedPath)),
   }
+  const actionCount = actions.immediate.length + actions.mediumTerm.length + actions.longTerm.length
+
+  const tabs: SectionTab[] = [
+    { id: 'milestones', label: 'Milestones', count: milestones.length },
+    { id: 'actions', label: 'Actions', count: actionCount },
+  ]
 
   return (
-    <div className="flex flex-col gap-8">
-
-      {/* Path label */}
-      <div>
-        <p className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)] mb-1">Your roadmap toward</p>
-        <p className="text-base font-bold text-[var(--neon)]" style={{ fontFamily: 'var(--font-sora)' }}>
-          {selectedPath}
-        </p>
-      </div>
-
-      {/* Positioning strategy */}
-      <PositioningSection blueprint={blueprint} />
-
-      {/* Visual milestone timeline */}
-      {milestones && milestones.length > 0 && (
-        <div>
-          <p className="text-[10px] font-bold tracking-[2.5px] uppercase text-[var(--text-muted)] mb-4">Timeline</p>
-          <div className="flex flex-col">
-            {milestones.map((milestone, idx) => (
-              <MilestoneCard key={milestone.phase} milestone={milestone} isLast={idx === milestones.length - 1} />
-            ))}
-          </div>
-        </div>
+    <SectionFrame
+      section="roadmap"
+      context={<Badge tone="accent">For {selectedPath}</Badge>}
+      stat={actionCount ? { value: actionCount, label: actionCount === 1 ? 'action to take' : 'actions to take' } : null}
+      tabs={tabs}
+      activeTab={tab}
+      onTabChange={id => setTab(id as RoadmapTab)}
+    >
+      {tab === 'milestones' && (
+        <>
+          <Positioning blueprint={blueprint} />
+          {milestones.length === 0 ? (
+            <EmptyState icon={Route} title="No milestones yet" body="Your concrete next steps are under Actions." />
+          ) : (
+            <Block title="Milestones" description="What to have done by each point, from today onward.">
+              <ol className="flex flex-col">
+                {milestones.map((m, i) => <Milestone key={`${m.phase}-${i}`} m={m} index={i} isLast={i === milestones.length - 1} />)}
+              </ol>
+            </Block>
+          )}
+        </>
       )}
-
-      {/* Detailed actions */}
-      {(filteredBlueprint.actions.immediate.length > 0 ||
-        filteredBlueprint.actions.mediumTerm.length > 0 ||
-        filteredBlueprint.actions.longTerm.length > 0) && (
-        <div>
-          <p className="text-[10px] font-bold tracking-[2.5px] uppercase text-[var(--text-muted)] mb-4">The actual steps</p>
-          <ActionsSection blueprint={filteredBlueprint} />
-        </div>
-      )}
-    </div>
+      {tab === 'actions' && <ActionsSection actions={actions} />}
+    </SectionFrame>
   )
 }
