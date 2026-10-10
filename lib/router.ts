@@ -38,6 +38,8 @@ async function callOpenRouter(messages: ChatMessage[], model = 'deepseek/deepsee
 
 const DEFAULT_GEMINI_FALLBACKS = ['gemini-3.8-flash', 'gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-3.5-flash-lite']
 const DEAD_MODEL_MS = 15 * 60 * 1000
+// One slow model must not eat the whole request; fail over to the next one.
+const GEMINI_TIMEOUT_MS = 40_000
 const deadModels = new Map<string, number>()
 
 const firstLine = (v: string | undefined) => (v ?? '').split('\n')[0].trim()
@@ -54,7 +56,7 @@ export function geminiModelChain(env: Record<string, string | undefined> = proce
 export function isRetryableProviderError(e: unknown): boolean {
   const msg = (e instanceof Error ? e.message : String(e)).toLowerCase()
   return /\b(429|404|403|500|502|503|504)\b/.test(msg) ||
-    /quota|rate.?limit|resource_exhausted|unavailable|overloaded|not found|not supported|permission|deadline|timeout|fetch failed/.test(msg)
+    /quota|rate.?limit|resource_exhausted|unavailable|overloaded|not found|not supported|permission|deadline|timeout|timed out|abort|fetch failed/.test(msg)
 }
 
 /** A message that is safe to show people. Raw provider errors stay in the logs. */
@@ -105,7 +107,7 @@ export async function generateWithGemini(parts: GeminiPart[], systemInstruction?
   let lastErr: unknown = new Error('No Gemini model configured')
   for (const model of liveModels()) {
     try {
-      const m = genAI.getGenerativeModel(systemInstruction ? { model, systemInstruction } : { model })
+      const m = genAI.getGenerativeModel(systemInstruction ? { model, systemInstruction } : { model }, { timeout: GEMINI_TIMEOUT_MS })
       const result = await m.generateContent(parts)
       return result.response.text()
     } catch (e) {

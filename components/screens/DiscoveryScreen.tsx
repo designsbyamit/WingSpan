@@ -5,6 +5,7 @@ import { useWingspan } from '@/context/WingspanContext'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { DiscoveryStep, ExtractedCareerData } from '@/types/wingspan'
 import { UniverseCanvas } from '@/components/ui/UniverseCanvas'
+import { readJson } from '@/lib/safe-json'
 
 // Generate hyper-personalised Stage 1 messages from extracted data
 function buildStage1Messages(data: ExtractedCareerData | null): string[] {
@@ -159,7 +160,7 @@ export function DiscoveryScreen() {
           body: JSON.stringify({ extractedData, interests: state.interests }),
         })
         if (!caRes.ok) throw new Error('Career Alpha failed')
-        const { careerAlpha, observations } = await caRes.json()
+        const { careerAlpha, observations } = await readJson(caRes)
         dispatch({ type: 'SET_CAREER_ALPHA', data: careerAlpha })
         for (const obs of (observations ?? [])) {
           dispatch({ type: 'ADD_OBSERVATION', text: obs })

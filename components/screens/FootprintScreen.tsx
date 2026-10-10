@@ -6,6 +6,7 @@ import { useWingspan } from '@/context/WingspanContext'
 import { NeonButton } from '@/components/ui/NeonButton'
 import { GhostButton } from '@/components/ui/GhostButton'
 import { runCareerPipeline } from '@/lib/pipeline'
+import { readJson } from '@/lib/safe-json'
 
 // ── Extraction animation overlay ──────────────────────────────────────────
 function ExtractionOverlay() {
@@ -236,7 +237,7 @@ export function FootprintScreen() {
       formData.append('urls', JSON.stringify(state.urls))
 
       const res = await fetch('/api/extract', { method: 'POST', body: formData })
-      const data = await res.json()
+      const data = await readJson(res)
       if (!res.ok) {
         throw new Error(data.error || 'We could not read that source.')
       }

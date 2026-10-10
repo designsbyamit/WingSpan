@@ -34,7 +34,7 @@ async function readSitemap(origin: string): Promise<string[]> {
   const candidates = [new URL('/sitemap.xml', origin).toString(), new URL('/sitemap_index.xml', origin).toString()]
   for (const url of candidates) {
     try {
-      const res = await fetch(url, { headers: { 'User-Agent': 'WingSpan Evidence Scanner/1.0' } })
+      const res = await fetch(url, { headers: { 'User-Agent': 'WingSpan Evidence Scanner/1.0' }, signal: AbortSignal.timeout(12_000) })
       if (!res.ok) continue
       const xml = await res.text()
       const urls = [...xml.matchAll(/<loc>\s*([^<]+)\s*<\/loc>/gi)].map(m => m[1].trim())
@@ -103,6 +103,24 @@ async function scanWithPlaywright(url: string, targets: string[]): Promise<Scann
     return pages
   } finally {
     await browser.close()
+  }
+}
+
+const SCAN_BUDGET_MS = 35_000
+
+/** Run a browser scan with a hard deadline; resolves to [] on timeout or failure. */
+async function scanWithin(ms: number, url: string, targets: string[]): Promise<ScannedPage[]> {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  try {
+    return await Promise.race([
+      scanWithPlaywright(url, targets),
+      new Promise<ScannedPage[]>((resolve) => { timer = setTimeout(() => resolve([]), ms) }),
+    ])
+  } catch (e) {
+    console.warn('Browser scan failed:', e instanceof Error ? e.message.slice(0, 120) : e)
+    return []
+  } finally {
+    if (timer) clearTimeout(timer)
   }
 }
 
@@ -256,16 +274,19 @@ export async function scanWebsiteToCareerEvidence(
   const sitemapUrls = await readSitemap(origin)
   const seedLinks = Object.values(profileUrls).filter(Boolean)
 
-  const homePages = await scanWithPlaywright(originUrl, [originUrl])
+  // A slow or unreadable site must never sink the whole analysis.
+  const homePages = await scanWithin(SCAN_BUDGET_MS, originUrl, [originUrl])
   if (homePages.length === 0) {
-    throw new Error('The website scanner could not render the portfolio.')
+    console.warn('Portfolio could not be rendered in time; continuing with the other sources')
+    const evidence = await normalizeCareerEvidence([], sitemapUrls, profileUrls, documentTexts)
+    return { evidence, careerAlphaInput: careerEvidenceToCareerAlphaInput(evidence, []) }
   }
 
   const discoveredLinks = homePages.flatMap(p => p.links)
   const targets = selectTargets(originUrl, sitemapUrls, [originUrl, ...seedLinks, ...discoveredLinks])
   const secondaryTargets = targets.filter(u => u !== originUrl)
   const secondaryPages = secondaryTargets.length
-    ? await scanWithPlaywright(originUrl, secondaryTargets)
+    ? await scanWithin(SCAN_BUDGET_MS, originUrl, secondaryTargets)
     : []
   const rendered = [...homePages, ...secondaryPages].slice(0, MAX_PAGES)
 

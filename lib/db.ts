@@ -6,10 +6,9 @@ const globalForPrisma = globalThis as unknown as {
 
 function createPrismaClient(): PrismaClient {
   if (process.env.NODE_ENV === "production" || process.env.DATABASE_URL?.startsWith("postgres")) {
-    const { Pool } = require("@neondatabase/serverless");
     const { PrismaNeon } = require("@prisma/adapter-neon");
-    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-    const adapter = new PrismaNeon(pool);
+    // Prisma 7's adapter takes a pool *config* and builds the pool itself.
+    const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL });
     return new PrismaClient({ adapter });
   }
 

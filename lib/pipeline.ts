@@ -2,6 +2,7 @@
 // Background pipeline runner — no React runtime imports
 import type { Dispatch } from 'react'
 import type { WingspanAction, ExtractedCareerData, Blueprint, DiscoveryStep } from '@/types/wingspan'
+import { readJson } from '@/lib/safe-json'
 
 export async function runCareerPipeline(
   extractedData: ExtractedCareerData,
@@ -17,7 +18,7 @@ export async function runCareerPipeline(
       body: JSON.stringify({ extractedData, interests }),
     })
     if (!caRes.ok) throw new Error('Career Alpha failed')
-    const { careerAlpha, observations } = await caRes.json()
+    const { careerAlpha, observations } = await readJson(caRes)
     dispatch({ type: 'SET_CAREER_ALPHA', data: careerAlpha })
 
     // Trickle observations with delay
