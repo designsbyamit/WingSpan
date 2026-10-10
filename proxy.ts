@@ -21,6 +21,7 @@ const PUBLIC_PATHS = [
   '/wingspan',
   '/api/extract',
   '/api/career-alpha',
+  '/api/orchestrate',
   '/api/blueprint',
   '/api/template',
   '/api/refine',
