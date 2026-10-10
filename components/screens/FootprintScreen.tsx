@@ -1,167 +1,22 @@
 'use client'
-import { useCallback, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Upload, Download, ChevronDown, ChevronUp, X, Link2, ArrowRight, FileText, Cpu, Sparkles } from 'lucide-react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
+import { ArrowRight, ChevronDown, ChevronUp, Link2, Upload } from 'lucide-react'
 import { useWingspan } from '@/context/WingspanContext'
-import { NeonButton } from '@/components/ui/NeonButton'
-import { GhostButton } from '@/components/ui/GhostButton'
 import { runCareerPipeline } from '@/lib/pipeline'
-import { readJson } from '@/lib/safe-json'
+import { MIN_INTERESTS } from '@/lib/interests'
+import type { ExtractedCareerData } from '@/types/wingspan'
+import { ResumeDrop } from '@/components/onboarding/ResumeDrop'
+import { InterestGroups, SelectionTray, SuggestedInterests } from '@/components/onboarding/InterestPicker'
+import { ReadingProgress } from '@/components/onboarding/ReadingProgress'
+import { useResumeExtraction } from '@/components/onboarding/useResumeExtraction'
+import { cx, focusRing, primaryButton, quietButton } from '@/components/onboarding/ui'
 
-// ── Extraction animation overlay ──────────────────────────────────────────
-function ExtractionOverlay() {
-  const steps = [
-    { icon: FileText, label: 'Reading document structure', delay: 0 },
-    { icon: Cpu, label: 'Extracting career signals', delay: 0.6 },
-    { icon: Sparkles, label: 'Building your profile', delay: 1.2 },
-  ]
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.4 }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center"
-      style={{ background: 'rgba(13,13,13,0.96)', backdropFilter: 'blur(12px)' }}
-    >
-      {/* Document animation */}
-      <div className="relative mb-12">
-        <svg width="120" height="140" viewBox="0 0 120 140" fill="none">
-          {/* Document base */}
-          <motion.rect x="20" y="10" width="80" height="100" rx="6"
-            stroke="rgba(255,255,255,0.1)" strokeWidth="1.5" fill="none"
-            initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-            transition={{ duration: 1, ease: 'easeOut' }}
-          />
-          {/* Page fold corner */}
-          <motion.path d="M80 10 L100 30 L80 30 Z"
-            fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" strokeWidth="1"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.4 }}
-          />
-          {/* Lines being extracted */}
-          {[30, 45, 60, 75, 88].map((y, i) => (
-            <motion.line key={i} x1="32" y1={y} x2="88" y2={y}
-              stroke="#B6FF2E" strokeWidth="1.5" strokeLinecap="round"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: [0, 0.8, 0.4] }}
-              transition={{ delay: 0.3 + i * 0.18, duration: 0.5, ease: 'easeOut' }}
-            />
-          ))}
-          {/* Nodes flying out */}
-          {[
-            { cx: 32, cy: 30, tx: -40, ty: -20 },
-            { cx: 60, cy: 45, tx: 45, ty: -30 },
-            { cx: 45, cy: 60, tx: -50, ty: 10 },
-            { cx: 75, cy: 75, tx: 40, ty: 20 },
-            { cx: 35, cy: 88, tx: -35, ty: 30 },
-          ].map((n, i) => (
-            <motion.circle key={i} cx={n.cx} cy={n.cy} r="3"
-              fill="#B6FF2E"
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: [0, 1.5, 1], opacity: [0, 1, 0], x: n.tx, y: n.ty }}
-              transition={{ delay: 0.5 + i * 0.2, duration: 0.8, ease: [0.16,1,0.3,1] }}
-            />
-          ))}
-        </svg>
-        {/* Orbital ring */}
-        <motion.div className="absolute inset-0 -m-4 rounded-full border"
-          style={{ borderColor: 'rgba(182,255,46,0.15)' }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-        />
-      </div>
-
-      {/* Step labels */}
-      <div className="flex flex-col items-center gap-3">
-        {steps.map(({ icon: Icon, label, delay }, i) => (
-          <motion.div key={i} className="flex items-center gap-2.5"
-            initial={{ opacity: 0, x: -12 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4 + delay, duration: 0.6, ease: [0.16,1,0.3,1] }}>
-            <motion.div
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ duration: 1.5, repeat: Infinity, delay: delay }}>
-              <Icon size={14} style={{ color: '#B6FF2E' }} />
-            </motion.div>
-            <span className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>{label}</span>
-          </motion.div>
-        ))}
-      </div>
-    </motion.div>
-  )
-}
-
-const INTEREST_CATEGORIES: { label: string; interests: string[] }[] = [
-  {
-    label: 'Design Craft & User Experience',
-    interests: [
-      'Product Design',
-      'UX Research',
-      'UI & Visual Design',
-      'Interaction Design',
-      'Information Architecture',
-      'Design Systems',
-      'Service Design',
-      'Accessibility & Inclusive Design',
-      'Content Design & UX Writing',
-      'Motion Design & Micro-interactions',
-      'Customer Journey Design',
-      'Enterprise UX',
-    ],
-  },
-  {
-    label: 'AI, Technology & Innovation',
-    interests: [
-      'Agentic Experience Design',
-      'Human-AI Collaboration',
-      'Agent-Agent Collaboration',
-      'AI Product Design',
-      'Prompt Engineering',
-      'AI-assisted Design',
-      'AI Governance & Responsible AI',
-      'Automation & No-code',
-      'Emerging Technologies (AR/VR/XR, Spatial, IoT)',
-      'Front-end Development',
-      'Data & Analytics',
-      'Innovation & Experimentation',
-    ],
-  },
-  {
-    label: 'Product, Business & Strategy',
-    interests: [
-      'Product Strategy',
-      'Business Strategy',
-      'Systems Thinking',
-      'Platform & Ecosystem Design',
-      'Design Operations',
-      'Growth Design',
-      'Experimentation & A/B Testing',
-      'Digital Transformation',
-      'Entrepreneurship & Startups',
-      'Domain Expertise (Finance, Healthcare, Retail, etc.)',
-      'Metrics & Decision Making',
-      'Venture Building',
-    ],
-  },
-  {
-    label: 'Leadership, Growth & Influence',
-    interests: [
-      'Design Leadership',
-      'People Management',
-      'Coaching & Mentorship',
-      'Community Building',
-      'Executive Communication',
-      'Facilitation & Workshop Design',
-      'Stakeholder Management',
-      'Organizational Design',
-      'Change Management',
-      'Thought Leadership',
-      'Public Speaking & Personal Branding',
-      'Future Foresight & Design Ethics',
-    ],
-  },
-]
+/**
+ * Phase 2: portfolio / website URL, extra profile links and additional files.
+ * Hidden for now so step 1 is resume-only; the inputs and their state handling stay below.
+ */
+const ENABLE_LINK_INPUTS = false
 
 const URL_FIELDS = [
   { key: 'linkedin', label: 'LinkedIn', placeholder: 'linkedin.com/in/yourname' },
@@ -174,392 +29,257 @@ const URL_FIELDS = [
 
 type FootprintStep = 'upload' | 'interests'
 
+const STEPS: { id: FootprintStep; label: string }[] = [
+  { id: 'upload', label: 'Resume' },
+  { id: 'interests', label: 'Focus areas' },
+]
+
+// ── Phase 2 link inputs (rendered only when ENABLE_LINK_INPUTS) ─────────────
+
+function LinkInputs() {
+  const { state, dispatch } = useWingspan()
+  const [showMoreUrls, setShowMoreUrls] = useState(false)
+  const [showExtraFiles, setShowExtraFiles] = useState(false)
+  const inputClass = cx(
+    'rounded-[8px] border border-[var(--border-ws)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--text-secondary)]',
+    'placeholder:text-[var(--text-muted)] focus:border-[var(--neon)] focus:outline-none transition-colors',
+  )
+  return (
+    <div className="flex flex-col gap-5">
+      <label className="flex flex-col gap-2">
+        <span className="flex items-center gap-2 text-[13px] font-semibold text-[var(--text-secondary)]">
+          <Link2 size={13} className="text-[var(--neon)]" aria-hidden /> Portfolio or website
+        </span>
+        <input
+          type="url"
+          placeholder="yourportfolio.com or behance.net/yourname"
+          value={state.urls['portfolio'] ?? ''}
+          onChange={(e) => dispatch({ type: 'SET_URL', key: 'portfolio', value: e.target.value })}
+          className={inputClass}
+        />
+      </label>
+      <div>
+        <button type="button" aria-expanded={showMoreUrls} onClick={() => setShowMoreUrls(!showMoreUrls)}
+          className={cx('flex items-center gap-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-secondary)]', focusRing)}>
+          {showMoreUrls ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+          Add more links (LinkedIn, GitHub, Behance, Dribbble, Medium)
+        </button>
+        {showMoreUrls && (
+          <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            {URL_FIELDS.filter((f) => f.key !== 'portfolio').map(({ key, label, placeholder }) => (
+              <input key={key} type="url" aria-label={label} placeholder={placeholder}
+                value={state.urls[key] ?? ''}
+                onChange={(e) => dispatch({ type: 'SET_URL', key, value: e.target.value })}
+                className={cx(inputClass, 'px-3 py-2 text-xs')} />
+            ))}
+          </div>
+        )}
+      </div>
+      <div>
+        <button type="button" aria-expanded={showExtraFiles} onClick={() => setShowExtraFiles(!showExtraFiles)}
+          className={cx('flex items-center gap-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-secondary)]', focusRing)}>
+          {showExtraFiles ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+          Got case studies or project files? Add those too.
+        </button>
+        {showExtraFiles && (
+          <label className="mt-2 flex cursor-pointer items-center gap-2 text-xs text-[var(--neon)]">
+            <Upload size={12} aria-hidden /> Choose additional files
+            <input type="file" multiple accept=".pdf,.docx,.xlsx,.xls,.csv,.txt" className="sr-only"
+              onChange={(e) => {
+                const files = Array.from(e.target.files ?? [])
+                if (files.length) dispatch({ type: 'SET_FILES', files: [...state.files, ...files] })
+              }} />
+          </label>
+        )}
+        {state.files.slice(1).map((f) => (
+          <p key={f.name} className="mt-1 text-xs text-[var(--text-muted)]">{f.name}</p>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Step rail ───────────────────────────────────────────────────────────────
+
+function StepRail({ step, onGoTo }: { step: FootprintStep; onGoTo: (s: FootprintStep) => void }) {
+  const current = STEPS.findIndex((s) => s.id === step)
+  return (
+    <nav aria-label="Onboarding steps">
+      <ol className="flex gap-3">
+        {STEPS.map((s, i) => {
+          const isCurrent = i === current
+          const isPast = i < current
+          const content = (
+            <>
+              <span className={cx('block h-[3px] w-full rounded-full transition-colors',
+                isCurrent || isPast ? 'bg-[var(--neon)]' : 'bg-[var(--border-ws)]')} aria-hidden />
+              <span className={cx('mt-2 block text-xs',
+                isCurrent ? 'font-semibold text-[var(--text-primary)]' : 'text-[var(--text-muted)]')}>
+                <span className="text-[var(--text-dim)]">Step {i + 1} </span>{s.label}
+              </span>
+            </>
+          )
+          return (
+            <li key={s.id} className="flex-1">
+              {isPast ? (
+                <button type="button" onClick={() => onGoTo(s.id)} className={cx('block w-full rounded-[4px] text-left hover:opacity-80', focusRing)}>
+                  {content}
+                </button>
+              ) : (
+                <div aria-current={isCurrent ? 'step' : undefined}>{content}</div>
+              )}
+            </li>
+          )
+        })}
+      </ol>
+    </nav>
+  )
+}
+
+// ── Screen ──────────────────────────────────────────────────────────────────
+
 export function FootprintScreen() {
   const { state, dispatch } = useWingspan()
   const [step, setStep] = useState<FootprintStep>('upload')
-  const [dragOver, setDragOver] = useState(false)
-  const [showExtraFiles, setShowExtraFiles] = useState(false)
-  const [showMoreUrls, setShowMoreUrls] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [validatingPortfolio, setValidatingPortfolio] = useState(false)
+  const [waiting, setWaiting] = useState(false)
+  const extraction = useResumeExtraction()
+  const launched = useRef(false)
+  const headingRef = useRef<HTMLHeadingElement>(null)
 
   const primaryFile = state.files[0]
-  const hasPortfolioLink = !!state.urls['portfolio']
-  const canProceedStep1 = !!primaryFile || hasPortfolioLink
-  const canBeginAnalysis = canProceedStep1 && state.interests.length >= 3
-  const error = state.error
+  const hasPortfolioLink = ENABLE_LINK_INPUTS && !!state.urls['portfolio']?.trim()
+  const canContinue = !!primaryFile || hasPortfolioLink
+  const enoughInterests = state.interests.length >= MIN_INTERESTS
+  const extractionFailed = extraction.status === 'error'
 
-  const handleFileDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setDragOver(false)
-    const files = Array.from(e.dataTransfer.files)
-    if (files.length > 0) {
-      dispatch({ type: 'SET_FILES', files: [files[0], ...state.files.slice(1)] })
-    }
-  }, [dispatch, state.files])
+  // After a step change, move focus to the new heading so keyboard and screen-reader users land in context.
+  const focusHeading = () => requestAnimationFrame(() => headingRef.current?.focus())
 
-  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>, replace = false) => {
-    const files = Array.from(e.target.files ?? [])
-    if (files.length === 0) return
-    dispatch({ type: 'SET_FILES', files: replace ? [files[0], ...state.files.slice(1)] : [...state.files, ...files] })
-  }
+  const goTo = (s: FootprintStep) => { setWaiting(false); setStep(s) }
 
-  const handleContinue = async () => {
-    if (!canProceedStep1 || validatingPortfolio) return
-
-    // Do not gate the experience on server-side portfolio classification.
-    // The actual extraction pipeline will read and analyse the URL. This is
-    // intentionally permissive so genuine JS-rendered portfolios are never
-    // blocked by a preflight classifier.
+  const handleContinue = () => {
+    if (!canContinue) return
+    extraction.start(state.files, ENABLE_LINK_INPUTS ? state.urls : {})
     setStep('interests')
   }
 
-  const handleBeginAnalysis = async () => {
-    if (loading) return
+  const launch = useCallback((data: ExtractedCareerData) => {
+    if (launched.current) return
+    launched.current = true
+    const interests = [...state.interests]
+    dispatch({ type: 'SET_SCREEN', screen: 'validating' })
+    void runCareerPipeline(data, interests, dispatch)
+  }, [dispatch, state.interests])
 
-    const selectedInterests = [...state.interests]
-    if (selectedInterests.length < 3) {
-      dispatch({ type: 'SET_ERROR', error: 'Pick at least 3 interests to continue.' })
-      return
-    }
-    if (!canProceedStep1) {
-      dispatch({ type: 'SET_ERROR', error: 'Add a resume or portfolio link to continue.' })
-      setStep('upload')
-      return
-    }
-
-    setLoading(true)
-    dispatch({ type: 'CLEAR_ERROR' })
-
-    try {
-      const formData = new FormData()
-      for (const file of state.files) formData.append('files', file)
-      formData.append('urls', JSON.stringify(state.urls))
-
-      const res = await fetch('/api/extract', { method: 'POST', body: formData })
-      const data = await readJson(res)
-      if (!res.ok) {
-        throw new Error(data.error || 'We could not read that source.')
-      }
-
-      dispatch({ type: 'SET_EXTRACTED_DATA', data })
-      dispatch({ type: 'SET_BLUEPRINT_LOADING', loading: true })
-      dispatch({ type: 'SET_PIPELINE_STAGE', stage: 'extract' })
-      dispatch({ type: 'SET_SCREEN', screen: 'validating' })
-
-      // Keep the selected interests from this click, even if another render occurs.
-      runCareerPipeline(data, selectedInterests, dispatch)
-    } catch (err) {
-      dispatch({ type: 'SET_ERROR', error: err instanceof Error ? err.message : String(err) })
-      setLoading(false)
-      return
-    } finally {
-      setLoading(false)
-    }
+  const handleBuild = () => {
+    if (!enoughInterests || extractionFailed) return
+    if (extraction.status === 'done' && extraction.data) launch(extraction.data)
+    else setWaiting(true)
   }
 
+  // The person already asked for the Blueprint: carry on as soon as the resume is read.
+  useEffect(() => {
+    if (waiting && extraction.status === 'done' && extraction.data) launch(extraction.data)
+  }, [waiting, extraction.status, extraction.data, launch])
+
+  // If reading fails while waiting, fall back to the interests step where the error and retry live.
+  const showWaiting = waiting && extraction.status !== 'error'
+  const retryExtraction = () => { setWaiting(false); extraction.retry() }
+
+  const transition = { duration: 0.22, ease: [0.2, 0, 0, 1] as const }
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12">
-      {/* Extraction overlay */}
-      <AnimatePresence>
-        {loading && <ExtractionOverlay />}
-      </AnimatePresence>
+    <MotionConfig reducedMotion="user">
+      <main className="flex min-h-screen justify-center px-4 pb-0 pt-24 sm:px-6 sm:pt-28">
+        <div className="flex w-full max-w-2xl flex-col gap-8">
+          {!showWaiting && <StepRail step={step} onGoTo={goTo} />}
 
-      <div className="max-w-2xl w-full flex flex-col gap-8">
-        {/* Header */}
-        <div>
-          <div className="flex items-center gap-4 mt-2">
-            {(['upload', 'interests'] as FootprintStep[]).map((s, i) => (
-              <button
-                key={s}
-                onClick={() => step === 'interests' && s === 'upload' ? setStep('upload') : undefined}
-                className={`flex items-center gap-2 text-xs font-semibold transition-colors ${
-                  step === s ? 'text-[var(--neon)]' : step === 'interests' && s === 'upload' ? 'text-[var(--text-muted)] cursor-pointer hover:text-[var(--text-secondary)]' : 'text-[var(--text-dim)]'
-                }`}
-              >
-                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border ${
-                  step === s ? 'bg-[var(--neon)] text-[#0a0a0a] border-[var(--neon)]' :
-                  step === 'interests' && s === 'upload' ? 'border-[var(--neon)] text-[var(--neon)]' :
-                  'border-[var(--border-ws)] text-[var(--text-dim)]'
-                }`}>{i + 1}</span>
-                {s === 'upload' ? 'Your Footprint' : 'Your Interests'}
-              </button>
-            ))}
-            <div className="flex-1 h-[1px] bg-[var(--border-ws)]" />
-          </div>
-        </div>
-
-        <AnimatePresence mode="wait">
-
-          {/* ── STEP 1: Upload + Links ── */}
-          {step === 'upload' && (
-            <motion.div
-              key="upload"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.3 }}
-              className="flex flex-col gap-6"
-            >
-              <div>
-                <h2 className="text-2xl font-bold text-[var(--text-primary)] leading-tight mb-1" style={{ fontFamily: 'var(--font-sora)' }}>
-                  Let's see what you've been building.
-                </h2>
-                <p className="text-sm text-[var(--text-secondary)]">
-                  Drop your resume here, or share a link to your portfolio. Either works great.
-                </p>
-              </div>
-
-              {/* Upload zone */}
-              <div
-                onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
-                onDragLeave={() => setDragOver(false)}
-                onDrop={handleFileDrop}
-                className={`
-                  border-[1.5px] border-dashed rounded-[12px] p-8 text-center transition-all
-                  ${dragOver ? 'border-[var(--neon)] bg-[var(--neon-surface)]' : 'border-[var(--border-ws)] bg-[var(--surface-dim)]'}
-                `}
-              >
-                {primaryFile ? (
-                  <div className="flex items-center justify-center gap-3">
-                    <div className="w-8 h-8 rounded-[8px] bg-[var(--neon-surface)] border border-[var(--neon-border)] flex items-center justify-center">
-                      <Upload size={14} className="text-[var(--neon)]" />
-                    </div>
-                    <span className="text-sm font-semibold text-[var(--text-primary)]">{primaryFile.name}</span>
-                    <button
-                      onClick={() => dispatch({ type: 'SET_FILES', files: state.files.slice(1) })}
-                      className="text-[var(--text-muted)] hover:text-[var(--neon)] transition-colors ml-auto"
-                    >
-                      <X size={14} />
-                    </button>
-                  </div>
-                ) : (
-                  <label className="cursor-pointer flex flex-col items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-[var(--surface)] border border-[var(--border-ws)] flex items-center justify-center">
-                      <Upload size={20} className="text-[var(--text-muted)]" />
-                    </div>
-                    <div>
-                      <span className="text-sm font-bold text-[var(--neon)] block">Upload Resume</span>
-                    <span className="text-xs text-[var(--text-muted)]">PDF · DOCX · XLSX · TXT · Drag & drop</span>
-                    </div>
-                    <input type="file" accept=".pdf,.docx,.xlsx,.xls,.csv,.txt" className="hidden" onChange={(e) => handleFileInput(e, true)} />
-                  </label>
-                )}
-              </div>
-
-              {/* Portfolio URL — primary prompt */}
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <Link2 size={13} className="text-[var(--neon)]" />
-                  <span className="text-xs font-bold tracking-[2px] uppercase text-[var(--text-muted)]">Portfolio or Website</span>
-                  <span className="text-[10px] text-[var(--text-dim)]">helps us understand you better</span>
-                </div>
-                <input
-                  type="url"
-                  placeholder="yourportfolio.com or behance.net/yourname"
-                  value={state.urls['portfolio'] ?? ''}
-                  onChange={(e) => dispatch({ type: 'SET_URL', key: 'portfolio', value: e.target.value })}
-                  className="bg-[var(--surface)] border border-[var(--border-ws)] rounded-[8px] px-4 py-3 text-sm text-[var(--text-secondary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--neon)] transition-colors"
+          <AnimatePresence mode="wait" initial={false} onExitComplete={focusHeading}>
+            {showWaiting ? (
+              <motion.div key="waiting" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={transition}>
+                <h1 ref={headingRef} tabIndex={-1} className="sr-only">Preparing your analysis</h1>
+                <ReadingProgress
+                  fileName={primaryFile?.name}
+                  interests={state.interests}
+                  startedAt={extraction.startedAt}
+                  onBack={() => setWaiting(false)}
                 />
-              </div>
-
-              {/* More links collapsible */}
-              <div>
-                <button
-                  onClick={() => setShowMoreUrls(!showMoreUrls)}
-                  className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
-                >
-                  {showMoreUrls ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                  Add more links (LinkedIn, GitHub, Behance, Dribbble, Medium)
-                </button>
-                <AnimatePresence>
-                  {showMoreUrls && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto' as const, opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.25 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="grid grid-cols-2 gap-2 mt-3">
-                        {URL_FIELDS.filter(f => f.key !== 'portfolio').map(({ key, label, placeholder }) => (
-                          <input
-                            key={key}
-                            type="url"
-                            placeholder={placeholder}
-                            value={state.urls[key] ?? ''}
-                            onChange={(e) => dispatch({ type: 'SET_URL', key, value: e.target.value })}
-                            className="bg-[var(--surface)] border border-[var(--border-ws)] rounded-[8px] px-3 py-2 text-xs text-[var(--text-secondary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--neon)] transition-colors"
-                          />
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Additional files */}
-              <div>
-                <button
-                  onClick={() => setShowExtraFiles(!showExtraFiles)}
-                  className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
-                >
-                  {showExtraFiles ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                  Got case studies or project files? Add those too.
-                </button>
-                {showExtraFiles && (
-                  <motion.label
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="mt-2 flex items-center gap-2 text-xs text-[var(--neon)] cursor-pointer"
-                  >
-                    <Upload size={12} />
-                    Choose additional files
-                    <input type="file" multiple accept=".pdf,.docx,.xlsx,.xls,.csv,.txt" className="hidden" onChange={(e) => handleFileInput(e, false)} />
-                  </motion.label>
-                )}
-                {state.files.slice(1).map(f => (
-                  <p key={f.name} className="text-xs text-[var(--text-muted)] mt-1">{f.name}</p>
-                ))}
-              </div>
-
-              {/* Sticky action bar */}
-              <div className="sticky bottom-0 left-0 right-0 pt-3 pb-2"
-                style={{ background: 'linear-gradient(to top, var(--bg) 70%, transparent)' }}>
-                <NeonButton
-                  onClick={handleContinue}
-                  disabled={!canProceedStep1 || validatingPortfolio}
-                  fullWidth
-                >
-                  {validatingPortfolio ? 'Checking your portfolio…' : <>Continue <ArrowRight size={14} /></>}
-                </NeonButton>
-                {error && step === 'upload' && (
-                  <div className="rounded-[10px] bg-red-950/40 border border-red-800/50 p-3 mt-2">
-                    <p className="text-xs text-red-400 leading-relaxed">{error}</p>
-                    {!primaryFile && state.urls['portfolio'] && (
-                      <p className="text-[11px] text-red-300/70 mt-1">Upload your portfolio PDF to continue.</p>
-                    )}
-                  </div>
-                )}
-                {!canProceedStep1 && (
-                  <p className="text-[11px] text-center text-[var(--text-dim)] mt-2">Drop a resume or add a portfolio link to keep going.</p>
-                )}
-              </div>
-            </motion.div>
-          )}
-
-          {/* ── STEP 2: Interests ── */}
-          {step === 'interests' && (
-            <motion.div
-              key="interests"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.3 }}
-              className="flex flex-col gap-4"
-            >
-              <div>
-                <h2 className="text-2xl font-bold text-[var(--text-primary)] leading-tight mb-1" style={{ fontFamily: 'var(--font-sora)' }}>
-                  What lights you up?
-                </h2>
-                <p className="text-sm text-[var(--text-secondary)]">
-                  Pick 3 to 5. These shape what your Blueprint focuses on.
-                </p>
-              </div>
-
-              {/* Interest categories — scrollable */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.1) transparent' }}>
-                {INTEREST_CATEGORIES.map(({ label, interests }) => {
-                  const selectedInCategory = interests.filter(i => state.interests.includes(i)).length
-                  return (
-                    <div key={label} className="flex flex-col gap-2 rounded-[12px] border border-[var(--border-ws)] bg-[var(--surface)] p-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold tracking-[2px] uppercase text-[var(--text-muted)]">
-                          {label}
-                        </span>
-                        {selectedInCategory > 0 && (
-                          <span className="text-[10px] font-semibold text-[var(--neon)]">
-                            {selectedInCategory} selected
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {interests.map((interest) => {
-                          const selected = state.interests.includes(interest)
-                          const atMax = state.interests.length >= 5 && !selected
-                          return (
-                            <motion.button
-                              key={interest}
-                              whileTap={{ scale: 0.97 }}
-                              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                              onClick={() => {
-                                if (atMax) return
-                                dispatch({ type: 'TOGGLE_INTEREST', interest })
-                              }}
-                              disabled={atMax}
-                              className={`
-                                px-3 py-1.5 rounded-full border text-xs font-semibold transition-all
-                                ${selected
-                                  ? 'bg-[var(--neon-surface)] border-[var(--neon)] text-[var(--neon)]'
-                                  : atMax
-                                  ? 'bg-transparent border-[var(--border-ws)] text-[var(--text-dim)] opacity-40 cursor-not-allowed'
-                                  : 'bg-transparent border-[var(--border-ws)] text-[var(--text-secondary)] hover:border-[var(--text-muted)] hover:text-[var(--text-primary)]'
-                                }
-                              `}
-                            >
-                              {selected && <span className="mr-1">✓</span>}
-                              {interest}
-                            </motion.button>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-
-              {/* Progress indicator */}
-              <div className="flex items-center justify-between pt-1">
-                <span className="text-xs text-[var(--text-muted)]">
-                  {state.interests.length === 0 && 'Pick at least 3 to keep going'}
-                  {state.interests.length >= 1 && state.interests.length < 3 && `${3 - state.interests.length} more and we're good`}
-                  {state.interests.length >= 3 && state.interests.length < 5 && `Nice. You can add ${5 - state.interests.length} more.`}
-                  {state.interests.length === 5 && "That's five. That's enough."}
-                </span>
-                <div className="flex gap-1">
-                  {[1,2,3,4,5].map(n => (
-                    <div key={n} className={`w-5 h-1 rounded-full transition-all ${n <= state.interests.length ? 'bg-[var(--neon)]' : 'bg-[var(--border-ws)]'}`} />
-                  ))}
+              </motion.div>
+            ) : step === 'upload' ? (
+              <motion.div key="upload" className="flex flex-col gap-7"
+                initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={transition}>
+                <div>
+                  <h1 ref={headingRef} tabIndex={-1}
+                    className="text-2xl font-semibold leading-tight text-[var(--text-primary)] outline-none sm:text-[28px]"
+                    style={{ fontFamily: 'var(--font-sora)' }}>
+                    Start with your resume
+                  </h1>
+                  <p className="mt-2 max-w-[56ch] text-[15px] leading-relaxed text-[var(--text-secondary)]">
+                    We read your roles, projects and skills to build your Blueprint. The more detail it has, the sharper the result.
+                  </p>
                 </div>
-              </div>
 
-              {error && (
-                <div className="rounded-[10px] bg-red-950/40 border border-red-800/50 p-3">
-                  <p className="text-xs text-red-400 leading-relaxed">Analysis failed: {error}. Please try again.</p>
+                <ResumeDrop
+                  file={primaryFile}
+                  onFile={(f) => dispatch({ type: 'SET_FILES', files: [f, ...state.files.slice(1)] })}
+                  onRemove={() => dispatch({ type: 'SET_FILES', files: state.files.slice(1) })}
+                />
+
+                {ENABLE_LINK_INPUTS && <LinkInputs />}
+
+                <div className="flex flex-col gap-2 pb-10 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-xs text-[var(--text-muted)]">
+                    {canContinue ? 'Reading starts when you continue.' : 'Add your resume to continue.'}
+                  </p>
+                  <button type="button" onClick={handleContinue} disabled={!canContinue} className={cx(primaryButton, 'w-full sm:w-auto')}>
+                    Continue <ArrowRight size={15} aria-hidden />
+                  </button>
                 </div>
-              )}
+              </motion.div>
+            ) : (
+              <motion.div key="interests" className="flex flex-col gap-8"
+                initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={transition}>
+                <div>
+                  <h1 ref={headingRef} tabIndex={-1}
+                    className="text-2xl font-semibold leading-tight text-[var(--text-primary)] outline-none sm:text-[28px]"
+                    style={{ fontFamily: 'var(--font-sora)' }}>
+                    Choose where you want to grow
+                  </h1>
+                  <p className="mt-2 max-w-[56ch] text-[15px] leading-relaxed text-[var(--text-secondary)]">
+                    Pick {MIN_INTERESTS} to 5 focus areas. Your Blueprint weighs its directions and learning toward them.
+                  </p>
+                </div>
 
-              {/* Sticky CTA — always visible */}
-              <div className="flex gap-3 pt-2">
-                <button
-                  onClick={() => setStep('upload')}
-                  className="px-5 py-2.5 rounded-[10px] border border-[var(--border-ws)] text-sm text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
-                >
-                  ← Back
-                </button>
-                <NeonButton
-                  onClick={handleBeginAnalysis}
-                  disabled={!canBeginAnalysis || loading}
-                  fullWidth
-                >
-                  {loading ? "We're on it..." : 'Build My Blueprint →'}
-                </NeonButton>
-              </div>
-            </motion.div>
-          )}
+                <SuggestedInterests
+                  status={extraction.status}
+                  data={extraction.data}
+                  error={extraction.error}
+                  onRetry={retryExtraction}
+                  onReupload={() => goTo('upload')}
+                />
 
-        </AnimatePresence>
-      </div>
-    </div>
+                <InterestGroups data={extraction.status === 'done' ? extraction.data : null} />
+
+                <SelectionTray
+                  actions={
+                    <>
+                      <button type="button" onClick={() => goTo('upload')} className={quietButton}>Back</button>
+                      <button
+                        type="button"
+                        onClick={handleBuild}
+                        disabled={!enoughInterests || extractionFailed}
+                        className={cx(primaryButton, 'flex-1')}
+                      >
+                        Build my Blueprint
+                      </button>
+                    </>
+                  }
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </main>
+    </MotionConfig>
   )
 }

@@ -2,7 +2,6 @@
 
 import { useWingspan } from '@/context/WingspanContext'
 import { FootprintScreen } from '@/components/screens/FootprintScreen'
-import { DiscoveryScreen } from '@/components/screens/DiscoveryScreen'
 import { ValidationScreen } from '@/components/screens/ValidationScreen'
 import { BlueprintScreen } from '@/components/screens/BlueprintScreen'
 import { TopNav } from '@/components/layout/TopNav'
@@ -12,7 +11,8 @@ export default function WingspanPage() {
 
   const screens = {
     footprint: <FootprintScreen />,
-    discovering: <DiscoveryScreen />,
+    // 'discovering' is no longer a separate step: progress lives on the processed-data screen.
+    discovering: <ValidationScreen />,
     validating: <ValidationScreen />,
     blueprint: <BlueprintScreen />,
   }
