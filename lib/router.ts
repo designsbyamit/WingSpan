@@ -39,7 +39,7 @@ async function callOpenRouter(messages: ChatMessage[], model = 'deepseek/deepsee
 const DEFAULT_GEMINI_FALLBACKS = ['gemini-3.8-flash', 'gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-3.5-flash-lite']
 const DEAD_MODEL_MS = 15 * 60 * 1000
 // One slow model must not eat the whole request; fail over to the next one.
-const GEMINI_TIMEOUT_MS = 40_000
+const GEMINI_TIMEOUT_MS = 30_000
 // Across the whole model chain, so the request ends well inside the 120s function limit.
 const GEMINI_TOTAL_BUDGET_MS = 85_000
 const deadModels = new Map<string, number>()
@@ -91,7 +91,9 @@ export function errorTail(e: unknown, max = 400): string {
 export function deadForMs(e: unknown): number {
   const msg = e instanceof Error ? e.message : String(e)
   const hard = /limit: 0|PerDay|not found|404|not supported|permission|403/i.test(msg)
-  return hard ? DEAD_MODEL_MS : 60 * 1000
+  // A model that was too slow once will usually be slow again; skip it for a few minutes.
+  const slow = /abort|timed out|timeout/i.test(msg)
+  return hard ? DEAD_MODEL_MS : slow ? 5 * 60 * 1000 : 60 * 1000
 }
 
 function markDead(model: string, e: unknown) {

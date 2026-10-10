@@ -75,3 +75,8 @@ test('error logging keeps the status, and per-minute limits are skipped only bri
   const daily = new Error('[429] Quota exceeded ... GenerateRequestsPerDayPerProjectPerModel-FreeTier, limit: 0')
   assert.equal(deadForMs(daily), 15 * 60 * 1000)
 })
+
+test('a model that timed out is skipped for five minutes', () => {
+  const slow = new Error('[GoogleGenerativeAI Error]: Request aborted when fetching ...: This operation was aborted')
+  assert.equal(deadForMs(slow), 5 * 60 * 1000)
+})
