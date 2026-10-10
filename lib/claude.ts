@@ -1,5 +1,6 @@
 // lib/claude.ts
 // Groq for fast extraction (Stage 1), Gemini for deep analysis (Blueprint streaming)
+import { normalizeValidated } from '@/lib/extracted-shape'
 import Groq from 'groq-sdk'
 import { ExtractedCareerData, Blueprint, ValidatedCareerData, CareerAlphaIntelligence } from '@/types/wingspan'
 
@@ -337,9 +338,10 @@ export function blueprintProblems(bp: Partial<Blueprint>): string[] {
 }
 
 export async function* streamBlueprint(
-  validatedData: ValidatedCareerData,
+  rawValidatedData: ValidatedCareerData,
   careerAlpha: CareerAlphaIntelligence
 ): AsyncGenerator<{ type: string; [key: string]: unknown }> {
+  const validatedData = normalizeValidated(rawValidatedData)
 
   const caCtx = `Career Alpha Intelligence (pre-computed — do NOT re-derive):
   Stage: ${careerAlpha.careerStage}

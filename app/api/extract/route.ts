@@ -4,6 +4,7 @@ import { mockExtractedData } from '@/lib/mock-data'
 import { normalizeCareerEvidence, scanWebsiteToCareerEvidence } from '@/lib/website-scanner'
 import { buildCareerInputBundle, CareerInputSource } from '@/lib/career-input'
 import { getSession } from '@/lib/auth'
+import { normalizeExtracted } from '@/lib/extracted-shape'
 import { saveIngestion } from '@/lib/ingestion-store'
 import type { IngestSource } from '@/lib/ingestion-mapping'
 import { friendlyProviderError } from '@/lib/router'
@@ -95,7 +96,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({
-      ...bundle.careerAlpha,
+      ...normalizeExtracted(bundle.careerAlpha),
       rawText,
       evidence: bundle.evidence,
       inputSources: bundle.sources.map(({ kind, name, url }) => ({ kind, name, url })),

@@ -1,6 +1,7 @@
 // lib/career-alpha.ts
 // Career Alpha Stage 2 — uses unified router (Gemini → OpenRouter/DeepSeek → Groq)
 import { routeCall } from '@/lib/router'
+import { normalizeExtracted } from '@/lib/extracted-shape'
 import { extractJsonObject } from '@/lib/website-scanner'
 import { ExtractedCareerData, CareerAlphaIntelligence, CareerStage } from '@/types/wingspan'
 import { loadCacheEntry, updateCacheDimensions, CacheEntry, CacheDimensionEntry } from '@/lib/career-alpha-cache'
@@ -191,9 +192,11 @@ const CAREER_ALPHA_SCHEMA = `{
  * 8. Return the full CareerAlphaIntelligence object
  */
 export async function computeCareerAlpha(
-  extractedData: ExtractedCareerData,
-  interests: string[]
+  rawExtractedData: ExtractedCareerData,
+  rawInterests: string[]
 ): Promise<CareerAlphaIntelligence> {
+  const extractedData = normalizeExtracted(rawExtractedData)
+  const interests = Array.isArray(rawInterests) ? rawInterests : []
   const currentDate = new Date().toISOString().split('T')[0]
 
   // Step 1: Fingerprint
