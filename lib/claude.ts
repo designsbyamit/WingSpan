@@ -566,5 +566,5 @@ Your output is the first thing this person will read about their own career pote
     yield { type: 'observation', text: blueprint.insights[0] }
   }
 
-  yield { type: 'complete', blueprint, percentage: 100 }
+  yield { type: 'complete', blueprint: normalizeBlueprint(blueprint), percentage: 100 }
 }
