@@ -65,3 +65,19 @@ test('enforceBets fixes titles, scores and pathway links', () => {
   assert.equal(r.actions.resources[0].pathway, 'Dir 1')
   assert.match(betsInstruction(bets), /exactly "Dir 2"/)
 })
+
+test('growth levels are grounded in evidence and experience', async () => {
+  const { groundLevel } = await import('./growth-agent')
+  const ctx = { evidenced: [{ name: 'Design Operations', level: 82 }], years: 16, seniority: 'leader' }
+  assert.equal(groundLevel('Scaling design operations', 35, ctx).level, 82)
+  assert.equal(groundLevel('Interaction Design', 35, ctx).level, 70)
+  assert.equal(groundLevel('AI governance', 30, ctx).level, 30)
+})
+
+test('directions never step down from the current role', async () => {
+  const { canonicalizeDrafts } = await import('./v02-agents')
+  const c = (direction: string) => ({ direction, experience: { capability: 80, project: 80, transferable: 80, context: 80, recency: 80 }, market: { demand: 70, growth: 70, future: 70, adjacency: 70, relevance: 70 }, interest: { direct: 70, behavioural: 70, stated: 70, curiosity: 70, adjacency: 70 }, capabilityDistance: 10, evidenceIds: [], whyThisPerson: '', whyNow: '', rationale: '' })
+  const r = canonicalizeDrafts({ candidates: [c('Senior Design Manager'), c('VP of Design'), c('Principal Design Consultant'), c('Design Director, Fintech')] } as never, 'leader', false, 'Head of Design')
+  assert.deepEqual(r.draft.candidates.map((x) => x.direction), ['VP of Design', 'Principal Design Consultant', 'Design Director, Fintech'])
+  assert.throws(() => canonicalizeDrafts({ candidates: [c('Senior Design Manager')] } as never, 'leader', true, 'Head of Design'))
+})

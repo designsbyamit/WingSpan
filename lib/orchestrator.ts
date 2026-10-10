@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { aggregatorAgent, careerAlphaAgent, marketIntelligenceAgent, careerDirectionGenerator, callValidated } from '@/lib/v02-agents'
-import { experienceFacts, groundingRules } from '@/lib/experience'
+import { factsOf, groundingRules } from '@/lib/experience'
 import { normalizeExtracted } from '@/lib/extracted-shape'
 import { computeArchetypeFingerprint } from '@/lib/career-alpha'
 import { getMarketBriefing, type MarketBriefing } from '@/lib/market/context'
@@ -29,7 +29,7 @@ const top = <T,>(xs: T[] | undefined, n: number) => (Array.isArray(xs) ? xs.slic
 
 export async function runAgents(rawData: ExtractedCareerData, interests: string[], onProgress: AgentProgress = () => {}): Promise<AgentRun> {
   const data = normalizeExtracted(rawData)
-  const facts = experienceFacts(data.timeline)
+  const facts = factsOf(data)
   const grounding = groundingRules(facts, interests)
   const timings: AgentRun['timings'] = {}
   const briefingOut: { briefing?: MarketBriefing } = {}
@@ -66,7 +66,7 @@ export async function runAgents(rawData: ExtractedCareerData, interests: string[
   const marketGraph = m.value
   const { evidenceGraph, careerDNA } = p.value
 
-  const careerMap = await step('directions', () => careerDirectionGenerator(careerDNA, marketGraph, grounding, data.timeline.length ? facts.seniority : null),
+  const careerMap = await step('directions', () => careerDirectionGenerator(careerDNA, marketGraph, grounding, data.timeline.length ? facts.seniority : null, facts.latestRole),
     (c) => `Scored ${c.candidates.length} directions; picked ${c.safe.direction}, ${c.growth.direction}, ${c.bold.direction}`)
 
   return { evidenceGraph, careerDNA, marketGraph, careerMap, timings, marketData: briefingOut.briefing ?? null }
@@ -134,7 +134,7 @@ function compactMarket(m: MarketGraph): string {
 }
 
 export async function orchestratorAgent(run: AgentRun, data: ExtractedCareerData, interests: string[]): Promise<OrchestratorOutput> {
-  const facts = experienceFacts(normalizeExtracted(data).timeline)
+  const facts = factsOf(normalizeExtracted(data))
   const { careerDNA: dna, careerMap: map, marketGraph: market, evidenceGraph: graph } = run
   const user = `${groundingRules(facts, interests)}
 
@@ -176,7 +176,7 @@ export function toCareerAlpha(
   out: OrchestratorOutput, run: AgentRun, data: ExtractedCareerData, interests: string[],
 ): CareerAlphaIntelligence {
   const clean = normalizeExtracted(data)
-  const facts = experienceFacts(clean.timeline)
+  const facts = factsOf(clean)
   const careerStage: CareerStage =
     clean.timeline.length === 0 ? 'student' : (STAGES.includes(facts.seniority as CareerStage) ? facts.seniority : 'mid')
   let fingerprint = `${careerStage}-${out.archetypeLabel.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`

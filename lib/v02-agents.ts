@@ -3,7 +3,7 @@ import type { ExtractedCareerData } from '@/types/wingspan'
 import type { EvidenceGraph, CareerDNA, MarketGraph, CareerMap } from '@/types/career-intelligence'
 import { evidenceGraphSchema, careerDNASchema, marketGraphSchema, careerDirectionDraftSchema } from '@/lib/agent-contracts'
 import { buildCareerMap } from '@/lib/career-scoring'
-import { canonicalizeTitle, fitsSeniority, titleCatalogPrompt } from '@/lib/role-taxonomy'
+import { canonicalizeTitle, fitsSeniority, titleCatalogPrompt, titleRank, OFF_LADDER } from '@/lib/role-taxonomy'
 import type { ExperienceFacts } from '@/lib/experience'
 import type { CareerDirectionDraft } from '@/lib/agent-contracts'
 
@@ -74,7 +74,8 @@ export class TitleIssues extends Error {
  * person's seniority. Strict on the first pass (the model is told exactly which titles failed and
  * retries); lenient on the retry, where near-misses are mapped and the rest dropped.
  */
-export function canonicalizeDrafts(draft: CareerDirectionDraft, seniority: ExperienceFacts['seniority'] | null, strict: boolean): { draft: CareerDirectionDraft; notes: string[] } {
+export function canonicalizeDrafts(draft: CareerDirectionDraft, seniority: ExperienceFacts['seniority'] | null, strict: boolean, currentRole = ''): { draft: CareerDirectionDraft; notes: string[] } {
+ const floor = currentRole ? titleRank(canonicalizeTitle(currentRole)?.base.title ?? currentRole) - 1 : 0
  const kept: CareerDirectionDraft['candidates'] = []
  const bad: string[] = []
  const notes: string[] = []
@@ -82,6 +83,7 @@ export function canonicalizeDrafts(draft: CareerDirectionDraft, seniority: Exper
   const t = canonicalizeTitle(c.direction, { strict })
   if (!t) { bad.push(`"${c.direction}" is not a recognised job title; use a base title from the ALLOWED JOB TITLES list`); continue }
   if (seniority && !fitsSeniority(t.base, seniority)) { bad.push(`"${c.direction}" is below this person's ${seniority} seniority`); continue }
+  if (floor > 0 && titleRank(t.base.title) < floor && !OFF_LADDER.test(t.base.title)) { bad.push(`"${c.direction}" is a step down from the current role (${currentRole}); propose roles at or above that level`); continue }
   if (t.direction !== c.direction) notes.push(`Renamed "${c.direction}" to the standard title "${t.direction}".`)
   kept.push({ ...c, direction: t.direction })
  }
@@ -90,15 +92,15 @@ export function canonicalizeDrafts(draft: CareerDirectionDraft, seniority: Exper
  return { draft: { candidates: kept }, notes }
 }
 
-export async function careerDirectionGenerator(dna:CareerDNA, market:MarketGraph, grounding='', seniority: ExperienceFacts['seniority'] | null = null):Promise<CareerMap>{
+export async function careerDirectionGenerator(dna:CareerDNA, market:MarketGraph, grounding='', seniority: ExperienceFacts['seniority'] | null = null, currentRole=''):Promise<CareerMap>{
  const system=`You are Career Direction Generator v0.2, the decision agent. Do not re-parse resumes and do not independently research markets. Consume CareerDNA and MarketGraph only. Generate 10-14 meaningfully different candidate directions: genuinely different kinds of work (different base job titles), not several names for the same job. Every direction MUST be named with a real job title from the allowed list, optionally with a short focus ("Head of Design, AI Products"). For each, give honest 0-100 sub-scores. Do not compute final scores and do not choose Safe, Growth or Bold; the application does both deterministically. Experience sub-scores must come from demonstrated evidence in CareerDNA. Market sub-scores must come from MarketGraph, never from hype, and must include risk: how exposed this direction is to automation, hype, oversupply or decline (use the MarketGraph invalidation risks and resilience). Interest sub-scores must keep stated interest separate from behavioural evidence. Demand alone must not make a direction look good for this person. Weak evidence should lower the evidence confidence, not erase the possibility. Every candidate must answer why this person, why this direction, why now. Return only JSON.`
- const user=`${grounding ? grounding + '\n\n' : ''}${seniority ? titleCatalogPrompt(seniority) + '\n\n' : ''}CareerDNA: ${JSON.stringify(dna)}\nMarketGraph: ${JSON.stringify(market)}\nReturn JSON of the form {"candidates":[{"direction":string,"experience":{"capability":0-100,"project":0-100,"transferable":0-100,"context":0-100,"recency":0-100},"market":{"demand":0-100,"growth":0-100,"future":0-100,"adjacency":0-100,"relevance":0-100,"risk":0-100},"interest":{"direct":0-100,"behavioural":0-100,"stated":0-100,"curiosity":0-100,"adjacency":0-100},"capabilityDistance":0-100,"confidence":0-1,"risks":string[],"whyThisPerson":string,"whyNow":string,"evidenceIds":string[],"rationale":string}]}. market.risk is 0 for a very safe direction and 100 for one highly exposed to automation, hype or decline; "risks" names the 1-2 specific risks. capabilityDistance is 0 when the person already does this work and 100 for a completely different field. confidence is how well the evidence supports this specific direction.`
+ const user=`${grounding ? grounding + '\n\n' : ''}${seniority ? titleCatalogPrompt(seniority) + '\n\n' : ''}${currentRole ? `CURRENT ROLE: ${currentRole}. Every direction must be at or above this level (a lateral move is fine); off-ladder roles (principal IC, consultant, partner, founder, educator) are allowed.\n\n` : ''}CareerDNA: ${JSON.stringify(dna)}\nMarketGraph: ${JSON.stringify(market)}\nReturn JSON of the form {"candidates":[{"direction":string,"experience":{"capability":0-100,"project":0-100,"transferable":0-100,"context":0-100,"recency":0-100},"market":{"demand":0-100,"growth":0-100,"future":0-100,"adjacency":0-100,"relevance":0-100,"risk":0-100},"interest":{"direct":0-100,"behavioural":0-100,"stated":0-100,"curiosity":0-100,"adjacency":0-100},"capabilityDistance":0-100,"confidence":0-1,"risks":string[],"whyThisPerson":string,"whyNow":string,"evidenceIds":string[],"rationale":string}]}. market.risk is 0 for a very safe direction and 100 for one highly exposed to automation, hype or decline; "risks" names the 1-2 specific risks. capabilityDistance is 0 when the person already does this work and 100 for a completely different field. confidence is how well the evidence supports this specific direction.`
  let attempt = 0
  let notes: string[] = []
  const draft=await callValidated(system,user,(o)=>{
   const strict = attempt++ === 0 // only the first reply is held to exact titles; the retry is mapped leniently
   const parsed = careerDirectionDraftSchema.parse(o)
-  const r = canonicalizeDrafts(parsed, seniority, strict)
+  const r = canonicalizeDrafts(parsed, seniority, strict, currentRole)
   if (r.draft.candidates.length < 3) throw new TitleIssues(['Fewer than three directions with recognised titles; propose 10-14 using the allowed titles'])
   notes = r.notes
   return r.draft

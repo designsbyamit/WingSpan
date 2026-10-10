@@ -2,7 +2,7 @@
 // Career Alpha Stage 2 — uses unified router (Gemini → OpenRouter/DeepSeek → Groq)
 import { routeCall } from '@/lib/router'
 import { normalizeExtracted } from '@/lib/extracted-shape'
-import { experienceFacts, groundingRules } from '@/lib/experience'
+import { factsOf, groundingRules } from '@/lib/experience'
 import { extractJsonObject } from '@/lib/website-scanner'
 import { ExtractedCareerData, CareerAlphaIntelligence, CareerStage } from '@/types/wingspan'
 import { loadCacheEntry, updateCacheDimensions, CacheEntry, CacheDimensionEntry } from '@/lib/career-alpha-cache'
@@ -238,7 +238,7 @@ export async function computeCareerAlpha(
         .join('\n')
     : ''
 
-  const facts = experienceFacts(extractedData.timeline)
+  const facts = factsOf(extractedData)
   const userPrompt = `${groundingRules(facts, interests)}
 - careerStage must be consistent with the seniority band above ("leader" band → "leader" or "senior").
 

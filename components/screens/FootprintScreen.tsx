@@ -261,6 +261,7 @@ export function FootprintScreen() {
                 <InterestGroups data={extraction.status === 'done' ? extraction.data : null} />
 
                 <SelectionTray
+                  status={extraction.status}
                   actions={
                     <>
                       <button type="button" onClick={() => goTo('upload')} className={quietButton}>Back</button>

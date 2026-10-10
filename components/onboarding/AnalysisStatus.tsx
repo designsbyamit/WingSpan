@@ -32,16 +32,16 @@ export function AnalysisStatus({ onOpenDetails, onOpenBlueprint, onRetry }: Anal
   const elapsed = analysisStart ? formatElapsed(now - analysisStart) : null
   const label = currentActivityLabel(state.activity.filter((e) => e.source !== 'extract')) ?? 'Starting the analysis'
 
+  // Docked footer on every screen size: processing and the primary action stay in one place.
   const shell = cx(
-    'fixed inset-x-0 bottom-0 z-40 border-t px-4 pb-[max(12px,env(safe-area-inset-bottom))] pt-3',
-    'md:sticky md:inset-x-auto md:bottom-auto md:top-[68px] md:rounded-[14px] md:border md:px-5 md:py-3.5',
-    'backdrop-blur-md',
+    'fixed inset-x-0 bottom-0 z-40 border-t px-4 pb-[max(12px,env(safe-area-inset-bottom))] pt-3 sm:px-6 backdrop-blur-md',
+    'bg-[color-mix(in_srgb,var(--bg)_88%,transparent)]',
   )
 
   if (phase === 'ready') {
     return (
       <div className={cx(shell, 'border-[var(--neon-border)] bg-[color-mix(in_srgb,var(--surface)_92%,transparent)]')}>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3" role="status" aria-live="polite">
             <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[var(--neon)]" aria-hidden>
               <Check size={13} strokeWidth={3} className="text-[#0a0a0a]" />
@@ -62,7 +62,7 @@ export function AnalysisStatus({ onOpenDetails, onOpenBlueprint, onRetry }: Anal
   if (phase === 'error') {
     return (
       <div role="alert" className={cx(shell, 'border-red-400/30 bg-[color-mix(in_srgb,var(--surface)_94%,transparent)]')}>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex min-w-0 gap-3">
             <AlertCircle size={18} className="mt-0.5 flex-shrink-0 text-red-300" aria-hidden />
             <div className="min-w-0">
@@ -81,7 +81,7 @@ export function AnalysisStatus({ onOpenDetails, onOpenBlueprint, onRetry }: Anal
 
   return (
     <div className={cx(shell, 'border-[var(--border-ws)] bg-[color-mix(in_srgb,var(--surface)_92%,transparent)]')}>
-      <div className="flex items-center gap-3">
+      <div className="mx-auto flex w-full max-w-5xl items-center gap-3">
         <span className="relative flex h-2.5 w-2.5 flex-shrink-0" aria-hidden>
           <span className="absolute inset-0 rounded-full bg-[var(--neon)] opacity-40 motion-safe:animate-[ws-breathe_2.4s_ease-in-out_infinite]" />
           <span className="relative m-auto h-1.5 w-1.5 rounded-full bg-[var(--neon)]" />

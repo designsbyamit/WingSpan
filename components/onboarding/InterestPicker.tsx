@@ -7,7 +7,7 @@ import {
   INTEREST_GROUPS, INTERESTS, MAX_INTERESTS, MIN_INTERESTS,
   orderedGroups, suggestInterests, interestByLabel, type Interest,
 } from '@/lib/interests'
-import { experienceFacts } from '@/lib/experience'
+import { factsOf } from '@/lib/experience'
 import type { ExtractedCareerData } from '@/types/wingspan'
 import type { ExtractionStatus } from './useResumeExtraction'
 import { cx, focusRing, linkButton, quietButton } from './ui'
@@ -74,6 +74,9 @@ export function SuggestedInterests({ status, data, error, onRetry, onReupload }:
   const headingId = useId()
   const suggestions = useMemo(() => (status === 'done' && data ? suggestInterests(data, 6) : []), [status, data])
 
+  // While the resume is still being read there is nothing to show: progress lives in the tray below.
+  if (status === 'reading' || status === 'idle') return null
+
   return (
     <section aria-labelledby={headingId} className="flex flex-col gap-3">
       <div className="flex items-baseline justify-between gap-3">
@@ -81,21 +84,9 @@ export function SuggestedInterests({ status, data, error, onRetry, onReupload }:
           Suggested from your resume
         </h3>
         <p aria-live="polite" className="text-xs text-[var(--text-muted)]">
-          {status === 'reading' && 'Reading your resume…'}
           {status === 'done' && suggestions.length > 0 && `${suggestions.length} suggestions`}
         </p>
       </div>
-
-      {status === 'reading' && (
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2" aria-hidden>
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="h-[58px] rounded-[12px] border border-[var(--border-ws)] bg-[var(--surface)] px-3.5 py-3">
-              <div className="h-3 w-2/5 rounded bg-[var(--surface-dim)] motion-safe:animate-pulse" />
-              <div className="mt-2.5 h-2.5 w-3/5 rounded bg-[var(--surface-dim)] motion-safe:animate-pulse" />
-            </div>
-          ))}
-        </div>
-      )}
 
       {status === 'error' && (
         <div role="alert" className="flex flex-col gap-3 rounded-[12px] border border-red-400/25 bg-red-400/[0.06] p-4">
@@ -211,7 +202,7 @@ export function InterestGroups({ data }: { data: ExtractedCareerData | null }) {
   const headingId = useId()
   const groups = useMemo(() => {
     if (!data?.timeline?.length) return INTEREST_GROUPS
-    return orderedGroups(experienceFacts(data.timeline).seniority)
+    return orderedGroups(factsOf(data).seniority)
   }, [data])
 
   return (
@@ -229,7 +220,7 @@ export function InterestGroups({ data }: { data: ExtractedCareerData | null }) {
 
 // ── Selection tray ──────────────────────────────────────────────────────────
 
-export function SelectionTray({ actions }: { actions: React.ReactNode }) {
+export function SelectionTray({ actions, status }: { actions: React.ReactNode; status?: ExtractionStatus }) {
   const { selected, toggle } = useInterestSelection()
   const n = selected.length
   const helper =
@@ -289,6 +280,13 @@ export function SelectionTray({ actions }: { actions: React.ReactNode }) {
         <p className="mt-2 text-xs text-[var(--text-muted)]" aria-live="polite">{helper}</p>
 
         <div className="mt-3 flex gap-2">{actions}</div>
+
+        {status === 'reading' && (
+          <p className="mt-3 flex items-center gap-2 border-t border-[var(--border-ws)] pt-3 text-xs text-[var(--text-muted)]" role="status">
+            <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[var(--neon)] motion-safe:animate-pulse" aria-hidden />
+            Reading your resume in the background. Suggestions appear here when it is done.
+          </p>
+        )}
       </div>
     </div>
   )

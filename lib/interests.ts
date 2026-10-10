@@ -1,5 +1,5 @@
 import type { ExtractedCareerData } from '@/types/wingspan'
-import { experienceFacts, type ExperienceFacts } from '@/lib/experience'
+import { factsOf, type ExperienceFacts } from '@/lib/experience'
 
 // The interest taxonomy: five groups that don't overlap, each with interests named the way the
 // industry names them. Suggestions are computed from the resume (skills, roles, projects) and the
@@ -106,7 +106,7 @@ const hits = (text: string, kw: string) => {
  * the list when the resume is thin. Returns at most `limit` suggestions with a short reason each.
  */
 export function suggestInterests(data: Partial<ExtractedCareerData> | null | undefined, limit = 6): InterestSuggestion[] {
-  const facts = experienceFacts(data?.timeline ?? [])
+  const facts = factsOf(data)
   const band = (data?.timeline?.length ?? 0) === 0 ? 'early' : facts.seniority
   const { text, roles } = haystack(data ?? {})
   const scored = INTERESTS.map((interest) => {

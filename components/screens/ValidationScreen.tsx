@@ -6,7 +6,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { MotionConfig } from 'framer-motion'
 import { useWingspan } from '@/context/WingspanContext'
 import { runCareerPipeline } from '@/lib/pipeline'
-import { experienceFacts } from '@/lib/experience'
+import { factsOf } from '@/lib/experience'
 import { ActivityDrawer } from '@/components/onboarding/ActivityDrawer'
 import { AnalysisStatus } from '@/components/onboarding/AnalysisStatus'
 import {
@@ -19,7 +19,7 @@ export function ValidationScreen() {
   const { extractedData } = state
   const [drawerOpen, setDrawerOpen] = useState(false)
 
-  const facts = useMemo(() => experienceFacts(extractedData?.timeline ?? []), [extractedData?.timeline])
+  const facts = useMemo(() => factsOf(extractedData), [extractedData])
 
   const openBlueprint = () => {
     if (extractedData) dispatch({ type: 'SET_VALIDATED_DATA', data: { ...extractedData, interests: state.interests } })
@@ -51,14 +51,9 @@ export function ValidationScreen() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <main className="mx-auto w-full max-w-5xl px-4 pb-40 pt-24 sm:px-6 md:pb-20 md:pt-28">
+      <main className="mx-auto w-full max-w-5xl px-4 pb-32 pt-24 sm:px-6 md:pt-28">
         <div className="flex flex-col gap-6">
           <IdentityHeader facts={facts} />
-          <AnalysisStatus
-            onOpenDetails={() => setDrawerOpen(true)}
-            onOpenBlueprint={openBlueprint}
-            onRetry={retry}
-          />
           <KpiStrip data={extractedData} years={facts.years} />
         </div>
 
@@ -74,6 +69,12 @@ export function ValidationScreen() {
           </aside>
         </div>
       </main>
+
+      <AnalysisStatus
+        onOpenDetails={() => setDrawerOpen(true)}
+        onOpenBlueprint={openBlueprint}
+        onRetry={retry}
+      />
 
       <ActivityDrawer open={drawerOpen} onClose={closeDrawer} />
     </MotionConfig>

@@ -56,7 +56,7 @@ test('a thin Blueprint is flagged, a complete one is not', () => {
   const thin = { futurePaths: [{}], strengths: [{}], actions: { immediate: [] }, roadmapMilestones: [{}] } as never
   assert.equal(blueprintProblems(thin).length, 4)
   const full = {
-    futurePaths: [{}, {}, {}], strengths: [{}, {}, {}], actions: { immediate: [{}] }, roadmapMilestones: [{}, {}, {}],
+    futurePaths: [{}, {}, {}], strengths: [{}, {}, {}], actions: { immediate: [{}, {}, {}] }, roadmapMilestones: [{}, {}, {}],
   } as never
   assert.deepEqual(blueprintProblems(full), [])
 })

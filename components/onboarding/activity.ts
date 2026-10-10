@@ -22,7 +22,7 @@ export const AGENT_ROLES: Record<string, string> = {
   careerDna: 'Works out who you are professionally, from your past only',
   market: 'Looks at where demand and capability needs are moving',
   directions: 'Proposes distinct directions and scores each one',
-  growth: 'Plans the capabilities and steps for each direction',
+  growth: 'Weighs the options, then plans the capabilities and steps for each direction',
   orchestrator: 'Weighs the agents and forms the recommendation',
   blueprint: 'Writes your Blueprint from the recommendation',
   system: 'Coordinates the analysis',
@@ -45,32 +45,55 @@ export interface AgentRow {
   updatedAt: number
 }
 
-/** Group events by source in order of first appearance and derive each agent's current status. */
+/** User-facing order of the steps. The Orchestrator is an internal coordinator: it is shown as part of the Growth Planner. */
+const STEP_ORDER = ['extract', 'system', 'aggregator', 'careerDna', 'market', 'directions', 'growth', 'blueprint']
+const rank = (source: string) => { const i = STEP_ORDER.indexOf(source); return i === -1 ? STEP_ORDER.length : i }
+const userSource = (source: string) => (source === 'orchestrator' ? 'growth' : source)
+
+/** Remove repeats: identical labels, and "in progress" lines once a step has finished. */
+function tidy(events: ActivityEvent[], finished: boolean): ActivityEvent[] {
+  const out: ActivityEvent[] = []
+  for (const e of events) {
+    if (finished && e.status === 'start') continue
+    const prev = out.find((x) => x.label === e.label && x.status === e.status)
+    if (prev) continue
+    out.push(e)
+  }
+  // While running only the latest in-progress line is useful.
+  if (!finished) {
+    const starts = out.filter((e) => e.status === 'start')
+    return out.filter((e) => e.status !== 'start' || e === starts[starts.length - 1])
+  }
+  return out
+}
+
+/** Group events into one row per user-facing step (in a logical order) and derive each step's status. */
 export function agentRows(activity: ActivityEvent[], pipelineStopped: boolean): AgentRow[] {
   const bySource = new Map<string, ActivityEvent[]>()
   for (const e of activity) {
-    const list = bySource.get(e.source)
-    if (list) list.push(e)
-    else bySource.set(e.source, [e])
+    const src = userSource(e.source)
+    const ev = e.source === 'orchestrator' && e.status === 'done' ? { ...e, label: 'Weighed the options and formed the recommendation' } : e
+    const list = bySource.get(src)
+    if (list) list.push(ev)
+    else bySource.set(src, [ev])
   }
-  return [...bySource.entries()].map(([source, events]) => {
+  const rows = [...bySource.entries()].map(([source, raw]) => {
+    const events = raw.slice().sort((a, b) => a.at - b.at)
+    const orchestratorOnly = source === 'growth' && activity.some((e) => e.source === 'orchestrator') && !activity.some((e) => e.source === 'growth')
     const lastState = [...events].reverse().find((e) => e.status !== 'info')
     let status: RowStatus =
       !lastState ? 'info'
       : lastState.status === 'error' ? 'error'
       : lastState.status === 'done' ? 'done'
       : 'running'
+    // The Growth Planner is only finished when it has reported itself, not just the coordinator.
+    if (orchestratorOnly && status === 'done') status = 'running'
     if (status === 'running' && pipelineStopped) status = 'stopped'
     if (source === 'system' && events.some((e) => e.status === 'error')) status = 'error'
-    return {
-      source,
-      name: agentName(source),
-      status,
-      events,
-      startedAt: events[0].at,
-      updatedAt: events[events.length - 1].at,
-    }
+    const shown = tidy(events, status === 'done')
+    return { source, name: agentName(source), status, events: shown, startedAt: events[0].at, updatedAt: events[events.length - 1].at }
   })
+  return rows.sort((a, b) => rank(a.source) - rank(b.source) || a.startedAt - b.startedAt)
 }
 
 /** The label to show in the one-line status: what is happening right now. */

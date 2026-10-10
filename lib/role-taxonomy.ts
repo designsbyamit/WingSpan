@@ -211,3 +211,23 @@ export function fieldsFor(roles: string[], interests: string[]): string[] {
   }
   return [...fams, ...interests].slice(0, 10)
 }
+
+/**
+ * Rough organisational level of a title (2 = associate … 10 = C-level), used so a recommendation is
+ * never a step down from the person's current role. Not a judgement of worth: lateral moves are fine.
+ */
+export function titleRank(title: string): number {
+  const t = ` ${title.toLowerCase()} `
+  if (/\b(chief|cxo|cdo|cpo|cto|ceo)\b/.test(t)) return 10
+  if (/\b(vp|vice president)\b/.test(t)) return 9
+  if (/\bhead of\b|\bsenior director\b|\bdean\b/.test(t)) return 8
+  if (/\bdirector\b/.test(t)) return 7
+  if (/\bsenior design manager\b|\bsenior manager\b|\bgroup product manager\b|\bprincipal\b/.test(t)) return 6
+  if (/\bmanager\b|\blead\b|\bstaff\b/.test(t)) return 5
+  if (/\bsenior\b/.test(t)) return 4
+  if (/\bassociate\b|\bjunior\b|\bintern\b/.test(t)) return 2
+  return 3
+}
+
+/** Titles that sit outside the management ladder and are a legitimate move at any level. */
+export const OFF_LADDER = /principal|partner|founder|consultant|professor|educator|venture|chief of staff/i

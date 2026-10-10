@@ -3,7 +3,7 @@
 import { betsInstruction, enforceBets, type Bet } from '@/lib/bets'
 import { normalizeValidated } from '@/lib/extracted-shape'
 import { normalizeBlueprint } from '@/lib/blueprint-shape'
-import { experienceFacts, groundingRules } from '@/lib/experience'
+import { factsOf, groundingRules } from '@/lib/experience'
 export { normalizeBlueprint }
 import Groq from 'groq-sdk'
 import { ExtractedCareerData, Blueprint, ValidatedCareerData, CareerAlphaIntelligence, Gap, Resource } from '@/types/wingspan'
@@ -171,7 +171,7 @@ ${urlContext ? `Profile URLs:\n${urlContext}` : ''}`,
 
   return {
     ...json,
-    timeline,
+    timeline: timeline.map((t, i) => ({ ...(t as object), id: `role-${i + 1}-${Math.random().toString(36).slice(2, 7)}` })),
     projects,
     skills,
     education,
@@ -333,8 +333,8 @@ export function blueprintProblems(bp: Partial<Blueprint>): string[] {
   if (!Array.isArray(bp.strengths) || bp.strengths.length < 3) {
     problems.push(`strengths has ${Array.isArray(bp.strengths) ? bp.strengths.length : 0} items, at least 3 are required`)
   }
-  if (!bp.actions || !Array.isArray(bp.actions.immediate) || bp.actions.immediate.length === 0) {
-    problems.push('actions.immediate is empty')
+  if (!bp.actions || !Array.isArray(bp.actions.immediate) || bp.actions.immediate.length < 3) {
+    problems.push(`actions.immediate has ${Array.isArray(bp.actions?.immediate) ? bp.actions!.immediate.length : 0} items; give at least 2 per direction`)
   }
   if (!Array.isArray(bp.roadmapMilestones) || bp.roadmapMilestones.length < 3) {
     problems.push('roadmapMilestones needs at least 3 phases')
@@ -389,7 +389,7 @@ For each bet populate all fields including betRationale, whyNotOtherPaths, caree
   const plannedGaps = Array.isArray(growth?.gaps) ? growth!.gaps!.filter((g) => g && g.pathway) : []
   const plannedResources = Array.isArray(growth?.resources) ? growth!.resources!.filter((r) => r && r.pathway) : []
   const hasPlan = plannedGaps.length > 0 && !!bets && bets.every((b) => plannedGaps.some((g) => g.pathway === b.direction))
-  const planInstruction = hasPlan ? `CAPABILITY GAPS ARE ALREADY MEASURED (do not regenerate them; return "gaps": [] and "resources": [] in actions). Build the roadmap milestones and the immediate / medium-term / long-term actions so they close these gaps, per direction:
+  const planInstruction = hasPlan ? `CAPABILITY GAPS ARE ALREADY MEASURED (do not regenerate them; return "gaps": [] and "resources": [] in actions). Build the roadmap milestones and the actions so they close these gaps: for EACH direction give at least 2 immediate, 2 medium-term and 1 long-term actions (pathway = the exact direction title). Gaps per direction:
 ${plannedGaps.map((g) => `- [${g.pathway}] ${g.title ?? g.gapType}: ${g.currentReadiness} → ${g.futureReadiness}. ${g.howToClose}`).join('\n')}
 Resources already chosen (refer to them by title in actions where useful): ${plannedResources.map((r) => `[${r.pathway}] ${r.title}`).join('; ')}` : ''
 
@@ -438,7 +438,7 @@ Career Profile:
 - Education: ${JSON.stringify(validatedData.education)}
 - Future Interests: ${validatedData.interests.join(', ')}
 
-${groundingRules(experienceFacts(validatedData.timeline), validatedData.interests)}
+${groundingRules(factsOf(validatedData), validatedData.interests)}
 ${negativeExamples}
 Generate a comprehensive, deeply personal Future Self Blueprint. Reference actual projects, roles, and companies by name. Every insight must cite real evidence. Make the person feel this was written only for them.
 

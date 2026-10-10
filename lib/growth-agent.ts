@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { callValidated } from '@/lib/v02-agents'
-import { experienceFacts } from '@/lib/experience'
+import { factsOf } from '@/lib/experience'
 import { normalizeExtracted } from '@/lib/extracted-shape'
 import { CATALOG, catalogById, catalogPrompt, matchCatalog } from '@/lib/resources-catalog'
 import type { Bet } from '@/lib/bets'
@@ -50,11 +50,11 @@ export type GrowthOutput = z.infer<typeof growthSchema>
 
 export interface GrowthPlan { gaps: Gap[]; resources: Resource[]; notes: string[] }
 
-const SYSTEM = `You are the Growth Planner agent. For each chosen career direction you identify the capability gaps that stand between this person and the role, and you pick learning resources that close them. You never invent evidence. Current levels must be grounded in the person's evidence: use the scores from Career DNA and the evidence graph when a capability appears there; when there is no evidence of a capability, its current level is at most 35. Required levels come from the market's capability requirements where relevant, otherwise from what the role typically demands (usually 70-90). Frame gaps as capability unlocks, never as deficits. Recommend resources ONLY by id from the catalog provided. Return only JSON.`
+const SYSTEM = `You are the Growth Planner agent. For each chosen career direction you identify the capability gaps that stand between this person and the role, and you pick learning resources that close them. You never invent evidence. Current levels must be grounded in the person's evidence and must differ by capability: when a gap capability is the same as or close to an evidenced capability, use that capability's level; years in role count as evidence (a person with 10+ years in a discipline is at least 60-70 in its fundamentals); only when there is genuinely no evidence of a capability may its current level be 35 or lower, and say so in "evidence". Gaps are what the TARGET role newly demands. Never list the fundamentals of the person's own discipline (for a designer: interaction design, visual design, UX research, prototyping) as gaps for a senior or leader profile unless the evidence shows they are missing. Required levels come from the market's capability requirements where relevant, otherwise from what the role typically demands (usually 70-90). Frame gaps as capability unlocks, never as deficits. Recommend resources ONLY by id from the catalog provided. Return only JSON.`
 
 export async function growthAgent(run: AgentRun, bets: Bet[], rawData: ExtractedCareerData, interests: string[]): Promise<GrowthPlan> {
   const data = normalizeExtracted(rawData)
-  const facts = experienceFacts(data.timeline)
+  const facts = factsOf(data)
   const { careerDNA: dna, evidenceGraph: g, marketGraph: m } = run
   const caps = [
     ...dna.strongestCapabilities.map((c) => `${c.name}: ${Math.round(c.score)} (strongest)`),
@@ -85,13 +85,43 @@ Return exactly: {"paths":[{"direction":string (exact title from above),"gaps":[{
     if (parsed.paths.length === 0) throw new Error('No paths returned')
     return parsed
   }, 9000)
-  return toGrowthPlan(out, bets)
+  const evidenced = [
+    ...dna.strongestCapabilities, ...dna.distinctiveStrengths, ...dna.transferableCapabilities,
+  ].map((c) => ({ name: c.name, level: c.score })).concat(g.capabilities.map((c) => ({ name: c.name, level: c.level })))
+  return toGrowthPlan(out, bets, { evidenced, years: facts.years, seniority: facts.seniority })
+}
+
+const capWords = (s: string) => new Set(s.toLowerCase().split(/[^a-z0-9]+/).filter((w) => w.length > 2 && !['and', 'the', 'for', 'with', 'design', 'management', 'strategy', 'skills'].includes(w)))
+const CRAFT = /interaction design|visual design|ui design|ux design|user research|ux research|prototyp|wirefram|usability|information architecture|product design/i
+
+/**
+ * Keep current levels honest: never below the level of a matching evidenced capability, and for
+ * experienced people, never below a sensible floor for the fundamentals of their own craft.
+ */
+export function groundLevel(capability: string, modelLevel: number, ctx: GroundingContext | undefined): { level: number; matched?: string } {
+  if (!ctx) return { level: modelLevel }
+  const w = capWords(capability)
+  let best: { name: string; level: number; s: number } | null = null
+  for (const e of ctx.evidenced) {
+    const ew = capWords(e.name)
+    if (!w.size || !ew.size) continue
+    let n = 0
+    w.forEach((x) => { if (ew.has(x)) n++ })
+    const s = n / Math.min(w.size, ew.size)
+    if (s >= 0.5 && (!best || s > best.s || (s === best.s && e.level > best.level))) best = { name: e.name, level: e.level, s }
+  }
+  let level = modelLevel
+  if (best && best.level > level) level = Math.round(best.level)
+  if (CRAFT.test(capability) && ctx.years >= 8) level = Math.max(level, ctx.years >= 12 ? 70 : 60)
+  return { level, matched: best?.name }
 }
 
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()
 
 /** Deterministic post-processing: titles, sizes, readiness and real resources only. */
-export function toGrowthPlan(out: GrowthOutput, bets: Bet[]): GrowthPlan {
+export interface GroundingContext { evidenced: { name: string; level: number }[]; years: number; seniority: string }
+
+export function toGrowthPlan(out: GrowthOutput, bets: Bet[], ground?: GroundingContext): GrowthPlan {
   const notes: string[] = []
   const gaps: Gap[] = []
   const resources: Resource[] = []
@@ -99,7 +129,9 @@ export function toGrowthPlan(out: GrowthOutput, bets: Bet[]): GrowthPlan {
     const path = out.paths.find((p) => norm(p.direction) === norm(bet.direction)) ?? out.paths[i]
     const used = new Set<string>()
     for (const gp of (path?.gaps ?? []).slice(0, 4)) {
-      const current = Math.round(gp.currentLevel)
+      const grounded = groundLevel(gp.capability, Math.round(gp.currentLevel), ground)
+      const current = grounded.level
+      if (grounded.level > Math.round(gp.currentLevel)) notes.push(`${bet.direction}: raised "${gp.capability}" from ${Math.round(gp.currentLevel)} to ${grounded.level}${grounded.matched ? ` (evidence: ${grounded.matched})` : ' (years of experience in the discipline)'}.`)
       const required = Math.round(Math.max(gp.requiredLevel, current))
       const diff = required - current
       if (diff < 5) { notes.push(`${bet.direction}: "${gp.capability}" is already at the required level, so it is a strength, not a gap.`); continue }
