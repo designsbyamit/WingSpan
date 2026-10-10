@@ -79,22 +79,59 @@ export function AnalysisStatus({ onOpenDetails, onOpenBlueprint, onRetry }: Anal
     )
   }
 
+  const secs = analysisStart ? Math.max(0, Math.floor((now - analysisStart) / 1000)) : 0
+  const quip = QUIPS[Math.floor(secs / 7) % QUIPS.length]
+  const remaining = Math.ceil((EXPECTED_SECONDS - secs) / 60)
+  const eta =
+    secs < 8 ? 'About 4 minutes'
+    : remaining >= 2 ? `About ${remaining} min left`
+    : remaining === 1 ? 'Under a minute or two left'
+    : 'Nearly there, thanks for waiting'
+  // Eases toward 95% so the line always feels alive without promising a finish time.
+  const pct = Math.min(95, Math.round(95 * (1 - Math.exp(-secs / 110))))
+
   return (
-    <div className={cx(shell, 'border-[var(--border-ws)] bg-[color-mix(in_srgb,var(--surface)_92%,transparent)]')}>
+    <div className={cx(shell, 'border-[var(--border-ws)]')}>
+      <div className="absolute inset-x-0 top-0 h-[2px] overflow-hidden bg-[var(--border-ws)]" aria-hidden>
+        <div className="h-full rounded-full bg-[var(--neon)] transition-[width] duration-1000 ease-linear" style={{ width: `${pct}%` }} />
+        <div className="absolute inset-y-0 w-24 bg-gradient-to-r from-transparent via-white/70 to-transparent motion-safe:animate-[ws-sweep_2.2s_ease-in-out_infinite]" />
+      </div>
       <div className="mx-auto flex w-full max-w-5xl items-center gap-3">
         <span className="relative flex h-2.5 w-2.5 flex-shrink-0" aria-hidden>
           <span className="absolute inset-0 rounded-full bg-[var(--neon)] opacity-40 motion-safe:animate-[ws-breathe_2.4s_ease-in-out_infinite]" />
           <span className="relative m-auto h-1.5 w-1.5 rounded-full bg-[var(--neon)]" />
         </span>
-        <p className="min-w-0 flex-1 text-[13px] leading-snug text-[var(--text-secondary)] sm:text-sm" role="status" aria-live="polite">
-          <span className="text-[var(--text-primary)]">Something more is being analysed</span>
-          <span className="hidden sm:inline"> — </span>
-          <span className="block truncate sm:inline">{label}</span>
-        </p>
-        {elapsed && <span className="flex-shrink-0 text-xs tabular-nums text-[var(--text-muted)]" aria-label={`Elapsed ${elapsed}`}>{elapsed}</span>}
+        <div className="min-w-0 flex-1" role="status" aria-live="polite">
+          <p key={quip} className="truncate text-sm font-medium text-[var(--text-primary)] motion-safe:animate-[ws-fade_0.5s_ease-out]">{quip}</p>
+          <p className="truncate text-xs text-[var(--text-muted)]">
+            {eta}<span className="hidden sm:inline"> · {label}. Meanwhile, look through your details above and fix anything that looks off.</span>
+          </p>
+        </div>
+        {elapsed && <span className="hidden flex-shrink-0 text-xs tabular-nums text-[var(--text-muted)] sm:block" aria-label={`Elapsed ${elapsed}`}>{elapsed}</span>}
         <button type="button" onClick={onOpenDetails} className={cx(linkButton, 'flex-shrink-0 text-xs sm:text-[13px]')}>View details</button>
       </div>
-      <style>{`@keyframes ws-breathe { 0%, 100% { transform: scale(1); opacity: .45 } 50% { transform: scale(2.2); opacity: 0 } }`}</style>
+      <style>{`
+        @keyframes ws-breathe { 0%, 100% { transform: scale(1); opacity: .45 } 50% { transform: scale(2.2); opacity: 0 } }
+        @keyframes ws-sweep { 0% { left: -6rem } 100% { left: 100% } }
+        @keyframes ws-fade { from { opacity: 0; transform: translateY(4px) } to { opacity: 1; transform: none } }
+      `}</style>
     </div>
   )
 }
+
+const EXPECTED_SECONDS = 240
+
+// Rotated every few seconds while the long analysis runs.
+const QUIPS = [
+  'Digging for gold in your career history…',
+  'Teaching the market to speak your language…',
+  'Weighing ten possible futures, keeping the best three…',
+  'Checking the job market so you do not have to…',
+  'Separating what you have proven from what you could prove…',
+  'Sketching the path from where you are to where you could be…',
+  'Reading between the lines of your resume…',
+  'Hunting for skills the market will pay for next year…',
+  'Good careers are built slowly. This part only takes minutes…',
+  'Lining up the first moves you can make this week…',
+  'Polishing the details. Great things take a few extra minutes…',
+]

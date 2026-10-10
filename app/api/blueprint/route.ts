@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
         }
       } catch (err) {
         console.error('Blueprint error:', err)
-        const errLine = `event: error\ndata: ${JSON.stringify({ error: friendlyProviderError(err) })}\n\n`
+        const errLine = `event: error\ndata: ${JSON.stringify({ type: 'error', error: friendlyProviderError(err) })}\n\n`
         controller.enqueue(encoder.encode(errLine))
       } finally {
         controller.close()

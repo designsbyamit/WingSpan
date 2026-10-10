@@ -1,7 +1,7 @@
 'use client'
 import { useId, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Check, Pencil, Trash2 } from 'lucide-react'
+import { Pencil, Trash2 } from 'lucide-react'
 import { useWingspan } from '@/context/WingspanContext'
 import type { ExtractedCareerData, TimelineEntry } from '@/types/wingspan'
 import type { ExperienceFacts } from '@/lib/experience'
@@ -118,15 +118,11 @@ export function CareerTimeline({ entries }: { entries: TimelineEntry[] }) {
   const { dispatch } = useWingspan()
   const [editingId, setEditingId] = useState<string | null>(null)
   const headingId = useId()
-  const confirmed = entries.filter((e) => e.confirmed).length
 
   return (
     <section aria-labelledby={headingId} className="flex flex-col gap-4">
       <div className="flex items-baseline justify-between gap-3">
         <SectionHeading id={headingId} title="Career timeline" count={entries.length} />
-        {entries.length > 0 && (
-          <p className="text-xs text-[var(--text-muted)]" aria-live="polite">{confirmed} of {entries.length} confirmed</p>
-        )}
       </div>
 
       {entries.length === 0 ? (
@@ -145,17 +141,14 @@ export function CareerTimeline({ entries }: { entries: TimelineEntry[] }) {
                 className="relative flex gap-4 pb-5 last:pb-0"
               >
                 {i < entries.length - 1 && <span className="absolute bottom-0 left-[5.5px] top-5 w-px bg-[var(--border-ws)]" aria-hidden />}
-                <span className={cx(
-                  'relative mt-[7px] h-3 w-3 flex-shrink-0 rounded-full border-2',
-                  entry.confirmed ? 'border-[var(--neon)] bg-[var(--neon)]' : 'border-[var(--text-dim)] bg-[var(--bg)]',
-                )} aria-hidden />
+                <span className="relative mt-[7px] h-3 w-3 flex-shrink-0 rounded-full border-2 border-[var(--text-dim)] bg-[var(--bg)]" aria-hidden />
                 <div className="min-w-0 flex-1">
                   {editingId === entry.id ? (
                     <TimelineEditForm
                       entry={entry}
                       onCancel={() => setEditingId(null)}
                       onSave={(draft) => {
-                        dispatch({ type: 'UPDATE_TIMELINE_ENTRY', entry: { ...entry, ...draft, confirmed: true } })
+                        dispatch({ type: 'UPDATE_TIMELINE_ENTRY', entry: { ...entry, ...draft } })
                         setEditingId(null)
                       }}
                     />
@@ -176,16 +169,6 @@ export function CareerTimeline({ entries }: { entries: TimelineEntry[] }) {
                         )}
                       </div>
                       <div className="-mr-1 flex flex-shrink-0 items-center">
-                        <button
-                          type="button"
-                          aria-pressed={entry.confirmed}
-                          aria-label={entry.confirmed ? `${entry.role} confirmed` : `Confirm ${entry.role}`}
-                          title={entry.confirmed ? 'Confirmed' : 'Confirm'}
-                          onClick={() => dispatch({ type: 'UPDATE_TIMELINE_ENTRY', entry: { ...entry, confirmed: !entry.confirmed } })}
-                          className={iconButton(entry.confirmed ? 'text-[var(--neon)]' : 'hover:text-[var(--neon)]')}
-                        >
-                          <Check size={15} aria-hidden />
-                        </button>
                         <button type="button" aria-label={`Edit ${entry.role}`} title="Edit" onClick={() => setEditingId(entry.id)}
                           className={iconButton('hover:text-[var(--text-primary)]')}>
                           <Pencil size={14} aria-hidden />

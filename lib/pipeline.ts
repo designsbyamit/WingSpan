@@ -91,7 +91,7 @@ export async function runCareerPipeline(
         throw new Error(event.error as string)
       }
     })
-    if (!completed) throw new Error('Blueprint generation ended before a complete result was received.')
+    if (!completed) throw new Error('Blueprint generation ended before a complete result was received. Please try again.')
   } catch (err) {
     console.error('Background pipeline error:', err)
     const message = err instanceof Error ? err.message : 'Something went wrong while building your Blueprint.'

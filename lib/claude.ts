@@ -508,8 +508,20 @@ Your output is the first thing this person will read about their own career pote
   try {
     blueprint = parseBlueprintJson(accumulated)
   } catch (parseErr) {
-    console.error('Blueprint JSON parse failed even after repair:', parseErr)
-    throw new Error('Blueprint generation was cut short. Please try again with a shorter resume or fewer projects.')
+    console.error('Blueprint JSON parse failed even after repair; regenerating once:', parseErr)
+    yield { type: 'ping', percentage: 85 }
+    try {
+      const again = await routeCall(
+        systemInstruction,
+        `${userPrompt}\n\nIMPORTANT: respond with ONE complete, strictly valid JSON object only (double-quoted keys and strings, no comments, no trailing commas, no markdown).`,
+        'blueprint',
+        16000,
+      )
+      blueprint = parseBlueprintJson(again)
+    } catch (retryErr) {
+      console.error('Blueprint regeneration failed:', retryErr)
+      throw new Error('The Blueprint could not be completed this time. Please try again.')
+    }
   }
 
   if (bets && bets.length === 3) blueprint = enforceBets(blueprint, bets)
