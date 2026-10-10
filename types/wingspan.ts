@@ -149,12 +149,19 @@ export interface Action {
 }
 
 export interface Resource {
-  type: 'book' | 'course' | 'community' | 'event' | 'article' | 'framework'
+  type: 'book' | 'course' | 'community' | 'event' | 'article' | 'framework' | 'tool' | 'certification' | 'newsletter'
   title: string
   url?: string
   pathway: string
   whereToStart?: string
   firstStep?: string
+  /** Publisher, author or organiser, e.g. "Google PAIR", "Julie Zhuo". */
+  provider?: string
+  cost?: 'free' | 'paid' | 'mixed'
+  /** The capability gap this resource helps close (matches a gap's requiredCapabilities or title). */
+  capability?: string
+  /** Roadmap phase where it fits best, e.g. "30 Days". */
+  phase?: string
 }
 
 export interface Blueprint {
