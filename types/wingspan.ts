@@ -224,6 +224,18 @@ export interface WingspanState {
   blueprintLoading: boolean
   blueprintReady: boolean
   pipelineStage: 'extract' | 'career-alpha' | 'blueprint' | null
+  /** Live activity stream of the analysis (extraction, each agent, blueprint), for the "View details" drawer. */
+  activity: ActivityEvent[]
+}
+
+export interface ActivityEvent {
+  id: string
+  at: number
+  /** extract | aggregator | careerDna | market | directions | orchestrator | growth | blueprint | system */
+  source: string
+  status: 'start' | 'done' | 'error' | 'info'
+  label: string
+  detail?: string
 }
 
 export type WingspanAction =
@@ -248,6 +260,8 @@ export type WingspanAction =
   | { type: 'SET_BLUEPRINT_BACKGROUND'; blueprint: Blueprint }
   | { type: 'SET_BLUEPRINT_LOADING'; loading: boolean }
   | { type: 'SET_PIPELINE_STAGE'; stage: 'extract' | 'career-alpha' | 'blueprint' | null }
+  | { type: 'ADD_ACTIVITY'; event: Omit<ActivityEvent, 'id' | 'at'> }
+  | { type: 'RESET_ACTIVITY' }
 
 // ── Career Alpha types ─────────────────────────────────────────────────────
 

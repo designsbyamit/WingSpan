@@ -172,75 +172,85 @@ function Evidence({ d }: { d: DeepAnalysis }) {
   )
 }
 
-export function DeepAnalysisButton({ analysis }: { analysis?: DeepAnalysis | null }) {
-  const [open, setOpen] = useState(false)
+/** The Deep analysis dialog on its own, so any surface (Resources page, side nav) can open it. */
+export function DeepAnalysisDialog({ analysis, open, onClose }: { analysis?: DeepAnalysis | null; open: boolean; onClose: () => void }) {
   const [tab, setTab] = useState<Tab>('overall')
 
   useEffect(() => {
     if (!open) return
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false) }
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', onKey)
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = prev }
-  }, [open])
+  }, [open, onClose])
 
   if (!analysis || !Array.isArray(analysis.agents)) return null
 
   return (
-    <>
-      <button
-        onClick={() => setOpen(true)}
-        aria-label="Open deep analysis"
-        title="Deep analysis"
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-[var(--border-ws)] text-[11px] font-semibold text-[var(--text-secondary)] hover:text-[var(--neon)] hover:border-[var(--neon)] transition-colors"
-      >
-        <Eye size={13} /> Deep analysis
-      </button>
-      <AnimatePresence>
-        {open && (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/70 sm:p-6"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          onClick={onClose}
+        >
           <motion.div
-            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            onClick={() => setOpen(false)}
+            role="dialog" aria-modal="true" aria-label="Deep analysis"
+            initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={(e) => e.stopPropagation()}
+            className="w-full sm:max-w-3xl h-[92vh] sm:h-[86vh] flex flex-col rounded-t-[20px] sm:rounded-[20px] border border-[var(--border-ws)] overflow-hidden"
+            style={{ background: 'var(--bg, #0d0d0d)' }}
           >
-            <motion.div
-              role="dialog" aria-modal="true" aria-label="Deep analysis"
-              initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full sm:max-w-2xl max-h-[92vh] flex flex-col rounded-t-[20px] sm:rounded-[20px] bg-[var(--bg,#0d0d0d)] border border-[var(--border-ws)]"
-              style={{ background: 'var(--bg, #0d0d0d)' }}
-            >
-              <div className="flex items-center justify-between gap-3 px-5 pt-4 pb-3">
-                <div>
-                  <p className="text-[10px] font-bold tracking-[2.5px] uppercase text-[var(--neon)]">Deep analysis</p>
-                  <p className="text-sm font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-sora)' }}>How this recommendation was reached</p>
-                </div>
-                <button onClick={() => setOpen(false)} aria-label="Close" className="p-2 rounded-full text-[var(--text-muted)] hover:text-[var(--text-primary)]"><X size={16} /></button>
+            <div className="shrink-0 flex items-start justify-between gap-3 px-5 sm:px-6 pt-5 pb-4">
+              <div>
+                <p className="text-[10px] font-bold tracking-[2.5px] uppercase text-[var(--neon)]">Deep analysis</p>
+                <p className="text-base font-semibold text-[var(--text-primary)] mt-0.5" style={{ fontFamily: 'var(--font-sora)' }}>How this recommendation was reached</p>
               </div>
-              <div className="flex gap-1 px-4 pb-3 overflow-x-auto">
-                {TABS.map((t) => (
-                  <button key={t.id} onClick={() => setTab(t.id)}
-                    className="px-3 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap border transition-colors"
-                    style={tab === t.id
-                      ? { background: 'var(--neon)', color: '#0a0a0a', borderColor: 'var(--neon)' }
-                      : { color: 'var(--text-secondary)', borderColor: 'var(--border-ws)' }}>
-                    {t.label}
-                  </button>
-                ))}
-              </div>
-              <div className="overflow-y-auto px-4 pb-6">
+              <button onClick={onClose} aria-label="Close" className="p-2 -m-1 rounded-full text-[var(--text-muted)] hover:text-[var(--text-primary)]"><X size={16} /></button>
+            </div>
+            <div role="tablist" className="shrink-0 flex items-center gap-1.5 px-5 sm:px-6 pb-4 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+              {TABS.map((t) => (
+                <button key={t.id} role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}
+                  className="shrink-0 h-8 px-3.5 inline-flex items-center rounded-full text-[12px] font-semibold leading-none whitespace-nowrap border transition-colors"
+                  style={tab === t.id
+                    ? { background: 'var(--neon)', color: '#0a0a0a', borderColor: 'var(--neon)' }
+                    : { color: 'var(--text-secondary)', borderColor: 'var(--border-ws)' }}>
+                  {t.label}
+                </button>
+              ))}
+            </div>
+            <div className="flex-1 min-h-0 overflow-y-auto px-5 sm:px-6 pb-8 pt-1 border-t border-[var(--border-ws)]">
+              <div className="pt-4">
                 {tab === 'overall' && <Overall d={analysis} />}
                 {tab === 'agents' && <Agents d={analysis} />}
                 {tab === 'directions' && <Directions d={analysis} />}
                 {tab === 'market' && <Market d={analysis} />}
                 {tab === 'evidence' && <Evidence d={analysis} />}
               </div>
-            </motion.div>
+            </div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  )
+}
+
+export function DeepAnalysisButton({ analysis }: { analysis?: DeepAnalysis | null }) {
+  const [open, setOpen] = useState(false)
+  if (!analysis || !Array.isArray(analysis.agents)) return null
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        aria-label="Open deep analysis"
+        title="Deep analysis"
+        className="shrink-0 inline-flex items-center gap-1.5 h-8 px-3 rounded-full border border-[var(--border-ws)] text-[11px] font-semibold text-[var(--text-secondary)] hover:text-[var(--neon)] hover:border-[var(--neon)] transition-colors"
+      >
+        <Eye size={13} /> Deep analysis
+      </button>
+      <DeepAnalysisDialog analysis={analysis} open={open} onClose={() => setOpen(false)} />
     </>
   )
 }

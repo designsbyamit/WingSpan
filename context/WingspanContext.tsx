@@ -33,10 +33,18 @@ const initialState: WingspanState = {
   blueprintLoading: false,
   blueprintReady: false,
   pipelineStage: null,
+  activity: [],
 }
 
 function reducer(state: WingspanState, action: WingspanAction): WingspanState {
   switch (action.type) {
+    case 'ADD_ACTIVITY':
+      return {
+        ...state,
+        activity: [...state.activity, { ...action.event, id: `${Date.now()}-${state.activity.length}`, at: Date.now() }].slice(-200),
+      }
+    case 'RESET_ACTIVITY':
+      return { ...state, activity: [] }
     case 'SET_SCREEN':
       return { ...state, screen: action.screen, error: null }
     case 'SET_FILES':
