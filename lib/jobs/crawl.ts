@@ -33,7 +33,7 @@ async function crawlOne(co: { id: string; key: string; name: string; kind: strin
     if (!retry) return { key: co.key, status: 'NO_BOARD (rechecked later)' }
     const found = await discoverBoard(co.key, co.name)
     if (!found) {
-      await db.company.update({ where: { id: co.id }, data: { lastCrawledAt: now, lastStatus: 'NO_BOARD' } })
+      await db.company.update({ where: { id: co.id }, data: { lastCrawledAt: now, lastStatus: 'NO_BOARD', ...(rediscover ? { atsType: null, atsToken: null } : {}) } })
       return { key: co.key, status: 'NO_BOARD' }
     }
     type = found.type; token = found.token
