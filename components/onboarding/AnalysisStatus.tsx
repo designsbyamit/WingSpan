@@ -6,6 +6,7 @@ import { currentActivityLabel, formatElapsed, useNow } from './activity'
 import { FlowFooter } from './FlowFooter'
 import { CancelFlowButton } from './CancelFlow'
 import { cx, linkButton, primaryButton } from './ui'
+import { firstNameOf } from '@/lib/student/name'
 
 export type AnalysisPhase = 'running' | 'ready' | 'error'
 
@@ -34,6 +35,7 @@ export function AnalysisStatus({ onOpenDetails, onOpenBlueprint, onRetry, onCanc
   const elapsed = analysisStart ? formatElapsed(now - analysisStart) : null
   const label = currentActivityLabel(state.activity.filter((e) => e.source !== 'extract')) ?? 'Starting the analysis'
   const student = state.flowMode === 'student'
+  const who = student ? firstNameOf(state.extractedData?.candidateName) : null
   const cancel = <CancelFlowButton onConfirm={onCancel} />
   const details = <button type="button" onClick={onOpenDetails} className={cx(linkButton, 'flex-shrink-0 whitespace-nowrap')}>View progress</button>
 
@@ -42,7 +44,7 @@ export function AnalysisStatus({ onOpenDetails, onOpenBlueprint, onRetry, onCanc
       <FlowFooter
         tone="ready"
         role="status"
-        message={<span className="inline-flex items-center gap-2"><Check size={15} strokeWidth={3} className="rounded-full bg-[var(--neon)] p-[2px] text-[#0a0a0a]" aria-hidden />{student ? 'Your plan is ready' : 'Your Blueprint is ready'}</span>}
+        message={<span className="inline-flex items-center gap-2"><Check size={15} strokeWidth={3} className="rounded-full bg-[var(--neon)] p-[2px] text-[#0a0a0a]" aria-hidden />{student ? (who ? `${who}, your plan is ready` : 'Your plan is ready') : 'Your Blueprint is ready'}</span>}
         hint="Review your details above if you like, or open it now."
         actions={<>
           {details}
@@ -70,7 +72,7 @@ export function AnalysisStatus({ onOpenDetails, onOpenBlueprint, onRetry, onCanc
   }
 
   const secs = analysisStart ? Math.max(0, Math.floor((now - analysisStart) / 1000)) : 0
-  const quips = student ? STUDENT_QUIPS : QUIPS
+  const quips = student ? studentQuips(who) : QUIPS
   const quip = quips[Math.floor(secs / 7) % quips.length]
   const remaining = Math.ceil(((student ? STUDENT_SECONDS : EXPECTED_SECONDS) - secs) / 60)
   const eta =
@@ -95,6 +97,7 @@ export function AnalysisStatus({ onOpenDetails, onOpenBlueprint, onRetry, onCanc
 const EXPECTED_SECONDS = 240
 const STUDENT_SECONDS = 120
 
+const studentQuips = (who: string | null) => (who ? [`${who}, I am finding what makes you different…`, ...STUDENT_QUIPS.slice(1, 5), `${who}, your work already says more than you think…`, STUDENT_QUIPS[6]] : STUDENT_QUIPS)
 const STUDENT_QUIPS = [
   'Finding what makes you different…',
   'Reading what employers say about freshers right now…',

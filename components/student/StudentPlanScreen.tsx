@@ -87,6 +87,7 @@ export function StudentPlanScreen() {
   const { state, dispatch } = useWingspan()
   const plan = state.studentPlan
   if (!plan) return null
+  const name = plan.firstName ?? null
 
   const startOver = () => { cancelCareerPipeline(); dispatch({ type: 'RESET_FLOW' }) }
   const useFull = () => {
@@ -99,15 +100,15 @@ export function StudentPlanScreen() {
     <MotionConfig reducedMotion="user">
       <main className="mx-auto w-full max-w-4xl px-4 pb-48 pt-10 sm:px-6 sm:pb-40 md:pt-14">
         <header className="mb-10">
-          <p className={h2}>Your Student Plan</p>
+          <p className={h2}>{name ? `${name}, here is your Student Plan` : 'Your Student Plan'}</p>
           <h1 className="mt-2 text-3xl font-semibold leading-tight text-[var(--text-primary)] sm:text-4xl" style={{ fontFamily: 'var(--font-sora)' }}>{plan.edge.headline}</h1>
           <p className="mt-3 max-w-2xl text-sm text-[var(--text-secondary)]">
-            A plan to land your first design role, built from your own work and from dated, cited evidence about who is hiring freshers. Every statement shows where it came from.
+            {name ? `${name}, I read through your work and checked it against what employers are saying about freshers right now. ` : 'Built from your own work and from dated, cited evidence about who is hiring freshers. '}Every statement shows where it came from, so you can check me.
           </p>
         </header>
 
         <div className="flex flex-col gap-12">
-          <Section id="edge" title="Your edge">
+          <Section id="edge" title={name ? `What sets you apart, ${name}` : 'Your edge'}>
             <div className="grid gap-3 sm:grid-cols-3">
               {plan.edge.differentiators.map((d) => (
                 <div key={d.title} className={card}>
@@ -171,9 +172,11 @@ export function StudentPlanScreen() {
                     <span>
                       <span className="font-semibold text-[var(--text-primary)]">{o.title}</span>
                       <span className="text-[var(--text-secondary)]"> · {o.company}{o.location ? ` · ${o.location}` : ''}</span>
-                      <span className="block text-[12px] text-[var(--text-dim)]">{o.fresherFriendly ? 'Open to freshers' : `${o.seniority.toLowerCase()}${o.minYears !== null ? `, asks ${o.minYears}+ years` : ''}`} · read {o.retrievedAt} · {o.sourceId}</span>
+                      <span className="block text-[12px] text-[var(--text-dim)]">{o.fresherFriendly ? 'Open to freshers' : `${o.seniority.toLowerCase()}${o.minYears !== null ? `, asks ${o.minYears}+ years` : ''}`} · {o.origin === 'MENTOR' ? `shared by your mentor${o.via ? `, seen on ${o.via}` : ''}` : 'read'} {o.retrievedAt} · {o.sourceId}</span>
                     </span>
-                    <a href={o.url} target="_blank" rel="noopener noreferrer" className={cx(quietButton, 'px-3 py-1.5 text-[13px]')}>View posting <ExternalLink size={13} aria-hidden /></a>
+                    {o.url
+                      ? <a href={o.url} target="_blank" rel="noopener noreferrer" className={cx(quietButton, 'px-3 py-1.5 text-[13px]')}>View posting <ExternalLink size={13} aria-hidden /></a>
+                      : <span className="text-[12px] text-[var(--text-dim)]">Ask your mentor for the link</span>}
                   </li>
                 ))}
               </ul>
@@ -181,7 +184,7 @@ export function StudentPlanScreen() {
             <p className="text-[13px] text-[var(--text-dim)]">Also search by hand: Internshala and Unstop list many fresher design roles; we do not read them automatically.</p>
           </Section>
 
-          <Section id="days" title="Your first 14 days">
+          <Section id="days" title={name ? `Your first 14 days, ${name}` : 'Your first 14 days'}>
             <p className="text-sm text-[var(--text-secondary)]">One action a day, up to 20 minutes. Your coach guides and nudges; applications and mock interviews are done with your mentor.</p>
             <Days plan={plan} />
           </Section>
@@ -199,7 +202,7 @@ export function StudentPlanScreen() {
 
       <FlowFooter
         tone="ready"
-        message="Your plan is ready"
+        message={name ? `${name}, your plan is ready` : 'Your plan is ready'}
         hint="Daily nudges and progress tracking are coming soon."
         actions={<>
           <CancelFlowButton onConfirm={startOver} label="Start over" />

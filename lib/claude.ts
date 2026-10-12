@@ -39,6 +39,7 @@ Return JSON matching this schema exactly:
 {
   "timeline": [{ "id": "uuid-string", "role": "string", "company": "string", "startDate": "YYYY-MM or Year", "endDate": "YYYY-MM, Year, or Present", "description": "string", "confirmed": false }],
   "projects": [{ "id": "uuid-string", "name": "string", "company": "string", "year": "string", "industry": "string", "platform": "string", "audience": "string", "summary": "string", "impact": "string" }],
+  "candidateName": "the person's own full name as printed on the resume or portfolio; empty string if it is not clearly present",
   "skills": ["string"],
   "education": [{ "institution": "string", "degree": "string", "year": "string" }],
   "rawText": "first 2000 chars of input",

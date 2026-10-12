@@ -122,6 +122,7 @@ export async function GET(req: NextRequest) {
           { institution: 'IDC School of Design, IIT Bombay', degree: 'M.Des, Interaction Design', year: '2027' },
           { institution: 'College of Engineering Pune', degree: 'B.Tech, Computer Engineering', year: '2024' },
         ],
+        candidateName: 'MEERA KULKARNI',
         rawText: 'Pursuing M.Des in Interaction Design. Previously B.Tech in Computer Engineering.',
       }
       const t0 = Date.now()
@@ -132,7 +133,7 @@ export async function GET(req: NextRequest) {
         edge: plan.edge.headline, differentiators: plan.edge.differentiators.map((d) => ({ t: d.title, ev: d.evidence, s: d.strength })),
         lanes: plan.lanes.map((l) => ({ name: l.name, demand: l.demand, who: l.whoHires.map((w) => w.name) })),
         marketClaims: plan.market.map((m) => ({ text: m.text, sources: m.sources, general: m.general, unverifiedNumber: m.unverifiedNumber })),
-        bridge: plan.bridge.title, openings: plan.openings.length, openingsNote: plan.openingsNote,
+        firstName: plan.firstName, mentorOpenings: plan.openings.filter((o) => o.origin === 'MENTOR').length, bridge: plan.bridge.title, openings: plan.openings.length, openingsNote: plan.openingsNote,
         days: plan.days.map((d) => `${d.day} ${d.theme}: ${d.action}`), sources: plan.sources.map((s) => `${s.id} ${s.publisher} ${s.url ?? ''}`),
       }
       return NextResponse.json(req.nextUrl.searchParams.get('raw') === '1' ? { ok: true, plan } : summary)

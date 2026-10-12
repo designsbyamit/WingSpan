@@ -35,6 +35,8 @@ export interface ExtractedCareerData {
   education: Array<{ institution: string; degree: string; year?: string }>
   rawText: string
   careerStageSignals?: string[]
+  /** The person's own name as printed on the resume; empty when not found. */
+  candidateName?: string
   evidenceQuality?: 'rich' | 'moderate' | 'sparse'
   geographySignals?: string[]
   footprintSignals?: string[]

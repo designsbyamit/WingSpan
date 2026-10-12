@@ -41,8 +41,11 @@ export interface Lane {
 export interface BridgeJob { title: string; why: string; whereToLook: string[]; claim: Claim }
 
 export interface Opening {
-  title: string; company: string; location: string | null; url: string
+  title: string; company: string; location: string | null; url: string | null
   seniority: string; minYears: number | null; fresherFriendly: boolean; retrievedAt: string; sourceId: string
+  /** Where the row came from: an employer job board we read, or a role the mentor shared. */
+  origin?: 'FEED' | 'MENTOR'
+  via?: string | null
 }
 
 export type DayTheme = 'Position' | 'Proof' | 'Reach' | 'Apply' | 'Practice' | 'Skill' | 'Reflect'
@@ -51,6 +54,8 @@ export interface PlanDay { day: number; theme: DayTheme; action: string; why: st
 export interface StudentPlan {
   version: 1
   generatedAt: string
+  /** First name taken from the resume, used to speak to the student directly. Null when none was found. */
+  firstName?: string | null
   detection: { reasons: string[] }
   edge: EdgeCard
   market: Claim[]

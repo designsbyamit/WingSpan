@@ -1,6 +1,7 @@
 import { normalizeExtracted } from '@/lib/extracted-shape'
 import { detectStudent } from '@/lib/student/detect'
 import { edgeFinder, targetPlanner } from '@/lib/student/agents'
+import { firstNameOf } from '@/lib/student/name'
 import { gatherStudentEvidence } from '@/lib/student/evidence'
 import { checkSupport } from '@/lib/student/check'
 import { buildResumeFacts, stripIds, checkClaim, checkDays, checkEdge, checkLanes } from '@/lib/student/verify'
@@ -52,6 +53,7 @@ export async function buildStudentPlan(raw: ExtractedCareerData, interests: stri
   return {
     version: 1,
     generatedAt: new Date().toISOString(),
+    firstName: firstNameOf(data.candidateName),
     detection: { reasons: detection.reasons },
     edge: { ...edge, headline: stripIds(edge.headline) }, market, lanes, bridge,
     openings: ev.openings, openingsNote: ev.openingsNote,
