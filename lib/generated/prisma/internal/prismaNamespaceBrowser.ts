@@ -119,7 +119,9 @@ export const ModelName = {
   MarketObservation: 'MarketObservation',
   MarketIngestionRun: 'MarketIngestionRun',
   Company: 'Company',
-  Posting: 'Posting'
+  Posting: 'Posting',
+  JobBatch: 'JobBatch',
+  JobListing: 'JobListing'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1089,6 +1091,50 @@ export const PostingScalarFieldEnum = {
 } as const
 
 export type PostingScalarFieldEnum = (typeof PostingScalarFieldEnum)[keyof typeof PostingScalarFieldEnum]
+
+
+export const JobBatchScalarFieldEnum = {
+  id: 'id',
+  label: 'label',
+  receivedAt: 'receivedAt',
+  imageCount: 'imageCount',
+  notes: 'notes'
+} as const
+
+export type JobBatchScalarFieldEnum = (typeof JobBatchScalarFieldEnum)[keyof typeof JobBatchScalarFieldEnum]
+
+
+export const JobListingScalarFieldEnum = {
+  id: 'id',
+  dedupeKey: 'dedupeKey',
+  title: 'title',
+  company: 'company',
+  companyKey: 'companyKey',
+  city: 'city',
+  location: 'location',
+  workMode: 'workMode',
+  employment: 'employment',
+  level: 'level',
+  minYears: 'minYears',
+  maxYears: 'maxYears',
+  isDesign: 'isDesign',
+  roleFamily: 'roleFamily',
+  skills: 'skills',
+  salaryText: 'salaryText',
+  applyUrl: 'applyUrl',
+  sourceName: 'sourceName',
+  postedAt: 'postedAt',
+  postedText: 'postedText',
+  status: 'status',
+  notes: 'notes',
+  rawText: 'rawText',
+  batchId: 'batchId',
+  firstAddedAt: 'firstAddedAt',
+  lastSeenAt: 'lastSeenAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type JobListingScalarFieldEnum = (typeof JobListingScalarFieldEnum)[keyof typeof JobListingScalarFieldEnum]
 
 
 export const SortOrder = {

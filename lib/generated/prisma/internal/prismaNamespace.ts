@@ -465,7 +465,9 @@ export const ModelName = {
   MarketObservation: 'MarketObservation',
   MarketIngestionRun: 'MarketIngestionRun',
   Company: 'Company',
-  Posting: 'Posting'
+  Posting: 'Posting',
+  JobBatch: 'JobBatch',
+  JobListing: 'JobListing'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -481,7 +483,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "domain" | "humanPattern" | "competency" | "skill" | "concept" | "conceptPrerequisite" | "principle" | "experience" | "challenge" | "asset" | "careerLevel" | "learningPath" | "learningPathEntry" | "conceptOnSkill" | "conceptOnHumanPattern" | "conceptOnPrinciple" | "conceptOnExperience" | "skillOnCompetency" | "skillOnCareerLevel" | "experienceOnCompetency" | "experienceOnHumanPattern" | "experienceOnPrinciple" | "challengeOnSkill" | "challengeOnCompetency" | "user" | "magicLinkToken" | "userCompetency" | "userSkill" | "userConceptMastery" | "learningSession" | "mentorMessage" | "userLearningPath" | "aIMentorContext" | "challengeSubmission" | "sourceDocument" | "extractionRun" | "role" | "project" | "education" | "skillClaim" | "analysisRun" | "agentOutput" | "evidence" | "evidenceLink" | "capability" | "capabilityEvidence" | "careerDnaSnapshot" | "dnaDimension" | "dnaDimensionEvidence" | "marketDirection" | "marketSignal" | "capabilityRequirement" | "careerCandidate" | "candidateEvidence" | "chosenBet" | "roadmap" | "roadmapMilestone" | "milestoneLink" | "userCapabilityProgress" | "auditEvent" | "feedback" | "usageLedger" | "blueprintSnapshot" | "marketDataSource" | "marketDataDocument" | "marketObservation" | "marketIngestionRun" | "company" | "posting"
+    modelProps: "domain" | "humanPattern" | "competency" | "skill" | "concept" | "conceptPrerequisite" | "principle" | "experience" | "challenge" | "asset" | "careerLevel" | "learningPath" | "learningPathEntry" | "conceptOnSkill" | "conceptOnHumanPattern" | "conceptOnPrinciple" | "conceptOnExperience" | "skillOnCompetency" | "skillOnCareerLevel" | "experienceOnCompetency" | "experienceOnHumanPattern" | "experienceOnPrinciple" | "challengeOnSkill" | "challengeOnCompetency" | "user" | "magicLinkToken" | "userCompetency" | "userSkill" | "userConceptMastery" | "learningSession" | "mentorMessage" | "userLearningPath" | "aIMentorContext" | "challengeSubmission" | "sourceDocument" | "extractionRun" | "role" | "project" | "education" | "skillClaim" | "analysisRun" | "agentOutput" | "evidence" | "evidenceLink" | "capability" | "capabilityEvidence" | "careerDnaSnapshot" | "dnaDimension" | "dnaDimensionEvidence" | "marketDirection" | "marketSignal" | "capabilityRequirement" | "careerCandidate" | "candidateEvidence" | "chosenBet" | "roadmap" | "roadmapMilestone" | "milestoneLink" | "userCapabilityProgress" | "auditEvent" | "feedback" | "usageLedger" | "blueprintSnapshot" | "marketDataSource" | "marketDataDocument" | "marketObservation" | "marketIngestionRun" | "company" | "posting" | "jobBatch" | "jobListing"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -5591,6 +5593,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    JobBatch: {
+      payload: Prisma.$JobBatchPayload<ExtArgs>
+      fields: Prisma.JobBatchFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.JobBatchFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobBatchPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.JobBatchFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobBatchPayload>
+        }
+        findFirst: {
+          args: Prisma.JobBatchFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobBatchPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.JobBatchFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobBatchPayload>
+        }
+        findMany: {
+          args: Prisma.JobBatchFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobBatchPayload>[]
+        }
+        create: {
+          args: Prisma.JobBatchCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobBatchPayload>
+        }
+        createMany: {
+          args: Prisma.JobBatchCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.JobBatchCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobBatchPayload>[]
+        }
+        delete: {
+          args: Prisma.JobBatchDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobBatchPayload>
+        }
+        update: {
+          args: Prisma.JobBatchUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobBatchPayload>
+        }
+        deleteMany: {
+          args: Prisma.JobBatchDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.JobBatchUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.JobBatchUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobBatchPayload>[]
+        }
+        upsert: {
+          args: Prisma.JobBatchUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobBatchPayload>
+        }
+        aggregate: {
+          args: Prisma.JobBatchAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateJobBatch>
+        }
+        groupBy: {
+          args: Prisma.JobBatchGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.JobBatchGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.JobBatchCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.JobBatchCountAggregateOutputType> | number
+        }
+      }
+    }
+    JobListing: {
+      payload: Prisma.$JobListingPayload<ExtArgs>
+      fields: Prisma.JobListingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.JobListingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobListingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.JobListingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobListingPayload>
+        }
+        findFirst: {
+          args: Prisma.JobListingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobListingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.JobListingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobListingPayload>
+        }
+        findMany: {
+          args: Prisma.JobListingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobListingPayload>[]
+        }
+        create: {
+          args: Prisma.JobListingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobListingPayload>
+        }
+        createMany: {
+          args: Prisma.JobListingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.JobListingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobListingPayload>[]
+        }
+        delete: {
+          args: Prisma.JobListingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobListingPayload>
+        }
+        update: {
+          args: Prisma.JobListingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobListingPayload>
+        }
+        deleteMany: {
+          args: Prisma.JobListingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.JobListingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.JobListingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobListingPayload>[]
+        }
+        upsert: {
+          args: Prisma.JobListingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$JobListingPayload>
+        }
+        aggregate: {
+          args: Prisma.JobListingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateJobListing>
+        }
+        groupBy: {
+          args: Prisma.JobListingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.JobListingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.JobListingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.JobListingCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -6583,6 +6733,50 @@ export const PostingScalarFieldEnum = {
 export type PostingScalarFieldEnum = (typeof PostingScalarFieldEnum)[keyof typeof PostingScalarFieldEnum]
 
 
+export const JobBatchScalarFieldEnum = {
+  id: 'id',
+  label: 'label',
+  receivedAt: 'receivedAt',
+  imageCount: 'imageCount',
+  notes: 'notes'
+} as const
+
+export type JobBatchScalarFieldEnum = (typeof JobBatchScalarFieldEnum)[keyof typeof JobBatchScalarFieldEnum]
+
+
+export const JobListingScalarFieldEnum = {
+  id: 'id',
+  dedupeKey: 'dedupeKey',
+  title: 'title',
+  company: 'company',
+  companyKey: 'companyKey',
+  city: 'city',
+  location: 'location',
+  workMode: 'workMode',
+  employment: 'employment',
+  level: 'level',
+  minYears: 'minYears',
+  maxYears: 'maxYears',
+  isDesign: 'isDesign',
+  roleFamily: 'roleFamily',
+  skills: 'skills',
+  salaryText: 'salaryText',
+  applyUrl: 'applyUrl',
+  sourceName: 'sourceName',
+  postedAt: 'postedAt',
+  postedText: 'postedText',
+  status: 'status',
+  notes: 'notes',
+  rawText: 'rawText',
+  batchId: 'batchId',
+  firstAddedAt: 'firstAddedAt',
+  lastSeenAt: 'lastSeenAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type JobListingScalarFieldEnum = (typeof JobListingScalarFieldEnum)[keyof typeof JobListingScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -7227,6 +7421,8 @@ export type GlobalOmitConfig = {
   marketIngestionRun?: Prisma.MarketIngestionRunOmit
   company?: Prisma.CompanyOmit
   posting?: Prisma.PostingOmit
+  jobBatch?: Prisma.JobBatchOmit
+  jobListing?: Prisma.JobListingOmit
 }
 
 /* Types for Logging */

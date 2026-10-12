@@ -1201,28 +1201,28 @@ model BlueprintSnapshot {
 
 enum MarketCategory {
   INDUSTRY_PERFORMANCE // industry performance, skills assessments, AI impact studies
-  JOB_MARKET           // postings, hiring volumes, salaries, labour statistics
+  JOB_MARKET // postings, hiring volumes, salaries, labour statistics
 }
 
 model MarketDataSource {
-  id            String              @id @default(cuid())
-  key           String              @unique
+  id            String               @id @default(cuid())
+  key           String               @unique
   name          String
   publisher     String
   category      MarketCategory
   kind          String // INDEX | PAGE | CSV | API | MANUAL
   url           String
-  region        String              @default("Global")
+  region        String               @default("Global")
   licence       String?
-  reliability   Float               @default(0.6) // 0-1, how much to trust this publisher's numbers
-  cadenceDays   Int                 @default(10)
-  enabled       Boolean             @default(true)
+  reliability   Float                @default(0.6) // 0-1, how much to trust this publisher's numbers
+  cadenceDays   Int                  @default(10)
+  enabled       Boolean              @default(true)
   config        Json?
   notes         String?
   lastFetchedAt DateTime?
   lastStatus    String?
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
   documents     MarketDataDocument[]
   observations  MarketObservation[]
 }
@@ -1246,25 +1246,25 @@ model MarketDataDocument {
 }
 
 model MarketObservation {
-  id            String              @id @default(cuid())
-  fingerprint   String              @unique
-  sourceId      String
-  documentId    String?
-  category      MarketCategory
-  metric        String // controlled vocabulary, see lib/market/vocabulary.ts
-  subject       String // role, skill, sector or "all"
-  region        String
-  value         Float?
-  unit          String?
-  period        String? // "2026", "2026-H1", "2023-2026"
-  statement     String // short paraphrase of the finding
-  reliability   Float
-  observedAt    DateTime? // when the figure applies / was published
-  firstSeenAt   DateTime            @default(now())
-  lastSeenAt    DateTime            @default(now())
-  supersededAt  DateTime?
-  source        MarketDataSource    @relation(fields: [sourceId], references: [id], onDelete: Cascade)
-  document      MarketDataDocument? @relation(fields: [documentId], references: [id], onDelete: SetNull)
+  id           String              @id @default(cuid())
+  fingerprint  String              @unique
+  sourceId     String
+  documentId   String?
+  category     MarketCategory
+  metric       String // controlled vocabulary, see lib/market/vocabulary.ts
+  subject      String // role, skill, sector or "all"
+  region       String
+  value        Float?
+  unit         String?
+  period       String? // "2026", "2026-H1", "2023-2026"
+  statement    String // short paraphrase of the finding
+  reliability  Float
+  observedAt   DateTime? // when the figure applies / was published
+  firstSeenAt  DateTime            @default(now())
+  lastSeenAt   DateTime            @default(now())
+  supersededAt DateTime?
+  source       MarketDataSource    @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  document     MarketDataDocument? @relation(fields: [documentId], references: [id], onDelete: SetNull)
 
   @@index([category, metric])
   @@index([subject])
@@ -1309,27 +1309,74 @@ model Company {
 }
 
 model Posting {
-  id            String    @id @default(cuid())
-  companyId     String
-  externalId    String
-  title         String
-  url           String
-  location      String?
-  inIndia       Boolean   @default(false)
-  remote        Boolean   @default(false)
-  isDesign      Boolean   @default(false)
-  seniority     String    @default("UNKNOWN") // INTERN | FRESHER | JUNIOR | MID | SENIOR | UNKNOWN
-  minYears      Int?
-  fresherOk     Boolean   @default(false)
-  postedAt      DateTime?
-  firstSeenAt   DateTime  @default(now())
-  lastSeenAt    DateTime  @default(now())
-  closedAt      DateTime?
-  excerpt       String?
-  source        String    @default("ATS") // ATS (public job-board feed) | CAREER_PAGE (structured data on the employer's own page)
-  company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  id          String    @id @default(cuid())
+  companyId   String
+  externalId  String
+  title       String
+  url         String
+  location    String?
+  inIndia     Boolean   @default(false)
+  remote      Boolean   @default(false)
+  isDesign    Boolean   @default(false)
+  seniority   String    @default("UNKNOWN") // INTERN | FRESHER | JUNIOR | MID | SENIOR | UNKNOWN
+  minYears    Int?
+  fresherOk   Boolean   @default(false)
+  postedAt    DateTime?
+  firstSeenAt DateTime  @default(now())
+  lastSeenAt  DateTime  @default(now())
+  closedAt    DateTime?
+  excerpt     String?
+  source      String    @default("ATS") // ATS (public job-board feed) | CAREER_PAGE (structured data on the employer's own page)
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@unique([companyId, externalId])
   @@index([isDesign, inIndia, closedAt])
   @@index([fresherOk])
+}
+
+/// Hand-curated job board. Fed from screenshots the product owner shares (almost daily), read and entered
+/// by Claude. Separate from Posting, which is machine-crawled and auto-closed. Mostly junior / fresher roles,
+/// but every level is stored.
+model JobBatch {
+  id         String       @id @default(cuid())
+  label      String? // e.g. "2026-10-13 LinkedIn + Naukri"
+  receivedAt DateTime     @default(now())
+  imageCount Int          @default(0)
+  notes      String?
+  listings   JobListing[]
+}
+
+model JobListing {
+  id           String    @id @default(cuid())
+  dedupeKey    String    @unique // lower(company)|lower(title)|lower(city), punctuation stripped; re-sharing a job updates it
+  title        String
+  company      String
+  companyKey   String? // optional link to Company.key when the employer is on the curated list
+  city         String?
+  location     String? // as printed on the screenshot
+  workMode     String? // ONSITE | HYBRID | REMOTE
+  employment   String? // FULL_TIME | INTERNSHIP | CONTRACT | PART_TIME
+  level        String    @default("UNKNOWN") // INTERN | FRESHER | JUNIOR | MID | SENIOR | LEAD | UNKNOWN
+  minYears     Int?
+  maxYears     Int?
+  isDesign     Boolean   @default(true)
+  roleFamily   String? // UX | UI | PRODUCT_DESIGN | RESEARCH | VISUAL | MOTION | CONTENT | OTHER
+  skills       String[]  @default([])
+  salaryText   String? // as printed; never inferred
+  applyUrl     String?
+  sourceName   String? // LinkedIn, Naukri, Instahyre, company site ...
+  postedAt     DateTime?
+  postedText   String? // "2 days ago" as printed
+  status       String    @default("OPEN") // OPEN | CLOSED
+  notes        String?
+  rawText      String? // transcription of the screenshot card, for audit
+  batchId      String?
+  firstAddedAt DateTime  @default(now())
+  lastSeenAt   DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  batch        JobBatch? @relation(fields: [batchId], references: [id], onDelete: SetNull)
+
+  @@index([status, level])
+  @@index([isDesign, city])
+  @@index([lastSeenAt])
 }

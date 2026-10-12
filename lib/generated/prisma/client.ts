@@ -384,3 +384,15 @@ export type Company = Prisma.CompanyModel
  * 
  */
 export type Posting = Prisma.PostingModel
+/**
+ * Model JobBatch
+ * Hand-curated job board. Fed from screenshots the product owner shares (almost daily), read and entered
+ * by Claude. Separate from Posting, which is machine-crawled and auto-closed. Mostly junior / fresher roles,
+ * but every level is stored.
+ */
+export type JobBatch = Prisma.JobBatchModel
+/**
+ * Model JobListing
+ * 
+ */
+export type JobListing = Prisma.JobListingModel

@@ -35,7 +35,7 @@ export function AnalysisStatus({ onOpenDetails, onOpenBlueprint, onRetry, onCanc
   const label = currentActivityLabel(state.activity.filter((e) => e.source !== 'extract')) ?? 'Starting the analysis'
   const student = state.flowMode === 'student'
   const cancel = <CancelFlowButton onConfirm={onCancel} />
-  const details = <button type="button" onClick={onOpenDetails} className={cx(linkButton, 'flex-shrink-0 whitespace-nowrap')}>View details</button>
+  const details = <button type="button" onClick={onOpenDetails} className={cx(linkButton, 'flex-shrink-0 whitespace-nowrap')}>View progress</button>
 
   if (phase === 'ready') {
     return (
