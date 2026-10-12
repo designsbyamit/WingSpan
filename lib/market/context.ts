@@ -7,9 +7,10 @@ export interface BriefingItem { statement: string; publisher: string; when: stri
 export interface MarketBriefing { lines: string[]; items: BriefingItem[]; observations: number; sources: number; latest: Date | null }
 
 const RELEVANT = /design|ux|ui\b|product|software|\bai\b|artificial|automation|data|leader|manage|skill|creative|media|marketing|all roles|gcc|jobs/i
+const ENTRY = /fresher|entry|early-career|recent (college )?grad|graduate|intern|junior|proof of work|portfolio|0-3 years/i
 const DAY = 86_400_000
 
-export async function getMarketBriefing(regions: string[] = [], limit = 36): Promise<MarketBriefing> {
+export async function getMarketBriefing(regions: string[] = [], limit = 36, opts: { entryLevel?: boolean } = {}): Promise<MarketBriefing> {
   const empty: MarketBriefing = { lines: [], items: [], observations: 0, sources: 0, latest: null }
   try {
     const { db } = await import('@/lib/db')
@@ -34,7 +35,7 @@ export async function getMarketBriefing(regions: string[] = [], limit = 36): Pro
     }
     const scoredAll = [...newest.values()].map((r) => {
       const age = r.observedAt ? (now - r.observedAt.getTime()) / DAY : 400
-      const score = r.reliability + (want.has(r.region) ? 0.25 : 0) + (RELEVANT.test(r.subject) || RELEVANT.test(r.statement) ? 0.15 : 0) + (age < 550 ? 0.1 : -0.1)
+      const score = r.reliability + (want.has(r.region) ? 0.25 : 0) + (RELEVANT.test(r.subject) || RELEVANT.test(r.statement) ? 0.15 : 0) + (opts.entryLevel && (ENTRY.test(r.subject) || ENTRY.test(r.statement) || r.metric === 'fresher_hiring_intent' || r.metric === 'entry_level_employment' || r.metric === 'entry_requirement') ? 0.6 : 0) + (age < 550 ? 0.1 : -0.1)
       return { r, score }
     }).sort((a, b) => b.score - a.score)
     // No single source may crowd out the rest (the Indeed feed alone has ~90 series).

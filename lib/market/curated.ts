@@ -17,6 +17,68 @@ const o = (metric: Metric, subject: string, region: string, value: number | null
 
 export const CURATED: CuratedDocument[] = [
   {
+    url: 'https://www.peoplematters.in/news/workforce-planning/fresher-hiring-intent-rises-to-75percent-but-it-demand-loses-ground-report-51352',
+    title: 'TeamLease EdTech fresher hiring outlook, July-December 2026 (1,097 employers) - coverage', publishedAt: '2026-08-11', category: 'JOB_MARKET',
+    observations: [
+      o('fresher_hiring_intent', 'All employers', 'India', 75, '% of employers', '2026-H2', '75% of employers plan to hire freshers in July-December 2026, up from 73% in the first half (TeamLease EdTech, 1,097 employers).', 0.75),
+      o('fresher_hiring_intent', 'E-commerce and tech startups', 'India', 93, '% of employers', '2026-H2', 'E-commerce and tech startups show the highest fresher hiring intent, 93% of surveyed employers.', 0.75),
+      o('fresher_hiring_intent', 'IT', 'India', 76, '% of employers', '2026-H2', 'IT fresher hiring intent fell to 76% from 81% in the first half of 2026.', 0.75),
+      o('fresher_hiring_intent', 'Marketing, advertising and media', 'India', null, null, '2026-H2', 'Consulting, telecom, marketing and advertising, media and entertainment, and education services all reduced fresher hiring plans (no figures given).', 0.7),
+      o('fresher_hiring_intent', 'Bengaluru', 'India', 89, '% of employers', '2026-H2', 'Bengaluru has the highest city-level fresher hiring intent (89%), then Mumbai 75%, Chennai 71%, Hyderabad 60%, Delhi 49%, Pune 41%.', 0.75),
+      o('entry_requirement', 'Entry-level skills sought', 'India', null, null, '2026-H2', 'Employers say they want AI fluency, applied problem-solving and hands-on project experience, shown through internships, portfolios, assessments and real projects.', 0.75),
+    ],
+  },
+  {
+    url: 'https://newsable.asianetnews.com/business/indias-fresher-hiring-to-rise-in-2026-employers-want-proofofwork-articleshow-65p63xu',
+    title: 'TeamLease EdTech Career Outlook Report, January-June 2026 (1,051 employers) - coverage', publishedAt: '2026-02-18', category: 'JOB_MARKET',
+    observations: [
+      o('fresher_hiring_intent', 'All employers', 'India', 73, '% of employers', '2026-H1', 'About 73% of Indian employers planned to hire freshers in January-June 2026, up about 3 points (TeamLease EdTech, 1,051 employers).', 0.75),
+      o('entry_requirement', 'Proof of work', 'India', null, null, '2026-H1', 'Employers value proof of work (internships, real projects, active online professional communities) above degrees alone; applied-skill candidates advance faster.', 0.75),
+    ],
+  },
+  {
+    url: 'https://www.businesstoday.in/amp/jobs/story/ai-gccs-and-a-changing-job-market-indias-fresher-hiring-is-no-longer-just-an-it-story-whos-driving-the-shift-547654-2026-08-06',
+    title: 'foundit Insights Tracker July 2026: fresher hiring in India - coverage', publishedAt: '2026-08-06', category: 'JOB_MARKET',
+    observations: [
+      o('hiring_growth', 'Entry-level hiring', 'India', -10, '% YoY', '2026-07', 'Overall entry-level hiring in India fell about 10% year on year in July 2026 and 2% month on month (foundit).', 0.7),
+      o('experience_mix', 'IT share of fresher hiring', 'India', 24, '%', '2026', 'IT\'s share of fresher hiring fell from 32% in 2025 to 24% in 2026; GCCs rose from 8% to 11% (foundit).', 0.7),
+      o('skill_demand', 'AI-led fresher roles', 'India', 4, '% of fresher hiring', '2026', 'AI-led roles are about 4% of fresher hiring, up from about 1% a year earlier; 51% are AI operations roles rather than model building (foundit).', 0.7),
+      o('entry_requirement', 'Internship expectation', 'India', 60, '% of fresher postings', '2026', 'Nearly six in ten fresher postings prefer or require prior internships, while 42% accept none (foundit).', 0.7),
+      o('location_share', 'Fresher hiring: Delhi NCR', 'India', 19, '%', '2026', 'Delhi NCR leads fresher hiring (19%), then Bengaluru and Mumbai and Pune (14% each), Hyderabad 11%, Chennai 9%; tier-2 cities such as Coimbatore, Jaipur and Kochi fell less (foundit).', 0.7),
+    ],
+  },
+  {
+    url: 'https://www.naukri.com/blog/naukri-jobspeak-white-collar-hiring-opens-2026-with-3-yoy-growth-driven-by-non-it-sectors-and-fresher-hiring/amp',
+    title: 'Naukri JobSpeak January 2026', publishedAt: '2026-02-01', category: 'JOB_MARKET',
+    observations: [
+      o('hiring_growth', 'Fresher (0-3 years) hiring', 'India', 8, '% YoY', '2026-01', 'Naukri JobSpeak: fresher hiring (0-3 years) up about 8% year on year in January 2026, led by non-IT sectors; the report does not break out design roles.', 0.8),
+      o('hiring_growth', 'AI/ML roles', 'India', 34, '% YoY', '2026-01', 'Naukri JobSpeak: AI/ML roles up about 34% year on year in January 2026.', 0.8),
+    ],
+  },
+  {
+    url: 'https://digitaleconomy.stanford.edu/publications/canaries-in-the-coal-mine',
+    title: 'Canaries in the Coal Mine? Stanford Digital Economy Lab (revised August 2026)', publishedAt: '2026-08-12', category: 'JOB_MARKET',
+    observations: [
+      o('entry_level_employment', 'Early-career workers (22-25) in AI-exposed jobs', 'US', -19, '% relative gap', 'through 2026-06', 'Employment of 22-25 year olds in AI-exposed occupations is about 19% below where it would be if it had tracked less-exposed peers; no comparable gap for experienced workers; no economy-wide displacement found (ADP payroll data).', 0.9),
+    ],
+  },
+  {
+    url: 'https://www.newyorkfed.org/research/college-labor-market',
+    title: 'New York Fed: labor market for recent college graduates (2026 Q2)', publishedAt: '2026-09-01', category: 'JOB_MARKET',
+    observations: [
+      o('unemployment_rate', 'Recent college graduates', 'US', 5.6, '%', '2026-Q2', 'Recent-graduate unemployment is about 5.6% in 2026 Q2.', 0.95),
+      o('entry_level_employment', 'Recent graduate underemployment', 'US', 42, '%', '2026-Q2', 'About 42% of recent graduates are underemployed, in jobs not typically requiring a degree (2026 Q2).', 0.95),
+    ],
+  },
+  {
+    url: 'https://www.uxdesigninstitute.com/state-of-ux-hiring',
+    title: 'State of UX Hiring (UX Design Institute, 500+ UX professionals and hiring managers)', publishedAt: null, category: 'INDUSTRY_PERFORMANCE',
+    observations: [
+      o('entry_requirement', 'Portfolio importance (UX hiring managers)', 'Global', 90, '% of hiring managers', '2024', '90% of UX hiring managers say a portfolio is an important part of an application; reviewers skim one or two case studies, so a few strong ones beat many.', 0.55),
+      o('entry_requirement', 'Entry-level UX skill sought', 'Global', null, null, '2024', 'Problem-solving ranks as the top skill hiring managers want from entry-level UX candidates; transferable skills from other careers are valued when linked to the role.', 0.55),
+    ],
+  },
+  {
     url: 'manual:design-ai-job-market-report',
     title: 'UX/UI/AI design job market report (compiled, supplied by the product owner)',
     publishedAt: null, category: 'JOB_MARKET',

@@ -61,6 +61,19 @@ export const SOURCES: SourceSeed[] = [
     licence: 'Facts and figures cited with attribution', reliability: 0.85,
     config: { linkPattern: '/research/', include: 'skills|jobs|ai|work|talent|india|design|creative', maxNew: 3 },
   },
+  // ------------------------------------------------------------ ENTRY LEVEL / FRESHERS
+  {
+    key: 'stanford-canaries', name: 'Canaries in the Coal Mine? Employment effects of AI', publisher: 'Stanford Digital Economy Lab',
+    category: 'JOB_MARKET', kind: 'PAGE', url: 'https://digitaleconomy.stanford.edu/publications/canaries-in-the-coal-mine', region: 'US',
+    licence: 'Published research; facts cited with attribution', reliability: 0.9, cadenceDays: 30,
+    notes: 'Entry-level evidence: early-career workers in AI-exposed jobs (ADP payroll data).',
+  },
+  {
+    key: 'nyfed-college-labor', name: 'Labor market for recent college graduates', publisher: 'Federal Reserve Bank of New York',
+    category: 'JOB_MARKET', kind: 'PAGE', url: 'https://www.newyorkfed.org/research/college-labor-market', region: 'US',
+    licence: 'Public data; cite the New York Fed', reliability: 0.95, cadenceDays: 30,
+    notes: 'Recent-graduate unemployment and underemployment, updated quarterly.',
+  },
   // ------------------------------------------------------------ INDUSTRY PERFORMANCE / SKILLS
   {
     key: 'wef-future-of-jobs-2025', name: 'Future of Jobs Report 2025', publisher: 'World Economic Forum',
