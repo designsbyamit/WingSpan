@@ -13,10 +13,11 @@ export interface SourceRef {
   publishedAt: string | null
   retrievedAt: string | null
   reliability: number | null
-  statement?: string          // the fact this source supports, in our words
+  statement?: string          // the fact(s) this source supports, in our words
+  region?: string
 }
 
-export interface Claim { text: string; sources: string[]; general?: boolean; unverifiedNumber?: boolean }
+export interface Claim { text: string; sources: string[]; general?: boolean; unverifiedNumber?: boolean; unchecked?: boolean }
 
 export interface Differentiator { title: string; whyHirersCare: string; evidence: string[]; strength: 'demonstrated' | 'indicated' }
 

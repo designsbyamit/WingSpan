@@ -53,3 +53,16 @@ test('the downloadable plan keeps citations and lists every source', () => {
   assert.match(md, /general guidance, no source/)
   assert.match(md, /- S1: R \(P, read 2026-10-12\) https:\/\/x\.y/)
 })
+
+import { stripIds, applySupport } from './verify'
+test('internal ids never reach the student', () => {
+  assert.equal(stripIds('Audit your R1-R4 projects (R2) and read S3'), 'Audit your projects and read your work')
+  assert.ok(!/\bR\d/.test(stripIds('Use R5 evidence')))
+})
+test('the claim checker removes sources that do not support a claim', () => {
+  const c = { text: 'claim', sources: ['S1', 'S2'] }
+  assert.deepEqual(applySupport(c, { i: 0, supported: 'yes', keep: ['S2'] }).sources, ['S2'])
+  assert.equal(applySupport(c, { i: 0, supported: 'no', keep: [] }).general, true)
+  assert.equal(applySupport(c, { i: 0, supported: 'partly', keep: [] }).general, true, 'no supporting source left means general guidance')
+  assert.equal(applySupport(c, undefined).unchecked, true)
+})

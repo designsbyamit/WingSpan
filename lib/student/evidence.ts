@@ -17,9 +17,18 @@ export interface StudentEvidence {
 export async function gatherStudentEvidence(): Promise<StudentEvidence> {
   const out: StudentEvidence = { facts: [], companies: [], openings: [], openingSources: [], openingsNote: '' }
   const briefing = await getMarketBriefing(['India'], 26, { entryLevel: true, cite: true })
-  out.facts = briefing.items.map((i) => ({
-    id: i.id, kind: 'REPORT', label: i.title ?? i.publisher, publisher: i.publisher, url: i.url, publishedAt: i.when === 'undated' ? null : i.when,
-    retrievedAt: i.retrievedAt, reliability: i.reliability, statement: i.statement,
+  // One citation per document: facts from the same report share an id, so the source list has no repeats.
+  const groups = new Map<string, { first: (typeof briefing.items)[number]; statements: string[]; reliability: number }>()
+  for (const i of briefing.items) {
+    const key = i.url ?? `${i.publisher}|${i.title}`
+    const g = groups.get(key)
+    const line = `${i.statement}${i.region && i.region !== 'Global' ? ` (${i.region})` : ''}`
+    if (g) { g.statements.push(line); g.reliability = Math.min(g.reliability, i.reliability) } else groups.set(key, { first: i, statements: [line], reliability: i.reliability })
+  }
+  out.facts = [...groups.values()].map((g, idx) => ({
+    id: `S${idx + 1}`, kind: 'REPORT' as const, label: g.first.title ?? g.first.publisher, publisher: g.first.publisher, url: g.first.url,
+    publishedAt: g.first.when === 'undated' ? null : g.first.when, retrievedAt: g.first.retrievedAt, reliability: g.reliability,
+    statement: g.statements.join(' | '), region: g.first.region,
   }))
   try {
     const { db } = await import('@/lib/db')

@@ -2,7 +2,7 @@ import type { SourceRef, StudentPlan } from '@/lib/student/types'
 
 // Plain-text version of the plan for download. Every claim keeps its citation ids and the full source list is at the end.
 const cite = (ids: string[]) => (ids.length ? ` [${ids.join(', ')}]` : '')
-const tag = (c: { general?: boolean; unverifiedNumber?: boolean }) => (c.general ? ' (general guidance, no source)' : c.unverifiedNumber ? ' (figure not confirmed by the cited source)' : '')
+const tag = (c: { general?: boolean; unverifiedNumber?: boolean; unchecked?: boolean }) => (c.general ? ' (general guidance, no source)' : c.unverifiedNumber ? ' (figure not confirmed by the cited source)' : c.unchecked ? ' (source not independently checked)' : '')
 const src = (s: SourceRef) => `- ${s.id}: ${s.label} (${s.publisher}${s.publishedAt ? `, published ${s.publishedAt}` : ''}${s.retrievedAt ? `, read ${s.retrievedAt}` : ''}) ${s.url ?? '[no public link]'}`
 
 export function studentPlanToMarkdown(p: StudentPlan): string {

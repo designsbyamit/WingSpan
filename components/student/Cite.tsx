@@ -26,6 +26,7 @@ export function ClaimText({ claim }: { claim: Claim }) {
       {claim.text}
       {claim.sources.map((id) => <CiteChip key={id} id={id} />)}
       {claim.general && <span className="ml-2 text-[11px] font-semibold uppercase tracking-wide text-[var(--text-dim)]">General guidance · no source</span>}
+      {claim.unchecked && <span className="ml-2 text-[11px] font-semibold uppercase tracking-wide text-[var(--text-dim)]">Source not independently checked</span>}
       {claim.unverifiedNumber && <span className="ml-2 text-[11px] font-semibold uppercase tracking-wide text-amber-300">Figure not confirmed by the source</span>}
     </span>
   )

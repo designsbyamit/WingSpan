@@ -10,6 +10,12 @@ import type { Claim, DayTheme, Differentiator, EdgeCard, Lane, PlanDay, ResumeFa
 export const THEMES: DayTheme[] = ['Position', 'Proof', 'Reach', 'Apply', 'Practice', 'Skill', 'Reflect']
 export const themeOfDay = (day: number): DayTheme => THEMES[(day - 1) % 7]
 
+/** Students never see internal ids: "(R1, R3)" is dropped and a bare id becomes "your resume". */
+export function stripIds(s: string): string {
+  return s.replace(/\s*\((?:[RSJ]\d+(?:\s*(?:,|-|–|and|&)\s*[RSJ]?\d+)*)\)/g, '').replace(/\byour\s+[RSJ]\d+(?:\s*[-–]\s*[RSJ]?\d+)?\b/gi, 'your').replace(/\b[RSJ]\d+(?:\s*[-–]\s*[RSJ]?\d+)?\b/g, 'your work').replace(/\byour your\b/gi, 'your').replace(/\s{2,}/g, ' ').trim()
+}
+const stripTheme = (s: string) => s.replace(/^\s*(position|proof|reach|apply|practice|skill|reflect)\s*[:\-–—]\s*/i, '')
+
 const clip = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1) + '…' : s)
 
 export function buildResumeFacts(data: ExtractedCareerData): ResumeFact[] {
@@ -81,10 +87,20 @@ export function checkDays(raw: Array<Partial<PlanDay>>): PlanDay[] {
     const ok = r && r.action && r.action.trim().length > 8
     return {
       day, theme,
-      action: ok ? clip(r!.action!.trim(), 220) : d.action,
-      why: ok && r!.why ? clip(r!.why.trim(), 220) : d.why,
+      action: ok ? clip(stripIds(stripTheme(r!.action!)), 240) : d.action,
+      why: ok && r!.why ? clip(stripIds(r!.why), 220) : d.why,
       minutes: Math.max(5, Math.min(20, Number(r?.minutes) || 20)),
-      guidance: ok && r!.guidance ? clip(r!.guidance.trim(), 300) : d.guidance,
+      guidance: ok && r!.guidance ? clip(stripIds(r!.guidance), 300) : d.guidance,
     }
   })
+}
+
+export interface SupportVerdict { i: number; supported: 'yes' | 'partly' | 'no'; keep: string[] }
+
+/** Applies the claim checker's verdict: sources that do not truly support the claim are removed; none left means general guidance. */
+export function applySupport(claim: Claim, v: SupportVerdict | undefined): Claim {
+  if (!v) return { ...claim, unchecked: claim.sources.length ? true : undefined }
+  const keep = claim.sources.filter((id) => v.keep.includes(id))
+  if (v.supported === 'no' || !keep.length) return { text: claim.text, sources: [], general: true }
+  return { ...claim, sources: keep }
 }
