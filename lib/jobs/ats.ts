@@ -47,12 +47,30 @@ export function tokenCandidates(key: string, name: string): string[] {
   return [...new Set([key, flat, dash, `${flat}inc`, `${flat}india`])].filter(Boolean)
 }
 
-/** Try every board type with every candidate name until one answers with a job list. */
+const flat = (v: string) => v.toLowerCase().replace(/[^a-z0-9]/g, '')
+
+/** The company name a board reports for itself, where the feed exposes one (Greenhouse, Workable). */
+async function boardName(type: AtsType, token: string): Promise<string | null> {
+  const t = encodeURIComponent(token)
+  if (type === 'GREENHOUSE') return (((await getJson(`https://boards-api.greenhouse.io/v1/boards/${t}`)) as J | null)?.name as string) ?? null
+  if (type === 'WORKABLE') return (((await getJson(`https://apply.workable.com/api/v1/widget/accounts/${t}`)) as J | null)?.name as string) ?? null
+  return null
+}
+
+/** A hit only counts when the board's own name matches the company, so a stranger's board with the same slug is rejected. */
+async function verified(type: AtsType, token: string, name: string): Promise<boolean> {
+  if (type === 'LEVER' || type === 'ASHBY') return true // these feeds do not expose a name; the slug is the account
+  const reported = await boardName(type, token).catch(() => null)
+  if (!reported) return false
+  const a = flat(reported), b = flat(name)
+  return a.length > 1 && (a.includes(b) || b.includes(a))
+}
+
+/** Try every board type with every candidate name until one answers with a job list for this company. */
 export async function discoverBoard(key: string, name: string): Promise<{ type: AtsType; token: string } | null> {
   for (const token of tokenCandidates(key, name)) {
     const hits = await Promise.all(ATS_TYPES.map(async (type) => ((await fetchBoard(type, token).catch(() => null)) ? type : null)))
-    const type = hits.find(Boolean) as AtsType | undefined
-    if (type) return { type, token }
+    for (const type of hits) if (type && (await verified(type, token, name))) return { type, token }
   }
   return null
 }

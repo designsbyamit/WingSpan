@@ -22,9 +22,12 @@ export async function ensureCompanies(): Promise<void> {
   }
 }
 
+const seededBoard = (key: string) => !!COMPANIES.find((s) => s.key === key)?.ats
+
 async function crawlOne(co: { id: string; key: string; name: string; kind: string; atsType: string | null; atsToken: string | null; lastStatus: string | null; lastCrawledAt: Date | null }, rediscover: boolean): Promise<CompanyResult> {
   const now = new Date()
   let type = co.atsType as AtsType | null, token = co.atsToken
+  if (rediscover && !seededBoard(co.key)) { type = null; token = null }
   if (!type || !token) {
     const retry = rediscover || !co.lastCrawledAt || now.getTime() - co.lastCrawledAt.getTime() > 14 * DAY
     if (!retry) return { key: co.key, status: 'NO_BOARD (rechecked later)' }
