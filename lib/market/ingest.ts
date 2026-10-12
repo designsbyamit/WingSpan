@@ -45,7 +45,7 @@ async function saveObservations(source: { id: string; category: Category }, docu
     const fp = fingerprint(source.id, r)
     const existing = await db.marketObservation.findUnique({ where: { fingerprint: fp }, select: { id: true } })
     if (existing) {
-      await db.marketObservation.update({ where: { id: existing.id }, data: { lastSeenAt: now, supersededAt: null, statement: r.statement, reliability: r.reliability, documentId: documentId ?? undefined } })
+      await db.marketObservation.update({ where: { id: existing.id }, data: { lastSeenAt: now, supersededAt: null, statement: r.statement, reliability: r.reliability, observedAt: r.observedAt ?? null, documentId: documentId ?? undefined } })
     } else {
       await db.marketObservation.create({
         data: {
@@ -108,7 +108,7 @@ async function runSource(source: Awaited<ReturnType<typeof db.marketDataSource.f
   try {
     if (source.kind === 'MANUAL') {
       for (const d of CURATED) {
-        const doc = await upsertDoc(source.id, d.url, { title: d.title, publishedAt: d.publishedAt ? new Date(d.publishedAt) : null, contentHash: sha(JSON.stringify(d.observations)), wordCount: 0, status: 'OK' })
+        const doc = await upsertDoc(source.id, d.url, { title: `${d.publisher}: ${d.title}`, publishedAt: d.publishedAt ? new Date(d.publishedAt) : null, contentHash: sha(JSON.stringify(d.observations)), wordCount: 0, status: 'OK' })
         const n = await saveObservations({ id: source.id, category: d.category }, doc.id, d.observations.map((o) => ({ ...o, observedAt: d.publishedAt ? new Date(d.publishedAt) : null })), now)
         base.documents++; base.observations += n
       }

@@ -9,7 +9,7 @@ export interface CuratedObservation {
   period: string | null; statement: string; reliability: number
 }
 export interface CuratedDocument {
-  url: string; title: string; publishedAt: string | null; category: 'JOB_MARKET' | 'INDUSTRY_PERFORMANCE'
+  publisher: string; url: string; title: string; publishedAt: string | null; category: 'JOB_MARKET' | 'INDUSTRY_PERFORMANCE'
   observations: CuratedObservation[]
 }
 const o = (metric: Metric, subject: string, region: string, value: number | null, unit: string | null, period: string | null, statement: string, reliability: number): CuratedObservation =>
@@ -17,6 +17,7 @@ const o = (metric: Metric, subject: string, region: string, value: number | null
 
 export const CURATED: CuratedDocument[] = [
   {
+    publisher: 'Careers360 (citing IIT Bombay placement report)',
     url: 'https://design.careers360.com/articles/iit-bombay-design-placement',
     title: 'IDC School of Design, IIT Bombay: placements 2023-24 (Careers360, citing the institute placement report)', publishedAt: '2026-03-18', category: 'JOB_MARKET',
     observations: [
@@ -26,6 +27,7 @@ export const CURATED: CuratedDocument[] = [
     ],
   },
   {
+    publisher: 'Careers360 (citing IIT placement reports)',
     url: 'https://design.careers360.com/articles/iit-placements-for-bdesign',
     title: 'B.Des placements at IITs 2023-24 (Careers360)', publishedAt: null, category: 'JOB_MARKET',
     observations: [
@@ -35,6 +37,7 @@ export const CURATED: CuratedDocument[] = [
     ],
   },
   {
+    publisher: 'Careers360 (citing NID placement lists)',
     url: 'https://design.careers360.com/articles/nid-placements',
     title: 'NID placements (Careers360, data to 2023-24)', publishedAt: '2025-12-19', category: 'JOB_MARKET',
     observations: [
@@ -43,6 +46,7 @@ export const CURATED: CuratedDocument[] = [
     ],
   },
   {
+    publisher: 'TeamLease EdTech (via People Matters)',
     url: 'https://www.peoplematters.in/news/workforce-planning/fresher-hiring-intent-rises-to-75percent-but-it-demand-loses-ground-report-51352',
     title: 'TeamLease EdTech fresher hiring outlook, July-December 2026 (1,097 employers) - coverage', publishedAt: '2026-08-11', category: 'JOB_MARKET',
     observations: [
@@ -55,6 +59,7 @@ export const CURATED: CuratedDocument[] = [
     ],
   },
   {
+    publisher: 'TeamLease EdTech (via Asianet Newsable/ANI)',
     url: 'https://newsable.asianetnews.com/business/indias-fresher-hiring-to-rise-in-2026-employers-want-proofofwork-articleshow-65p63xu',
     title: 'TeamLease EdTech Career Outlook Report, January-June 2026 (1,051 employers) - coverage', publishedAt: '2026-02-18', category: 'JOB_MARKET',
     observations: [
@@ -63,6 +68,7 @@ export const CURATED: CuratedDocument[] = [
     ],
   },
   {
+    publisher: 'foundit (via Business Today)',
     url: 'https://www.businesstoday.in/amp/jobs/story/ai-gccs-and-a-changing-job-market-indias-fresher-hiring-is-no-longer-just-an-it-story-whos-driving-the-shift-547654-2026-08-06',
     title: 'foundit Insights Tracker July 2026: fresher hiring in India - coverage', publishedAt: '2026-08-06', category: 'JOB_MARKET',
     observations: [
@@ -74,14 +80,16 @@ export const CURATED: CuratedDocument[] = [
     ],
   },
   {
+    publisher: 'Naukri JobSpeak (Info Edge)',
     url: 'https://www.naukri.com/blog/naukri-jobspeak-white-collar-hiring-opens-2026-with-3-yoy-growth-driven-by-non-it-sectors-and-fresher-hiring/amp',
-    title: 'Naukri JobSpeak January 2026', publishedAt: '2026-02-01', category: 'JOB_MARKET',
+    title: 'Naukri JobSpeak, January 2026', publishedAt: null, category: 'JOB_MARKET',
     observations: [
       o('hiring_growth', 'Fresher (0-3 years) hiring', 'India', 8, '% YoY', '2026-01', 'Naukri JobSpeak: fresher hiring (0-3 years) up about 8% year on year in January 2026, led by non-IT sectors; the report does not break out design roles.', 0.8),
       o('hiring_growth', 'AI/ML roles', 'India', 34, '% YoY', '2026-01', 'Naukri JobSpeak: AI/ML roles up about 34% year on year in January 2026.', 0.8),
     ],
   },
   {
+    publisher: 'Stanford Digital Economy Lab',
     url: 'https://digitaleconomy.stanford.edu/publications/canaries-in-the-coal-mine',
     title: 'Canaries in the Coal Mine? Stanford Digital Economy Lab (revised August 2026)', publishedAt: '2026-08-12', category: 'JOB_MARKET',
     observations: [
@@ -89,14 +97,16 @@ export const CURATED: CuratedDocument[] = [
     ],
   },
   {
+    publisher: 'Federal Reserve Bank of New York',
     url: 'https://www.newyorkfed.org/research/college-labor-market',
-    title: 'New York Fed: labor market for recent college graduates (2026 Q2)', publishedAt: '2026-09-01', category: 'JOB_MARKET',
+    title: 'Labor market for recent college graduates (2026 Q2 data)', publishedAt: null, category: 'JOB_MARKET',
     observations: [
       o('unemployment_rate', 'Recent college graduates', 'US', 5.6, '%', '2026-Q2', 'Recent-graduate unemployment is about 5.6% in 2026 Q2.', 0.95),
       o('entry_level_employment', 'Recent graduate underemployment', 'US', 42, '%', '2026-Q2', 'About 42% of recent graduates are underemployed, in jobs not typically requiring a degree (2026 Q2).', 0.95),
     ],
   },
   {
+    publisher: 'UX Design Institute',
     url: 'https://www.uxdesigninstitute.com/state-of-ux-hiring',
     title: 'State of UX Hiring (UX Design Institute, 500+ UX professionals and hiring managers)', publishedAt: null, category: 'INDUSTRY_PERFORMANCE',
     observations: [
@@ -105,6 +115,7 @@ export const CURATED: CuratedDocument[] = [
     ],
   },
   {
+    publisher: 'Compiled by the product owner (secondary sources)',
     url: 'manual:design-ai-job-market-report',
     title: 'UX/UI/AI design job market report (compiled, supplied by the product owner)',
     publishedAt: null, category: 'JOB_MARKET',
@@ -127,6 +138,7 @@ export const CURATED: CuratedDocument[] = [
     ],
   },
   {
+    publisher: 'LinkedIn (via Storyboard18)',
     url: 'https://www.storyboard18.com/brand-makers/linkedins-skills-on-the-rise-2026-identifies-top-skill-stacks-reshaping-indias-workforce-90556.htm',
     title: 'LinkedIn Skills on the Rise 2026 (India) - coverage', publishedAt: '2026-02-24', category: 'JOB_MARKET',
     observations: [
@@ -139,6 +151,7 @@ export const CURATED: CuratedDocument[] = [
     ],
   },
   {
+    publisher: 'Indeed Hiring Lab (via Storyboard18)',
     url: 'https://www.storyboard18.com/digital/ai-reshaping-roles-but-95-of-job-listings-omit-it-report-ws-l-93591.htm',
     title: 'Indeed Hiring Lab Global Labour Market and Workforce Trends Chartbook (Feb 2026) - coverage', publishedAt: '2026-03-29', category: 'INDUSTRY_PERFORMANCE',
     observations: [
@@ -149,6 +162,7 @@ export const CURATED: CuratedDocument[] = [
     ],
   },
   {
+    publisher: 'Nasscom-Zinnov (via Swarajya)',
     url: 'https://swarajyamag.com/economy/ai-data-skills-now-drive-two-in-three-new-gcc-jobs-in-india-as-hiring-rises-11-per-cent',
     title: 'Nasscom-Zinnov 2026: AI and data skills drive new GCC jobs in India - coverage', publishedAt: '2026-07-02', category: 'JOB_MARKET',
     observations: [
