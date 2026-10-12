@@ -2,7 +2,8 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ExternalLink, ChevronDown, BookOpen, Link2, Code2, Users, Pen, ArrowRight, CheckCircle2, Circle, Clock, type LucideIcon } from 'lucide-react'
-import { Action, ActionType } from '@/types/wingspan'
+import { Action, ActionType, Resource } from '@/types/wingspan'
+import { resolveActionLink, type ResolvedLink } from '@/lib/links'
 import { Badge, Bar, Card, EmptyState, FieldLabel, FOCUS_RING, INK } from './shell/ui'
 
 type ProgressState = 'not-started' | 'in-progress' | 'done'
@@ -45,15 +46,17 @@ function ProgressButton({ state, onChange, title }: { state: ProgressState; onCh
 
 const PRIORITY_TONE = { high: 'accent', medium: 'warn', low: 'neutral' } as const
 
-function ActionCard({ action, progress, onProgress }: {
+function ActionCard({ action, progress, onProgress, resources }: {
   action: Action
+  resources: Resource[]
   progress: ProgressState
   onProgress: (s: ProgressState) => void
 }) {
   const [expanded, setExpanded] = useState(false)
   const Icon = ACTION_ICON[action.actionType] ?? ArrowRight
   const done = progress === 'done'
-  const hasDetail = !!(action.howToStart || action.whereToStart || action.measurable || action.link)
+  const link: ResolvedLink | null = resolveActionLink(action, resources)
+  const hasDetail = !!(action.howToStart || action.whereToStart || action.measurable || link)
 
   return (
     <Card as="li" className={`overflow-hidden ${done ? 'opacity-70' : ''}`}>
@@ -105,7 +108,13 @@ function ActionCard({ action, progress, onProgress }: {
               {action.whereToStart && (
                 <div>
                   <FieldLabel>Where</FieldLabel>
-                  <p className="text-[14px] text-[var(--text-secondary)]">{action.whereToStart}</p>
+                  {link ? (
+                    <a href={link.url} target="_blank" rel="noopener noreferrer" className={`group inline-flex items-center gap-1.5 text-[14px] ${INK} underline decoration-[var(--neon-border)] underline-offset-4 hover:decoration-current rounded-[4px] ${FOCUS_RING}`}>
+                      {action.whereToStart}
+                      <ExternalLink size={12} className="shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
+                      <span className="sr-only">({link.kind === 'search' ? 'searches the web, ' : ''}opens in a new tab)</span>
+                    </a>
+                  ) : <p className="text-[14px] text-[var(--text-secondary)]">{action.whereToStart}</p>}
                 </div>
               )}
               {action.measurable && (
@@ -114,14 +123,14 @@ function ActionCard({ action, progress, onProgress }: {
                   <p className={`text-[14px] ${INK}`}>{action.measurable}</p>
                 </div>
               )}
-              {action.link && (
+              {link && (
                 <a
-                  href={action.link}
+                  href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`self-start inline-flex items-center gap-2 h-9 px-4 rounded-[10px] bg-[var(--neon)] text-[#0a0a0a] text-[13px] font-bold hover:opacity-90 ${FOCUS_RING}`}
                 >
-                  {action.linkLabel ?? 'Open link'}
+                  {link.label}
                   <ExternalLink size={13} aria-hidden />
                   <span className="sr-only">(opens in a new tab)</span>
                 </a>
@@ -141,7 +150,7 @@ const GROUPS = [
 ] as const
 
 /** Now / Next / Later action lists with progress tracking (stored on this device). */
-export function ActionsSection({ actions }: { actions: { immediate: Action[]; mediumTerm: Action[]; longTerm: Action[] } }) {
+export function ActionsSection({ actions, resources = [] }: { actions: { immediate: Action[]; mediumTerm: Action[]; longTerm: Action[] }; resources?: Resource[] }) {
   const [progress, setProgress] = useState<Record<string, ProgressState>>(loadProgress)
 
   const setActionProgress = (title: string, state: ProgressState) => {
@@ -182,6 +191,7 @@ export function ActionsSection({ actions }: { actions: { immediate: Action[]; me
                 <ActionCard
                   key={`${action.title}-${i}`}
                   action={action}
+                  resources={resources}
                   progress={progress[action.title] ?? 'not-started'}
                   onProgress={(s) => setActionProgress(action.title, s)}
                 />

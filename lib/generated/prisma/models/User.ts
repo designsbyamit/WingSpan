@@ -294,6 +294,7 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   careerLevel?: Prisma.XOR<Prisma.CareerLevelNullableScalarRelationFilter, Prisma.CareerLevelWhereInput> | null
   magicLinkTokens?: Prisma.MagicLinkTokenListRelationFilter
+  profileDetails?: Prisma.XOR<Prisma.UserProfileNullableScalarRelationFilter, Prisma.UserProfileWhereInput> | null
   competencies?: Prisma.UserCompetencyListRelationFilter
   skills?: Prisma.UserSkillListRelationFilter
   conceptMasteries?: Prisma.UserConceptMasteryListRelationFilter
@@ -333,6 +334,7 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   careerLevel?: Prisma.CareerLevelOrderByWithRelationInput
   magicLinkTokens?: Prisma.MagicLinkTokenOrderByRelationAggregateInput
+  profileDetails?: Prisma.UserProfileOrderByWithRelationInput
   competencies?: Prisma.UserCompetencyOrderByRelationAggregateInput
   skills?: Prisma.UserSkillOrderByRelationAggregateInput
   conceptMasteries?: Prisma.UserConceptMasteryOrderByRelationAggregateInput
@@ -375,6 +377,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   careerLevel?: Prisma.XOR<Prisma.CareerLevelNullableScalarRelationFilter, Prisma.CareerLevelWhereInput> | null
   magicLinkTokens?: Prisma.MagicLinkTokenListRelationFilter
+  profileDetails?: Prisma.XOR<Prisma.UserProfileNullableScalarRelationFilter, Prisma.UserProfileWhereInput> | null
   competencies?: Prisma.UserCompetencyListRelationFilter
   skills?: Prisma.UserSkillListRelationFilter
   conceptMasteries?: Prisma.UserConceptMasteryListRelationFilter
@@ -455,6 +458,7 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -493,6 +497,7 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -531,6 +536,7 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -569,6 +575,7 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -1066,6 +1073,20 @@ export type UserUpdateOneRequiredWithoutBlueprintSnapshotsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBlueprintSnapshotsInput, Prisma.UserUpdateWithoutBlueprintSnapshotsInput>, Prisma.UserUncheckedUpdateWithoutBlueprintSnapshotsInput>
 }
 
+export type UserCreateNestedOneWithoutProfileDetailsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProfileDetailsInput, Prisma.UserUncheckedCreateWithoutProfileDetailsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProfileDetailsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutProfileDetailsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutProfileDetailsInput, Prisma.UserUncheckedCreateWithoutProfileDetailsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutProfileDetailsInput
+  upsert?: Prisma.UserUpsertWithoutProfileDetailsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProfileDetailsInput, Prisma.UserUpdateWithoutProfileDetailsInput>, Prisma.UserUncheckedUpdateWithoutProfileDetailsInput>
+}
+
 export type UserCreateWithoutCareerLevelInput = {
   id?: string
   email: string
@@ -1081,6 +1102,7 @@ export type UserCreateWithoutCareerLevelInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -1118,6 +1140,7 @@ export type UserUncheckedCreateWithoutCareerLevelInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -1201,6 +1224,7 @@ export type UserCreateWithoutMagicLinkTokensInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -1238,6 +1262,7 @@ export type UserUncheckedCreateWithoutMagicLinkTokensInput = {
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -1291,6 +1316,7 @@ export type UserUpdateWithoutMagicLinkTokensInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -1328,6 +1354,7 @@ export type UserUncheckedUpdateWithoutMagicLinkTokensInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -1366,6 +1393,7 @@ export type UserCreateWithoutCompetenciesInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
   learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
@@ -1403,6 +1431,7 @@ export type UserUncheckedCreateWithoutCompetenciesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
   learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
@@ -1456,6 +1485,7 @@ export type UserUpdateWithoutCompetenciesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
   learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
@@ -1493,6 +1523,7 @@ export type UserUncheckedUpdateWithoutCompetenciesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
   learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1530,6 +1561,7 @@ export type UserCreateWithoutSkillsInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
   learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
@@ -1567,6 +1599,7 @@ export type UserUncheckedCreateWithoutSkillsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
   learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
@@ -1620,6 +1653,7 @@ export type UserUpdateWithoutSkillsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
   learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
@@ -1657,6 +1691,7 @@ export type UserUncheckedUpdateWithoutSkillsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
   learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1694,6 +1729,7 @@ export type UserCreateWithoutConceptMasteriesInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
@@ -1731,6 +1767,7 @@ export type UserUncheckedCreateWithoutConceptMasteriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
@@ -1784,6 +1821,7 @@ export type UserUpdateWithoutConceptMasteriesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
@@ -1821,6 +1859,7 @@ export type UserUncheckedUpdateWithoutConceptMasteriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1858,6 +1897,7 @@ export type UserCreateWithoutLearningSessionsInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -1895,6 +1935,7 @@ export type UserUncheckedCreateWithoutLearningSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -1948,6 +1989,7 @@ export type UserUpdateWithoutLearningSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -1985,6 +2027,7 @@ export type UserUncheckedUpdateWithoutLearningSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -2022,6 +2065,7 @@ export type UserCreateWithoutLearningPathsInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -2059,6 +2103,7 @@ export type UserUncheckedCreateWithoutLearningPathsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -2112,6 +2157,7 @@ export type UserUpdateWithoutLearningPathsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -2149,6 +2195,7 @@ export type UserUncheckedUpdateWithoutLearningPathsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -2186,6 +2233,7 @@ export type UserCreateWithoutAiMentorContextInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -2223,6 +2271,7 @@ export type UserUncheckedCreateWithoutAiMentorContextInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -2276,6 +2325,7 @@ export type UserUpdateWithoutAiMentorContextInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -2313,6 +2363,7 @@ export type UserUncheckedUpdateWithoutAiMentorContextInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -2350,6 +2401,7 @@ export type UserCreateWithoutSubmissionsInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -2387,6 +2439,7 @@ export type UserUncheckedCreateWithoutSubmissionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -2440,6 +2493,7 @@ export type UserUpdateWithoutSubmissionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -2477,6 +2531,7 @@ export type UserUncheckedUpdateWithoutSubmissionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -2514,6 +2569,7 @@ export type UserCreateWithoutSourceDocumentsInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -2551,6 +2607,7 @@ export type UserUncheckedCreateWithoutSourceDocumentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -2604,6 +2661,7 @@ export type UserUpdateWithoutSourceDocumentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -2641,6 +2699,7 @@ export type UserUncheckedUpdateWithoutSourceDocumentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -2678,6 +2737,7 @@ export type UserCreateWithoutRolesInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -2715,6 +2775,7 @@ export type UserUncheckedCreateWithoutRolesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -2768,6 +2829,7 @@ export type UserUpdateWithoutRolesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -2805,6 +2867,7 @@ export type UserUncheckedUpdateWithoutRolesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -2842,6 +2905,7 @@ export type UserCreateWithoutProjectsInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -2879,6 +2943,7 @@ export type UserUncheckedCreateWithoutProjectsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -2932,6 +2997,7 @@ export type UserUpdateWithoutProjectsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -2969,6 +3035,7 @@ export type UserUncheckedUpdateWithoutProjectsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -3006,6 +3073,7 @@ export type UserCreateWithoutEducationsInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -3043,6 +3111,7 @@ export type UserUncheckedCreateWithoutEducationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -3096,6 +3165,7 @@ export type UserUpdateWithoutEducationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -3133,6 +3203,7 @@ export type UserUncheckedUpdateWithoutEducationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -3170,6 +3241,7 @@ export type UserCreateWithoutSkillClaimsInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -3207,6 +3279,7 @@ export type UserUncheckedCreateWithoutSkillClaimsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -3260,6 +3333,7 @@ export type UserUpdateWithoutSkillClaimsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -3297,6 +3371,7 @@ export type UserUncheckedUpdateWithoutSkillClaimsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -3334,6 +3409,7 @@ export type UserCreateWithoutAnalysisRunsInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -3371,6 +3447,7 @@ export type UserUncheckedCreateWithoutAnalysisRunsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -3424,6 +3501,7 @@ export type UserUpdateWithoutAnalysisRunsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -3461,6 +3539,7 @@ export type UserUncheckedUpdateWithoutAnalysisRunsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -3498,6 +3577,7 @@ export type UserCreateWithoutChosenBetsInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -3535,6 +3615,7 @@ export type UserUncheckedCreateWithoutChosenBetsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -3588,6 +3669,7 @@ export type UserUpdateWithoutChosenBetsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -3625,6 +3707,7 @@ export type UserUncheckedUpdateWithoutChosenBetsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -3662,6 +3745,7 @@ export type UserCreateWithoutRoadmapsInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -3699,6 +3783,7 @@ export type UserUncheckedCreateWithoutRoadmapsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -3752,6 +3837,7 @@ export type UserUpdateWithoutRoadmapsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -3789,6 +3875,7 @@ export type UserUncheckedUpdateWithoutRoadmapsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -3826,6 +3913,7 @@ export type UserCreateWithoutCapabilityProgressInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -3863,6 +3951,7 @@ export type UserUncheckedCreateWithoutCapabilityProgressInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -3916,6 +4005,7 @@ export type UserUpdateWithoutCapabilityProgressInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -3953,6 +4043,7 @@ export type UserUncheckedUpdateWithoutCapabilityProgressInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -3990,6 +4081,7 @@ export type UserCreateWithoutAuditEventsInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -4027,6 +4119,7 @@ export type UserUncheckedCreateWithoutAuditEventsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -4080,6 +4173,7 @@ export type UserUpdateWithoutAuditEventsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -4117,6 +4211,7 @@ export type UserUncheckedUpdateWithoutAuditEventsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -4154,6 +4249,7 @@ export type UserCreateWithoutFeedbackInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -4191,6 +4287,7 @@ export type UserUncheckedCreateWithoutFeedbackInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -4244,6 +4341,7 @@ export type UserUpdateWithoutFeedbackInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -4281,6 +4379,7 @@ export type UserUncheckedUpdateWithoutFeedbackInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -4318,6 +4417,7 @@ export type UserCreateWithoutUsageInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -4355,6 +4455,7 @@ export type UserUncheckedCreateWithoutUsageInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -4408,6 +4509,7 @@ export type UserUpdateWithoutUsageInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -4445,6 +4547,7 @@ export type UserUncheckedUpdateWithoutUsageInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -4482,6 +4585,7 @@ export type UserCreateWithoutBlueprintSnapshotsInput = {
   updatedAt?: Date | string
   careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
   magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
@@ -4519,6 +4623,7 @@ export type UserUncheckedCreateWithoutBlueprintSnapshotsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  profileDetails?: Prisma.UserProfileUncheckedCreateNestedOneWithoutUserInput
   competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
   skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
@@ -4572,6 +4677,7 @@ export type UserUpdateWithoutBlueprintSnapshotsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -4609,6 +4715,7 @@ export type UserUncheckedUpdateWithoutBlueprintSnapshotsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -4628,6 +4735,174 @@ export type UserUncheckedUpdateWithoutBlueprintSnapshotsInput = {
   auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
   feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
   usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutProfileDetailsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  careerLevel?: Prisma.CareerLevelCreateNestedOneWithoutUsersInput
+  magicLinkTokens?: Prisma.MagicLinkTokenCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutProfileDetailsInput = {
+  id?: string
+  email: string
+  phone?: string | null
+  name?: string | null
+  passwordHash?: string | null
+  avatarUrl?: string | null
+  careerLevelId?: string | null
+  xp?: number
+  streak?: number
+  lastActiveAt?: Date | string | null
+  activeLearningPathId?: string | null
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedCreateNestedManyWithoutUserInput
+  competencies?: Prisma.UserCompetencyUncheckedCreateNestedManyWithoutUserInput
+  skills?: Prisma.UserSkillUncheckedCreateNestedManyWithoutUserInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedCreateNestedManyWithoutUserInput
+  learningSessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutUserInput
+  learningPaths?: Prisma.UserLearningPathUncheckedCreateNestedManyWithoutUserInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedCreateNestedOneWithoutUserInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedCreateNestedManyWithoutUserInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedCreateNestedManyWithoutUserInput
+  roles?: Prisma.RoleUncheckedCreateNestedManyWithoutUserInput
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutUserInput
+  educations?: Prisma.EducationUncheckedCreateNestedManyWithoutUserInput
+  skillClaims?: Prisma.SkillClaimUncheckedCreateNestedManyWithoutUserInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedCreateNestedManyWithoutUserInput
+  chosenBets?: Prisma.ChosenBetUncheckedCreateNestedManyWithoutUserInput
+  roadmaps?: Prisma.RoadmapUncheckedCreateNestedManyWithoutUserInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedCreateNestedManyWithoutUserInput
+  auditEvents?: Prisma.AuditEventUncheckedCreateNestedManyWithoutUserInput
+  feedback?: Prisma.FeedbackUncheckedCreateNestedManyWithoutUserInput
+  usage?: Prisma.UsageLedgerUncheckedCreateNestedManyWithoutUserInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutProfileDetailsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutProfileDetailsInput, Prisma.UserUncheckedCreateWithoutProfileDetailsInput>
+}
+
+export type UserUpsertWithoutProfileDetailsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutProfileDetailsInput, Prisma.UserUncheckedUpdateWithoutProfileDetailsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutProfileDetailsInput, Prisma.UserUncheckedCreateWithoutProfileDetailsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutProfileDetailsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutProfileDetailsInput, Prisma.UserUncheckedUpdateWithoutProfileDetailsInput>
+}
+
+export type UserUpdateWithoutProfileDetailsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  careerLevel?: Prisma.CareerLevelUpdateOneWithoutUsersNestedInput
+  magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutProfileDetailsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  careerLevelId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  streak?: Prisma.IntFieldUpdateOperationsInput | number
+  lastActiveAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  activeLearningPathId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
+  skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
+  conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
+  learningSessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutUserNestedInput
+  learningPaths?: Prisma.UserLearningPathUncheckedUpdateManyWithoutUserNestedInput
+  aiMentorContext?: Prisma.AIMentorContextUncheckedUpdateOneWithoutUserNestedInput
+  submissions?: Prisma.ChallengeSubmissionUncheckedUpdateManyWithoutUserNestedInput
+  sourceDocuments?: Prisma.SourceDocumentUncheckedUpdateManyWithoutUserNestedInput
+  roles?: Prisma.RoleUncheckedUpdateManyWithoutUserNestedInput
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutUserNestedInput
+  educations?: Prisma.EducationUncheckedUpdateManyWithoutUserNestedInput
+  skillClaims?: Prisma.SkillClaimUncheckedUpdateManyWithoutUserNestedInput
+  analysisRuns?: Prisma.AnalysisRunUncheckedUpdateManyWithoutUserNestedInput
+  chosenBets?: Prisma.ChosenBetUncheckedUpdateManyWithoutUserNestedInput
+  roadmaps?: Prisma.RoadmapUncheckedUpdateManyWithoutUserNestedInput
+  capabilityProgress?: Prisma.UserCapabilityProgressUncheckedUpdateManyWithoutUserNestedInput
+  auditEvents?: Prisma.AuditEventUncheckedUpdateManyWithoutUserNestedInput
+  feedback?: Prisma.FeedbackUncheckedUpdateManyWithoutUserNestedInput
+  usage?: Prisma.UsageLedgerUncheckedUpdateManyWithoutUserNestedInput
+  blueprintSnapshots?: Prisma.BlueprintSnapshotUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyCareerLevelInput = {
@@ -4661,6 +4936,7 @@ export type UserUpdateWithoutCareerLevelInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUpdateManyWithoutUserNestedInput
@@ -4698,6 +4974,7 @@ export type UserUncheckedUpdateWithoutCareerLevelInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   magicLinkTokens?: Prisma.MagicLinkTokenUncheckedUpdateManyWithoutUserNestedInput
+  profileDetails?: Prisma.UserProfileUncheckedUpdateOneWithoutUserNestedInput
   competencies?: Prisma.UserCompetencyUncheckedUpdateManyWithoutUserNestedInput
   skills?: Prisma.UserSkillUncheckedUpdateManyWithoutUserNestedInput
   conceptMasteries?: Prisma.UserConceptMasteryUncheckedUpdateManyWithoutUserNestedInput
@@ -4955,6 +5232,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   careerLevel?: boolean | Prisma.User$careerLevelArgs<ExtArgs>
   magicLinkTokens?: boolean | Prisma.User$magicLinkTokensArgs<ExtArgs>
+  profileDetails?: boolean | Prisma.User$profileDetailsArgs<ExtArgs>
   competencies?: boolean | Prisma.User$competenciesArgs<ExtArgs>
   skills?: boolean | Prisma.User$skillsArgs<ExtArgs>
   conceptMasteries?: boolean | Prisma.User$conceptMasteriesArgs<ExtArgs>
@@ -5035,6 +5313,7 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   careerLevel?: boolean | Prisma.User$careerLevelArgs<ExtArgs>
   magicLinkTokens?: boolean | Prisma.User$magicLinkTokensArgs<ExtArgs>
+  profileDetails?: boolean | Prisma.User$profileDetailsArgs<ExtArgs>
   competencies?: boolean | Prisma.User$competenciesArgs<ExtArgs>
   skills?: boolean | Prisma.User$skillsArgs<ExtArgs>
   conceptMasteries?: boolean | Prisma.User$conceptMasteriesArgs<ExtArgs>
@@ -5069,6 +5348,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     careerLevel: Prisma.$CareerLevelPayload<ExtArgs> | null
     magicLinkTokens: Prisma.$MagicLinkTokenPayload<ExtArgs>[]
+    profileDetails: Prisma.$UserProfilePayload<ExtArgs> | null
     competencies: Prisma.$UserCompetencyPayload<ExtArgs>[]
     skills: Prisma.$UserSkillPayload<ExtArgs>[]
     conceptMasteries: Prisma.$UserConceptMasteryPayload<ExtArgs>[]
@@ -5501,6 +5781,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   careerLevel<T extends Prisma.User$careerLevelArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$careerLevelArgs<ExtArgs>>): Prisma.Prisma__CareerLevelClient<runtime.Types.Result.GetResult<Prisma.$CareerLevelPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   magicLinkTokens<T extends Prisma.User$magicLinkTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$magicLinkTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MagicLinkTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  profileDetails<T extends Prisma.User$profileDetailsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$profileDetailsArgs<ExtArgs>>): Prisma.Prisma__UserProfileClient<runtime.Types.Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   competencies<T extends Prisma.User$competenciesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$competenciesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserCompetencyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   skills<T extends Prisma.User$skillsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$skillsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserSkillPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   conceptMasteries<T extends Prisma.User$conceptMasteriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$conceptMasteriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserConceptMasteryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6005,6 +6286,25 @@ export type User$magicLinkTokensArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.MagicLinkTokenScalarFieldEnum | Prisma.MagicLinkTokenScalarFieldEnum[]
+}
+
+/**
+ * User.profileDetails
+ */
+export type User$profileDetailsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserProfile
+   */
+  select?: Prisma.UserProfileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the UserProfile
+   */
+  omit?: Prisma.UserProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserProfileInclude<ExtArgs> | null
+  where?: Prisma.UserProfileWhereInput
 }
 
 /**

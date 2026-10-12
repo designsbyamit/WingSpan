@@ -10,6 +10,7 @@ export function normalizeExtracted<T extends Partial<ExtractedCareerData>>(d: T)
     projects: arr(d.projects),
     skills: arr<string>(d.skills).filter((s) => typeof s === 'string'),
     education: arr(d.education),
+    contact: d.contact && typeof d.contact === 'object' ? d.contact : {},
     candidateName: typeof d.candidateName === 'string' ? d.candidateName.trim().slice(0, 80) : '',
     rawText: typeof d.rawText === 'string' ? d.rawText : '',
     careerStageSignals: arr<string>(d.careerStageSignals),

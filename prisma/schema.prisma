@@ -340,6 +340,7 @@ model User {
   updatedAt            DateTime     @updatedAt
 
   magicLinkTokens  MagicLinkToken[]
+  profileDetails   UserProfile?
   competencies     UserCompetency[]
   skills           UserSkill[]
   conceptMasteries UserConceptMastery[]
@@ -1379,4 +1380,28 @@ model JobListing {
   @@index([status, level])
   @@index([isDesign, city])
   @@index([lastSeenAt])
+}
+
+/// The person's own details, read from their first resume and confirmed by them. The name is locked once
+/// confirmed: a later resume with a different name never changes it; one with the same name can update the
+/// other fields, but only with the person's consent.
+model UserProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  fullName        String
+  email           String?
+  phone           String?
+  location        String?
+  linkedinUrl     String?
+  portfolioUrl    String?
+  githubUrl       String?
+  experienceYears Float?
+  track           String   @default("PROFESSIONAL") // STUDENT | PROFESSIONAL | BOTH
+  currentRole     String?
+  currentOrg      String?
+  education       String?
+  confirmedAt     DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

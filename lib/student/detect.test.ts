@@ -30,3 +30,17 @@ test('graduate from long ago is not a student', () => {
 test('missing data is safe', () => {
   assert.equal(detectStudent(null).mode, 'professional')
 })
+
+test('track: studying only, working only, or both', () => {
+  const stu = detectStudent({ ...base, timeline: [t('UX Design Intern', '2025', '2025')], education: [{ institution: 'IDC', degree: 'M.Des', year: '2027' }] }, 2026)
+  assert.equal(stu.track, 'STUDENT')
+  const both = detectStudent({ ...base, timeline: [t('Senior Product Designer', '2018', 'Present')], education: [{ institution: 'X', degree: 'M.Des', year: '2027' }] }, 2026)
+  assert.equal(both.track, 'BOTH')
+  const pro = detectStudent({ ...base, timeline: [t('Product Designer', '2019', 'Present')], education: [{ institution: 'X', degree: 'B.Des', year: '2018' }] }, 2026)
+  assert.equal(pro.track, 'PROFESSIONAL')
+  assert.ok(pro.fullTimeYears >= 7)
+})
+test('a job that only just began beside a degree in progress is still the student journey', () => {
+  const r = detectStudent({ ...base, timeline: [t('Associate Designer', `${new Date().getFullYear()}-${String(Math.max(1, new Date().getMonth() - 2)).padStart(2, '0')}`, 'Present')], education: [{ institution: 'X', degree: 'B.Des', year: String(new Date().getFullYear()) }] }, new Date().getFullYear())
+  assert.equal(r.track, 'STUDENT')
+})

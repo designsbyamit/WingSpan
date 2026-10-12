@@ -121,7 +121,8 @@ export const ModelName = {
   Company: 'Company',
   Posting: 'Posting',
   JobBatch: 'JobBatch',
-  JobListing: 'JobListing'
+  JobListing: 'JobListing',
+  UserProfile: 'UserProfile'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1135,6 +1136,29 @@ export const JobListingScalarFieldEnum = {
 } as const
 
 export type JobListingScalarFieldEnum = (typeof JobListingScalarFieldEnum)[keyof typeof JobListingScalarFieldEnum]
+
+
+export const UserProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  fullName: 'fullName',
+  email: 'email',
+  phone: 'phone',
+  location: 'location',
+  linkedinUrl: 'linkedinUrl',
+  portfolioUrl: 'portfolioUrl',
+  githubUrl: 'githubUrl',
+  experienceYears: 'experienceYears',
+  track: 'track',
+  currentRole: 'currentRole',
+  currentOrg: 'currentOrg',
+  education: 'education',
+  confirmedAt: 'confirmedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserProfileScalarFieldEnum = (typeof UserProfileScalarFieldEnum)[keyof typeof UserProfileScalarFieldEnum]
 
 
 export const SortOrder = {

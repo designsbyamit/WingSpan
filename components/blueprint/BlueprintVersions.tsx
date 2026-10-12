@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Bookmark, FolderOpen, Loader2, Trash2 } from 'lucide-react'
 import { useWingspan } from '@/context/WingspanContext'
 import type { Blueprint, ExtractedCareerData } from '@/types/wingspan'
@@ -24,6 +24,10 @@ export function useBlueprintVersions(signedIn: boolean) {
   const [error, setError] = useState('')
   const [listing, setListing] = useState<Listing>({ working: null, versions: [] })
   const lastSaved = useRef('')
+  // Snapshot of what the latest saved (or opened) version contained. "Save version" is offered only when the
+  // Blueprint differs from it, so a version that was just saved is not offered again until something changes.
+  const [savedBody, setSavedBody] = useState<string | null>(null)
+  const rebaseOnNext = useRef(false)
 
   const refreshList = useCallback(async () => {
     const res = await fetch('/api/blueprints').catch(() => null)
@@ -39,6 +43,13 @@ export function useBlueprintVersions(signedIn: boolean) {
   const payload = useCallback(() => ({
     blueprint, extractedData, selectedPath,
   }), [blueprint, extractedData, selectedPath])
+
+  const currentBody = useMemo(() => JSON.stringify(payload()), [payload])
+  useEffect(() => {
+    // After opening a version the loaded state settles on the next render; that settled state is the baseline.
+    if (rebaseOnNext.current) { rebaseOnNext.current = false; setSavedBody(currentBody) } // eslint-disable-line react-hooks/set-state-in-effect
+  }, [currentBody])
+  const hasUnsavedChanges = !signedIn || savedBody === null || savedBody !== currentBody
 
   // Debounced autosave of the working copy.
   useEffect(() => {
@@ -64,6 +75,7 @@ export function useBlueprintVersions(signedIn: boolean) {
       }).catch(() => null)
       const data = await res?.json().catch(() => ({})) ?? {}
       if (!res?.ok) { setError(data.error ?? 'Could not save. Check your connection and try again.'); return false }
+      setSavedBody(JSON.stringify(payload()))
       await refreshList()
       return true
     } finally { setBusy(false) }
@@ -79,6 +91,7 @@ export function useBlueprintVersions(signedIn: boolean) {
       if (row.extractedData) dispatch({ type: 'SET_EXTRACTED_DATA', data: row.extractedData })
       dispatch({ type: 'SET_BLUEPRINT', blueprint: row.blueprint })
       if (row.selectedPath) dispatch({ type: 'SELECT_PATH', path: row.selectedPath })
+      rebaseOnNext.current = true
       return true
     } finally { setBusy(false) }
   }, [dispatch])
@@ -91,7 +104,7 @@ export function useBlueprintVersions(signedIn: boolean) {
     } finally { setBusy(false) }
   }, [refreshList])
 
-  return { versions: signedIn ? listing.versions : [], busy, error, setError, save, open, remove }
+  return { versions: signedIn ? listing.versions : [], hasUnsavedChanges, busy, error, setError, save, open, remove }
 }
 
 export type VersionsApi = ReturnType<typeof useBlueprintVersions>

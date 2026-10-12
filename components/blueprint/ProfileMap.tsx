@@ -23,15 +23,6 @@ const VIEW_TABS: { id: ProjectView; label: string; icon: typeof LayoutGrid }[] =
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
 ]
 
-const URL_NUDGES = [
-  { key: 'linkedin', label: 'LinkedIn', placeholder: 'linkedin.com/in/yourname' },
-  { key: 'portfolio', label: 'Portfolio', placeholder: 'yourportfolio.com' },
-  { key: 'github', label: 'GitHub', placeholder: 'github.com/yourname' },
-  { key: 'behance', label: 'Behance', placeholder: 'behance.net/yourname' },
-]
-
-const inputCls = `w-full h-10 bg-[var(--bg)] border border-[var(--border-ws)] rounded-[10px] px-3 text-[14px] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] ${FOCUS_RING}`
-
 type ProfileTab = 'summary' | 'skills' | 'projects' | 'education'
 
 interface ProfileMapProps {
@@ -85,29 +76,6 @@ function Disclosure({ icon: Icon, title, body, children }: { icon: typeof Link2;
         )}
       </AnimatePresence>
     </Card>
-  )
-}
-
-function LinksNudge() {
-  const { state, dispatch } = useWingspan()
-  if (Object.values(state.urls).some(v => v)) return null
-  return (
-    <Disclosure icon={Link2} title="Add your online presence" body="LinkedIn, portfolio or GitHub give the analysis a fuller picture next time you run it.">
-      <div className="grid sm:grid-cols-2 gap-4">
-        {URL_NUDGES.map(({ key, label, placeholder }) => (
-          <label key={key} className="flex flex-col gap-1.5">
-            <span className="text-[12px] font-semibold text-[var(--text-muted)]">{label}</span>
-            <input
-              type="url"
-              placeholder={placeholder}
-              value={state.urls[key] ?? ''}
-              onChange={(e) => dispatch({ type: 'SET_URL', key, value: e.target.value })}
-              className={inputCls}
-            />
-          </label>
-        ))}
-      </div>
-    </Disclosure>
   )
 }
 
@@ -244,7 +212,6 @@ function SummaryTab({ blueprint, projects, timeline }: { blueprint: Blueprint; p
         </Block>
       )}
 
-      <LinksNudge />
     </>
   )
 }

@@ -37,6 +37,8 @@ export interface ExtractedCareerData {
   careerStageSignals?: string[]
   /** The person's own name as printed on the resume; empty when not found. */
   candidateName?: string
+  /** Contact details printed on the resume; any may be empty. */
+  contact?: { email?: string; phone?: string; location?: string; linkedinUrl?: string; portfolioUrl?: string; githubUrl?: string }
   evidenceQuality?: 'rich' | 'moderate' | 'sparse'
   geographySignals?: string[]
   footprintSignals?: string[]

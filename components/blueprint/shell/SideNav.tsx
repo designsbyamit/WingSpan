@@ -17,12 +17,16 @@ export interface SideNavProps {
   versionCount: number
   exporting: boolean
   onSave: () => void
+  /** False right after a save: the Save version buttons disappear until the Blueprint changes again. */
+  canSave: boolean
   onVersions: () => void
   onDeepAnalysis: (() => void) | null
   onExport: () => void
   onPreferences: () => void
   onSignIn: () => void
   onAccount: () => void
+  /** The profile home is open (opened from the avatar). */
+  homeActive?: boolean
   onSignOut: () => void
 }
 
@@ -99,7 +103,7 @@ export function SideNav(p: SideNavProps) {
       </nav>
 
       <div role="group" aria-label="Blueprint tools" className={`border-t border-[var(--border-ws)] py-3 flex flex-col gap-0.5 ${rail ? 'px-2' : 'px-3'}`}>
-        <UtilityButton rail={rail} icon={Bookmark} label="Save version" onClick={p.onSave} />
+        {p.canSave && <UtilityButton rail={rail} icon={Bookmark} label="Save version" onClick={p.onSave} />}
         {signedIn && (
           <UtilityButton
             rail={rail}
@@ -133,15 +137,25 @@ export function SideNav(p: SideNavProps) {
             <button
               type="button"
               onClick={p.onAccount}
-              aria-label={`Account: ${p.user!.email}`}
-              className={`w-full h-10 flex items-center justify-center rounded-[10px] hover:bg-[var(--surface-dim)] ${FOCUS_RING}`}
+              aria-label={`Your profile: ${p.user!.email}`}
+              aria-current={p.homeActive ? 'page' : undefined}
+              className={`w-full h-10 flex items-center justify-center rounded-[10px] hover:bg-[var(--surface-dim)] ${p.homeActive ? 'bg-[var(--surface-dim)]' : ''} ${FOCUS_RING}`}
             >
               <Avatar email={p.user!.email} />
             </button>
           ) : (
-            <div className="flex items-center gap-3 px-3 h-10">
-              <Avatar email={p.user!.email} />
-              <span className="flex-1 min-w-0 text-[13px] text-[var(--text-secondary)] truncate" title={p.user!.email}>{p.user!.email}</span>
+            <div className={`flex items-center gap-1 rounded-[10px] ${p.homeActive ? 'bg-[var(--surface-dim)]' : ''}`}>
+              <button
+                type="button"
+                onClick={p.onAccount}
+                aria-label="Open your profile"
+                aria-current={p.homeActive ? 'page' : undefined}
+                title="Your profile"
+                className={`flex flex-1 min-w-0 items-center gap-3 px-3 h-10 rounded-[10px] text-left hover:bg-[var(--surface-dim)] ${FOCUS_RING}`}
+              >
+                <Avatar email={p.user!.email} />
+                <span className="flex-1 min-w-0 text-[13px] text-[var(--text-secondary)] truncate">{p.user!.email}</span>
+              </button>
               <button
                 type="button"
                 onClick={p.onSignOut}

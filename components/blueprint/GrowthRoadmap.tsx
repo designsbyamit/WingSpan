@@ -153,7 +153,7 @@ export function GrowthRoadmap({ blueprint }: { blueprint: Blueprint }) {
           )}
         </>
       )}
-      {tab === 'actions' && <ActionsSection actions={actions} />}
+      {tab === 'actions' && <ActionsSection actions={actions} resources={blueprint.actions?.resources ?? []} />}
     </SectionFrame>
   )
 }

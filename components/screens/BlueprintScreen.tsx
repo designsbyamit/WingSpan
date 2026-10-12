@@ -2,7 +2,7 @@
 'use client'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Download, Loader2, Lock, LogOut, Menu, X } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Download, Loader2, Lock, Menu, X } from 'lucide-react'
 import { useWingspan } from '@/context/WingspanContext'
 import { StepErrorBoundary } from '@/components/ui/StepErrorBoundary'
 import { ProfileMap } from '@/components/blueprint/ProfileMap'
@@ -14,8 +14,11 @@ import { Resources } from '@/components/blueprint/Resources'
 import { AuthModal } from '@/components/blueprint/AuthModal'
 import { DeepAnalysisDialog } from '@/components/blueprint/DeepAnalysisPanel'
 import { SaveVersionDialog, VersionsDialog, useBlueprintVersions } from '@/components/blueprint/BlueprintVersions'
-import { SideNav, Avatar } from '@/components/blueprint/shell/SideNav'
-import { Dialog, useModalBehaviour } from '@/components/blueprint/shell/Dialog'
+import { ProfileHome } from '@/components/profile/home/ProfileHome'
+import { useProfileDetails } from '@/components/profile/home/useProfileDetails'
+import { ProfileDetailsDialog, type DetailsDialogState } from '@/components/blueprint/ProfileDetailsDialog'
+import { SideNav } from '@/components/blueprint/shell/SideNav'
+import { useModalBehaviour } from '@/components/blueprint/shell/Dialog'
 import { FlowFooter } from '@/components/onboarding/FlowFooter'
 import { cx, primaryButton, quietButton } from '@/components/onboarding/ui'
 import { PreferencesDialog, useThemePreference } from '@/components/blueprint/shell/PreferencesDialog'
@@ -43,8 +46,14 @@ function StepContent({ step, blueprint, extractedData }: {
   }
 }
 
-type Modal = null | 'save' | 'versions' | 'preferences' | 'account' | 'deep'
+type Modal = null | 'save' | 'versions' | 'preferences' | 'deep'
 type Pending = null | 'save' | 'export'
+
+const SECTION_MOTION = {
+  enter: (d: number) => ({ opacity: 0, x: 36 * d, filter: 'blur(6px)' }),
+  center: { opacity: 1, x: 0, filter: 'blur(0px)', transition: { duration: 0.34, ease: [0.22, 1, 0.36, 1] as const } },
+  exit: (d: number) => ({ opacity: 0, x: -24 * d, filter: 'blur(4px)', transition: { duration: 0.18, ease: 'easeIn' as const } }),
+}
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -64,10 +73,14 @@ export function BlueprintScreen() {
   const nudgeTimer = useRef<number | undefined>(undefined)
   const toastTimer = useRef<number | undefined>(undefined)
   const firstRender = useRef(true)
+  const [direction, setDirection] = useState(1)
+  const [homeOpen, setHomeOpen] = useState(false)
 
   const { user, loading: authLoading } = useAuth()
   const signedIn = !!user
   const versions = useBlueprintVersions(signedIn)
+  const profileDetails = useProfileDetails(signedIn)
+  const [detailsDialog, setDetailsDialog] = useState<DetailsDialogState | null>(null)
   const { theme, setTheme } = useThemePreference()
 
   const isLocked = useCallback(
@@ -98,8 +111,10 @@ export function BlueprintScreen() {
     setDrawerOpen(false)
     if (isLocked(step)) { showNudge(); return }
     setNudgeVisible(false)
-    if (step === currentStep) return
+    if (step === currentStep) { setHomeOpen(false); return }
     setVisited(prev => prev.includes(currentStep) ? prev : [...prev, currentStep])
+    setDirection(sectionIndex(step) >= sectionIndex(currentStep) ? 1 : -1)
+    setHomeOpen(false)
     setCurrentStep(step)
   }, [currentStep, isLocked, showNudge])
 
@@ -111,7 +126,7 @@ export function BlueprintScreen() {
       document.querySelector<HTMLElement>('[data-section-title]')?.focus({ preventScroll: true })
     })
     return () => window.cancelAnimationFrame(id)
-  }, [currentStep])
+  }, [currentStep, homeOpen])
 
   useEffect(() => () => { window.clearTimeout(nudgeTimer.current); window.clearTimeout(toastTimer.current) }, [])
 
@@ -147,6 +162,26 @@ export function BlueprintScreen() {
     notifyAuthChanged()
     flash('Signed out')
   }, [flash])
+
+  // Once signed in, read the details from the resume and ask the person to confirm them (first time) or approve
+  // changes (a newer resume with the same name). A resume with another name is ignored by the server.
+  const askKey = signedIn && profileDetails.loaded && extractedData ? `${extractedData.candidateName ?? ''}|${(extractedData.rawText ?? '').slice(0, 160)}|${profileDetails.profile?.confirmedAt ?? 'none'}` : null
+  const lastAsked = useRef<string | null>(null)
+  useEffect(() => {
+    if (!askKey || !extractedData || lastAsked.current === askKey) return
+    lastAsked.current = askKey
+    try { if (sessionStorage.getItem('wingspan-details-asked') === askKey) return; sessionStorage.setItem('wingspan-details-asked', askKey) } catch { /* storage unavailable */ }
+    let live = true
+    fetch('/api/profile-details', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ extracted: extractedData, urls: state.urls }) })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((p) => {
+        if (!live || !p) return
+        if (p.status === 'new') setDetailsDialog({ kind: 'new', proposed: p.proposed })
+        else if (p.status === 'same-person') setDetailsDialog({ kind: 'update', proposed: p.proposed, changes: p.changes })
+      })
+      .catch(() => null)
+    return () => { live = false }
+  }, [askKey, extractedData, state.urls])
 
   // Other surfaces (older code paths) can still ask for the save flow by event.
   useEffect(() => {
@@ -185,12 +220,14 @@ export function BlueprintScreen() {
     currentStep, completedSteps, isLocked, onStepClick: goTo, selectedPath,
     user: user ?? null, authLoading, versionCount: versions.versions.length, exporting,
     onSave: openSave,
+    canSave: versions.hasUnsavedChanges,
     onVersions: () => { setDrawerOpen(false); versions.setError(''); setModal('versions') },
     onDeepAnalysis: openDeepAnalysis,
     onExport: exportMarkdown,
     onPreferences: () => { setDrawerOpen(false); setModal('preferences') },
     onSignIn: openSignIn,
-    onAccount: () => setModal('account'),
+    onAccount: () => { setDrawerOpen(false); setDirection(1); setHomeOpen(true) },
+    homeActive: homeOpen,
     onSignOut: signOut,
   }
 
@@ -253,24 +290,34 @@ export function BlueprintScreen() {
                 )}
               </AnimatePresence>
 
-              <motion.div
-                key={currentStep}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.25, ease: 'easeOut' }}
-              >
-                <StepErrorBoundary key={currentStep} label={currentStep}>
-                  <StepContent step={currentStep} blueprint={blueprint} extractedData={extractedData} />
-                </StepErrorBoundary>
-              </motion.div>
+              {/* Sections glide in the direction of travel: forward slides in from the right, back from the left. */}
+              <AnimatePresence mode="wait" initial={false} custom={direction}>
+                <motion.div
+                  key={homeOpen ? 'home' : currentStep}
+                  custom={direction}
+                  variants={SECTION_MOTION}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                >
+                  {homeOpen ? (
+                    <StepErrorBoundary key="home" label="home">
+                      <ProfileHome details={profileDetails} versionCount={versions.versions.length} onClose={() => setHomeOpen(false)} onSignOut={signOut} goTo={(s) => { setHomeOpen(false); goTo(s) }} />
+                    </StepErrorBoundary>
+                  ) : (
+                    <StepErrorBoundary key={currentStep} label={currentStep}>
+                      <StepContent step={currentStep} blueprint={blueprint} extractedData={extractedData} />
+                    </StepErrorBoundary>
+                  )}
+                </motion.div>
+              </AnimatePresence>
 
             </div>
           </main>
 
           {/* Same sticky footer as the rest of the journey, carrying Previous / Next */}
-          <FlowFooter
+          {!homeOpen && <FlowFooter
             inset="left-0 md:left-[72px] lg:left-[264px]"
-            progress={Math.round(((idx + 1) / SECTIONS.length) * 100)}
             message={<>Step {idx + 1} of {SECTIONS.length} · {current.label}</>}
             hint={
               current.id === 'resources' ? 'Tracking your progress on this roadmap is coming soon.'
@@ -305,7 +352,7 @@ export function BlueprintScreen() {
                 </button>
               ))}
             </>}
-          />
+          />}
 
           {/* Dialogs */}
           <SaveVersionDialog
@@ -322,17 +369,13 @@ export function BlueprintScreen() {
             onSaveNew={() => { versions.setError(''); setModal('save') }}
           />
           <PreferencesDialog open={modal === 'preferences'} onClose={() => setModal(null)} theme={theme} setTheme={setTheme} />
-          <Dialog open={modal === 'account' && !!user} onClose={() => setModal(null)} title="Account">
-            {user && (
-              <div className="flex flex-col gap-5">
-                <div className="flex items-center gap-3">
-                  <Avatar email={user.email} />
-                  <p className="text-[14px] text-[var(--text-primary)] truncate">{user.email}</p>
-                </div>
-                <SecondaryButton onClick={signOut} className="self-start"><LogOut size={14} />Sign out</SecondaryButton>
-              </div>
-            )}
-          </Dialog>
+          <ProfileDetailsDialog
+            state={detailsDialog}
+            extracted={extractedData}
+            urls={state.urls}
+            onClose={() => setDetailsDialog(null)}
+            onSaved={() => { setDetailsDialog(null); void profileDetails.reload(); flash('Profile saved') }}
+          />
           <DeepAnalysisDialog analysis={blueprint.deepAnalysis} open={modal === 'deep'} onClose={() => setModal(null)} />
 
           <AnimatePresence>

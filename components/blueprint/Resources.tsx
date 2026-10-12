@@ -5,6 +5,7 @@ import {
   Layers, Library, Link2, Loader2, Newspaper, ScanSearch, Signpost, Users, Wrench, type LucideIcon,
 } from 'lucide-react'
 import { matchesPath } from '@/lib/path-match'
+import { resourceLink } from '@/lib/links'
 import { Blueprint, Resource } from '@/types/wingspan'
 import { useWingspan } from '@/context/WingspanContext'
 import { SectionFrame, type SectionTab } from './shell/SectionFrame'
@@ -52,9 +53,10 @@ function ResourceCard({ resource }: { resource: Resource }) {
   const Icon = meta.icon
   const cost = resource.cost ? COST[resource.cost] : undefined
   const firstStep = resource.firstStep || resource.whereToStart
+  const door = resourceLink(resource)
 
   return (
-    <Card as="li" className="p-5 flex flex-col gap-4">
+    <Card as="li" className="p-5 flex flex-col gap-4 transition duration-200 motion-safe:hover:-translate-y-0.5 hover:border-[var(--neon-border)]">
       <div className="flex items-start gap-4">
         <span className="shrink-0 w-10 h-10 rounded-[10px] bg-[var(--surface-dim)] flex items-center justify-center text-[var(--text-secondary)]">
           <Icon size={18} aria-hidden />
@@ -64,11 +66,9 @@ function ResourceCard({ resource }: { resource: Resource }) {
             {meta.label}{resource.provider ? <> from <span className="text-[var(--text-secondary)]">{resource.provider}</span></> : null}
           </p>
           <h4 className="text-[15px] font-semibold text-[var(--text-primary)] leading-snug mt-1" style={{ fontFamily: 'var(--font-sora)' }}>
-            {resource.url ? (
-              <a href={resource.url} target="_blank" rel="noopener noreferrer" className={`rounded-[4px] hover:underline underline-offset-4 ${FOCUS_RING}`}>
-                {resource.title}<span className="sr-only"> (opens in a new tab)</span>
-              </a>
-            ) : resource.title}
+            <a href={door.url} target="_blank" rel="noopener noreferrer" className={`rounded-[4px] hover:underline underline-offset-4 ${FOCUS_RING}`}>
+              {resource.title}<span className="sr-only"> ({door.isSearch ? 'searches the web, ' : ''}opens in a new tab)</span>
+            </a>
           </h4>
         </div>
       </div>
@@ -94,14 +94,14 @@ function ResourceCard({ resource }: { resource: Resource }) {
         </div>
       )}
 
-      {resource.url && (
+      {(
         <a
-          href={resource.url}
+          href={door.url}
           target="_blank"
           rel="noopener noreferrer"
           className={`mt-auto self-start inline-flex items-center gap-2 h-9 px-3.5 rounded-[10px] border border-[var(--border-ws)] text-[13px] font-semibold text-[var(--text-primary)] hover:bg-[var(--surface-dim)] ${FOCUS_RING}`}
         >
-          Open<ExternalLink size={13} aria-hidden /><span className="sr-only"> {resource.title} in a new tab</span>
+          {door.isSearch ? 'Search for it' : 'Open'}<ExternalLink size={13} aria-hidden /><span className="sr-only"> {resource.title} in a new tab</span>
         </a>
       )}
     </Card>

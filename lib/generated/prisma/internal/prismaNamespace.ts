@@ -467,7 +467,8 @@ export const ModelName = {
   Company: 'Company',
   Posting: 'Posting',
   JobBatch: 'JobBatch',
-  JobListing: 'JobListing'
+  JobListing: 'JobListing',
+  UserProfile: 'UserProfile'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -483,7 +484,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "domain" | "humanPattern" | "competency" | "skill" | "concept" | "conceptPrerequisite" | "principle" | "experience" | "challenge" | "asset" | "careerLevel" | "learningPath" | "learningPathEntry" | "conceptOnSkill" | "conceptOnHumanPattern" | "conceptOnPrinciple" | "conceptOnExperience" | "skillOnCompetency" | "skillOnCareerLevel" | "experienceOnCompetency" | "experienceOnHumanPattern" | "experienceOnPrinciple" | "challengeOnSkill" | "challengeOnCompetency" | "user" | "magicLinkToken" | "userCompetency" | "userSkill" | "userConceptMastery" | "learningSession" | "mentorMessage" | "userLearningPath" | "aIMentorContext" | "challengeSubmission" | "sourceDocument" | "extractionRun" | "role" | "project" | "education" | "skillClaim" | "analysisRun" | "agentOutput" | "evidence" | "evidenceLink" | "capability" | "capabilityEvidence" | "careerDnaSnapshot" | "dnaDimension" | "dnaDimensionEvidence" | "marketDirection" | "marketSignal" | "capabilityRequirement" | "careerCandidate" | "candidateEvidence" | "chosenBet" | "roadmap" | "roadmapMilestone" | "milestoneLink" | "userCapabilityProgress" | "auditEvent" | "feedback" | "usageLedger" | "blueprintSnapshot" | "marketDataSource" | "marketDataDocument" | "marketObservation" | "marketIngestionRun" | "company" | "posting" | "jobBatch" | "jobListing"
+    modelProps: "domain" | "humanPattern" | "competency" | "skill" | "concept" | "conceptPrerequisite" | "principle" | "experience" | "challenge" | "asset" | "careerLevel" | "learningPath" | "learningPathEntry" | "conceptOnSkill" | "conceptOnHumanPattern" | "conceptOnPrinciple" | "conceptOnExperience" | "skillOnCompetency" | "skillOnCareerLevel" | "experienceOnCompetency" | "experienceOnHumanPattern" | "experienceOnPrinciple" | "challengeOnSkill" | "challengeOnCompetency" | "user" | "magicLinkToken" | "userCompetency" | "userSkill" | "userConceptMastery" | "learningSession" | "mentorMessage" | "userLearningPath" | "aIMentorContext" | "challengeSubmission" | "sourceDocument" | "extractionRun" | "role" | "project" | "education" | "skillClaim" | "analysisRun" | "agentOutput" | "evidence" | "evidenceLink" | "capability" | "capabilityEvidence" | "careerDnaSnapshot" | "dnaDimension" | "dnaDimensionEvidence" | "marketDirection" | "marketSignal" | "capabilityRequirement" | "careerCandidate" | "candidateEvidence" | "chosenBet" | "roadmap" | "roadmapMilestone" | "milestoneLink" | "userCapabilityProgress" | "auditEvent" | "feedback" | "usageLedger" | "blueprintSnapshot" | "marketDataSource" | "marketDataDocument" | "marketObservation" | "marketIngestionRun" | "company" | "posting" | "jobBatch" | "jobListing" | "userProfile"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -5741,6 +5742,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    UserProfile: {
+      payload: Prisma.$UserProfilePayload<ExtArgs>
+      fields: Prisma.UserProfileFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserProfileFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserProfileFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>
+        }
+        findFirst: {
+          args: Prisma.UserProfileFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserProfileFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>
+        }
+        findMany: {
+          args: Prisma.UserProfileFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>[]
+        }
+        create: {
+          args: Prisma.UserProfileCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>
+        }
+        createMany: {
+          args: Prisma.UserProfileCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserProfileCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>[]
+        }
+        delete: {
+          args: Prisma.UserProfileDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>
+        }
+        update: {
+          args: Prisma.UserProfileUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>
+        }
+        deleteMany: {
+          args: Prisma.UserProfileDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserProfileUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserProfileUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>[]
+        }
+        upsert: {
+          args: Prisma.UserProfileUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserProfilePayload>
+        }
+        aggregate: {
+          args: Prisma.UserProfileAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserProfile>
+        }
+        groupBy: {
+          args: Prisma.UserProfileGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserProfileGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserProfileCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserProfileCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -6777,6 +6852,29 @@ export const JobListingScalarFieldEnum = {
 export type JobListingScalarFieldEnum = (typeof JobListingScalarFieldEnum)[keyof typeof JobListingScalarFieldEnum]
 
 
+export const UserProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  fullName: 'fullName',
+  email: 'email',
+  phone: 'phone',
+  location: 'location',
+  linkedinUrl: 'linkedinUrl',
+  portfolioUrl: 'portfolioUrl',
+  githubUrl: 'githubUrl',
+  experienceYears: 'experienceYears',
+  track: 'track',
+  currentRole: 'currentRole',
+  currentOrg: 'currentOrg',
+  education: 'education',
+  confirmedAt: 'confirmedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type UserProfileScalarFieldEnum = (typeof UserProfileScalarFieldEnum)[keyof typeof UserProfileScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -7423,6 +7521,7 @@ export type GlobalOmitConfig = {
   posting?: Prisma.PostingOmit
   jobBatch?: Prisma.JobBatchOmit
   jobListing?: Prisma.JobListingOmit
+  userProfile?: Prisma.UserProfileOmit
 }
 
 /* Types for Logging */

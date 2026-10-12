@@ -396,3 +396,10 @@ export type JobBatch = Prisma.JobBatchModel
  * 
  */
 export type JobListing = Prisma.JobListingModel
+/**
+ * Model UserProfile
+ * The person's own details, read from their first resume and confirmed by them. The name is locked once
+ * confirmed: a later resume with a different name never changes it; one with the same name can update the
+ * other fields, but only with the person's consent.
+ */
+export type UserProfile = Prisma.UserProfileModel
