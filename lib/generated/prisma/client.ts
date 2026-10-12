@@ -374,3 +374,13 @@ export type MarketObservation = Prisma.MarketObservationModel
  * 
  */
 export type MarketIngestionRun = Prisma.MarketIngestionRunModel
+/**
+ * Model Company
+ * 
+ */
+export type Company = Prisma.CompanyModel
+/**
+ * Model Posting
+ * 
+ */
+export type Posting = Prisma.PostingModel

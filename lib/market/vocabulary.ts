@@ -21,6 +21,7 @@ export const METRICS = [
   'attrition',
   'fresher_hiring_intent', // share of employers planning to hire freshers / entry-level
   'entry_level_employment', // employment, unemployment or underemployment of early-career workers
+  'placement_rate',        // share of registered/participating students placed by campus placement
   'entry_requirement',     // what entry-level postings ask for (internships, portfolios, degrees)
   'other',
 ] as const

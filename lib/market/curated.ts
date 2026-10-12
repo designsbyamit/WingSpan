@@ -17,6 +17,32 @@ const o = (metric: Metric, subject: string, region: string, value: number | null
 
 export const CURATED: CuratedDocument[] = [
   {
+    url: 'https://design.careers360.com/articles/iit-bombay-design-placement',
+    title: 'IDC School of Design, IIT Bombay: placements 2023-24 (Careers360, citing the institute placement report)', publishedAt: '2026-03-18', category: 'JOB_MARKET',
+    observations: [
+      o('placement_rate', 'IDC IIT Bombay M.Des', 'India', 57.1, '% of participants placed', '2023-24', 'IDC IIT Bombay 2023-24: 36 of 63 participating M.Des students placed on campus (57.1%).', 0.6),
+      o('placement_rate', 'IDC IIT Bombay B.Des', 'India', 52.9, '% of participants placed', '2023-24', 'IDC IIT Bombay 2023-24: 9 of 17 participating B.Des students placed on campus (52.9%).', 0.6),
+      o('hiring_volume', 'Design offers at IIT Bombay', 'India', 33, 'offers', '2023-24', 'IIT Bombay received 33 design offers from 17 companies in 2023-24, about 2.2% of all its campus offers; recruiters include Google, Microsoft, Adobe, Oracle, Atlassian, Nvidia, Samsung, Myntra.', 0.6),
+    ],
+  },
+  {
+    url: 'https://design.careers360.com/articles/iit-placements-for-bdesign',
+    title: 'B.Des placements at IITs 2023-24 (Careers360)', publishedAt: null, category: 'JOB_MARKET',
+    observations: [
+      o('placement_rate', 'IIT Guwahati design', 'India', 55, '% placed', '2023-24', 'IIT Guwahati design placement was 55% in 2023-24, down from 74% in 2022-23 and 71% in 2021-22.', 0.6),
+      o('salary', 'IIT Guwahati design (median)', 'India', 30.75, 'INR lakh/yr', '2023-24', 'IIT Guwahati design median package 30.75 LPA (average 36.17, lowest 8.16) in 2023-24; applies to the placed minority from a top-tier institute.', 0.6),
+      o('placement_rate', 'IIT Hyderabad design', 'India', 12.5, '% placed', '2023-24', 'IIT Hyderabad design placement fell to 12.5% in 2023-24 from 55.6% in 2022-23.', 0.6),
+    ],
+  },
+  {
+    url: 'https://design.careers360.com/articles/nid-placements',
+    title: 'NID placements (Careers360, data to 2023-24)', publishedAt: '2025-12-19', category: 'JOB_MARKET',
+    observations: [
+      o('placement_rate', 'NID offers per student', 'India', 69, '% offers per student (derived)', '2023-24', 'NID campuses recorded offers equal to roughly 65-73% of students in 2023-24, down from about 83-87% in 2021-22 (derived from reported counts, not an official placement rate).', 0.5),
+      o('salary', 'NID lowest package', 'India', 3, 'INR lakh/yr', '2023-24', 'NID campus-wide lowest packages ran about 3-4 LPA through 2021-24; highest 30-46 LPA. Recruiters include Microsoft, Cognizant, Titan, Hindustan Unilever, Hero MotoCorp.', 0.5),
+    ],
+  },
+  {
     url: 'https://www.peoplematters.in/news/workforce-planning/fresher-hiring-intent-rises-to-75percent-but-it-demand-loses-ground-report-51352',
     title: 'TeamLease EdTech fresher hiring outlook, July-December 2026 (1,097 employers) - coverage', publishedAt: '2026-08-11', category: 'JOB_MARKET',
     observations: [

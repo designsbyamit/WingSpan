@@ -1283,3 +1283,52 @@ model MarketIngestionRun {
   observationsNew Int       @default(0)
   details         Json?
 }
+
+// Employers and their open design-related roles, crawled from public job-board feeds (Greenhouse, Lever, Ashby, Workable).
+// Used by the student coach to find fresher-friendly openings. Refreshed by lib/jobs/crawl.ts.
+
+model Company {
+  id            String    @id @default(cuid())
+  key           String    @unique // slug, e.g. "razorpay"
+  name          String
+  sector        String? // fintech, saas, e-commerce, gcc, agency, ...
+  kind          String    @default("PRODUCT") // PRODUCT | GCC | STARTUP | AGENCY | ENTERPRISE
+  cities        String[]  @default([])
+  careersUrl    String?
+  atsType       String? // GREENHOUSE | LEVER | ASHBY | WORKABLE (null until discovered)
+  atsToken      String?
+  seeded        Boolean   @default(true) // true = on the curated list maintained by the product owner
+  notes         String?
+  fresherScore  Float? // 0-100, null when there is not enough evidence
+  scoreSignals  Json?
+  lastCrawledAt DateTime?
+  lastStatus    String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  postings      Posting[]
+}
+
+model Posting {
+  id            String    @id @default(cuid())
+  companyId     String
+  externalId    String
+  title         String
+  url           String
+  location      String?
+  inIndia       Boolean   @default(false)
+  remote        Boolean   @default(false)
+  isDesign      Boolean   @default(false)
+  seniority     String    @default("UNKNOWN") // INTERN | FRESHER | JUNIOR | MID | SENIOR | UNKNOWN
+  minYears      Int?
+  fresherOk     Boolean   @default(false)
+  postedAt      DateTime?
+  firstSeenAt   DateTime  @default(now())
+  lastSeenAt    DateTime  @default(now())
+  closedAt      DateTime?
+  excerpt       String?
+  company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, externalId])
+  @@index([isDesign, inIndia, closedAt])
+  @@index([fresherOk])
+}

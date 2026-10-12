@@ -117,7 +117,9 @@ export const ModelName = {
   MarketDataSource: 'MarketDataSource',
   MarketDataDocument: 'MarketDataDocument',
   MarketObservation: 'MarketObservation',
-  MarketIngestionRun: 'MarketIngestionRun'
+  MarketIngestionRun: 'MarketIngestionRun',
+  Company: 'Company',
+  Posting: 'Posting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1040,6 +1042,52 @@ export const MarketIngestionRunScalarFieldEnum = {
 } as const
 
 export type MarketIngestionRunScalarFieldEnum = (typeof MarketIngestionRunScalarFieldEnum)[keyof typeof MarketIngestionRunScalarFieldEnum]
+
+
+export const CompanyScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  name: 'name',
+  sector: 'sector',
+  kind: 'kind',
+  cities: 'cities',
+  careersUrl: 'careersUrl',
+  atsType: 'atsType',
+  atsToken: 'atsToken',
+  seeded: 'seeded',
+  notes: 'notes',
+  fresherScore: 'fresherScore',
+  scoreSignals: 'scoreSignals',
+  lastCrawledAt: 'lastCrawledAt',
+  lastStatus: 'lastStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompanyScalarFieldEnum = (typeof CompanyScalarFieldEnum)[keyof typeof CompanyScalarFieldEnum]
+
+
+export const PostingScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  externalId: 'externalId',
+  title: 'title',
+  url: 'url',
+  location: 'location',
+  inIndia: 'inIndia',
+  remote: 'remote',
+  isDesign: 'isDesign',
+  seniority: 'seniority',
+  minYears: 'minYears',
+  fresherOk: 'fresherOk',
+  postedAt: 'postedAt',
+  firstSeenAt: 'firstSeenAt',
+  lastSeenAt: 'lastSeenAt',
+  closedAt: 'closedAt',
+  excerpt: 'excerpt'
+} as const
+
+export type PostingScalarFieldEnum = (typeof PostingScalarFieldEnum)[keyof typeof PostingScalarFieldEnum]
 
 
 export const SortOrder = {

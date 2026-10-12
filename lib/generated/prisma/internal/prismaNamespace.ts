@@ -463,7 +463,9 @@ export const ModelName = {
   MarketDataSource: 'MarketDataSource',
   MarketDataDocument: 'MarketDataDocument',
   MarketObservation: 'MarketObservation',
-  MarketIngestionRun: 'MarketIngestionRun'
+  MarketIngestionRun: 'MarketIngestionRun',
+  Company: 'Company',
+  Posting: 'Posting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -479,7 +481,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "domain" | "humanPattern" | "competency" | "skill" | "concept" | "conceptPrerequisite" | "principle" | "experience" | "challenge" | "asset" | "careerLevel" | "learningPath" | "learningPathEntry" | "conceptOnSkill" | "conceptOnHumanPattern" | "conceptOnPrinciple" | "conceptOnExperience" | "skillOnCompetency" | "skillOnCareerLevel" | "experienceOnCompetency" | "experienceOnHumanPattern" | "experienceOnPrinciple" | "challengeOnSkill" | "challengeOnCompetency" | "user" | "magicLinkToken" | "userCompetency" | "userSkill" | "userConceptMastery" | "learningSession" | "mentorMessage" | "userLearningPath" | "aIMentorContext" | "challengeSubmission" | "sourceDocument" | "extractionRun" | "role" | "project" | "education" | "skillClaim" | "analysisRun" | "agentOutput" | "evidence" | "evidenceLink" | "capability" | "capabilityEvidence" | "careerDnaSnapshot" | "dnaDimension" | "dnaDimensionEvidence" | "marketDirection" | "marketSignal" | "capabilityRequirement" | "careerCandidate" | "candidateEvidence" | "chosenBet" | "roadmap" | "roadmapMilestone" | "milestoneLink" | "userCapabilityProgress" | "auditEvent" | "feedback" | "usageLedger" | "blueprintSnapshot" | "marketDataSource" | "marketDataDocument" | "marketObservation" | "marketIngestionRun"
+    modelProps: "domain" | "humanPattern" | "competency" | "skill" | "concept" | "conceptPrerequisite" | "principle" | "experience" | "challenge" | "asset" | "careerLevel" | "learningPath" | "learningPathEntry" | "conceptOnSkill" | "conceptOnHumanPattern" | "conceptOnPrinciple" | "conceptOnExperience" | "skillOnCompetency" | "skillOnCareerLevel" | "experienceOnCompetency" | "experienceOnHumanPattern" | "experienceOnPrinciple" | "challengeOnSkill" | "challengeOnCompetency" | "user" | "magicLinkToken" | "userCompetency" | "userSkill" | "userConceptMastery" | "learningSession" | "mentorMessage" | "userLearningPath" | "aIMentorContext" | "challengeSubmission" | "sourceDocument" | "extractionRun" | "role" | "project" | "education" | "skillClaim" | "analysisRun" | "agentOutput" | "evidence" | "evidenceLink" | "capability" | "capabilityEvidence" | "careerDnaSnapshot" | "dnaDimension" | "dnaDimensionEvidence" | "marketDirection" | "marketSignal" | "capabilityRequirement" | "careerCandidate" | "candidateEvidence" | "chosenBet" | "roadmap" | "roadmapMilestone" | "milestoneLink" | "userCapabilityProgress" | "auditEvent" | "feedback" | "usageLedger" | "blueprintSnapshot" | "marketDataSource" | "marketDataDocument" | "marketObservation" | "marketIngestionRun" | "company" | "posting"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -5441,6 +5443,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Company: {
+      payload: Prisma.$CompanyPayload<ExtArgs>
+      fields: Prisma.CompanyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CompanyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CompanyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyPayload>
+        }
+        findFirst: {
+          args: Prisma.CompanyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CompanyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyPayload>
+        }
+        findMany: {
+          args: Prisma.CompanyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyPayload>[]
+        }
+        create: {
+          args: Prisma.CompanyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyPayload>
+        }
+        createMany: {
+          args: Prisma.CompanyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.CompanyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyPayload>[]
+        }
+        delete: {
+          args: Prisma.CompanyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyPayload>
+        }
+        update: {
+          args: Prisma.CompanyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyPayload>
+        }
+        deleteMany: {
+          args: Prisma.CompanyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CompanyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.CompanyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyPayload>[]
+        }
+        upsert: {
+          args: Prisma.CompanyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CompanyPayload>
+        }
+        aggregate: {
+          args: Prisma.CompanyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCompany>
+        }
+        groupBy: {
+          args: Prisma.CompanyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CompanyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CompanyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CompanyCountAggregateOutputType> | number
+        }
+      }
+    }
+    Posting: {
+      payload: Prisma.$PostingPayload<ExtArgs>
+      fields: Prisma.PostingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PostingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PostingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingPayload>
+        }
+        findFirst: {
+          args: Prisma.PostingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PostingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingPayload>
+        }
+        findMany: {
+          args: Prisma.PostingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingPayload>[]
+        }
+        create: {
+          args: Prisma.PostingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingPayload>
+        }
+        createMany: {
+          args: Prisma.PostingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PostingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingPayload>[]
+        }
+        delete: {
+          args: Prisma.PostingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingPayload>
+        }
+        update: {
+          args: Prisma.PostingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingPayload>
+        }
+        deleteMany: {
+          args: Prisma.PostingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PostingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PostingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingPayload>[]
+        }
+        upsert: {
+          args: Prisma.PostingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PostingPayload>
+        }
+        aggregate: {
+          args: Prisma.PostingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePosting>
+        }
+        groupBy: {
+          args: Prisma.PostingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PostingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PostingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PostingCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -6386,6 +6536,52 @@ export const MarketIngestionRunScalarFieldEnum = {
 export type MarketIngestionRunScalarFieldEnum = (typeof MarketIngestionRunScalarFieldEnum)[keyof typeof MarketIngestionRunScalarFieldEnum]
 
 
+export const CompanyScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  name: 'name',
+  sector: 'sector',
+  kind: 'kind',
+  cities: 'cities',
+  careersUrl: 'careersUrl',
+  atsType: 'atsType',
+  atsToken: 'atsToken',
+  seeded: 'seeded',
+  notes: 'notes',
+  fresherScore: 'fresherScore',
+  scoreSignals: 'scoreSignals',
+  lastCrawledAt: 'lastCrawledAt',
+  lastStatus: 'lastStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CompanyScalarFieldEnum = (typeof CompanyScalarFieldEnum)[keyof typeof CompanyScalarFieldEnum]
+
+
+export const PostingScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  externalId: 'externalId',
+  title: 'title',
+  url: 'url',
+  location: 'location',
+  inIndia: 'inIndia',
+  remote: 'remote',
+  isDesign: 'isDesign',
+  seniority: 'seniority',
+  minYears: 'minYears',
+  fresherOk: 'fresherOk',
+  postedAt: 'postedAt',
+  firstSeenAt: 'firstSeenAt',
+  lastSeenAt: 'lastSeenAt',
+  closedAt: 'closedAt',
+  excerpt: 'excerpt'
+} as const
+
+export type PostingScalarFieldEnum = (typeof PostingScalarFieldEnum)[keyof typeof PostingScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -7028,6 +7224,8 @@ export type GlobalOmitConfig = {
   marketDataDocument?: Prisma.MarketDataDocumentOmit
   marketObservation?: Prisma.MarketObservationOmit
   marketIngestionRun?: Prisma.MarketIngestionRunOmit
+  company?: Prisma.CompanyOmit
+  posting?: Prisma.PostingOmit
 }
 
 /* Types for Logging */

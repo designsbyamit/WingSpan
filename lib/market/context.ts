@@ -35,7 +35,7 @@ export async function getMarketBriefing(regions: string[] = [], limit = 36, opts
     }
     const scoredAll = [...newest.values()].map((r) => {
       const age = r.observedAt ? (now - r.observedAt.getTime()) / DAY : 400
-      const score = r.reliability + (want.has(r.region) ? 0.25 : 0) + (RELEVANT.test(r.subject) || RELEVANT.test(r.statement) ? 0.15 : 0) + (opts.entryLevel && (ENTRY.test(r.subject) || ENTRY.test(r.statement) || r.metric === 'fresher_hiring_intent' || r.metric === 'entry_level_employment' || r.metric === 'entry_requirement') ? 0.6 : 0) + (age < 550 ? 0.1 : -0.1)
+      const score = r.reliability + (want.has(r.region) ? 0.25 : 0) + (RELEVANT.test(r.subject) || RELEVANT.test(r.statement) ? 0.15 : 0) + (opts.entryLevel && (ENTRY.test(r.subject) || ENTRY.test(r.statement) || r.metric === 'fresher_hiring_intent' || r.metric === 'entry_level_employment' || r.metric === 'entry_requirement' || r.metric === 'placement_rate') ? 0.6 : 0) + (age < 550 ? 0.1 : -0.1)
       return { r, score }
     }).sort((a, b) => b.score - a.score)
     // No single source may crowd out the rest (the Indeed feed alone has ~90 series).

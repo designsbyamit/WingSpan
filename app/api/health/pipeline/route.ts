@@ -103,6 +103,26 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ ok: false, error: e instanceof Error ? e.message.slice(0, 300) : 'failed' })
     }
   }
+  // ?flow=jobs crawls company job boards into Company/Posting (add &company=key for one, &limit=N, &rediscover=1 to retry board discovery).
+  if (req.nextUrl.searchParams.get('flow') === 'jobs') {
+    try {
+      const { crawlJobs } = await import('@/lib/jobs/crawl')
+      const q = req.nextUrl.searchParams
+      const summary = await crawlJobs({ budgetMs: 200_000, limit: Number(q.get('limit') ?? 12), onlyCompany: q.get('company') ?? undefined, rediscover: q.get('rediscover') === '1' })
+      return NextResponse.json({ ok: true, ...summary })
+    } catch (e) {
+      return NextResponse.json({ ok: false, error: e instanceof Error ? e.message.slice(0, 300) : 'failed' })
+    }
+  }
+  // ?flow=jobsdb summarises companies, boards found and the fresher-friendly openings.
+  if (req.nextUrl.searchParams.get('flow') === 'jobsdb') {
+    const [companies, open, fresher] = await Promise.all([
+      db.company.findMany({ select: { key: true, atsType: true, atsToken: true, lastStatus: true, fresherScore: true }, orderBy: { fresherScore: { sort: 'desc', nulls: 'last' } } }),
+      db.posting.count({ where: { isDesign: true, closedAt: null } }),
+      db.posting.findMany({ where: { fresherOk: true, closedAt: null, OR: [{ inIndia: true }, { remote: true }] }, take: 25, orderBy: { lastSeenAt: 'desc' }, select: { title: true, location: true, seniority: true, url: true, company: { select: { name: true } } } }),
+    ])
+    return NextResponse.json({ ok: true, companies: companies.length, withBoard: companies.filter((c) => c.atsType).length, openDesignPostings: open, fresherFriendly: fresher, list: companies })
+  }
   // ?flow=marketdb summarises what the market database holds.
   if (req.nextUrl.searchParams.get('flow') === 'marketdb') {
     const [sources, docs, obs, runs] = await Promise.all([
