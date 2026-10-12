@@ -52,6 +52,7 @@ export type PostingMinAggregateOutputType = {
   lastSeenAt: Date | null
   closedAt: Date | null
   excerpt: string | null
+  source: string | null
 }
 
 export type PostingMaxAggregateOutputType = {
@@ -72,6 +73,7 @@ export type PostingMaxAggregateOutputType = {
   lastSeenAt: Date | null
   closedAt: Date | null
   excerpt: string | null
+  source: string | null
 }
 
 export type PostingCountAggregateOutputType = {
@@ -92,6 +94,7 @@ export type PostingCountAggregateOutputType = {
   lastSeenAt: number
   closedAt: number
   excerpt: number
+  source: number
   _all: number
 }
 
@@ -122,6 +125,7 @@ export type PostingMinAggregateInputType = {
   lastSeenAt?: true
   closedAt?: true
   excerpt?: true
+  source?: true
 }
 
 export type PostingMaxAggregateInputType = {
@@ -142,6 +146,7 @@ export type PostingMaxAggregateInputType = {
   lastSeenAt?: true
   closedAt?: true
   excerpt?: true
+  source?: true
 }
 
 export type PostingCountAggregateInputType = {
@@ -162,6 +167,7 @@ export type PostingCountAggregateInputType = {
   lastSeenAt?: true
   closedAt?: true
   excerpt?: true
+  source?: true
   _all?: true
 }
 
@@ -269,6 +275,7 @@ export type PostingGroupByOutputType = {
   lastSeenAt: Date
   closedAt: Date | null
   excerpt: string | null
+  source: string
   _count: PostingCountAggregateOutputType | null
   _avg: PostingAvgAggregateOutputType | null
   _sum: PostingSumAggregateOutputType | null
@@ -312,6 +319,7 @@ export type PostingWhereInput = {
   lastSeenAt?: Prisma.DateTimeFilter<"Posting"> | Date | string
   closedAt?: Prisma.DateTimeNullableFilter<"Posting"> | Date | string | null
   excerpt?: Prisma.StringNullableFilter<"Posting"> | string | null
+  source?: Prisma.StringFilter<"Posting"> | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
 }
 
@@ -333,6 +341,7 @@ export type PostingOrderByWithRelationInput = {
   lastSeenAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   excerpt?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrder
   company?: Prisma.CompanyOrderByWithRelationInput
 }
 
@@ -358,6 +367,7 @@ export type PostingWhereUniqueInput = Prisma.AtLeast<{
   lastSeenAt?: Prisma.DateTimeFilter<"Posting"> | Date | string
   closedAt?: Prisma.DateTimeNullableFilter<"Posting"> | Date | string | null
   excerpt?: Prisma.StringNullableFilter<"Posting"> | string | null
+  source?: Prisma.StringFilter<"Posting"> | string
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
 }, "id" | "companyId_externalId">
 
@@ -379,6 +389,7 @@ export type PostingOrderByWithAggregationInput = {
   lastSeenAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   excerpt?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrder
   _count?: Prisma.PostingCountOrderByAggregateInput
   _avg?: Prisma.PostingAvgOrderByAggregateInput
   _max?: Prisma.PostingMaxOrderByAggregateInput
@@ -407,6 +418,7 @@ export type PostingScalarWhereWithAggregatesInput = {
   lastSeenAt?: Prisma.DateTimeWithAggregatesFilter<"Posting"> | Date | string
   closedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Posting"> | Date | string | null
   excerpt?: Prisma.StringNullableWithAggregatesFilter<"Posting"> | string | null
+  source?: Prisma.StringWithAggregatesFilter<"Posting"> | string
 }
 
 export type PostingCreateInput = {
@@ -426,6 +438,7 @@ export type PostingCreateInput = {
   lastSeenAt?: Date | string
   closedAt?: Date | string | null
   excerpt?: string | null
+  source?: string
   company: Prisma.CompanyCreateNestedOneWithoutPostingsInput
 }
 
@@ -447,6 +460,7 @@ export type PostingUncheckedCreateInput = {
   lastSeenAt?: Date | string
   closedAt?: Date | string | null
   excerpt?: string | null
+  source?: string
 }
 
 export type PostingUpdateInput = {
@@ -466,6 +480,7 @@ export type PostingUpdateInput = {
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   company?: Prisma.CompanyUpdateOneRequiredWithoutPostingsNestedInput
 }
 
@@ -487,6 +502,7 @@ export type PostingUncheckedUpdateInput = {
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PostingCreateManyInput = {
@@ -507,6 +523,7 @@ export type PostingCreateManyInput = {
   lastSeenAt?: Date | string
   closedAt?: Date | string | null
   excerpt?: string | null
+  source?: string
 }
 
 export type PostingUpdateManyMutationInput = {
@@ -526,6 +543,7 @@ export type PostingUpdateManyMutationInput = {
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PostingUncheckedUpdateManyInput = {
@@ -546,6 +564,7 @@ export type PostingUncheckedUpdateManyInput = {
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PostingListRelationFilter = {
@@ -581,6 +600,7 @@ export type PostingCountOrderByAggregateInput = {
   lastSeenAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrder
   excerpt?: Prisma.SortOrder
+  source?: Prisma.SortOrder
 }
 
 export type PostingAvgOrderByAggregateInput = {
@@ -605,6 +625,7 @@ export type PostingMaxOrderByAggregateInput = {
   lastSeenAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrder
   excerpt?: Prisma.SortOrder
+  source?: Prisma.SortOrder
 }
 
 export type PostingMinOrderByAggregateInput = {
@@ -625,6 +646,7 @@ export type PostingMinOrderByAggregateInput = {
   lastSeenAt?: Prisma.SortOrder
   closedAt?: Prisma.SortOrder
   excerpt?: Prisma.SortOrder
+  source?: Prisma.SortOrder
 }
 
 export type PostingSumOrderByAggregateInput = {
@@ -690,6 +712,7 @@ export type PostingCreateWithoutCompanyInput = {
   lastSeenAt?: Date | string
   closedAt?: Date | string | null
   excerpt?: string | null
+  source?: string
 }
 
 export type PostingUncheckedCreateWithoutCompanyInput = {
@@ -709,6 +732,7 @@ export type PostingUncheckedCreateWithoutCompanyInput = {
   lastSeenAt?: Date | string
   closedAt?: Date | string | null
   excerpt?: string | null
+  source?: string
 }
 
 export type PostingCreateOrConnectWithoutCompanyInput = {
@@ -758,6 +782,7 @@ export type PostingScalarWhereInput = {
   lastSeenAt?: Prisma.DateTimeFilter<"Posting"> | Date | string
   closedAt?: Prisma.DateTimeNullableFilter<"Posting"> | Date | string | null
   excerpt?: Prisma.StringNullableFilter<"Posting"> | string | null
+  source?: Prisma.StringFilter<"Posting"> | string
 }
 
 export type PostingCreateManyCompanyInput = {
@@ -777,6 +802,7 @@ export type PostingCreateManyCompanyInput = {
   lastSeenAt?: Date | string
   closedAt?: Date | string | null
   excerpt?: string | null
+  source?: string
 }
 
 export type PostingUpdateWithoutCompanyInput = {
@@ -796,6 +822,7 @@ export type PostingUpdateWithoutCompanyInput = {
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PostingUncheckedUpdateWithoutCompanyInput = {
@@ -815,6 +842,7 @@ export type PostingUncheckedUpdateWithoutCompanyInput = {
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PostingUncheckedUpdateManyWithoutCompanyInput = {
@@ -834,6 +862,7 @@ export type PostingUncheckedUpdateManyWithoutCompanyInput = {
   lastSeenAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   excerpt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -856,6 +885,7 @@ export type PostingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   lastSeenAt?: boolean
   closedAt?: boolean
   excerpt?: boolean
+  source?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["posting"]>
 
@@ -877,6 +907,7 @@ export type PostingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   lastSeenAt?: boolean
   closedAt?: boolean
   excerpt?: boolean
+  source?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["posting"]>
 
@@ -898,6 +929,7 @@ export type PostingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   lastSeenAt?: boolean
   closedAt?: boolean
   excerpt?: boolean
+  source?: boolean
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["posting"]>
 
@@ -919,9 +951,10 @@ export type PostingSelectScalar = {
   lastSeenAt?: boolean
   closedAt?: boolean
   excerpt?: boolean
+  source?: boolean
 }
 
-export type PostingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "externalId" | "title" | "url" | "location" | "inIndia" | "remote" | "isDesign" | "seniority" | "minYears" | "fresherOk" | "postedAt" | "firstSeenAt" | "lastSeenAt" | "closedAt" | "excerpt", ExtArgs["result"]["posting"]>
+export type PostingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "companyId" | "externalId" | "title" | "url" | "location" | "inIndia" | "remote" | "isDesign" | "seniority" | "minYears" | "fresherOk" | "postedAt" | "firstSeenAt" | "lastSeenAt" | "closedAt" | "excerpt" | "source", ExtArgs["result"]["posting"]>
 export type PostingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
 }
@@ -955,6 +988,7 @@ export type $PostingPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     lastSeenAt: Date
     closedAt: Date | null
     excerpt: string | null
+    source: string
   }, ExtArgs["result"]["posting"]>
   composites: {}
 }
@@ -1396,6 +1430,7 @@ export interface PostingFieldRefs {
   readonly lastSeenAt: Prisma.FieldRef<"Posting", 'DateTime'>
   readonly closedAt: Prisma.FieldRef<"Posting", 'DateTime'>
   readonly excerpt: Prisma.FieldRef<"Posting", 'String'>
+  readonly source: Prisma.FieldRef<"Posting", 'String'>
 }
     
 

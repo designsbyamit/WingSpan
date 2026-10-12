@@ -1084,7 +1084,8 @@ export const PostingScalarFieldEnum = {
   firstSeenAt: 'firstSeenAt',
   lastSeenAt: 'lastSeenAt',
   closedAt: 'closedAt',
-  excerpt: 'excerpt'
+  excerpt: 'excerpt',
+  source: 'source'
 } as const
 
 export type PostingScalarFieldEnum = (typeof PostingScalarFieldEnum)[keyof typeof PostingScalarFieldEnum]

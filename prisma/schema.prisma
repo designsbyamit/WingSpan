@@ -1326,6 +1326,7 @@ model Posting {
   lastSeenAt    DateTime  @default(now())
   closedAt      DateTime?
   excerpt       String?
+  source        String    @default("ATS") // ATS (public job-board feed) | CAREER_PAGE (structured data on the employer's own page)
   company       Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@unique([companyId, externalId])

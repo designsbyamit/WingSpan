@@ -39,3 +39,22 @@ test('fresher score: evidence beats prior; unknown stays null', () => {
   const low = fresherScore({ kind: 'STARTUP', crawledOk: true, designOpen: 4, indiaDesignOpen: 4, fresherOpen: 0, fresherSeen90d: 0 })
   assert.ok(high.score! > low.score! + 40)
 })
+
+import { parseJobPostings } from './careerpage'
+import { postingCitation, formatCitation } from '../sources/citations'
+test('career page JSON-LD is parsed, including @graph and remote jobs', () => {
+  const html = `<html><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"JobPosting","title":"Associate Product Designer","url":"https://x.com/j/1","datePosted":"2026-10-01","identifier":{"value":"J1"},"jobLocation":{"address":{"addressLocality":"Bengaluru","addressCountry":"IN"}},"description":"<p>0-1 years</p>"}]}</script>
+  <script type="application/ld+json">not json</script>
+  <script type="application/ld+json">{"@type":"JobPosting","title":"Visual Designer","jobLocationType":"TELECOMMUTE"}</script></html>`
+  const r = parseJobPostings(html, 'https://x.com/careers')
+  assert.equal(r.length, 2)
+  assert.equal(r[0].externalId, 'J1')
+  assert.equal(r[0].location, 'Bengaluru, IN')
+  assert.equal(r[0].text, '0-1 years')
+  assert.match(r[1].location ?? '', /Remote/)
+})
+test('citations always carry publisher, dates and a link or an explicit no-link note', () => {
+  const c = postingCitation({ title: 'Design Intern', url: 'https://x.com/j', lastSeenAt: new Date('2026-10-12'), source: 'ATS', company: { name: 'Acme' } })
+  assert.match(formatCitation(c), /Acme.*read 2026-10-12.*https:\/\/x\.com\/j/)
+  assert.match(formatCitation({ kind: 'REPORT', label: 'R', publisher: 'P', url: null, retrievedAt: null }), /no public link/)
+})

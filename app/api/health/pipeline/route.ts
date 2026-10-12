@@ -114,6 +114,18 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ ok: false, error: e instanceof Error ? e.message.slice(0, 300) : 'failed' })
     }
   }
+  // ?flow=sources lists everything the coach can cite: every document read (with link, publisher, dates, reliability, fact count) and every employer feed.
+  if (req.nextUrl.searchParams.get('flow') === 'sources') {
+    const [docs, cos] = await Promise.all([
+      db.marketDataDocument.findMany({ orderBy: [{ source: { publisher: 'asc' } }, { fetchedAt: 'desc' }], select: { url: true, title: true, publishedAt: true, fetchedAt: true, status: true, source: { select: { publisher: true, reliability: true, region: true } }, _count: { select: { observations: true } } } }),
+      db.company.findMany({ orderBy: { name: 'asc' }, select: { name: true, atsType: true, atsToken: true, careersUrl: true, lastCrawledAt: true, lastStatus: true, fresherScore: true, _count: { select: { postings: true } } } }),
+    ])
+    return NextResponse.json({
+      ok: true,
+      reports: docs.map((d) => ({ publisher: d.source.publisher, title: d.title, url: /^https?:/.test(d.url) ? d.url : null, publishedAt: d.publishedAt?.toISOString().slice(0, 10) ?? null, readAt: d.fetchedAt.toISOString().slice(0, 10), reliability: d.source.reliability, region: d.source.region, facts: d._count.observations, status: d.status })),
+      employers: cos.map((c) => ({ name: c.name, feed: c.atsType ? `${c.atsType}${c.atsType === 'CAREER_PAGE' ? '' : ':' + c.atsToken}` : null, careersUrl: c.careersUrl, readAt: c.lastCrawledAt?.toISOString().slice(0, 10) ?? null, status: c.lastStatus, fresherScore: c.fresherScore, designPostingsHeld: c._count.postings })),
+    })
+  }
   // ?flow=jobsdb summarises companies, boards found and the fresher-friendly openings.
   if (req.nextUrl.searchParams.get('flow') === 'jobsdb') {
     const [companies, open, fresher] = await Promise.all([
