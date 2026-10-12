@@ -10,6 +10,10 @@ export const AGENT_NAMES: Record<string, string> = {
   market: 'Market Intelligence',
   directions: 'Direction Generator',
   growth: 'Growth Planner',
+  edge: 'Edge Finder',
+  scout: 'Market Scout',
+  planner: 'Target Planner',
+  verifier: 'Verifier',
   orchestrator: 'Orchestrator',
   blueprint: 'Blueprint writer',
   system: 'Analysis',
@@ -24,6 +28,10 @@ export const AGENT_ROLES: Record<string, string> = {
   directions: 'Proposes distinct directions and scores each one',
   growth: 'Weighs the options, then plans the capabilities and steps for each direction',
   orchestrator: 'Weighs the agents and forms the recommendation',
+  edge: 'Finds what makes you different, using only your resume',
+  scout: 'Reads current fresher-hiring evidence and the employers we track',
+  planner: 'Chooses your target lanes, a bridge job and your first 14 days',
+  verifier: 'Checks every claim against its source before you see it',
   blueprint: 'Writes your Blueprint from the recommendation',
   system: 'Coordinates the analysis',
 }
@@ -46,7 +54,7 @@ export interface AgentRow {
 }
 
 /** User-facing order of the steps. The Orchestrator is an internal coordinator: it is shown as part of the Growth Planner. */
-const STEP_ORDER = ['extract', 'system', 'aggregator', 'careerDna', 'market', 'directions', 'growth', 'blueprint']
+const STEP_ORDER = ['extract', 'system', 'aggregator', 'careerDna', 'market', 'directions', 'growth', 'edge', 'scout', 'planner', 'verifier', 'blueprint']
 const rank = (source: string) => { const i = STEP_ORDER.indexOf(source); return i === -1 ? STEP_ORDER.length : i }
 const userSource = (source: string) => (source === 'orchestrator' ? 'growth' : source)
 

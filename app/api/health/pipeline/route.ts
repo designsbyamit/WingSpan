@@ -103,6 +103,43 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ ok: false, error: e instanceof Error ? e.message.slice(0, 300) : 'failed' })
     }
   }
+  // ?flow=student builds a Student Plan for a made-up M.Des student, to check the whole student path on staging (add &raw=1 for the full plan).
+  if (req.nextUrl.searchParams.get('flow') === 'student') {
+    try {
+      const { buildStudentPlan } = await import('@/lib/student/plan')
+      const { detectStudent } = await import('@/lib/student/detect')
+      const sample = {
+        timeline: [
+          { id: 'r1', role: 'UX Design Intern', company: 'Example Fintech Startup', startDate: '2025', endDate: '2025', description: 'Redesigned the onboarding flow for a payments app; ran 6 usability tests with first-time users and cut drop-off in the KYC step in the team’s own analytics.', confirmed: false },
+          { id: 'r2', role: 'Freelance Visual Designer', company: 'Self-employed', startDate: '2023', endDate: '2024', description: 'Brand identities and social campaigns for two local cafés.', confirmed: false },
+        ],
+        projects: [
+          { id: 'p1', name: 'Bus route planner for Tier-2 city commuters', company: 'M.Des thesis', year: '2026', summary: 'Field research with 24 daily commuters in Nashik; designed a Hindi-first, low-data mobile app and a conductor-side tool.', impact: 'Pilot with one bus depot' },
+          { id: 'p2', name: 'Voice-first pharmacy reordering', company: 'Course project', year: '2025', summary: 'Prototype for elderly users with low vision, tested with 8 participants.' },
+        ],
+        skills: ['Figma', 'User research', 'Prototyping', 'Interaction design', 'Python', 'Hindi', 'Marathi', 'English'],
+        education: [
+          { institution: 'IDC School of Design, IIT Bombay', degree: 'M.Des, Interaction Design', year: '2027' },
+          { institution: 'College of Engineering Pune', degree: 'B.Tech, Computer Engineering', year: '2024' },
+        ],
+        rawText: 'Pursuing M.Des in Interaction Design. Previously B.Tech in Computer Engineering.',
+      }
+      const t0 = Date.now()
+      const events: string[] = []
+      const plan = await buildStudentPlan(sample as never, ['Interaction design', 'User research', 'Accessibility'], (id, status, note) => events.push(`${id}:${status}${note ? ` (${note})` : ''}`))
+      const summary = {
+        ok: true, ms: Date.now() - t0, detection: detectStudent(sample as never), events,
+        edge: plan.edge.headline, differentiators: plan.edge.differentiators.map((d) => ({ t: d.title, ev: d.evidence, s: d.strength })),
+        lanes: plan.lanes.map((l) => ({ name: l.name, demand: l.demand, who: l.whoHires.map((w) => w.name) })),
+        marketClaims: plan.market.map((m) => ({ text: m.text, sources: m.sources, general: m.general, unverifiedNumber: m.unverifiedNumber })),
+        bridge: plan.bridge.title, openings: plan.openings.length, openingsNote: plan.openingsNote,
+        days: plan.days.map((d) => `${d.day} ${d.theme}: ${d.action}`), sources: plan.sources.map((s) => `${s.id} ${s.publisher} ${s.url ?? ''}`),
+      }
+      return NextResponse.json(req.nextUrl.searchParams.get('raw') === '1' ? { ok: true, plan } : summary)
+    } catch (e) {
+      return NextResponse.json({ ok: false, error: e instanceof Error ? e.message.slice(0, 400) : 'failed' })
+    }
+  }
   // ?flow=jobs crawls company job boards into Company/Posting (add &company=key for one, &limit=N, &rediscover=1 to retry board discovery).
   if (req.nextUrl.searchParams.get('flow') === 'jobs') {
     try {

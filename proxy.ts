@@ -22,6 +22,7 @@ const PUBLIC_PATHS = [
   '/api/extract',
   '/api/career-alpha',
   '/api/orchestrate',
+  '/api/student-plan',
   '/api/blueprint',
   '/api/template',
   '/api/refine',

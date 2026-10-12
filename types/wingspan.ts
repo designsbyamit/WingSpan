@@ -4,6 +4,8 @@ export type Screen = 'welcome' | 'footprint' | 'discovering' | 'validating' | 'b
 
 export type BlueprintStep = 'profile' | 'intelligence' | 'path-selection' | 'gap-analysis' | 'roadmap' | 'resources'
 
+import type { StudentPlan } from '@/lib/student/types'
+
 export interface TimelineEntry {
   id: string
   role: string
@@ -237,6 +239,9 @@ export interface WingspanState {
   pipelineStage: 'extract' | 'career-alpha' | 'blueprint' | null
   /** Live activity stream of the analysis (extraction, each agent, blueprint), for the "View details" drawer. */
   activity: ActivityEvent[]
+  /** Which flow this person is in. Set from the resume (student or professional) and overridable on screen. */
+  flowMode: 'student' | 'professional' | null
+  studentPlan: StudentPlan | null
 }
 
 export interface ActivityEvent {
@@ -274,6 +279,8 @@ export type WingspanAction =
   | { type: 'SET_PIPELINE_STAGE'; stage: 'extract' | 'career-alpha' | 'blueprint' | null }
   | { type: 'ADD_ACTIVITY'; event: Omit<ActivityEvent, 'id' | 'at'> }
   | { type: 'RESET_ACTIVITY' }
+  | { type: 'SET_FLOW_MODE'; mode: 'student' | 'professional' | null }
+  | { type: 'SET_STUDENT_PLAN'; plan: StudentPlan }
 
 // ── Career Alpha types ─────────────────────────────────────────────────────
 

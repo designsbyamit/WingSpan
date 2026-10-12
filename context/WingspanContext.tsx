@@ -34,6 +34,8 @@ const initialState: WingspanState = {
   blueprintReady: false,
   pipelineStage: null,
   activity: [],
+  flowMode: null,
+  studentPlan: null,
 }
 
 function reducer(state: WingspanState, action: WingspanAction): WingspanState {
@@ -45,6 +47,10 @@ function reducer(state: WingspanState, action: WingspanAction): WingspanState {
       }
     case 'RESET_FLOW':
       return { ...initialState }
+    case 'SET_FLOW_MODE':
+      return { ...state, flowMode: action.mode, ...(action.mode !== 'student' ? { studentPlan: null } : {}) }
+    case 'SET_STUDENT_PLAN':
+      return { ...state, studentPlan: action.plan, blueprintReady: true, blueprintLoading: false, pipelineStage: null }
     case 'RESET_ACTIVITY':
       return { ...state, activity: [] }
     case 'SET_SCREEN':

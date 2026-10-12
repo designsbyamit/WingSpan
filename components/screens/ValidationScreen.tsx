@@ -28,7 +28,11 @@ export function ValidationScreen() {
 
   const retry = () => {
     if (!extractedData) return
-    void runCareerPipeline(extractedData, state.interests, dispatch)
+    void runCareerPipeline(extractedData, state.interests, dispatch, state.flowMode ? { mode: state.flowMode } : {})
+  }
+
+  const switchToFull = () => {
+    if (extractedData) void runCareerPipeline(extractedData, state.interests, dispatch, { mode: 'professional' })
   }
 
   const closeDrawer = useCallback(() => setDrawerOpen(false), [])
@@ -52,6 +56,15 @@ export function ValidationScreen() {
   return (
     <MotionConfig reducedMotion="user">
       <main className="mx-auto w-full max-w-5xl px-4 pb-48 pt-24 sm:pb-40 sm:px-6 md:pt-28">
+        {state.flowMode === 'student' && (
+          <div role="note" className="mb-8 rounded-[12px] border border-[var(--border-ws)] bg-[var(--surface-dim)] px-4 py-3 text-sm text-[var(--text-secondary)]">
+            <p className="font-semibold text-[var(--text-primary)]">We are building your Student Plan</p>
+            <p className="mt-1">
+              Your resume reads like an early-career design student ({(state.studentPlan?.detection.reasons ?? []).slice(0, 2).join('; ').toLowerCase() || 'little full-time experience so far'}), so you get a plan focused on landing your first role instead of the full career analysis.{' '}
+              <button type="button" onClick={switchToFull} className="font-semibold underline underline-offset-4 hover:text-[var(--text-primary)]">Not right? Use the full career analysis</button>
+            </p>
+          </div>
+        )}
         <div className="flex flex-col gap-6">
           <IdentityHeader facts={facts} />
           <KpiStrip data={extractedData} years={facts.years} />

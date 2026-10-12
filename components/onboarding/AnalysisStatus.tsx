@@ -33,6 +33,7 @@ export function AnalysisStatus({ onOpenDetails, onOpenBlueprint, onRetry, onCanc
   const analysisStart = state.activity.find((e) => e.source !== 'extract')?.at ?? state.activity[0]?.at
   const elapsed = analysisStart ? formatElapsed(now - analysisStart) : null
   const label = currentActivityLabel(state.activity.filter((e) => e.source !== 'extract')) ?? 'Starting the analysis'
+  const student = state.flowMode === 'student'
   const cancel = <CancelFlowButton onConfirm={onCancel} />
   const details = <button type="button" onClick={onOpenDetails} className={cx(linkButton, 'flex-shrink-0 whitespace-nowrap')}>View details</button>
 
@@ -41,12 +42,12 @@ export function AnalysisStatus({ onOpenDetails, onOpenBlueprint, onRetry, onCanc
       <FlowFooter
         tone="ready"
         role="status"
-        message={<span className="inline-flex items-center gap-2"><Check size={15} strokeWidth={3} className="rounded-full bg-[var(--neon)] p-[2px] text-[#0a0a0a]" aria-hidden />Your Blueprint is ready</span>}
+        message={<span className="inline-flex items-center gap-2"><Check size={15} strokeWidth={3} className="rounded-full bg-[var(--neon)] p-[2px] text-[#0a0a0a]" aria-hidden />{student ? 'Your plan is ready' : 'Your Blueprint is ready'}</span>}
         hint="Review your details above if you like, or open it now."
         actions={<>
           {details}
           {cancel}
-          <button type="button" onClick={onOpenBlueprint} className={primaryButton}>Open your Blueprint <ArrowRight size={15} aria-hidden /></button>
+          <button type="button" onClick={onOpenBlueprint} className={primaryButton}>{student ? 'Open your plan' : 'Open your Blueprint'} <ArrowRight size={15} aria-hidden /></button>
         </>}
       />
     )
@@ -69,15 +70,16 @@ export function AnalysisStatus({ onOpenDetails, onOpenBlueprint, onRetry, onCanc
   }
 
   const secs = analysisStart ? Math.max(0, Math.floor((now - analysisStart) / 1000)) : 0
-  const quip = QUIPS[Math.floor(secs / 7) % QUIPS.length]
-  const remaining = Math.ceil((EXPECTED_SECONDS - secs) / 60)
+  const quips = student ? STUDENT_QUIPS : QUIPS
+  const quip = quips[Math.floor(secs / 7) % quips.length]
+  const remaining = Math.ceil(((student ? STUDENT_SECONDS : EXPECTED_SECONDS) - secs) / 60)
   const eta =
-    secs < 8 ? 'About 4 minutes'
+    secs < 8 ? (student ? 'About 2 minutes' : 'About 4 minutes')
     : remaining >= 2 ? `About ${remaining} min left`
     : remaining === 1 ? 'Under a minute or two left'
     : 'Nearly there, thanks for waiting'
   // Eases toward 95% so the line always feels alive without promising a finish time.
-  const pct = Math.min(95, Math.round(95 * (1 - Math.exp(-secs / 110))))
+  const pct = Math.min(95, Math.round(95 * (1 - Math.exp(-secs / (student ? 55 : 110)))))
 
   return (
     <FlowFooter
@@ -91,6 +93,17 @@ export function AnalysisStatus({ onOpenDetails, onOpenBlueprint, onRetry, onCanc
 }
 
 const EXPECTED_SECONDS = 240
+const STUDENT_SECONDS = 120
+
+const STUDENT_QUIPS = [
+  'Finding what makes you different…',
+  'Reading what employers say about freshers right now…',
+  'Checking every claim against its source…',
+  'Matching your work to the lanes that are hiring…',
+  'Turning your strengths into a plan for the next two weeks…',
+  'Your work already says more than you think…',
+  'Almost there. Great plans take a minute…',
+]
 
 // Rotated every few seconds while the long analysis runs.
 const QUIPS = [

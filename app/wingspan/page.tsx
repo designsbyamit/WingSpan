@@ -4,6 +4,7 @@ import { useWingspan } from '@/context/WingspanContext'
 import { FootprintScreen } from '@/components/screens/FootprintScreen'
 import { ValidationScreen } from '@/components/screens/ValidationScreen'
 import { BlueprintScreen } from '@/components/screens/BlueprintScreen'
+import { StudentPlanScreen } from '@/components/student/StudentPlanScreen'
 import { TopNav } from '@/components/layout/TopNav'
 
 export default function WingspanPage() {
@@ -14,7 +15,7 @@ export default function WingspanPage() {
     // 'discovering' is no longer a separate step: progress lives on the processed-data screen.
     discovering: <ValidationScreen />,
     validating: <ValidationScreen />,
-    blueprint: <BlueprintScreen />,
+    blueprint: state.flowMode === 'student' && state.studentPlan ? <StudentPlanScreen /> : <BlueprintScreen />,
   }
 
   return (

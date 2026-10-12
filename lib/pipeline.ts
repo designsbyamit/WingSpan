@@ -9,6 +9,8 @@ import { readJson } from '@/lib/safe-json'
 import { readSse } from '@/lib/sse-client'
 import type { CareerAlphaIntelligence } from '@/types/wingspan'
 import type { DeepAnalysis } from '@/types/career-intelligence'
+import type { StudentPlan } from '@/lib/student/types'
+import { detectStudent } from '@/lib/student/detect'
 
 const BLUEPRINT_LABELS: Record<string, string> = {
   timeline: 'Reconstructing your career timeline',
@@ -60,17 +62,53 @@ export function cancelCareerPipeline() {
   try { sessionStorage.removeItem(STORE) } catch { /* ignore */ }
 }
 
+/** Student flow: one streamed call that returns the verified Student Plan. */
+async function runStudentPipeline(extractedData: ExtractedCareerData, interests: string[], dispatch: Dispatch<WingspanAction>, ctl: AbortController, activity: (e: Omit<ActivityEvent, 'id' | 'at'>) => void) {
+  dispatch({ type: 'SET_PIPELINE_STAGE', stage: 'career-alpha' })
+  activity({ source: 'system', status: 'info', label: 'Student plan started', detail: 'Early-career design student detected from your resume.' })
+  const res = await fetch('/api/student-plan', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ extractedData, interests }), signal: ctl.signal,
+  })
+  if (!res.ok) {
+    const failure = await readJson(res)
+    throw new Error(failure?.error ?? 'Your plan could not be built')
+  }
+  let plan: StudentPlan | null = null
+  await readSse(res, (event) => {
+    if (event.type === 'agent') {
+      const status = event.status === 'done' ? 'done' : event.status === 'error' ? 'error' : 'start'
+      activity({ source: String(event.id ?? 'agent'), status, label: String(event.label ?? event.id ?? 'Agent'), detail: typeof event.note === 'string' ? event.note : undefined })
+    } else if (event.type === 'complete') {
+      plan = event.plan as StudentPlan
+    } else if (event.type === 'error') {
+      throw new Error(String(event.error ?? 'Your plan could not be built'))
+    }
+  })
+  if (!plan) throw new Error('The plan ended before a result was received. Please try again.')
+  dispatch({ type: 'SET_VALIDATED_DATA', data: { ...extractedData, interests } })
+  dispatch({ type: 'SET_STUDENT_PLAN', plan })
+  activity({ source: 'system', status: 'done', label: 'Your plan is ready' })
+}
+
 export async function runCareerPipeline(
   extractedData: ExtractedCareerData,
   interests: string[],
-  dispatch: Dispatch<WingspanAction>
+  dispatch: Dispatch<WingspanAction>,
+  opts: { mode?: 'student' | 'professional' } = {},
 ): Promise<void> {
   const activity = (event: Omit<ActivityEvent, 'id' | 'at'>) => dispatch({ type: 'ADD_ACTIVITY', event })
   controller?.abort()
   const ctl = (controller = new AbortController())
   dispatch({ type: 'CLEAR_ERROR' })
   dispatch({ type: 'SET_BLUEPRINT_LOADING', loading: true })
+  const mode = opts.mode ?? detectStudent(extractedData).mode
+  dispatch({ type: 'SET_FLOW_MODE', mode })
   try {
+    if (mode === 'student') {
+      await runStudentPipeline(extractedData, interests, dispatch, ctl, activity)
+      return
+    }
     // Stage 1: the agent team (evidence, career DNA, market, directions, growth) and the Orchestrator
     const key = keyOf(extractedData, interests)
     const saved = loadCheckpoint(key)
