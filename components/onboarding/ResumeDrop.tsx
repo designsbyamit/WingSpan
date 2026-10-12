@@ -47,6 +47,14 @@ export function ResumeDrop({ file, onFile, onRemove }: ResumeDropProps) {
     </>
   )
 
+  // Limits are shown next to the field so people know before they pick a file.
+  const limits = (
+    <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[var(--text-muted)]">
+      <span className="rounded-full border border-[var(--border-ws)] px-2 py-0.5 font-semibold text-[var(--text-secondary)]">Max {formatBytes(MAX_RESUME_BYTES)}</span>
+      <span>PDF or Word (.docx) with selectable text. Scans and photos are not supported.</span>
+    </p>
+  )
+
   const input = (
     <input
       ref={inputRef}
@@ -63,7 +71,8 @@ export function ResumeDrop({ file, onFile, onRemove }: ResumeDropProps) {
 
   if (file) {
     return (
-      <div>
+      <div className="flex flex-col gap-2">
+      {limits}
       <div
         className="flex items-center gap-3 rounded-[12px] border border-[var(--border-ws)] bg-[var(--surface)] px-4 py-3.5"
         onDragOver={(e) => { e.preventDefault() }}
@@ -92,7 +101,8 @@ export function ResumeDrop({ file, onFile, onRemove }: ResumeDropProps) {
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-2">
+    {limits}
     <label
       htmlFor={inputId}
       onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
@@ -113,7 +123,7 @@ export function ResumeDrop({ file, onFile, onRemove }: ResumeDropProps) {
       <span className="text-sm font-semibold text-[var(--text-primary)]">
         Choose your resume <span className="font-normal text-[var(--text-muted)]">or drop it here</span>
       </span>
-      <span id={hintId} className="text-xs text-[var(--text-muted)]">PDF or Word (.docx), up to {formatBytes(MAX_RESUME_BYTES)}</span>
+      <span id={hintId} className="text-xs text-[var(--text-muted)]">Drop your file here, or click to browse</span>
     </label>
     {feedback}
     </div>
