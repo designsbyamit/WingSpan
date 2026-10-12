@@ -69,7 +69,8 @@ async function verified(type: AtsType, token: string, name: string): Promise<boo
 /** Try every board type with every candidate name until one answers with a job list for this company. */
 export async function discoverBoard(key: string, name: string): Promise<{ type: AtsType; token: string } | null> {
   for (const token of tokenCandidates(key, name)) {
-    const hits = await Promise.all(ATS_TYPES.map(async (type) => ((await fetchBoard(type, token).catch(() => null)) ? type : null)))
+    // An empty list is indistinguishable from an unknown account on some feeds (Workable answers 200 for any slug), so a board must list at least one job.
+    const hits = await Promise.all(ATS_TYPES.map(async (type) => (((await fetchBoard(type, token).catch(() => null))?.length ?? 0) > 0 ? type : null)))
     for (const type of hits) if (type && (await verified(type, token, name))) return { type, token }
   }
   return null
