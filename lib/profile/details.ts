@@ -1,6 +1,7 @@
 import { detectStudent, type CareerTrack } from '@/lib/student/detect'
 import { experienceFacts } from '@/lib/experience'
 import { safeUrl } from '@/lib/links'
+import { identityFrom } from '@/lib/profile/contact'
 import type { ExtractedCareerData } from '@/types/wingspan'
 
 // The person's own details as read from a resume, and the rules for keeping them:
@@ -27,7 +28,7 @@ export type EditableField = (typeof EDITABLE_FIELDS)[number]
 
 export const FIELD_LABELS: Record<keyof ProfileDetails, string> = {
   fullName: 'Name', email: 'Email', phone: 'Phone', location: 'Location', linkedinUrl: 'LinkedIn', portfolioUrl: 'Portfolio', githubUrl: 'GitHub',
-  experienceYears: 'Years of experience', track: 'You are', currentRole: 'Current role', currentOrg: 'Current organisation', education: 'Education',
+  experienceYears: 'Years of experience', track: 'You are', currentRole: 'Latest role', currentOrg: 'Organisation', education: 'Education',
 }
 export const TRACK_LABELS: Record<CareerTrack, string> = { STUDENT: 'A student', PROFESSIONAL: 'An experienced professional', BOTH: 'Both: studying and working' }
 
@@ -58,12 +59,16 @@ export function sameName(a: string, b: string): boolean {
   return direct || swapped
 }
 
+/** Names printed in capitals (MAYURI BHIDE) are stored as Mayuri Bhide. */
+const titleCaseIfShouting = (n: string) => (n && n === n.toUpperCase() ? n.toLowerCase().replace(/(^|[\s'-])(\p{L})/gu, (_, a, b) => a + b.toUpperCase()) : n)
+
 // ── Reading details out of a resume ─────────────────────────────────────────
 const yearOf = (s: string | undefined) => Number(String(s ?? '').match(/(19|20)\d{2}/)?.[0] ?? NaN)
 
 export function proposeDetails(data: Partial<ExtractedCareerData>, urls: Record<string, string> = {}, now = new Date().getFullYear()): ProfileDetails {
   const d = { timeline: [], education: [], skills: [], rawText: '', ...data } as ExtractedCareerData
-  const c = d.contact ?? {}
+  const id = identityFrom(d)
+  const c = id.contact
   const det = detectStudent(d, now)
   const facts = experienceFacts(d.timeline ?? [], now)
   // Current role: the latest role on the timeline, preferring one marked as current.
@@ -71,7 +76,7 @@ export function proposeDetails(data: Partial<ExtractedCareerData>, urls: Record<
   const cur = rows.find((t) => /present|current|ongoing|now/i.test(String(t.endDate ?? ''))) ?? rows[0]
   const edu = [...(d.education ?? [])].sort((a, b) => (yearOf(b.year) || 0) - (yearOf(a.year) || 0))[0]
   return {
-    fullName: clean(d.candidateName, 80),
+    fullName: titleCaseIfShouting(clean(id.name, 80)),
     email: cleanEmail(c.email),
     phone: cleanPhone(c.phone),
     location: clean(c.location, 80),

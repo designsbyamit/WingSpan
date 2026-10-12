@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { parseFile } from '@/lib/parsers'
 import { mockExtractedData } from '@/lib/mock-data'
+import { identityFrom } from '@/lib/profile/contact'
 import { normalizeCareerEvidence, scanWebsiteToCareerEvidence } from '@/lib/website-scanner'
 import { buildCareerInputBundle, CareerInputSource } from '@/lib/career-input'
 import { getSession } from '@/lib/auth'
@@ -117,8 +118,14 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // Name and contact details: the AI reading first, the resume's own header for anything it missed.
+    const resumeText = documentTexts.find((d) => /resume|cv|curriculum/i.test(d.filename))?.text ?? documentTexts[0]?.text ?? ''
+    const identity = identityFrom({ ...bundle.careerAlpha, rawText: resumeText || rawText })
+
     return NextResponse.json({
       ...normalizeExtracted(bundle.careerAlpha),
+      candidateName: identity.name,
+      contact: identity.contact,
       rawText,
       evidence: bundle.evidence,
       inputSources: bundle.sources.map(({ kind, name, url }) => ({ kind, name, url })),

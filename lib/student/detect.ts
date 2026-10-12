@@ -44,7 +44,6 @@ export function detectStudent(data: Pick<ExtractedCareerData, 'timeline' | 'educ
   const starts = fullTime.map((t) => ({ t, y: yearIn(t.startDate), m: monthIn(t.startDate) })).filter((r) => Number.isFinite(r.y))
   const latestStart = starts.sort((a, b) => b.y - a.y || (b.m ?? 6) - (a.m ?? 6))[0]
   const monthsInLatestRole = latestStart ? Math.max(0, (now - latestStart.y) * 12 + (nowMonth - (latestStart.m ?? 6))) : null
-  const currentFullTime = fullTime.some((t) => IS_CURRENT.test(String(t.endDate ?? '')))
 
   const early = fullTime.length === 0 || fullTimeYears < 1.5
   if (fullTime.length === 0 && timeline.length > 0) reasons.push('Your roles so far are internships, freelance or student work')
@@ -57,14 +56,18 @@ export function detectStudent(data: Pick<ExtractedCareerData, 'timeline' | 'educ
   const isDesign = DESIGN_DEGREE.test(designText)
   if (isDesign) reasons.push('Your education and skills point to design')
 
-  const isStudent = early && (inProgress || recentGrad)
-
-  // Track: studying only, working only, or both. A degree in progress next to a full-time job that has run for
-  // most of a year (or more than 18 months of full-time work) is "both"; a job that only just began beside a
-  // degree in progress is treated as the student's first placement.
-  const workingForReal = !early || (currentFullTime && (monthsInLatestRole ?? 0) >= 9)
-  const track: CareerTrack = isStudent && !(inProgress && workingForReal) ? 'STUDENT' : inProgress && workingForReal ? 'BOTH' : 'PROFESSIONAL'
-  if (track === 'BOTH') reasons.push(`You are studying and also working (${fullTimeYears >= 1 ? `${Math.round(fullTimeYears)}+ years of full-time work` : `current role for ${Math.round((monthsInLatestRole ?? 0) / 12 * 10) / 10} years`})`)
+  // Track. Timelines decide: a degree that runs into the current year is the student journey, unless a full-time job
+  // is running beside it ("both"), or the person is experienced enough (4+ years) that studying is a mid-career step.
+  // A graduate of the last two years with little full-time work is also on the student journey.
+  const endYear = (t: TimelineEntry) => yearIn(t.endDate)
+  const currentJob = fullTime.some((t) => IS_CURRENT.test(String(t.endDate ?? '')) || endYear(t) >= now)
+  const jobForReal = currentJob && (monthsInLatestRole ?? 0) >= 9
+  let track: CareerTrack
+  if (inProgress) track = jobForReal || fullTimeYears >= 4 ? 'BOTH' : 'STUDENT'
+  else track = recentGrad && early ? 'STUDENT' : 'PROFESSIONAL'
+  const isStudent = track === 'STUDENT'
+  if (track === 'BOTH') reasons.push(jobForReal ? `You are studying and also working (in your current role for ${Math.round((monthsInLatestRole ?? 0) / 12 * 10) / 10} years)` : `You are studying after ${Math.round(fullTimeYears)}+ years of full-time work`)
   else if (track === 'PROFESSIONAL' && fullTime.length) reasons.push(monthsInLatestRole !== null && monthsInLatestRole < 12 ? 'You started your current role within the last year' : `${fullTimeYears} years of full-time experience`)
-  return { isStudent: isStudent && track === 'STUDENT', isDesign, mode: isStudent && track === 'STUDENT' && isDesign ? 'student' : 'professional', reasons, track, fullTimeYears, monthsInLatestRole, educationInProgress: inProgress }
+  else if (track === 'STUDENT' && fullTimeYears >= 1) reasons.push(`${Math.round(fullTimeYears * 10) / 10} years of work before your studies`)
+  return { isStudent, isDesign, mode: isStudent && isDesign ? 'student' : 'professional', reasons, track, fullTimeYears, monthsInLatestRole, educationInProgress: inProgress }
 }

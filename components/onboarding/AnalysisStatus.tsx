@@ -7,6 +7,7 @@ import { FlowFooter } from './FlowFooter'
 import { CancelFlowButton } from './CancelFlow'
 import { cx, linkButton, primaryButton } from './ui'
 import { firstNameOf } from '@/lib/student/name'
+import { identityFrom } from '@/lib/profile/contact'
 
 export type AnalysisPhase = 'running' | 'ready' | 'error'
 
@@ -35,7 +36,7 @@ export function AnalysisStatus({ onOpenDetails, onOpenBlueprint, onRetry, onCanc
   const elapsed = analysisStart ? formatElapsed(now - analysisStart) : null
   const label = currentActivityLabel(state.activity.filter((e) => e.source !== 'extract')) ?? 'Starting the analysis'
   const student = state.flowMode === 'student'
-  const who = student ? firstNameOf(state.extractedData?.candidateName) : null
+  const who = student ? firstNameOf(identityFrom(state.extractedData).name) : null
   const cancel = <CancelFlowButton onConfirm={onCancel} />
   const details = <button type="button" onClick={onOpenDetails} className={cx(linkButton, 'flex-shrink-0 whitespace-nowrap')}>View progress</button>
 

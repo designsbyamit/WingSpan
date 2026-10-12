@@ -25,6 +25,11 @@ export interface CareerEvidence {
     headline?: string
     location?: string
     summary?: string
+    email?: string
+    phone?: string
+    linkedinUrl?: string
+    portfolioUrl?: string
+    githubUrl?: string
   }
   timeline: TimelineEntry[]
   projects: CareerEvidenceProject[]
@@ -76,6 +81,8 @@ export function careerEvidenceToCareerAlphaInput(
       industry: p.industry, platform: p.platform, audience: p.audience,
       summary: p.summary, impact: p.impact,
     })),
+    candidateName: evidence.person.name ?? '',
+    contact: { email: evidence.person.email, phone: evidence.person.phone, location: evidence.person.location, linkedinUrl: evidence.person.linkedinUrl, portfolioUrl: evidence.person.portfolioUrl, githubUrl: evidence.person.githubUrl },
     skills: [...new Set([...evidence.skills, ...evidence.methods, ...evidence.technologies])],
     education: evidence.education,
     rawText: rawText.slice(0, 12000),

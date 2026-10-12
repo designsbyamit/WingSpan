@@ -200,6 +200,7 @@ Rules:
 - Prefer more specific/corroborated evidence when sources disagree, but preserve uncertainty instead of guessing.
 - Look for role, company, date, responsibility, method, outcome, metric, technology, domain, client, audience, and leadership evidence.
 - If a project is visually clear but text is sparse, use screenshot evidence and mark the evidence accordingly.
+- person.name is the person's own full name as printed at the top of the resume; person.email, phone, linkedinUrl, portfolioUrl and githubUrl are copied exactly as printed (empty string when absent). Never guess them.
 - Never invent dates, metrics, clients, outcomes, skills, or project details.
 - Include source URLs or filenames for every project and role where possible.
 - evidenceQuality is rich only when there is broad, corroborated evidence.
@@ -220,7 +221,7 @@ ${JSON.stringify(profileUrls)}
 Return this exact shape:
 {
   "schemaVersion":"1.0",
-  "person":{"name":"","headline":"","location":"","summary":""},
+  "person":{"name":"","headline":"","location":"","summary":"","email":"","phone":"","linkedinUrl":"","portfolioUrl":"","githubUrl":""},
   "timeline":[],
   "projects":[],
   "skills":[],

@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight, BadgeCheck, Briefcase, Check, ExternalLink, Grad
 import { useWingspan } from '@/context/WingspanContext'
 import { useAuth } from '@/lib/use-auth'
 import { firstNameOf } from '@/lib/student/name'
+import { identityFrom } from '@/lib/profile/contact'
 import { detectStudent } from '@/lib/student/detect'
 import { greetingFor, milestonesFor, nextNudge, stageCopy, type HomeFacts } from '@/lib/profile/home'
 import { TRACK_LABELS, proposeDetails } from '@/lib/profile/details'
@@ -130,7 +131,7 @@ export function ProfileHome({ details, versionCount, onClose, onSignOut, goTo }:
   const detected = useMemo(() => (data ? detectStudent(data) : null), [data])
   const track = profile?.track ?? detected?.track ?? 'PROFESSIONAL'
   const years = profile?.experienceYears ?? (detected ? detected.fullTimeYears : null)
-  const name = profile?.fullName ?? data?.candidateName ?? ''
+  const name = profile?.fullName ?? identityFrom(data).name
   const firstName = firstNameOf(name) ?? firstNameOf(user?.email?.split('@')[0])
   const student = track === 'STUDENT'
 
@@ -283,7 +284,7 @@ export function ProfileHome({ details, versionCount, onClose, onSignOut, goTo }:
             <Row icon={Link2} label="LinkedIn" value={(profile?.linkedinUrl ?? '').replace(/^https?:\/\/(www\.)?/, '')} href={profile?.linkedinUrl || undefined} />
             <Row icon={Globe} label="Portfolio" value={(profile?.portfolioUrl ?? '').replace(/^https?:\/\/(www\.)?/, '')} href={profile?.portfolioUrl || undefined} />
             <Row icon={Link2} label="GitHub" value={(profile?.githubUrl ?? '').replace(/^https?:\/\/(www\.)?/, '')} href={profile?.githubUrl || undefined} />
-            <Row icon={Briefcase} label="Current role" value={[profile?.currentRole, profile?.currentOrg].filter(Boolean).join(' at ')} />
+            <Row icon={Briefcase} label="Latest role" value={[profile?.currentRole, profile?.currentOrg].filter(Boolean).join(' at ')} />
           </div>
         </Card>
       </motion.section>

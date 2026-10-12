@@ -44,3 +44,18 @@ test('a job that only just began beside a degree in progress is still the studen
   const r = detectStudent({ ...base, timeline: [t('Associate Designer', `${new Date().getFullYear()}-${String(Math.max(1, new Date().getMonth() - 2)).padStart(2, '0')}`, 'Present')], education: [{ institution: 'X', degree: 'B.Des', year: String(new Date().getFullYear()) }] }, new Date().getFullYear())
   assert.equal(r.track, 'STUDENT')
 })
+
+test('a designer who left a job to study for an M.Des is on the student journey', () => {
+  const r = detectStudent({
+    ...base,
+    timeline: [t('UI/UX Designer', '2023-12', '2025-06'), t('UI/UX Design Intern', '2023-08', '2023-12'), t('Special Design Intern', '2022-04', '2022-07')],
+    education: [{ institution: 'MIT Institute of Design', degree: "Master's in User Experience Design (M.Des)", year: 'Jul 2025 – Jul 2027 (Expected)' }, { institution: 'GLS Institute of Design', degree: 'B.Des', year: 'Jun 2019 – Jun 2023' }],
+  }, 2026)
+  assert.equal(r.track, 'STUDENT')
+  assert.equal(r.mode, 'student')
+})
+test('an experienced designer who left work for a degree is both, not a student', () => {
+  const r = detectStudent({ ...base, timeline: [t('Senior Product Designer', '2017', '2025')], education: [{ institution: 'X', degree: 'M.Des', year: '2027' }] }, 2026)
+  assert.equal(r.track, 'BOTH')
+  assert.equal(r.mode, 'professional')
+})

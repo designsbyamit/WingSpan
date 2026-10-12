@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "tsx --test lib/career-scoring.test.ts lib/agent-contracts.test.ts lib/analysis-mapping.test.ts lib/ingestion-mapping.test.ts lib/router.test.ts lib/extracted-shape.test.ts lib/experience.test.ts lib/orchestrator.test.ts lib/market/market.test.ts lib/upload-rules.test.ts lib/jobs/jobs.test.ts lib/student/detect.test.ts lib/student/verify.test.ts lib/student/name.test.ts lib/links.test.ts lib/profile/details.test.ts lib/profile/home.test.ts"
+    "test": "tsx --test lib/career-scoring.test.ts lib/agent-contracts.test.ts lib/analysis-mapping.test.ts lib/ingestion-mapping.test.ts lib/router.test.ts lib/extracted-shape.test.ts lib/experience.test.ts lib/orchestrator.test.ts lib/market/market.test.ts lib/upload-rules.test.ts lib/jobs/jobs.test.ts lib/student/detect.test.ts lib/student/verify.test.ts lib/student/name.test.ts lib/links.test.ts lib/profile/details.test.ts lib/profile/home.test.ts lib/profile/contact.test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",
