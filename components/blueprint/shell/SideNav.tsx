@@ -41,25 +41,32 @@ function Brand({ rail }: { rail: boolean }) {
   )
 }
 
-function UtilityButton({ icon: Icon, label, onClick, rail, trailing, busy }: {
+function UtilityButton({ icon: Icon, label, onClick, rail, trailing, busy, sub }: {
   icon: LucideIcon
   label: string
   onClick: () => void
   rail: boolean
   trailing?: ReactNode
   busy?: boolean
+  /** Optional secondary line under the label (hidden in the icon rail). */
+  sub?: string
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-label={rail ? label : undefined}
-      className={`group relative w-full flex items-center gap-3 h-10 rounded-[10px] text-[13px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-dim)] transition-colors ${FOCUS_RING} focus-visible:ring-offset-0 ${
-        rail ? 'justify-center' : 'px-3'
+      className={`group relative w-full flex items-center gap-3 rounded-[10px] text-[13px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-dim)] transition-colors ${FOCUS_RING} focus-visible:ring-offset-0 ${
+        rail ? 'justify-center h-10' : sub ? 'px-3 py-2' : 'px-3 h-10'
       }`}
     >
       {busy ? <Loader2 size={16} className="shrink-0 animate-spin" aria-hidden /> : <Icon size={16} className="shrink-0" aria-hidden />}
-      {!rail && <span className="flex-1 text-left truncate">{label}</span>}
+      {!rail && (
+        <span className="flex-1 min-w-0 text-left">
+          <span className="block truncate">{label}</span>
+          {sub && <span className="block text-[12px] font-normal leading-snug text-[var(--text-muted)] mt-0.5">{sub}</span>}
+        </span>
+      )}
       {!rail && trailing}
       {rail && (
         <span aria-hidden className="pointer-events-none absolute left-full ml-3 top-1/2 -translate-y-1/2 z-50 whitespace-nowrap rounded-[8px] border border-[var(--border-ws)] bg-[var(--surface)] px-2.5 py-1.5 text-[12px] font-medium text-[var(--text-primary)] shadow-lg opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity">
@@ -91,21 +98,6 @@ export function SideNav(p: SideNavProps) {
         />
       </nav>
 
-      {/* Guest nudge to keep the Blueprint */}
-      {!rail && !p.authLoading && !signedIn && (
-        <div className="mx-3 mb-3 rounded-[12px] border border-[var(--neon-border)] bg-[var(--neon-surface)] p-4">
-          <p className="text-[13px] font-semibold text-[var(--text-primary)]">Save your Blueprint</p>
-          <p className="text-[12px] text-[var(--text-secondary)] mt-1 leading-snug">Create a free account to keep it and pick up where you left off.</p>
-          <button
-            type="button"
-            onClick={p.onSave}
-            className={`mt-3 w-full h-9 rounded-[8px] bg-[var(--neon)] text-[#0a0a0a] text-[13px] font-bold hover:opacity-90 ${FOCUS_RING}`}
-          >
-            Create account
-          </button>
-        </div>
-      )}
-
       <div role="group" aria-label="Blueprint tools" className={`border-t border-[var(--border-ws)] py-3 flex flex-col gap-0.5 ${rail ? 'px-2' : 'px-3'}`}>
         <UtilityButton rail={rail} icon={Bookmark} label="Save version" onClick={p.onSave} />
         {signedIn && (
@@ -117,7 +109,7 @@ export function SideNav(p: SideNavProps) {
             trailing={p.versionCount > 0 ? <span className="text-[12px] tabular-nums text-[var(--text-muted)]">{p.versionCount}</span> : undefined}
           />
         )}
-        {p.onDeepAnalysis && <UtilityButton rail={rail} icon={ScanSearch} label="Deep analysis" onClick={p.onDeepAnalysis} />}
+        {p.onDeepAnalysis && <UtilityButton rail={rail} icon={ScanSearch} label="Deep analysis" sub="Understand why these recommendations?" onClick={p.onDeepAnalysis} />}
         <UtilityButton
           rail={rail}
           icon={Download}
@@ -161,8 +153,24 @@ export function SideNav(p: SideNavProps) {
               </button>
             </div>
           )
-        ) : (
+        ) : rail ? (
           <UtilityButton rail={rail} icon={LogIn} label="Sign in" onClick={p.onSignIn} />
+        ) : (
+          // Guests: the one place that asks them to keep the Blueprint. Nothing repeats it on the page.
+          <div className="flex flex-col gap-2 px-1">
+            <div className="rounded-[12px] border border-[var(--neon-border)] bg-[var(--neon-surface)] p-3.5">
+              <p className="text-[13px] font-semibold text-[var(--text-primary)]">Save your Blueprint</p>
+              <p className="text-[12px] text-[var(--text-secondary)] mt-1 leading-snug">Create a free account to keep it and pick up where you left off.</p>
+              <button
+                type="button"
+                onClick={p.onSave}
+                className={`mt-3 w-full h-9 rounded-[8px] bg-[var(--neon)] text-[#0a0a0a] text-[13px] font-bold hover:opacity-90 ${FOCUS_RING}`}
+              >
+                Create account
+              </button>
+            </div>
+            <UtilityButton rail={rail} icon={LogIn} label="Sign in" onClick={p.onSignIn} />
+          </div>
         )}
       </div>
     </div>

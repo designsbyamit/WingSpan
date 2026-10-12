@@ -2,7 +2,7 @@
 'use client'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Lock, LogOut, Menu, X } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Download, Loader2, Lock, LogOut, Menu, X } from 'lucide-react'
 import { useWingspan } from '@/context/WingspanContext'
 import { StepErrorBoundary } from '@/components/ui/StepErrorBoundary'
 import { ProfileMap } from '@/components/blueprint/ProfileMap'
@@ -272,12 +272,28 @@ export function BlueprintScreen() {
             inset="left-0 md:left-[72px] lg:left-[264px]"
             progress={Math.round(((idx + 1) / SECTIONS.length) * 100)}
             message={<>Step {idx + 1} of {SECTIONS.length} · {current.label}</>}
-            hint={nextLocked ? 'Choose a path in Future Paths to unlock the next steps.' : next ? `Next: ${next.label}` : 'You have reached the last step.'}
+            hint={
+              current.id === 'resources' ? 'Tracking your progress on this roadmap is coming soon.'
+              : nextLocked ? 'Choose a path in Future Paths to unlock the next steps.'
+              : next ? `Next: ${next.label}` : 'You have reached the last step.'
+            }
             actions={<>
               {prev && (
                 <button type="button" onClick={() => goTo(prev.id)} className={quietButton}>
                   <ArrowLeft size={15} aria-hidden /> <span className="hidden sm:inline">{prev.label}</span><span className="sm:hidden">Back</span>
                 </button>
+              )}
+              {current.id === 'resources' && (
+                <>
+                  <button type="button" onClick={doExport} disabled={exporting} className={quietButton}>
+                    {exporting ? <Loader2 size={14} className="animate-spin" aria-hidden /> : <Download size={14} aria-hidden />}
+                    Export to Notion
+                  </button>
+                  <button type="button" disabled className={cx(primaryButton, 'justify-between gap-3')} aria-describedby="roadmap-journey-soon">
+                    Get started on this roadmap
+                    <span id="roadmap-journey-soon" className="rounded-full bg-[var(--surface)]/60 px-2 py-0.5 text-[11px] font-semibold">Coming soon</span>
+                  </button>
+                </>
               )}
               {next && (nextLocked ? (
                 <button type="button" onClick={showNudge} aria-disabled="true" className={cx(quietButton, 'cursor-not-allowed text-[var(--text-muted)]')}>

@@ -135,63 +135,30 @@ function GroupPanel({ group, resources }: { group: (typeof GROUPS)[number]; reso
   )
 }
 
-function TakeItWithYou() {
-  const shell = useShell()
-  const { signedIn, authLoading } = shell
+function TakeItWithYou({ blueprint }: { blueprint: Blueprint }) {
+  const { goTo } = useShell()
+  const a = blueprint.actions ?? { immediate: [], mediumTerm: [], longTerm: [] }
+  const rows = [
+    { label: 'Start now', count: a.immediate?.length ?? 0 },
+    { label: 'Next', count: a.mediumTerm?.length ?? 0 },
+    { label: 'Later', count: a.longTerm?.length ?? 0 },
+  ]
   return (
-    <div className="grid md:grid-cols-2 gap-4">
-      <Card className="p-6 flex flex-col gap-4 md:col-span-2">
-        <div className="flex items-start gap-4">
-          <span className={`shrink-0 w-10 h-10 rounded-[10px] bg-[var(--neon-surface)] border border-[var(--neon-border)] flex items-center justify-center ${INK}`}>
-            <Download size={18} aria-hidden />
-          </span>
-          <div className="min-w-0">
-            <h3 className="text-[17px] font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-sora)' }}>Continue in Notion</h3>
-            <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed mt-1.5 max-w-[60ch]">
-              Export your roadmap, gap analysis, actions and resources as Notion-ready Markdown. In Notion, create a new page and paste the file’s contents.
-            </p>
+    <Card className="p-6 flex flex-col gap-5">
+      <div>
+        <h3 className="text-[16px] font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-sora)' }}>Your roadmap at a glance</h3>
+        <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed mt-1.5">The steps for this path, in the order to take them.</p>
+      </div>
+      <dl className="grid grid-cols-3 gap-3">
+        {rows.map(r => (
+          <div key={r.label} className="rounded-[12px] border border-[var(--border-ws)] px-4 py-3">
+            <dt className="text-[12px] text-[var(--text-muted)]">{r.label}</dt>
+            <dd className="text-[22px] font-semibold tabular-nums text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-sora)' }}>{r.count}</dd>
           </div>
-        </div>
-        <div className="flex flex-wrap items-center gap-3 sm:pl-14">
-          <PrimaryButton onClick={shell.exportMarkdown} disabled={shell.exporting}>
-            {shell.exporting ? <Loader2 size={14} className="animate-spin" aria-hidden /> : <Download size={14} aria-hidden />}
-            {shell.exporting ? 'Exporting' : 'Export to Notion (.md)'}
-          </PrimaryButton>
-          {!authLoading && !signedIn && <p className="text-[13px] text-[var(--text-muted)]">You’ll be asked to sign in first.</p>}
-        </div>
-      </Card>
-
-      {!authLoading && !signedIn ? (
-        <Card tone="accent" className={`p-6 flex flex-col gap-4 ${shell.openDeepAnalysis ? '' : 'md:col-span-2'}`}>
-          <div>
-            <h3 className="text-[16px] font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-sora)' }}>Save your Blueprint</h3>
-            <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed mt-1.5">Create a free account to keep this Blueprint and continue your journey.</p>
-          </div>
-          <PrimaryButton onClick={shell.openSave} className="self-start"><Bookmark size={14} aria-hidden />Create account and save</PrimaryButton>
-        </Card>
-      ) : (
-        <Card className={`p-6 flex flex-col gap-4 ${shell.openDeepAnalysis ? '' : 'md:col-span-2'}`}>
-          <div>
-            <h3 className="text-[16px] font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-sora)' }}>Keep a snapshot</h3>
-            <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed mt-1.5">Your Blueprint saves automatically. Save a named version to keep this one even after a new analysis.</p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <PrimaryButton onClick={shell.openSave}><Bookmark size={14} aria-hidden />Save version</PrimaryButton>
-            <SecondaryButton onClick={shell.openVersions}><History size={14} aria-hidden />Versions</SecondaryButton>
-          </div>
-        </Card>
-      )}
-
-      {shell.openDeepAnalysis && (
-        <Card className="p-6 flex flex-col gap-4">
-          <div>
-            <h3 className="text-[16px] font-semibold text-[var(--text-primary)]" style={{ fontFamily: 'var(--font-sora)' }}>Deep analysis</h3>
-            <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed mt-1.5">See how each agent reached this recommendation, with the market evidence behind it.</p>
-          </div>
-          <SecondaryButton onClick={shell.openDeepAnalysis} className="self-start"><ScanSearch size={14} aria-hidden />Open deep analysis</SecondaryButton>
-        </Card>
-      )}
-    </div>
+        ))}
+      </dl>
+      <SecondaryButton onClick={() => goTo('roadmap')} className="self-start">View the roadmap</SecondaryButton>
+    </Card>
   )
 }
 
@@ -239,7 +206,7 @@ export function Resources({ blueprint }: { blueprint: Blueprint }) {
       activeTab={active}
       onTabChange={id => setTab(id as ResourcesTab)}
     >
-      {active === 'export' ? <TakeItWithYou /> : shown.length === 0 ? (
+      {active === 'export' ? <TakeItWithYou blueprint={blueprint} /> : shown.length === 0 ? (
         <EmptyState
           icon={Library}
           title="No resources matched this path"
